@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio Dashboard v27.2</title>
+    <title>Portfolio Dashboard v28.7</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js">
     function exportMasterJSON() {
         const fullData = {
@@ -458,6 +458,48 @@
             }
         }
     
+    
+        @media (max-width: 480px) {
+            .info-line {
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+                margin-bottom: 12px;
+                padding: 4px 0;
+            }
+            .info-label {
+                font-size: 0.75rem;
+                font-weight: 500;
+                color: var(--text-muted);
+                flex-shrink: 0;
+            }
+            /* Rechter container die alles strak naar rechts duwt */
+            .info-values {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-end;
+                text-align: right;
+                flex-grow: 1;
+            }
+            .main-value-small {
+                font-size: 0.95rem;
+                font-weight: 600;
+                display: block;
+                margin-bottom: 6px; /* De extra spatie */
+            }
+            .sub-value-small {
+                font-size: 0.8rem;
+                font-weight: 400;
+                opacity: 0.8;
+                display: block;
+            }
+        }
+    
+    
+        canvas {
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: rgba(0,0,0,0);
+        }
     </style>
 </head>
 <body>
@@ -757,7 +799,12 @@
     }
 
     function initCharts() {
-        const lineOpt = { responsive: true, maintainAspectRatio: false, plugins: { legend: {display: false}, datalabels: { display: false } }, scales: { x: { grid: { display: false } }, y: { display: false } } };
+        const lineOpt = { responsive: true,
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                events: ['touchstart', 'touchmove', 'click', 'mousemove'], maintainAspectRatio: false, plugins: { legend: {display: false}, datalabels: { display: false } }, scales: { x: { grid: { display: false } }, y: { display: false } } };
         charts.main = new Chart(document.getElementById('growthChart'), { type: 'line', data: { labels: [], datasets: [{ data: [], borderColor: '#6c757d', backgroundColor: '#6c757d15', fill: true, tension: 0.4, pointRadius: 4, pointHoverRadius: 6, borderWidth: 3 }] }, options: lineOpt });
         ['degiro', 'bolero', 'saxo'].forEach(b => {
             const colors = { degiro: '#f1c40f', bolero: '#3498db', saxo: '#e67e22' };
