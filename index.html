@@ -381,6 +381,83 @@
             .header-titles h1 { font-size: 1.5rem; }
             #lastUpdate { font-size: 0.8rem; }
         }
+    
+        @media (max-width: 480px) {
+            .extra-info {
+                margin-top: 15px;
+                border-top: 1px solid rgba(0,0,0,0.05);
+                padding-top: 10px;
+            }
+            .info-line {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                align-items: center;
+                margin-bottom: 8px;
+            }
+            .info-label {
+                font-size: 0.65rem;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                color: var(--text-muted);
+            }
+            .info-line div, .info-line .blur-target {
+                text-align: right;
+                font-weight: 600;
+                font-size: 0.85rem;
+            }
+            /* Rendement euro en percentage strak onder elkaar aan de rechterkant */
+            .profit-wrapper {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-end;
+            }
+            .profit-perc-small {
+                font-size: 0.7rem !important;
+                font-weight: 400 !important;
+                opacity: 0.7;
+            }
+        }
+    
+    
+        @media (max-width: 480px) {
+            .info-line {
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start; /* Zorgt dat de tekst bovenaan uitlijnt */
+                margin-bottom: 10px;
+                padding: 4px 0;
+            }
+            .info-label {
+                font-size: 0.7rem;
+                font-weight: 500;
+                color: var(--text-muted);
+                padding-top: 2px;
+            }
+            /* Rechterkolom voor de waardes */
+            .info-values {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-end; /* Alles strak naar rechts */
+                text-align: right;
+            }
+            #profitEuro, #profitPerc, #netInleg, #cashDegiro, #profDegiroEuro, #profDegiroPerc, 
+            #cashBolero, #profBoleroEuro, #profBoleroPerc, #cashSaxo, #profSaxoEuro, #profSaxoPerc {
+                display: block;
+                line-height: 1.2;
+            }
+            .main-value-small {
+                font-size: 0.9rem;
+                font-weight: 600;
+                color: var(--text-color);
+            }
+            .sub-value-small {
+                font-size: 0.75rem;
+                font-weight: 400;
+                opacity: 0.7;
+                margin-top: 6px; /* Extra spatie toegevoegd */
+            }
+        }
+    
     </style>
 </head>
 <body>
@@ -416,7 +493,7 @@
                 <div id="totalChange" class="change-row"></div>
                 <div class="extra-info">
                     <div class="info-line"><span class="info-label">Cash</span><span class="blur-target" id="netInleg"></span></div>
-                    <div class="info-line"><span class="info-label">Rendement</span><div style="display:flex;gap:6px"><span class="blur-target" id="profitEuro"></span><span id="profitPerc"></span></div></div>
+                    <div class="info-line"><span class="info-label">Rendement</span><div class="info-values"><span class="blur-target main-value-small" id="profitEuro"></span><span id="profitPerc" class="sub-value-small"></span></div></div>
                 </div>
             </div>
             <div class="card card-degiro">
@@ -425,7 +502,7 @@
                 <div id="chgDegiro" class="change-row"></div>
                 <div class="extra-info">
                     <div class="info-line"><span class="info-label">Cash</span><span class="blur-target" id="cashDegiro"></span></div>
-                    <div class="info-line"><span class="info-label">Rendement</span><div style="display:flex;gap:6px"><span class="blur-target" id="profDegiroEuro"></span><span id="profDegiroPerc"></span></div></div>
+                    <div class="info-line"><span class="info-label">Rendement</span><div class="info-values"><span class="blur-target main-value-small" id="profDegiroEuro"></span><span id="profDegiroPerc" class="sub-value-small"></span></div></div>
                 </div>
             </div>
             <div class="card card-bolero">
@@ -434,7 +511,7 @@
                 <div id="chgBolero" class="change-row"></div>
                 <div class="extra-info">
                     <div class="info-line"><span class="info-label">Cash</span><span class="blur-target" id="cashBolero"></span></div>
-                    <div class="info-line"><span class="info-label">Rendement</span><div style="display:flex;gap:6px"><span class="blur-target" id="profBoleroEuro"></span><span id="profBoleroPerc"></span></div></div>
+                    <div class="info-line"><span class="info-label">Rendement</span><div class="info-values"><span class="blur-target main-value-small" id="profBoleroEuro"></span><span id="profBoleroPerc" class="sub-value-small"></span></div></div>
                 </div>
             </div>
             <div class="card card-saxo">
@@ -443,7 +520,7 @@
                 <div id="chgSaxo" class="change-row"></div>
                 <div class="extra-info">
                     <div class="info-line"><span class="info-label">Cash</span><span class="blur-target" id="cashSaxo"></span></div>
-                    <div class="info-line"><span class="info-label">Rendement</span><div style="display:flex;gap:6px"><span class="blur-target" id="profSaxoEuro"></span><span id="profSaxoPerc"></span></div></div>
+                    <div class="info-line"><span class="info-label">Rendement</span><div class="info-values"><span class="blur-target main-value-small" id="profSaxoEuro"></span><span id="profSaxoPerc" class="sub-value-small"></span></div></div>
                 </div>
             </div>
         </div>
