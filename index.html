@@ -262,7 +262,50 @@
             margin-bottom: 2rem; 
         }
         .header-titles h1 { margin: 0; font-weight: 800; letter-spacing: -0.5px; }
-        
+        /* Sidebar basis stijl */
+.sidebar {
+    height: 100%;
+    width: 0; /* Standaard gesloten */
+    position: fixed;
+    z-index: 2000;
+    top: 0;
+    left: 0;
+    background-color: var(--card-bg);
+    overflow-x: hidden;
+    transition: 0.3s; /* Snelheid van openschuiven */
+    padding-top: 60px;
+    border-right: 1px solid var(--border-color);
+}
+
+/* De links in het menu */
+.sidebar .nav-item {
+    padding: 15px 25px;
+    font-size: 1.1rem;
+    display: block;
+    transition: 0.2s;
+    border-bottom: none;
+}
+
+/* De sandwich knop styling */
+.menu-btn {
+    font-size: 1.5rem;
+    cursor: pointer;
+    background: none;
+    border: none;
+    color: var(--text-color);
+    padding: 10px;
+}
+
+/* Overlay als menu open is */
+.overlay {
+    display: none;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0; left: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 1999;
+}
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -417,11 +460,15 @@
     </style>
 </head>
 <body>
-
+<div id="mySidebar" class="sidebar">
+    <div class="nav-item active" onclick="switchTab('dashboard', this); closeNav()">PORTFOLIO</div>
+    <div class="nav-item" onclick="switchTab('data-page', this); closeNav()">DATA</div>
+</div>
+<div id="overlay" class="overlay" onclick="closeNav()"></div>
 <div class="nav">
-    <div class="nav-links">
-        <div class="nav-item active" onclick="switchTab('dashboard', this)">PORTFOLIO</div>
-        <div class="nav-item" onclick="switchTab('data-page', this)">DATA</div>
+    <div style="display:flex; align-items:center;">
+        <button class="menu-btn" onclick="openNav()">☰</button>
+        <span style="font-weight:bold; margin-left:10px;">DASHBOARD</span>
     </div>
     <div style="display:flex; gap:10px; align-items:center;">
         <button class="btn btn-theme" onclick="toggleBlur()" title="Verberg Bedragen">👁️</button>
@@ -530,6 +577,29 @@
         </div>
     </div>
 <script>
+    function openNav() {
+    document.getElementById("mySidebar").style.width = "250px";
+    document.getElementById("overlay").style.display = "block";
+}
+
+function closeNav() {
+    document.getElementById("mySidebar").style.width = "0";
+    document.getElementById("overlay").style.display = "none";
+}
+
+// Pas je bestaande switchTab een klein beetje aan om closeNav() aan te roepen
+const originalSwitchTab = switchTab;
+switchTab = function(tabId, element) {
+    // Verwijder active class van alle items in sidebar
+    document.querySelectorAll('.sidebar .nav-item').forEach(i => i.classList.remove('active'));
+    // Voeg toe aan geklikte item
+    element.classList.add('active');
+    
+    // Roep de rest van je logica aan
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+    document.getElementById(tabId).classList.add('active');
+    closeNav();
+}
     Chart.register(ChartDataLabels);
     
     function toggleTheme() {
