@@ -214,7 +214,11 @@
             --border-color: #2f3336;
             --row-hover: #1c2125;
         }
-
+#data-page h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-weight: 700;
+}
         body {
             font-family: 'Inter', -apple-system, sans-serif;
             background-color: var(--bg-color);
@@ -248,19 +252,27 @@
             background: var(--row-hover);
         }
         .container {
-            max-width: 1400px;
-            margin: 2rem auto;
-            padding: 0 1.5rem;
-        }
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px; /* Verklein dit van bijv. 40px naar 20px */
+    padding-top: 10px; /* Zorgt dat de inhoud direct onder de nav-balk begint */
+}
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
-        .header { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            margin-bottom: 2rem; 
-        }
+        .header {
+    display: flex;
+    justify-content: space-between; /* Portfolio links, Datum rechts */
+    align-items: baseline; /* Lijnt de onderkant van de tekst perfect uit */
+    margin-bottom: 25px; /* Ruimte onder de titel voordat de kaarten beginnen */
+    margin-top: 0;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 2rem;
+    letter-spacing: -1px; /* Maakt de titel wat moderner/strakker */
+}
         .header-titles h1 { margin: 0; font-weight: 800; letter-spacing: -0.5px; }
         /* Sidebar basis stijl */
 .sidebar {
