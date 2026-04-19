@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio Dashboard v28.7</title>
+    <title> Dashboard v28.7</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js">
     function exportMasterJSON() {
         const fullData = {
@@ -18,7 +18,7 @@
         const link = document.createElement("a");
         const dateStr = new Date().toLocaleDateString('nl-NL').replace(/\//g, '-');
         link.href = URL.createObjectURL(blob);
-        link.setAttribute("download", `Portfolio_Master_Backup_${dateStr}.json`);
+        link.setAttribute("download", `_Master_Backup_${dateStr}.json`);
         link.click();
         alert("Master Backup gegenereerd! Sla dit bestand op in je iCloud Drive.");
     }
@@ -577,7 +577,7 @@
     </div>
     <div id="data-page" class="tab-content">
         <div class="header">
-            <h1>DATA & BEHEER</h1>
+            <h1>DATA</h1>
             <button class="btn btn-main" onclick="saveData()">💾 Dashboard Bijwerken</button>
         </div>
 
@@ -593,7 +593,7 @@
 
         <div class="card" style="margin-bottom: 2rem;">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
-                <h3>📊 Broker Standen</h3>
+                <h3>Broker Standen</h3>
                 <div style="display:flex; gap:8px;"><button class="btn" style="background:var(--bg-color);" onclick="document.getElementById('importBrokerCSV').click()">📥 Import CSV</button><input type="file" id="importBrokerCSV" style="display:none" accept=".csv" onchange="importCSV(this, 'broker')"><button class="btn btn-csv" onclick="exportCSV('broker')">CSV Export</button></div>
             </div>
             <div style="overflow-x: auto;">
@@ -607,7 +607,7 @@
 
         <div class="card">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
-                <h3>💸 Cash Flow Mutaties</h3>
+                <h3>Cash</h3>
                 <div style="display:flex; gap:8px;"><button class="btn" style="background:var(--bg-color);" onclick="document.getElementById('importCashCSV').click()">📥 Import CSV</button><input type="file" id="importCashCSV" style="display:none" accept=".csv" onchange="importCSV(this, 'cash')"><button class="btn btn-csv" onclick="exportCSV('cash')">CSV Export</button></div>
             </div>
             <div style="overflow-x: auto;">
@@ -846,7 +846,7 @@
         const link = document.createElement("a");
         const dateStr = new Date().toLocaleDateString('nl-NL').replace(/\//g, '-');
         link.href = URL.createObjectURL(blob);
-        link.setAttribute("download", `Portfolio_Master_Backup_${dateStr}.json`);
+        link.setAttribute("download", `_Master_Backup_${dateStr}.json`);
         link.click();
         alert("Master Backup gegenereerd! Sla dit bestand op in je iCloud Drive.");
     }
