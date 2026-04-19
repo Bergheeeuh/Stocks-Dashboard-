@@ -545,25 +545,22 @@
         </div>
     </div>
     <div id="data-page" class="tab-content">
-        <div class="header">
-            <h1>DATA</h1>
-            <button class="btn btn-main" onclick="saveData()">💾 Dashboard Bijwerken</button>
+    <div class="header data-header-actions">
+        <h1>DATA</h1>
+        <div class="header-btns">
+            <button class="btn btn-icloud" onclick="exportMasterJSON()">Backup naar iCloud</button>
+            <button class="btn" onclick="document.getElementById('importJSON').click()">Upload Backup</button>
+            <input type="file" id="importJSON" style="display:none" accept=".json" onchange="importMasterJSON(this)">
+            
+            <button class="btn btn-main" onclick="saveData()">UPDATE</button>
         </div>
+    </div>
 
-        <div class="card" style="margin-bottom: 2rem; border: 1px solid #007aff20; background: #007aff05;">
-            <h3 style="color: #007aff;">☁️ iCloud & Backup</h3>
-            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Back-up al je data naar één bestand voor iCloud.</p>
-            <div style="display:flex; gap:10px;">
-                <button class="btn" style="background:#007aff; color:white; border:none;" onclick="exportMasterJSON()">Backup naar iCloud</button>
-                <button class="btn" style="background:var(--row-hover);" onclick="document.getElementById('importJSON').click()">📥 Herstel Bestand</button>
-                <input type="file" id="importJSON" style="display:none" accept=".json" onchange="importMasterJSON(this)">
-            </div>
-        </div>
 
         <div class="card" style="margin-bottom: 2rem;">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
                 <h3>Broker</h3>
-                <div style="display:flex; gap:8px;"><button class="btn" style="background:var(--bg-color);" onclick="document.getElementById('importBrokerCSV').click()">📥 Import CSV</button><input type="file" id="importBrokerCSV" style="display:none" accept=".csv" onchange="importCSV(this, 'broker')"><button class="btn btn-csv" onclick="exportCSV('broker')">CSV Export</button></div>
+                <div style="display:flex; gap:8px;"><button class="btn" style="background:var(--bg-color);" onclick="document.getElementById('importBrokerCSV').click()">Upload CSV</button><input type="file" id="importBrokerCSV" style="display:none" accept=".csv" onchange="importCSV(this, 'broker')"><button class="btn btn-csv" onclick="exportCSV('broker')">Download CSV</button></div>
             </div>
             <div style="overflow-x: auto;">
                 <table>
@@ -571,13 +568,13 @@
                     <tbody id="brokerTableBody"></tbody>
                 </table>
             </div>
-            <button class="btn" onclick="addRow('broker')" style="margin-top:10px;">+ Nieuwe Dag</button>
+            <button class="btn" onclick="addRow('broker')" style="margin-top:10px;">+ Nieuw</button>
         </div>
 
         <div class="card">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
                 <h3>Cash</h3>
-                <div style="display:flex; gap:8px;"><button class="btn" style="background:var(--bg-color);" onclick="document.getElementById('importCashCSV').click()">📥 Import CSV</button><input type="file" id="importCashCSV" style="display:none" accept=".csv" onchange="importCSV(this, 'cash')"><button class="btn btn-csv" onclick="exportCSV('cash')">CSV Export</button></div>
+                <div style="display:flex; gap:8px;"><button class="btn" style="background:var(--bg-color);" onclick="document.getElementById('importCashCSV').click()">Upload CSV</button><input type="file" id="importCashCSV" style="display:none" accept=".csv" onchange="importCSV(this, 'cash')"><button class="btn btn-csv" onclick="exportCSV('cash')">Download CSV</button></div>
             </div>
             <div style="overflow-x: auto;">
                 <table>
@@ -585,7 +582,7 @@
                     <tbody id="cashTableBody"></tbody>
                 </table>
             </div>
-            <button class="btn" onclick="addRow('cash')" style="margin-top:10px;">+ Nieuwe Mutatie</button>
+            <button class="btn" onclick="addRow('cash')" style="margin-top:10px;">+ Nieuw</button>
         </div>
     </div>
 <script>
