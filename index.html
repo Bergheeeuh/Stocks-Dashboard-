@@ -731,22 +731,19 @@ function initCharts() {
             legend: { display: false }, 
             datalabels: { display: false },
             tooltip: {
-                callbacks: {
-                    label: function(context) {
-                        let label = context.dataset.label || '';
-                        if (label) { label += ': '; }
-                        
-                        // Check of de blur-class aanwezig is
-                        const isBlurred = document.querySelector('.blur-target').classList.contains('blur');
-                        
-                        if (isBlurred) {
-                            return label + "€ •••••"; 
-                        } else {
-                            return label + formatEuro(context.parsed.y); 
-                        }
-                    }
-                }
+    callbacks: {
+        label: function(context) {
+            // We halen de 'label' (brokernaam) hier weg
+            const isBlurred = document.querySelector('.blur-target').classList.contains('blur');
+            
+            if (isBlurred) {
+                return "€ •••••"; // Alleen de bolletjes tonen
+            } else {
+                return formatEuro(context.parsed.y); // Alleen het bedrag tonen
             }
+        }
+    }
+}
         }, 
         scales: { 
             x: { grid: { display: false } }, 
