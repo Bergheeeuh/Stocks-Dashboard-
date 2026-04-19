@@ -1,11 +1,192 @@
+
 <!DOCTYPE html>
 <html lang="nl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio v3</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+    <title>Portfolio Dashboard v28.7</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js">
+    function exportMasterJSON() {
+        const fullData = {
+            version: "27.0",
+            timestamp: new Date().toISOString(),
+            brokerData: brokerData,
+            cashData: cashData,
+            theme: localStorage.getItem('v25_theme') || 'light'
+        };
+        const blob = new Blob([JSON.stringify(fullData, null, 2)], { type: 'application/json' });
+        const link = document.createElement("a");
+        const dateStr = new Date().toLocaleDateString('nl-NL').replace(/\//g, '-');
+        link.href = URL.createObjectURL(blob);
+        link.setAttribute("download", `Portfolio_Master_Backup_${dateStr}.json`);
+        link.click();
+        alert("Master Backup gegenereerd! Sla dit bestand op in je iCloud Drive.");
+    }
+
+    function importMasterJSON(input) {
+        const file = input.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                const data = JSON.parse(e.target.result);
+                if (data.brokerData && data.cashData) {
+                    brokerData = data.brokerData;
+                    cashData = data.cashData;
+                    if (data.theme) {
+                        document.documentElement.setAttribute('data-theme', data.theme);
+                        localStorage.setItem('v25_theme', data.theme);
+                    }
+                    saveData();
+                    updateDashboard();
+                    alert("Succes! Alle data en instellingen zijn hersteld.");
+                } else {
+                    alert("Ongeldig backup bestand.");
+                }
+            } catch (err) {
+                alert("Fout bij het lezen van het bestand.");
+            }
+        };
+        reader.readAsText(file);
+    }
+
+
+    function importCSV(input, type) {
+        const file = input.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const text = e.target.result;
+            const lines = text.split('\n');
+            const newRows = [];
+            
+            // Start bij 1 om header over te slaan
+            for (let i = 1; i < lines.length; i++) {
+                if (!lines[i].trim()) continue;
+                const cols = lines[i].split(',');
+                
+                if (type === 'broker') {
+                    newRows.push({
+                        date: cols[0],
+                        degiro: parseFloat(cols[1]) || 0,
+                        bolero: parseFloat(cols[2]) || 0,
+                        saxo: parseFloat(cols[3]) || 0
+                    });
+                } else {
+                    newRows.push({
+                        date: cols[0],
+                        broker: cols[1],
+                        type: cols[2],
+                        amount: parseFloat(cols[3]) || 0
+                    });
+                }
+            }
+            
+            if (newRows.length > 0) {
+                if (confirm(`Weet je zeker dat je ${newRows.length} regels wilt importeren? Dit vervangt de huidige tabel.`)) {
+                    if (type === 'broker') brokerData = newRows;
+                    else cashData = newRows;
+                    saveData();
+                    updateDashboard();
+                    alert("Import geslaagd!");
+                }
+            }
+        };
+        reader.readAsText(file);
+    }
+
+</script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2">
+    function exportMasterJSON() {
+        const fullData = {
+            version: "27.0",
+            timestamp: new Date().toISOString(),
+            brokerData: brokerData,
+            cashData: cashData,
+            theme: localStorage.getItem('v25_theme') || 'light'
+        };
+        const blob = new Blob([JSON.stringify(fullData, null, 2)], { type: 'application/json' });
+        const link = document.createElement("a");
+        const dateStr = new Date().toLocaleDateString('nl-NL').replace(/\//g, '-');
+        link.href = URL.createObjectURL(blob);
+        link.setAttribute("download", `Portfolio_Master_Backup_${dateStr}.json`);
+        link.click();
+        alert("Master Backup gegenereerd! Sla dit bestand op in je iCloud Drive.");
+    }
+
+    function importMasterJSON(input) {
+        const file = input.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                const data = JSON.parse(e.target.result);
+                if (data.brokerData && data.cashData) {
+                    brokerData = data.brokerData;
+                    cashData = data.cashData;
+                    if (data.theme) {
+                        document.documentElement.setAttribute('data-theme', data.theme);
+                        localStorage.setItem('v25_theme', data.theme);
+                    }
+                    saveData();
+                    updateDashboard();
+                    alert("Succes! Alle data en instellingen zijn hersteld.");
+                } else {
+                    alert("Ongeldig backup bestand.");
+                }
+            } catch (err) {
+                alert("Fout bij het lezen van het bestand.");
+            }
+        };
+        reader.readAsText(file);
+    }
+
+
+    function importCSV(input, type) {
+        const file = input.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const text = e.target.result;
+            const lines = text.split('\n');
+            const newRows = [];
+            
+            // Start bij 1 om header over te slaan
+            for (let i = 1; i < lines.length; i++) {
+                if (!lines[i].trim()) continue;
+                const cols = lines[i].split(',');
+                
+                if (type === 'broker') {
+                    newRows.push({
+                        date: cols[0],
+                        degiro: parseFloat(cols[1]) || 0,
+                        bolero: parseFloat(cols[2]) || 0,
+                        saxo: parseFloat(cols[3]) || 0
+                    });
+                } else {
+                    newRows.push({
+                        date: cols[0],
+                        broker: cols[1],
+                        type: cols[2],
+                        amount: parseFloat(cols[3]) || 0
+                    });
+                }
+            }
+            
+            if (newRows.length > 0) {
+                if (confirm(`Weet je zeker dat je ${newRows.length} regels wilt importeren? Dit vervangt de huidige tabel.`)) {
+                    if (type === 'broker') brokerData = newRows;
+                    else cashData = newRows;
+                    saveData();
+                    updateDashboard();
+                    alert("Import geslaagd!");
+                }
+            }
+        };
+        reader.readAsText(file);
+    }
+
+</script>
     <style>
         :root {
             --bg-color: #f4f7f9;
@@ -22,7 +203,6 @@
             --border-radius: 16px;
             --danger: #e74c3c;
             --success: #2ecc71;
-            --accent-color: #007aff;
         }
 
         [data-theme="dark"] {
@@ -42,314 +222,429 @@
             margin: 0;
             padding: 0;
             transition: background-color 0.3s, color 0.3s;
-            -webkit-font-smoothing: antialiased;
         }
-
         .nav {
             background: var(--nav-bg);
-            padding: 0.75rem 1.5rem;
+            padding: 1rem 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
             position: sticky;
             top: 0;
-            z-index: 1000;
+            z-index: 100;
         }
-
-        .nav-links { display: flex; gap: 1rem; }
-        
+        .nav-links { display: flex; gap: 2rem; }
         .nav-item {
             cursor: pointer;
-            font-weight: 700;
+            font-weight: 600;
             color: var(--text-muted);
-            padding: 8px 16px;
-            border-radius: 10px;
+            padding: 8px 12px;
+            border-radius: 8px;
             transition: all 0.2s;
-            font-size: 0.9rem;
-            letter-spacing: 0.5px;
         }
-
         .nav-item.active {
             color: var(--text-main);
             background: var(--row-hover);
         }
-
         .container {
-            max-width: 1200px;
-            margin: 1.5rem auto;
-            padding: 0 1rem;
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
         }
-
-        .tab-content { display: none; animation: fadeIn 0.3s ease; }
+        .tab-content { display: none; }
         .tab-content.active { display: block; }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
 
         .header { 
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem; 
         }
-
+        .header-titles h1 { margin: 0; font-weight: 800; letter-spacing: -0.5px; }
+        
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-            margin-bottom: 1.5rem;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
         }
-
-        .card {
+        .card { padding: 1.2rem;  min-width: 0; 
             background: var(--card-bg);
-            padding: 1.25rem;
+            padding: 1.5rem;
             border-radius: var(--border-radius);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
             position: relative;
-            border: 1px solid var(--border-color);
-        }
-
-        .card h3 { 
-            margin: 0; 
-            font-size: 0.7rem; 
-            font-weight: 800; 
-            text-transform: uppercase; 
-            color: var(--text-muted); 
-            letter-spacing: 0.8px;
-        }
-
-        .card .value { 
-            font-size: 1.4rem; 
-            font-weight: 800; 
-            margin: 0.4rem 0;
-            letter-spacing: -0.5px;
-        }
-
-        .change-row { 
-            display: flex; 
-            align-items: center; 
-            gap: 6px; 
-            font-weight: 700; 
-            font-size: 0.8rem;
-            margin-bottom: 10px;
-        }
-
-        .extra-info {
-            border-top: 1px solid var(--border-color);
-            padding-top: 10px;
+            overflow: hidden;
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            border: 1px solid var(--border-color);
         }
-
-        .info-line {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
+        .card::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; width: 6px; height: 100%;
         }
+        .card-total::before { background: var(--total-gray); }
+        .card-degiro::before { background: var(--degiro); }
+        .card-bolero::before { background: var(--bolero); }
+        .card-saxo::before { background: var(--saxo); }
 
-        .info-label { font-size: 0.7rem; color: var(--text-muted); font-weight: 600; }
-        .info-val { font-size: 0.85rem; font-weight: 700; text-align: right; }
-        .info-sub { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
+        .card h3 { margin: 0; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.5px; }
+        .card .value { font-size: 1.7rem; font-weight: 800; margin: 0.5rem 0; }
+        
+        .change-row { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 0.85rem; margin-bottom: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; }
+        
+        .extra-info { display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
+        .info-line { display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; font-weight: 600; }
+        .info-label { color: var(--text-muted); text-transform: uppercase; font-size: 0.65rem; }
 
         .blur { filter: blur(10px) !important; }
 
+        .btn-group { display: flex; gap: 10px; flex-wrap: wrap; }
         .btn {
             background: var(--row-hover);
             color: var(--text-main);
             border: 1px solid var(--border-color);
-            padding: 10px 18px;
-            border-radius: 12px;
+            padding: 10px 16px;
+            border-radius: 10px;
             cursor: pointer;
-            font-weight: 700;
+            font-weight: 600;
             font-size: 0.85rem;
-            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
         }
+        .btn-main { background: var(--text-main); color: var(--bg-color); border: none; }
+        .btn-csv { background: #27ae60; color: white; border: none; }
+        .btn-theme { padding: 8px; border-radius: 50%; width: 40px; height: 40px; justify-content: center; }
 
-        .btn-main { background: var(--accent-color); color: white; border: none; }
+        .charts-master-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+        .span-2 { grid-column: span 2; }
+        .chart-box { height: 350px; }
+        .chart-wrapper { flex-grow: 1; position: relative; width: 100%; height: calc(100% - 40px); margin-top: 0.5rem; }
 
-        canvas { max-height: 220px; }
-
-        table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
-        th { text-align: left; padding: 12px; color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; }
-        td { padding: 10px; border-bottom: 1px solid var(--border-color); }
-
-        input, select {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            background: var(--bg-color);
+        table { width: 100%; border-collapse: separate; border-spacing: 0 8px; }
+        th { padding: 12px; color: var(--text-muted); font-size: 0.8rem; text-align: left; text-transform: uppercase; }
+        td { padding: 12px; background: var(--card-bg); border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); }
+        td:first-child { border-left: 1px solid var(--border-color); border-radius: 8px 0 0 8px; }
+        td:last-child { border-right: 1px solid var(--border-color); border-radius: 0 8px 8px 0; }
+        
+        input, select { 
+            width: 92%; padding: 8px; 
+            border: 1px solid var(--border-color); 
+            border-radius: 8px; 
+            background: var(--bg-color); 
             color: var(--text-main);
-            font-size: 0.9rem;
         }
 
-        @media (max-width: 600px) {
+        @media (max-width: 1200px) {
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .charts-master-grid { grid-template-columns: 1fr; }
+            .span-2 { grid-column: span 1; }
+        }
+    
+        /* iPhone 14 Pro & Mobiele Optimalisaties */
+        @media (max-width: 480px) {
             .stats-grid { grid-template-columns: 1fr; }
-            .nav { padding: 0.5rem 1rem; }
-            .nav-links { gap: 0.5rem; }
+            .card .value { font-size: 1.5rem; }
+            .info-line { 
+                flex-direction: row; 
+                flex-wrap: nowrap;
+                justify-content: space-between;
+                align-items: flex-start;
+                gap: 10px;
+                margin-bottom: 4px;
+            }
+            /* Specifiek voor het rendement-blokje op mobiel */
+            .info-line div[style*="display:flex"] {
+                flex-direction: column !important;
+                align-items: flex-end !important;
+                text-align: right;
+                min-width: fit-content;
+            }
+            .info-line span:last-child {
+                font-size: 0.7rem; /* Maak percentage iets kleiner om ruimte te winnen */
+                opacity: 0.8;
+            }
+            /* Forceer rendement waarden op een nieuwe regel als ze te breed zijn */
+            .info-line div {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-end !important;
+                text-align: right;
+            }
+            .header-titles h1 { font-size: 1.5rem; }
+            #lastUpdate { font-size: 0.8rem; }
+        }
+    
+        @media (max-width: 480px) {
+            .extra-info {
+                margin-top: 15px;
+                border-top: 1px solid rgba(0,0,0,0.05);
+                padding-top: 10px;
+            }
+            .info-line {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                align-items: center;
+                margin-bottom: 8px;
+            }
+            .info-label {
+                font-size: 0.65rem;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                color: var(--text-muted);
+            }
+            .info-line div, .info-line .blur-target {
+                text-align: right;
+                font-weight: 600;
+                font-size: 0.85rem;
+            }
+            /* Rendement euro en percentage strak onder elkaar aan de rechterkant */
+            .profit-wrapper {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-end;
+            }
+            .profit-perc-small {
+                font-size: 0.7rem !important;
+                font-weight: 400 !important;
+                opacity: 0.7;
+            }
+        }
+    
+    
+        @media (max-width: 480px) {
+            .info-line {
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start; /* Zorgt dat de tekst bovenaan uitlijnt */
+                margin-bottom: 10px;
+                padding: 4px 0;
+            }
+            .info-label {
+                font-size: 0.7rem;
+                font-weight: 500;
+                color: var(--text-muted);
+                padding-top: 2px;
+            }
+            /* Rechterkolom voor de waardes */
+            .info-values {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-end; /* Alles strak naar rechts */
+                text-align: right;
+            }
+            #profitEuro, #profitPerc, #netInleg, #cashDegiro, #profDegiroEuro, #profDegiroPerc, 
+            #cashBolero, #profBoleroEuro, #profBoleroPerc, #cashSaxo, #profSaxoEuro, #profSaxoPerc {
+                display: block;
+                line-height: 1.2;
+            }
+            .main-value-small {
+                font-size: 0.9rem;
+                font-weight: 600;
+                color: var(--text-color);
+            }
+            .sub-value-small {
+                font-size: 0.75rem;
+                font-weight: 400;
+                opacity: 0.7;
+                margin-top: 6px; /* Extra spatie toegevoegd */
+            }
+        }
+    
+    
+        @media (max-width: 480px) {
+            .info-line {
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+                margin-bottom: 12px;
+                padding: 4px 0;
+            }
+            .info-label {
+                font-size: 0.75rem;
+                font-weight: 500;
+                color: var(--text-muted);
+                flex-shrink: 0;
+            }
+            /* Rechter container die alles strak naar rechts duwt */
+            .info-values {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-end;
+                text-align: right;
+                flex-grow: 1;
+            }
+            .main-value-small {
+                font-size: 0.95rem;
+                font-weight: 600;
+                display: block;
+                margin-bottom: 6px; /* De extra spatie */
+            }
+            .sub-value-small {
+                font-size: 0.8rem;
+                font-weight: 400;
+                opacity: 0.8;
+                display: block;
+            }
+        }
+    
+    
+        canvas {
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: rgba(0,0,0,0);
         }
     </style>
 </head>
 <body>
 
 <div class="nav">
+    
+    
     <div class="nav-links">
         <div class="nav-item active" onclick="switchTab('dashboard', this)">PORTFOLIO</div>
         <div class="nav-item" onclick="switchTab('data-page', this)">DATA</div>
     </div>
-    <button class="btn" style="padding: 8px 12px;" onclick="toggleTheme()" id="themeBtn">🌙</button>
+    <div style="display:flex; gap:10px; align-items:center;">
+        <button class="btn btn-theme" onclick="toggleTheme()" id="themeBtn">🌙</button>
+    </div>
+
+
 </div>
 
 <div class="container">
     <div id="dashboard" class="tab-content active">
         <div class="header">
-            <h1 style="margin:0; font-size: 1.5rem; font-weight: 900;" onclick="toggleBlur()">₿ PORTFOLIO</h1>
-            <p id="lastUpdate" style="color: var(--text-muted); font-size: 0.75rem; font-weight: 600;"></p>
+            <div class="header-titles">
+                <h1>PORTFOLIO</h1>
+                <p id="lastUpdate" style="color: var(--text-muted); font-size: 0.9rem;"></p>
+            </div>
+            <button class="btn" onclick="toggleBlur()">👁️ Verberg Bedragen</button>
         </div>
 
         <div class="stats-grid">
-            <div class="card" style="border-left: 5px solid var(--total-gray);">
+            <div class="card card-total">
                 <h3>Totaal Vermogen</h3>
-                <div class="value blur-target" id="totalValue">€ 0,00</div>
+                <div class="value blur-target" id="totalValue"></div>
                 <div id="totalChange" class="change-row"></div>
                 <div class="extra-info">
-                    <div class="info-line">
-                        <span class="info-label">Netto Inleg</span>
-                        <span class="info-val blur-target" id="netInleg">€ 0,00</span>
-                    </div>
-                    <div class="info-line">
-                        <span class="info-label">Rendement</span>
-                        <div>
-                            <div class="info-val blur-target" id="profitEuro" style="color: var(--success);">€ 0,00</div>
-                            <div class="info-sub" id="profitPerc">0.00%</div>
-                        </div>
-                    </div>
+                    <div class="info-line"><span class="info-label">Cash</span><span class="blur-target" id="netInleg"></span></div>
+                    <div class="info-line"><span class="info-label">Rendement</span><div class="info-values"><span class="blur-target main-value-small" id="profitEuro"></span><span id="profitPerc" class="sub-value-small"></span></div></div>
                 </div>
             </div>
-            <div class="card" style="border-left: 5px solid var(--degiro);">
+            <div class="card card-degiro">
                 <h3>Degiro</h3>
-                <div class="value blur-target" id="valDegiro">€ 0,00</div>
+                <div class="value blur-target" id="valDegiro"></div>
                 <div id="chgDegiro" class="change-row"></div>
                 <div class="extra-info">
-                    <div class="info-line">
-                        <span class="info-label">Rendement</span>
-                        <div>
-                            <div class="info-val blur-target" id="profDegiroEuro">€ 0,00</div>
-                            <div class="info-sub" id="profDegiroPerc">0.00%</div>
-                        </div>
-                    </div>
+                    <div class="info-line"><span class="info-label">Cash</span><span class="blur-target" id="cashDegiro"></span></div>
+                    <div class="info-line"><span class="info-label">Rendement</span><div class="info-values"><span class="blur-target main-value-small" id="profDegiroEuro"></span><span id="profDegiroPerc" class="sub-value-small"></span></div></div>
                 </div>
             </div>
-            <div class="card" style="border-left: 5px solid var(--bolero);">
+            <div class="card card-bolero">
                 <h3>Bolero</h3>
-                <div class="value blur-target" id="valBolero">€ 0,00</div>
+                <div class="value blur-target" id="valBolero"></div>
                 <div id="chgBolero" class="change-row"></div>
                 <div class="extra-info">
-                    <div class="info-line">
-                        <span class="info-label">Rendement</span>
-                        <div>
-                            <div class="info-val blur-target" id="profBoleroEuro">€ 0,00</div>
-                            <div class="info-sub" id="profBoleroPerc">0.00%</div>
-                        </div>
-                    </div>
+                    <div class="info-line"><span class="info-label">Cash</span><span class="blur-target" id="cashBolero"></span></div>
+                    <div class="info-line"><span class="info-label">Rendement</span><div class="info-values"><span class="blur-target main-value-small" id="profBoleroEuro"></span><span id="profBoleroPerc" class="sub-value-small"></span></div></div>
                 </div>
             </div>
-            <div class="card" style="border-left: 5px solid var(--saxo);">
+            <div class="card card-saxo">
                 <h3>Saxo</h3>
-                <div class="value blur-target" id="valSaxo">€ 0,00</div>
+                <div class="value blur-target" id="valSaxo"></div>
                 <div id="chgSaxo" class="change-row"></div>
                 <div class="extra-info">
-                    <div class="info-line">
-                        <span class="info-label">Rendement</span>
-                        <div>
-                            <div class="info-val blur-target" id="profSaxoEuro">€ 0,00</div>
-                            <div class="info-sub" id="profSaxoPerc">0.00%</div>
-                        </div>
-                    </div>
+                    <div class="info-line"><span class="info-label">Cash</span><span class="blur-target" id="cashSaxo"></span></div>
+                    <div class="info-line"><span class="info-label">Rendement</span><div class="info-values"><span class="blur-target main-value-small" id="profSaxoEuro"></span><span id="profSaxoPerc" class="sub-value-small"></span></div></div>
                 </div>
             </div>
         </div>
 
-        <div class="card" style="margin-bottom: 1.5rem;">
-            <h3>Vermogensverloop</h3>
-            <div style="height: 220px; margin-top: 1rem;"><canvas id="growthChart"></canvas></div>
+        <div class="charts-master-grid">
+            <div class="card chart-box span-2"><h3>TOTAAL VERMOGEN</h3><div class="chart-wrapper"><canvas id="growthChart"></canvas></div></div>
+            <div class="card chart-box"><h3>VERDELING</h3><div class="chart-wrapper"><canvas id="pieChart"></canvas></div></div>
+            <div class="card chart-box"><h3>DEGIRO</h3><div class="chart-wrapper"><canvas id="chartDegiro"></canvas></div></div>
+            <div class="card chart-box"><h3>BOLERO</h3><div class="chart-wrapper"><canvas id="chartBolero"></canvas></div></div>
+            <div class="card chart-box"><h3>SAXO</h3><div class="chart-wrapper"><canvas id="chartSaxo"></canvas></div></div>
         </div>
     </div>
-
     <div id="data-page" class="tab-content">
         <div class="header">
-            <h1 style="margin:0;">DATA BEHEER</h1>
-            <div style="display:flex; gap:8px;">
-                <button class="btn btn-main" onclick="saveData()">💾 Opslaan</button>
+            <h1>DATA & BEHEER</h1>
+            <button class="btn btn-main" onclick="saveData()">💾 Dashboard Bijwerken</button>
+        </div>
+
+        <div class="card" style="margin-bottom: 2rem; border: 1px solid #007aff20; background: #007aff05;">
+            <h3 style="color: #007aff;">☁️ iCloud & Backup</h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Back-up al je data naar één bestand voor iCloud.</p>
+            <div style="display:flex; gap:10px;">
+                <button class="btn" style="background:#007aff; color:white; border:none;" onclick="exportMasterJSON()">Backup naar iCloud</button>
+                <button class="btn" style="background:var(--row-hover);" onclick="document.getElementById('importJSON').click()">📥 Herstel Bestand</button>
+                <input type="file" id="importJSON" style="display:none" accept=".json" onchange="importMasterJSON(this)">
             </div>
         </div>
 
-        <div class="card" style="margin-bottom: 1.5rem;">
-            <h3>Broker Standen (DD/MM/YYYY)</h3>
+        <div class="card" style="margin-bottom: 2rem;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+                <h3>📊 Broker Standen</h3>
+                <div style="display:flex; gap:8px;"><button class="btn" style="background:var(--bg-color);" onclick="document.getElementById('importBrokerCSV').click()">📥 Import CSV</button><input type="file" id="importBrokerCSV" style="display:none" accept=".csv" onchange="importCSV(this, 'broker')"><button class="btn btn-csv" onclick="exportCSV('broker')">CSV Export</button></div>
+            </div>
             <div style="overflow-x: auto;">
-                <table id="brokerTable">
+                <table>
                     <thead><tr><th>Datum</th><th>Degiro</th><th>Bolero</th><th>Saxo</th><th></th></tr></thead>
                     <tbody id="brokerTableBody"></tbody>
                 </table>
             </div>
-            <button class="btn" style="margin-top: 1rem; width: 100%;" onclick="addRow('broker')">+ Nieuwe Dag</button>
+            <button class="btn" onclick="addRow('broker')" style="margin-top:10px;">+ Nieuwe Dag</button>
         </div>
 
         <div class="card">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
-                <h3>Cash Flow</h3>
-                <button class="btn" onclick="exportMasterJSON()">☁️ Backup</button>
+                <h3>💸 Cash Flow Mutaties</h3>
+                <div style="display:flex; gap:8px;"><button class="btn" style="background:var(--bg-color);" onclick="document.getElementById('importCashCSV').click()">📥 Import CSV</button><input type="file" id="importCashCSV" style="display:none" accept=".csv" onchange="importCSV(this, 'cash')"><button class="btn btn-csv" onclick="exportCSV('cash')">CSV Export</button></div>
             </div>
             <div style="overflow-x: auto;">
                 <table>
-                    <thead><tr><th>Datum</th><th>Broker</th><th>Type</th><th>Bedrag</th><th></th></tr></thead>
+                    <thead><tr><th>Datum</th><th>Broker</th><th>Type</th><th>Bedrag (€)</th><th></th></tr></thead>
                     <tbody id="cashTableBody"></tbody>
                 </table>
             </div>
-            <button class="btn" style="margin-top: 1rem; width: 100%;" onclick="addRow('cash')">+ Nieuwe Mutatie</button>
-        </div>
-        <div style="margin-top: 2rem; display: flex; gap: 10px;">
-            <button class="btn" onclick="document.getElementById('importJSON').click()">📥 Herstel Backup</button>
-            <input type="file" id="importJSON" style="display:none" accept=".json" onchange="importMasterJSON(this)">
+            <button class="btn" onclick="addRow('cash')" style="margin-top:10px;">+ Nieuwe Mutatie</button>
         </div>
     </div>
-</div>
-
 <script>
-    // --- DATUM SORTEER LOGICA (Toegevoegd) ---
-    function parseDate(s) {
-        if (!s) return new Date(0);
-        const parts = s.split('/');
-        if (parts.length === 3) return new Date(parts[2], parts[1] - 1, parts[0]);
-        if (parts.length === 2) return new Date(2026, parts[1] - 1, parts[0]);
-        return new Date(0);
-    }
-
-    // --- DATA INITIALISATIE (EXACT v1) ---
-    let brokerData = JSON.parse(localStorage.getItem('v25_broker')) || [
-        { date: '17/04/2026', degiro: 57170, bolero: 23132, saxo: 34940 },
-        { date: '16/04/2026', degiro: 56000, bolero: 22700, saxo: 34100 }
-    ];
-    let cashData = JSON.parse(localStorage.getItem('v25_cash')) || [
-        { date: '01/01/2021', broker: 'Degiro', type: 'Gestort', amount: 38000 }
-    ];
-
-    let growthChart;
-
-    function formatEuro(v) { 
-        return "€ " + (v || 0).toLocaleString('nl-NL', {minimumFractionDigits: 2, maximumFractionDigits: 2}); 
-    }
-
+    Chart.register(ChartDataLabels);
+    
     function toggleTheme() {
-        const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-        document.documentElement.setAttribute('data-theme', theme);
-        localStorage.setItem('v25_theme', theme);
-        document.getElementById('themeBtn').innerText = theme === 'dark' ? '☀️' : '🌙';
+        const current = document.documentElement.getAttribute('data-theme');
+        const next = current === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', next);
+        localStorage.setItem('v25_theme', next);
+        document.getElementById('themeBtn').innerText = next === 'dark' ? '☀️' : '🌙';
     }
+
+    let brokerData = JSON.parse(localStorage.getItem('v25_broker')) || [
+        { date: '13/04', degiro: 50850, bolero: 21720, saxo: 31720 },
+        { date: '14/04', degiro: 54090, bolero: 22414, saxo: 33640 },
+        { date: '15/04', degiro: 55400, bolero: 22650, saxo: 34260 },
+        { date: '16/04', degiro: 56000, bolero: 22700, saxo: 34100 },
+        { date: '17/04', degiro: 57170, bolero: 23132, saxo: 34940 }
+    ];
+    
+    let cashData = JSON.parse(localStorage.getItem('v25_cash')) || [
+        { date: '07/2023', broker: 'Degiro', type: 'Gestort', amount: 38512 },
+        { date: '01/2021', broker: 'Bolero', type: 'Gestort', amount: 12570 },
+        { date: '12/2024', broker: 'Saxo', type: 'Gestort', amount: 26300 }
+    ];
+
+    let charts = {};
 
     function switchTab(id, el) {
         document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
@@ -359,10 +654,11 @@
     }
 
     function toggleBlur() { document.querySelectorAll('.blur-target').forEach(e => e.classList.toggle('blur')); }
+    function formatEuro(v) { return "€ " + (v || 0).toLocaleString('nl-NL', {minimumFractionDigits: 2}); }
 
     function addRow(type) {
-        if(type === 'broker') brokerData.unshift({date: '', degiro: 0, bolero: 0, saxo: 0});
-        else cashData.unshift({date: '', broker: 'Degiro', type: 'Gestort', amount: 0});
+        if(type === 'broker') brokerData.push({date: '', degiro: 0, bolero: 0, saxo: 0});
+        else cashData.push({date: '', broker: 'Degiro', type: 'Gestort', amount: 0});
         renderTables();
     }
 
@@ -370,21 +666,76 @@
         localStorage.setItem('v25_broker', JSON.stringify(brokerData));
         localStorage.setItem('v25_cash', JSON.stringify(cashData));
         updateDashboard();
-        alert("Opgeslagen!");
+        alert("Gegevens opgeslagen!");
+    }
+
+    function updateDashboard() {
+        brokerData.sort((a,b) => {
+            if(!a.date || !b.date) return 0;
+            const [d1, m1] = a.date.split('/').map(Number);
+            const [d2, m2] = b.date.split('/').map(Number);
+            return (m1 * 100 + d1) - (m2 * 100 + d2);
+        });
+        const last = brokerData[brokerData.length-1];
+        const prev = brokerData[brokerData.length-2] || last;
+        const total = last.degiro + last.bolero + last.saxo;
+        const pTotal = prev.degiro + prev.bolero + prev.saxo;
+
+        let cash = { Degiro: 0, Bolero: 0, Saxo: 0, Totaal: 0 };
+        cashData.forEach(c => {
+            const val = c.type === 'Gestort' ? c.amount : -c.amount;
+            cash[c.broker] += val;
+            cash.Totaal += val;
+        });
+
+        const profitTotal = total - cash.Totaal;
+        const percTotal = cash.Totaal !== 0 ? ((profitTotal / cash.Totaal) * 100).toFixed(2) : 0;
+
+        document.getElementById('totalValue').innerText = formatEuro(total);
+        document.getElementById('netInleg').innerText = formatEuro(cash.Totaal);
+        document.getElementById('profitEuro').innerText = formatEuro(profitTotal);
+        document.getElementById('profitPerc').innerText = "(" + percTotal + "%)";
+        document.getElementById('profitEuro').style.color = profitTotal >= 0 ? 'var(--success)' : 'var(--danger)';
+
+        ['Degiro', 'Bolero', 'Saxo'].forEach(b => {
+            const currentVal = last[b.toLowerCase()];
+            const cashVal = cash[b];
+            const pEuro = currentVal - cashVal;
+            const pPerc = cashVal !== 0 ? ((pEuro / cashVal) * 100).toFixed(2) : 0;
+            document.getElementById(`val${b}`).innerText = formatEuro(currentVal);
+            document.getElementById(`cash${b}`).innerText = formatEuro(cashVal);
+            document.getElementById(`prof${b}Euro`).innerText = formatEuro(pEuro);
+            document.getElementById(`prof${b}Perc`).innerText = "(" + pPerc + "%)";
+            document.getElementById(`prof${b}Euro`).style.color = pEuro >= 0 ? 'var(--success)' : 'var(--danger)';
+        });
+
+        document.getElementById('lastUpdate').innerText = `Laatst bijgewerkt op ${last.date} 2026`;
+        updateChange('totalChange', total, pTotal);
+        updateChange('chgDegiro', last.degiro, prev.degiro);
+        updateChange('chgBolero', last.bolero, prev.bolero);
+        updateChange('chgSaxo', last.saxo, prev.saxo);
+        updateCharts();
+        renderTables();
+    }
+
+    function updateChange(id, cur, prev) {
+        const diff = cur - prev, perc = prev !== 0 ? ((diff / prev) * 100).toFixed(2) : 0;
+        const el = document.getElementById(id);
+        el.style.color = diff >= 0 ? 'var(--success)' : 'var(--danger)';
+        el.innerHTML = `<span>${diff >= 0 ? '▲' : '▼'}</span> <span class="blur-target">${formatEuro(Math.abs(diff))}</span> (${perc}%)`;
     }
 
     function renderTables() {
         const bt = document.getElementById('brokerTableBody'); bt.innerHTML = '';
         brokerData.forEach((r, i) => {
             bt.innerHTML += `<tr>
-                <td><input type="text" placeholder="DD/MM/YYYY" value="${r.date}" onchange="brokerData[${i}].date=this.value"></td>
+                <td><input type="text" value="${r.date}" onchange="brokerData[${i}].date=this.value"></td>
                 <td><input type="number" value="${r.degiro}" onchange="brokerData[${i}].degiro=parseFloat(this.value)"></td>
                 <td><input type="number" value="${r.bolero}" onchange="brokerData[${i}].bolero=parseFloat(this.value)"></td>
                 <td><input type="number" value="${r.saxo}" onchange="brokerData[${i}].saxo=parseFloat(this.value)"></td>
-                <td><button class="btn" onclick="brokerData.splice(${i},1);renderTables()">✕</button></td>
+                <td><button onclick="brokerData.splice(${i},1);renderTables()">✕</button></td>
             </tr>`;
         });
-
         const ct = document.getElementById('cashTableBody'); ct.innerHTML = '';
         cashData.forEach((r, i) => {
             ct.innerHTML += `<tr>
@@ -392,80 +743,186 @@
                 <td><select onchange="cashData[${i}].broker=this.value"><option ${r.broker==='Degiro'?'selected':''}>Degiro</option><option ${r.broker==='Bolero'?'selected':''}>Bolero</option><option ${r.broker==='Saxo'?'selected':''}>Saxo</option></select></td>
                 <td><select onchange="cashData[${i}].type=this.value"><option ${r.type==='Gestort'?'selected':''}>Gestort</option><option ${r.type==='Opgenomen'?'selected':''}>Opgenomen</option></select></td>
                 <td><input type="number" value="${r.amount}" onchange="cashData[${i}].amount=parseFloat(this.value)"></td>
-                <td><button class="btn" onclick="cashData.splice(${i},1);renderTables()">✕</button></td>
+                <td><button onclick="cashData.splice(${i},1);renderTables()">✕</button></td>
             </tr>`;
         });
     }
 
-    function updateDashboard() {
-        // --- AUTOMATISCHE SORTERING ---
-        brokerData.sort((a, b) => parseDate(b.date) - parseDate(a.date));
-        const sortedCharts = [...brokerData].sort((a, b) => parseDate(a.date) - parseDate(b.date));
-
-        const last = brokerData[0] || {degiro:0, bolero:0, saxo:0, date:''};
-        const prev = brokerData[1] || last;
-        const total = last.degiro + last.bolero + last.saxo;
-        
-        let netInleg = 0;
-        cashData.forEach(c => netInleg += (c.type === 'Gestort' ? c.amount : -c.amount));
-
-        document.getElementById('totalValue').innerText = formatEuro(total);
-        document.getElementById('netInleg').innerText = formatEuro(netInleg);
-        document.getElementById('profitEuro').innerText = formatEuro(total - netInleg);
-        document.getElementById('profitPerc').innerText = (netInleg ? ((total-netInleg)/netInleg*100).toFixed(2) : 0) + "%";
-
-        document.getElementById('valDegiro').innerText = formatEuro(last.degiro);
-        document.getElementById('valBolero').innerText = formatEuro(last.bolero);
-        document.getElementById('valSaxo').innerText = formatEuro(last.saxo);
-        document.getElementById('lastUpdate').innerText = `Update: ${last.date}`;
-
-        renderTables();
-        updateChart(sortedCharts);
+    function exportCSV(type) {
+        let csv = '', filename = '';
+        if(type === 'broker') {
+            csv = 'Datum;Degiro;Bolero;Saxo\n' + brokerData.map(r => `${r.date};${r.degiro};${r.bolero};${r.saxo}`).join('\n');
+            filename = 'portfolio_broker_data.csv';
+        } else {
+            csv = 'Datum;Broker;Type;Bedrag\n' + cashData.map(r => `${r.date};${r.broker};${r.type};${r.amount}`).join('\n');
+            filename = 'portfolio_cash_data.csv';
+        }
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.setAttribute("download", filename);
+        link.click();
     }
 
-    function updateChart(data) {
-        const ctx = document.getElementById('growthChart').getContext('2d');
-        if(growthChart) growthChart.destroy();
-        growthChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: data.map(d => d.date),
-                datasets: [{
-                    data: data.map(d => d.degiro + d.bolero + d.saxo),
-                    borderColor: '#6c757d',
-                    backgroundColor: 'rgba(108, 117, 125, 0.1)',
-                    fill: true,
-                    tension: 0.4
-                }]
-            },
-            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: {display: false} } }
+    function importCSV(input, type) {
+        const file = input.files[0];
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const lines = e.target.result.split('\n');
+            const result = [];
+            for(let i = 1; i < lines.length; i++) {
+                if(!lines[i]) continue;
+                const cols = lines[i].split(';');
+                if(type === 'broker') result.push({date: cols[0], degiro: parseFloat(cols[1]), bolero: parseFloat(cols[2]), saxo: parseFloat(cols[3])});
+                else result.push({date: cols[0], broker: cols[1], type: cols[2], amount: parseFloat(cols[3])});
+            }
+            if(type === 'broker') brokerData = result; else cashData = result;
+            renderTables();
+            alert('CSV succesvol geïmporteerd!');
+        };
+        reader.readAsText(file);
+    }
+
+    function updateCharts() {
+        const labels = brokerData.map(d => d.date);
+        charts.main.data.labels = labels;
+        charts.main.data.datasets[0].data = brokerData.map(d => d.degiro + d.bolero + d.saxo);
+        charts.main.update();
+        const last = brokerData[brokerData.length-1];
+        charts.pie.data.datasets[0].data = [last.degiro, last.bolero, last.saxo];
+        charts.pie.update();
+        ['degiro', 'bolero', 'saxo'].forEach(b => {
+            charts[b].data.labels = labels;
+            charts[b].data.datasets[0].data = brokerData.map(d => d[b]);
+            charts[b].update();
         });
     }
 
-    function exportMasterJSON() {
-        const fullData = { brokerData, cashData };
-        const blob = new Blob([JSON.stringify(fullData)], { type: 'application/json' });
-        const a = document.createElement("a");
-        a.href = URL.createObjectURL(blob);
-        a.download = "portfolio_backup.json";
-        a.click();
-    }
-
-    function importMasterJSON(input) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            const d = JSON.parse(e.target.result);
-            brokerData = d.brokerData; cashData = d.cashData;
-            saveData();
-        };
-        reader.readAsText(input.files[0]);
+    function initCharts() {
+        const lineOpt = { responsive: true,
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                events: ['touchstart', 'touchmove', 'click', 'mousemove'], maintainAspectRatio: false, plugins: { legend: {display: false}, datalabels: { display: false } }, scales: { x: { grid: { display: false } }, y: { display: false } } };
+        charts.main = new Chart(document.getElementById('growthChart'), { type: 'line', data: { labels: [], datasets: [{ data: [], borderColor: '#6c757d', backgroundColor: '#6c757d15', fill: true, tension: 0.4, pointRadius: 4, pointHoverRadius: 6, borderWidth: 3 }] }, options: lineOpt });
+        ['degiro', 'bolero', 'saxo'].forEach(b => {
+            const colors = { degiro: '#f1c40f', bolero: '#3498db', saxo: '#e67e22' };
+            charts[b] = new Chart(document.getElementById('chart' + b.charAt(0).toUpperCase() + b.slice(1)), { type: 'line', data: { labels: [], datasets: [{ data: [], borderColor: colors[b], backgroundColor: colors[b]+'15', fill: true, tension: 0.4, pointRadius: 4, pointHoverRadius: 6, borderWidth: 3 }] }, options: lineOpt });
+        });
+        charts.pie = new Chart(document.getElementById('pieChart'), { type: 'doughnut', data: { labels: ['Degiro', 'Bolero', 'Saxo'], datasets: [{ data: [], backgroundColor: ['#f1c40f', '#3498db', '#e67e22'], borderWeight: 0 }] }, options: { 
+                cutout: '70%', 
+                maintainAspectRatio: false, 
+                layout: { padding: { top: 10, bottom: 10, left: 10, right: 10 } },
+                plugins: { 
+                    legend: { 
+                        display: true,
+                        position: 'bottom', 
+                        labels: { 
+                            usePointStyle: true, 
+                            padding: 15,
+                            font: { size: 12 }
+                        } 
+                    }, datalabels: { display: true, color: '#fff', font: { weight: 'bold' }, formatter: (v, c) => { let s=0; c.chart.data.datasets[0].data.forEach(x=>s+=x); return (v*100/s).toFixed(0)+"%"; } } } } });
     }
 
     window.onload = () => {
-        const theme = localStorage.getItem('v25_theme') || 'light';
-        document.documentElement.setAttribute('data-theme', theme);
-        updateDashboard();
+        const savedTheme = localStorage.getItem('v25_theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        document.getElementById('themeBtn').innerText = savedTheme === 'dark' ? '☀️' : '🌙';
+        initCharts(); 
+        updateDashboard(); 
     };
+
+    function exportMasterJSON() {
+        const fullData = {
+            version: "27.0",
+            timestamp: new Date().toISOString(),
+            brokerData: brokerData,
+            cashData: cashData,
+            theme: localStorage.getItem('v25_theme') || 'light'
+        };
+        const blob = new Blob([JSON.stringify(fullData, null, 2)], { type: 'application/json' });
+        const link = document.createElement("a");
+        const dateStr = new Date().toLocaleDateString('nl-NL').replace(/\//g, '-');
+        link.href = URL.createObjectURL(blob);
+        link.setAttribute("download", `Portfolio_Master_Backup_${dateStr}.json`);
+        link.click();
+        alert("Master Backup gegenereerd! Sla dit bestand op in je iCloud Drive.");
+    }
+
+    function importMasterJSON(input) {
+        const file = input.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                const data = JSON.parse(e.target.result);
+                if (data.brokerData && data.cashData) {
+                    brokerData = data.brokerData;
+                    cashData = data.cashData;
+                    if (data.theme) {
+                        document.documentElement.setAttribute('data-theme', data.theme);
+                        localStorage.setItem('v25_theme', data.theme);
+                    }
+                    saveData();
+                    updateDashboard();
+                    alert("Succes! Alle data en instellingen zijn hersteld.");
+                } else {
+                    alert("Ongeldig backup bestand.");
+                }
+            } catch (err) {
+                alert("Fout bij het lezen van het bestand.");
+            }
+        };
+        reader.readAsText(file);
+    }
+
+
+    function importCSV(input, type) {
+        const file = input.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const text = e.target.result;
+            const lines = text.split('\n');
+            const newRows = [];
+            
+            // Start bij 1 om header over te slaan
+            for (let i = 1; i < lines.length; i++) {
+                if (!lines[i].trim()) continue;
+                const cols = lines[i].split(',');
+                
+                if (type === 'broker') {
+                    newRows.push({
+                        date: cols[0],
+                        degiro: parseFloat(cols[1]) || 0,
+                        bolero: parseFloat(cols[2]) || 0,
+                        saxo: parseFloat(cols[3]) || 0
+                    });
+                } else {
+                    newRows.push({
+                        date: cols[0],
+                        broker: cols[1],
+                        type: cols[2],
+                        amount: parseFloat(cols[3]) || 0
+                    });
+                }
+            }
+            
+            if (newRows.length > 0) {
+                if (confirm(`Weet je zeker dat je ${newRows.length} regels wilt importeren? Dit vervangt de huidige tabel.`)) {
+                    if (type === 'broker') brokerData = newRows;
+                    else cashData = newRows;
+                    saveData();
+                    updateDashboard();
+                    alert("Import geslaagd!");
+                }
+            }
+        };
+        reader.readAsText(file);
+    }
+
 </script>
 </body>
 </html>
