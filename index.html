@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> PORTFOLIO v1</title>
+    <title>Portfolio v1</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js">
     function exportMasterJSON() {
         const fullData = {
@@ -18,7 +18,7 @@
         const link = document.createElement("a");
         const dateStr = new Date().toLocaleDateString('nl-NL').replace(/\//g, '-');
         link.href = URL.createObjectURL(blob);
-        link.setAttribute("download", `_Master_Backup_${dateStr}.json`);
+        link.setAttribute("download", `Portfolio_Master_Backup_${dateStr}.json`);
         link.click();
         alert("Master Backup gegenereerd! Sla dit bestand op in je iCloud Drive.");
     }
@@ -347,155 +347,69 @@
             .charts-master-grid { grid-template-columns: 1fr; }
             .span-2 { grid-column: span 1; }
         }
-    
-        /* iPhone 14 Pro & Mobiele Optimalisaties */
-        @media (max-width: 480px) {
-            .stats-grid { grid-template-columns: 1fr; }
-            .card .value { font-size: 1.5rem; }
-            .info-line { 
-                flex-direction: row; 
-                flex-wrap: nowrap;
-                justify-content: space-between;
-                align-items: flex-start;
-                gap: 10px;
-                margin-bottom: 4px;
-            }
-            /* Specifiek voor het rendement-blokje op mobiel */
-            .info-line div[style*="display:flex"] {
-                flex-direction: column !important;
-                align-items: flex-end !important;
-                text-align: right;
-                min-width: fit-content;
-            }
-            .info-line span:last-child {
-                font-size: 0.7rem; /* Maak percentage iets kleiner om ruimte te winnen */
-                opacity: 0.8;
-            }
-            /* Forceer rendement waarden op een nieuwe regel als ze te breed zijn */
-            .info-line div {
-                display: flex;
-                flex-direction: column;
-                align-items: flex-end !important;
-                text-align: right;
-            }
-            .header-titles h1 { font-size: 1.5rem; }
-            #lastUpdate { font-size: 0.8rem; }
+ /* Zorgt dat euro en percentage onder elkaar staan en rechts uitlijnen */
+.info-values {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-end !important;
+    text-align: right !important;
+}
+
+/* Optioneel: wat extra ruimte tussen het euroteken en het percentage */
+.sub-value-small {
+    font-size: 0.75rem !important;
+    margin-top: 2px !important;
+    display: block !important;
+}   
+@media (max-width: 480px) {
+        /* Grid naar 1 kolom voor kaarten */
+        .stats-grid { 
+            grid-template-columns: 1fr !important; 
+            gap: 1rem;
         }
-    
-        @media (max-width: 480px) {
-            .extra-info {
-                margin-top: 15px;
-                border-top: 1px solid rgba(0,0,0,0.05);
-                padding-top: 10px;
-            }
-            .info-line {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                align-items: center;
-                margin-bottom: 8px;
-            }
-            .info-label {
-                font-size: 0.65rem;
-                text-transform: uppercase;
-                letter-spacing: 0.5px;
-                color: var(--text-muted);
-            }
-            .info-line div, .info-line .blur-target {
-                text-align: right;
-                font-weight: 600;
-                font-size: 0.85rem;
-            }
-            /* Rendement euro en percentage strak onder elkaar aan de rechterkant */
-            .profit-wrapper {
-                display: flex;
-                flex-direction: column;
-                align-items: flex-end;
-            }
-            .profit-perc-small {
-                font-size: 0.7rem !important;
-                font-weight: 400 !important;
-                opacity: 0.7;
-            }
+
+        /* Zorgt dat labels en waardes op één lijn staan */
+        .info-line {
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: flex-start !important;
+            margin-bottom: 10px;
+            padding: 2px 0;
+            position: relative;
         }
-    
-    
-        @media (max-width: 480px) {
-            .info-line {
-                display: flex;
-                justify-content: space-between;
-                align-items: flex-start; /* Zorgt dat de tekst bovenaan uitlijnt */
-                margin-bottom: 10px;
-                padding: 4px 0;
-            }
-            .info-label {
-                font-size: 0.7rem;
-                font-weight: 500;
-                color: var(--text-muted);
-                padding-top: 2px;
-            }
-            /* Rechterkolom voor de waardes */
-            .info-values {
-                display: flex;
-                flex-direction: column;
-                align-items: flex-end; /* Alles strak naar rechts */
-                text-align: right;
-            }
-            #profitEuro, #profitPerc, #netInleg, #cashDegiro, #profDegiroEuro, #profDegiroPerc, 
-            #cashBolero, #profBoleroEuro, #profBoleroPerc, #cashSaxo, #profSaxoEuro, #profSaxoPerc {
-                display: block;
-                line-height: 1.2;
-            }
-            .main-value-small {
-                font-size: 0.9rem;
-                font-weight: 600;
-                color: var(--text-color);
-            }
-            .sub-value-small {
-                font-size: 0.75rem;
-                font-weight: 400;
-                opacity: 0.7;
-                margin-top: 6px; /* Extra spatie toegevoegd */
-            }
+
+        /* De rechterkant waar de euro's staan */
+        .info-values {
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: flex-end !important;
+            text-align: right !important;
+            min-width: 120px; /* Geeft ruimte zodat tekst niet overlapt */
         }
-    
-    
-        @media (max-width: 480px) {
-            .info-line {
-                display: flex;
-                justify-content: space-between;
-                align-items: flex-start;
-                margin-bottom: 12px;
-                padding: 4px 0;
-            }
-            .info-label {
-                font-size: 0.75rem;
-                font-weight: 500;
-                color: var(--text-muted);
-                flex-shrink: 0;
-            }
-            /* Rechter container die alles strak naar rechts duwt */
-            .info-values {
-                display: flex;
-                flex-direction: column;
-                align-items: flex-end;
-                text-align: right;
-                flex-grow: 1;
-            }
-            .main-value-small {
-                font-size: 0.95rem;
-                font-weight: 600;
-                display: block;
-                margin-bottom: 6px; /* De extra spatie */
-            }
-            .sub-value-small {
-                font-size: 0.8rem;
-                font-weight: 400;
-                opacity: 0.8;
-                display: block;
-            }
+
+        /* Het euro bedrag (haalt de zwevende euro weg) */
+        .main-value-small {
+            font-size: 0.9rem !important;
+            font-weight: 600 !important;
+            display: inline-block !important; /* Voorkomt dat het een los blok wordt */
+            line-height: 1.2 !important;
+            margin: 0 !important;
         }
-    
-    
+
+        /* Het percentage */
+        .sub-value-small {
+            font-size: 0.75rem !important;
+            display: block !important;
+            margin-top: 2px !important;
+        }
+
+        /* Fix voor de overlap: label mag niet te breed zijn */
+        .info-label {
+            font-size: 0.7rem;
+            flex-shrink: 0;
+            padding-right: 10px;
+        }
+    }
         canvas {
             touch-action: manipulation;
             -webkit-tap-highlight-color: rgba(0,0,0,0);
@@ -593,7 +507,7 @@
 
         <div class="card" style="margin-bottom: 2rem;">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
-                <h3>Broker Standen</h3>
+                <h3>Broker</h3>
                 <div style="display:flex; gap:8px;"><button class="btn" style="background:var(--bg-color);" onclick="document.getElementById('importBrokerCSV').click()">📥 Import CSV</button><input type="file" id="importBrokerCSV" style="display:none" accept=".csv" onchange="importCSV(this, 'broker')"><button class="btn btn-csv" onclick="exportCSV('broker')">CSV Export</button></div>
             </div>
             <div style="overflow-x: auto;">
@@ -846,7 +760,7 @@
         const link = document.createElement("a");
         const dateStr = new Date().toLocaleDateString('nl-NL').replace(/\//g, '-');
         link.href = URL.createObjectURL(blob);
-        link.setAttribute("download", `_Master_Backup_${dateStr}.json`);
+        link.setAttribute("download", `Portfolio_Master_Backup_${dateStr}.json`);
         link.click();
         alert("Master Backup gegenereerd! Sla dit bestand op in je iCloud Drive.");
     }
