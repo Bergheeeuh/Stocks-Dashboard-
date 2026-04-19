@@ -8,7 +8,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js">
     function exportMasterJSON() {
         const fullData = {
-            version: "27.0",
+            version: "1",
             timestamp: new Date().toISOString(),
             brokerData: brokerData,
             cashData: cashData,
@@ -419,17 +419,14 @@
 <body>
 
 <div class="nav">
-    
-    
     <div class="nav-links">
         <div class="nav-item active" onclick="switchTab('dashboard', this)">PORTFOLIO</div>
         <div class="nav-item" onclick="switchTab('data-page', this)">DATA</div>
     </div>
     <div style="display:flex; gap:10px; align-items:center;">
+        <button class="btn btn-theme" onclick="toggleBlur()" title="Verberg Bedragen">👁️</button>
         <button class="btn btn-theme" onclick="toggleTheme()" id="themeBtn">🌙</button>
     </div>
-
-
 </div>
 
 <div class="container">
@@ -439,7 +436,6 @@
                 <h1>PORTFOLIO</h1>
                 <p id="lastUpdate" style="color: var(--text-muted); font-size: 0.9rem;"></p>
             </div>
-            <button class="btn" onclick="toggleBlur()">👁️ Verberg Bedragen</button>
         </div>
 
         <div class="stats-grid">
@@ -567,7 +563,17 @@
         el.classList.add('active');
     }
 
-    function toggleBlur() { document.querySelectorAll('.blur-target').forEach(e => e.classList.toggle('blur')); }
+function toggleBlur() { 
+    // Wissel de blur op alle teksten
+    document.querySelectorAll('.blur-target').forEach(e => e.classList.toggle('blur')); 
+    
+    // Ververs de grafieken zodat de tooltips ook geblurred worden
+    for (let chartName in charts) {
+        if (charts[chartName]) {
+            charts[chartName].update();
+        }
+    }
+}
     function formatEuro(v) { return "€ " + (v || 0).toLocaleString('nl-NL', {minimumFractionDigits: 2}); }
 
     function addRow(type) {
@@ -712,33 +718,85 @@
         });
     }
 
-    function initCharts() {
-        const lineOpt = { responsive: true,
-                interaction: {
-                    mode: 'index',
-                    intersect: false,
-                },
-                events: ['touchstart', 'touchmove', 'click', 'mousemove'], maintainAspectRatio: false, plugins: { legend: {display: false}, datalabels: { display: false } }, scales: { x: { grid: { display: false } }, y: { display: false } } };
-        charts.main = new Chart(document.getElementById('growthChart'), { type: 'line', data: { labels: [], datasets: [{ data: [], borderColor: '#6c757d', backgroundColor: '#6c757d15', fill: true, tension: 0.4, pointRadius: 4, pointHoverRadius: 6, borderWidth: 3 }] }, options: lineOpt });
-        ['degiro', 'bolero', 'saxo'].forEach(b => {
-            const colors = { degiro: '#f1c40f', bolero: '#3498db', saxo: '#e67e22' };
-            charts[b] = new Chart(document.getElementById('chart' + b.charAt(0).toUpperCase() + b.slice(1)), { type: 'line', data: { labels: [], datasets: [{ data: [], borderColor: colors[b], backgroundColor: colors[b]+'15', fill: true, tension: 0.4, pointRadius: 4, pointHoverRadius: 6, borderWidth: 3 }] }, options: lineOpt });
+function initCharts() {
+    // 1. De instellingen voor alle lijngrafieken (inclusief de blur-logica)
+    const lineOpt = { 
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: {
+            mode: 'index',
+            intersect: false,
+        },
+        plugins: { 
+            legend: { display: false }, 
+            datalabels: { display: false },
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        let label = context.dataset.label || '';
+                        if (label) { label += ': '; }
+                        
+                        // Check of de blur-class aanwezig is
+                        const isBlurred = document.querySelector('.blur-target').classList.contains('blur');
+                        
+                        if (isBlurred) {
+                            return label + "€ •••••"; 
+                        } else {
+                            return label + formatEuro(context.parsed.y); 
+                        }
+                    }
+                }
+            }
+        }, 
+        scales: { 
+            x: { grid: { display: false } }, 
+            y: { display: false } 
+        } 
+    };
+
+    // 2. De Hoofdgrafiek aanmaken
+    charts.main = new Chart(document.getElementById('growthChart'), { 
+        type: 'line', 
+        data: { labels: [], datasets: [{ data: [], borderColor: '#6c757d', backgroundColor: '#6c757d15', fill: true, tension: 0.4, pointRadius: 4, pointHoverRadius: 6, borderWidth: 3 }] }, 
+        options: lineOpt 
+    });
+
+    // 3. De Broker-grafieken (Degiro, Bolero, Saxo) aanmaken
+    ['degiro', 'bolero', 'saxo'].forEach(b => {
+        const colors = { degiro: '#f1c40f', bolero: '#3498db', saxo: '#e67e22' };
+        charts[b] = new Chart(document.getElementById('chart' + b.charAt(0).toUpperCase() + b.slice(1)), { 
+            type: 'line', 
+            data: { labels: [], datasets: [{ label: b.charAt(0).toUpperCase() + b.slice(1), data: [], borderColor: colors[b], backgroundColor: colors[b]+'15', fill: true, tension: 0.4, pointRadius: 4, pointHoverRadius: 6, borderWidth: 3 }] }, 
+            options: lineOpt 
         });
-        charts.pie = new Chart(document.getElementById('pieChart'), { type: 'doughnut', data: { labels: ['Degiro', 'Bolero', 'Saxo'], datasets: [{ data: [], backgroundColor: ['#f1c40f', '#3498db', '#e67e22'], borderWeight: 0 }] }, options: { 
-                cutout: '70%', 
-                maintainAspectRatio: false, 
-                layout: { padding: { top: 10, bottom: 10, left: 10, right: 10 } },
-                plugins: { 
-                    legend: { 
-                        display: true,
-                        position: 'bottom', 
-                        labels: { 
-                            usePointStyle: true, 
-                            padding: 15,
-                            font: { size: 12 }
-                        } 
-                    }, datalabels: { display: true, color: '#fff', font: { weight: 'bold' }, formatter: (v, c) => { let s=0; c.chart.data.datasets[0].data.forEach(x=>s+=x); return (v*100/s).toFixed(0)+"%"; } } } } });
-    }
+    });
+
+    // 4. De Taartdiagram (Distribution) aanmaken
+    charts.pie = new Chart(document.getElementById('pieChart'), { 
+        type: 'doughnut', 
+        data: { labels: ['Degiro', 'Bolero', 'Saxo'], datasets: [{ data: [], backgroundColor: ['#f1c40f', '#3498db', '#e67e22'], borderWeight: 0 }] }, 
+        options: { 
+            cutout: '70%', 
+            maintainAspectRatio: false, 
+            plugins: { 
+                legend: { 
+                    display: true, 
+                    position: 'bottom',
+                    labels: { usePointStyle: true, font: { size: 12 } }
+                }, 
+                datalabels: { 
+                    display: true, 
+                    color: '#fff', 
+                    font: { weight: 'bold' }, 
+                    formatter: (v, c) => { 
+                        let s=0; c.chart.data.datasets[0].data.forEach(x=>s+=x); 
+                        return (v*100/s).toFixed(0)+"%"; 
+                    } 
+                } 
+            } 
+        } 
+    });
+}
 
     window.onload = () => {
         const savedTheme = localStorage.getItem('v25_theme') || 'light';
