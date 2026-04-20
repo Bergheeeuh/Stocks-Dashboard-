@@ -297,7 +297,30 @@
     transition: 0.2s;
     border-bottom: none;
 }
-
+/* Nieuwe styling voor de sub-tabs in DATA */
+.data-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 10px;
+}
+.data-tab-btn {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-weight: 700;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: 0.2s;
+}
+.data-tab-btn.active {
+    background: var(--row-hover);
+    color: var(--bolero); /* Of een andere accentkleur */
+}
+.sub-tab-content { display: none; }
+.sub-tab-content.active { display: block; }
 /* De sandwich knop styling */
 .menu-btn {
     font-size: 1.5rem;
@@ -551,16 +574,24 @@
             <button class="btn btn-icloud" onclick="exportMasterJSON()">Backup naar iCloud</button>
             <button class="btn" onclick="document.getElementById('importJSON').click()">Upload Backup</button>
             <input type="file" id="importJSON" style="display:none" accept=".json" onchange="importMasterJSON(this)">
-            
             <button class="btn btn-main" onclick="saveData()">UPDATE</button>
         </div>
     </div>
 
+    <div class="data-tabs">
+        <button class="data-tab-btn active" onclick="switchDataTab('broker-tab', this)">BROKER</button>
+        <button class="data-tab-btn" onclick="switchDataTab('cash-tab', this)">CASH</button>
+    </div>
 
+    <div id="broker-tab" class="sub-tab-content active">
         <div class="card" style="margin-bottom: 2rem;">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
-                <h3>Broker</h3>
-                <div style="display:flex; gap:8px;"><button class="btn" style="background:var(--bg-color);" onclick="document.getElementById('importBrokerCSV').click()">Upload CSV</button><input type="file" id="importBrokerCSV" style="display:none" accept=".csv" onchange="importCSV(this, 'broker')"><button class="btn btn-csv" onclick="exportCSV('broker')">Download CSV</button></div>
+                <h3>Broker Waardes</h3>
+                <div style="display:flex; gap:8px;">
+                    <button class="btn" style="background:var(--bg-color);" onclick="document.getElementById('importBrokerCSV').click()">Upload CSV</button>
+                    <input type="file" id="importBrokerCSV" style="display:none" accept=".csv" onchange="importCSV(this, 'broker')">
+                    <button class="btn btn-csv" onclick="exportCSV('broker')">Download CSV</button>
+                </div>
             </div>
             <div style="overflow-x: auto;">
                 <table>
@@ -570,11 +601,17 @@
             </div>
             <button class="btn" onclick="addRow('broker')" style="margin-top:10px;">+ Nieuw</button>
         </div>
+    </div>
 
+    <div id="cash-tab" class="sub-tab-content">
         <div class="card">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
-                <h3>Cash</h3>
-                <div style="display:flex; gap:8px;"><button class="btn" style="background:var(--bg-color);" onclick="document.getElementById('importCashCSV').click()">Upload CSV</button><input type="file" id="importCashCSV" style="display:none" accept=".csv" onchange="importCSV(this, 'cash')"><button class="btn btn-csv" onclick="exportCSV('cash')">Download CSV</button></div>
+                <h3>Cash Transacties</h3>
+                <div style="display:flex; gap:8px;">
+                    <button class="btn" style="background:var(--bg-color);" onclick="document.getElementById('importCashCSV').click()">Upload CSV</button>
+                    <input type="file" id="importCashCSV" style="display:none" accept=".csv" onchange="importCSV(this, 'cash')">
+                    <button class="btn btn-csv" onclick="exportCSV('cash')">Download CSV</button>
+                </div>
             </div>
             <div style="overflow-x: auto;">
                 <table>
@@ -585,12 +622,29 @@
             <button class="btn" onclick="addRow('cash')" style="margin-top:10px;">+ Nieuw</button>
         </div>
     </div>
+</div>
+
+
+    
 <script>
     function openNav() {
     document.getElementById("mySidebar").style.width = "250px";
     document.getElementById("overlay").style.display = "block";
 }
-
+function switchDataTab(tabId, btn) {
+    // Verberg alle sub-content
+    document.querySelectorAll('.sub-tab-content').forEach(content => {
+        content.classList.remove('active');
+    });
+    // Deactiveer alle sub-tab knoppen
+    document.querySelectorAll('.data-tab-btn').forEach(button => {
+        button.classList.remove('active');
+    });
+    
+    // Toon de gekozen tab en zet knop op actief
+    document.getElementById(tabId).classList.add('active');
+    btn.classList.add('active');
+}
 function closeNav() {
     document.getElementById("mySidebar").style.width = "0";
     document.getElementById("overlay").style.display = "none";
