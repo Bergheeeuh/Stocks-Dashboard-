@@ -494,10 +494,14 @@
         }
     </style>
 </head>
+
+
 <body>
 <div id="mySidebar" class="sidebar">
     <div class="nav-item active" onclick="switchTab('dashboard', this); closeNav()">PORTFOLIO</div>
     <div class="nav-item" onclick="switchTab('data-page', this); closeNav()">DATA</div>
+        <div class="nav-item" onclick="switchTab('aandelen-page', this); closeNav()">MARKT</div>
+
 </div>
 <div id="overlay" class="overlay" onclick="closeNav()"></div>
 <div class="nav">
@@ -510,6 +514,8 @@
         <button class="btn btn-theme" onclick="toggleTheme()" id="themeBtn">🌙</button>
     </div>
 </div>
+
+
 
 <div class="container">
     <div id="dashboard" class="tab-content active">
@@ -567,6 +573,10 @@
             <div class="card chart-box"><h3>SAXO</h3><div class="chart-wrapper"><canvas id="chartSaxo"></canvas></div></div>
         </div>
     </div>
+
+
+
+
  <div id="data-page" class="tab-content">
     <div class="header data-header-actions">
         <h1>DATA</h1>
@@ -586,7 +596,7 @@
     <div id="broker-tab" class="sub-tab-content active">
         <div class="card">
             <h3>BROKER</h3>
-            <button class="btn" onclick="addRow('broker')" style="margin-top: 20px; margin-bottom: 25px; background-color: var(--row-hover); width: 100%; text-align: left;">+ Nieuwe Dagwaarde</button>
+            <button class="btn" onclick="addRow('broker')" style="margin-top: 20px; margin-bottom: 25px; background-color: var(--row-hover); width: 100%; text-align: left;">+ Nieuw</button>
             <div style="overflow-x: auto;">
                 <table>
                     <thead><tr><th>Datum</th><th>Degiro</th><th>Bolero</th><th>Saxo</th><th></th></tr></thead>
@@ -595,6 +605,11 @@
             </div>
         </div>
     </div>
+</div>
+
+
+
+
 
 <div id="cash-tab" class="sub-tab-content">
     <style>
@@ -667,7 +682,39 @@
 </div>
 
 
+
+<div id="aandelen-page" class="tab-content">
+    <div class="header">
+        <div class="header-titles">
+            <h1>MARKT</h1>
+        </div>
+    </div>
+
+    <div class="stats-grid" style="grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); align-items: start;">
+        
+
+
+        <script type="module" src="https://widgets.tradingview-widget.com/w/en/tv-ticker-tag.js"></script>
+        <tv-ticker-tag symbol="SAXO:EURUSD" preserve-text size="small"></tv-ticker-tag> 
+
+        <script type="module" src="https://widgets.tradingview-widget.com/w/en/tv-ticker-tag.js"></script>
+        <tv-ticker-tag symbol="SAXO:EURUSD" preserve-text size="small"></tv-ticker-tag> 
+
+        <script type="module" src="https://widgets.tradingview-widget.com/w/en/tv-ticker-tag.js"></script>
+        <tv-ticker-tag symbol="SAXO:EURUSD" preserve-text size="small"></tv-ticker-tag>
+
+        <script type="module" src="https://widgets.tradingview-widget.com/w/en/tv-ticker-tag.js"></script>
+        <tv-ticker-tag symbol="SAXO:EURUSD" preserve-text size="small"></tv-ticker-tag> 
+
+        <script type="module" src="https://widgets.tradingview-widget.com/w/en/tv-ticker-tag.js"></script>
+        <tv-ticker-tag symbol="SAXO:EURUSD" preserve-text size="small"></tv-ticker-tag> 
+
+    </div>
+</div>
     
+
+
+
 <script>
     function openNav() {
     document.getElementById("mySidebar").style.width = "250px";
