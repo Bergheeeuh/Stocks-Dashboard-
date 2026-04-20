@@ -63,7 +63,7 @@
             // Start bij 1 om header over te slaan
             for (let i = 1; i < lines.length; i++) {
                 if (!lines[i].trim()) continue;
-                const cols = lines[i].split(',');
+                const cols = lines[i].split(';');
                 
                 if (type === 'broker') {
                     newRows.push({
@@ -154,7 +154,7 @@
             // Start bij 1 om header over te slaan
             for (let i = 1; i < lines.length; i++) {
                 if (!lines[i].trim()) continue;
-                const cols = lines[i].split(',');
+                const cols = lines[i].split(';');
                 
                 if (type === 'broker') {
                     newRows.push({
@@ -567,7 +567,7 @@
             <div class="card chart-box"><h3>SAXO</h3><div class="chart-wrapper"><canvas id="chartSaxo"></canvas></div></div>
         </div>
     </div>
-    <div id="data-page" class="tab-content">
+ <div id="data-page" class="tab-content">
     <div class="header data-header-actions">
         <h1>DATA</h1>
         <div class="header-btns">
@@ -584,42 +584,84 @@
     </div>
 
     <div id="broker-tab" class="sub-tab-content active">
-        <div class="card" style="margin-bottom: 2rem;">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
-                <h3>Broker Waardes</h3>
-                <div style="display:flex; gap:8px;">
-                    <button class="btn" style="background:var(--bg-color);" onclick="document.getElementById('importBrokerCSV').click()">Upload CSV</button>
-                    <input type="file" id="importBrokerCSV" style="display:none" accept=".csv" onchange="importCSV(this, 'broker')">
-                    <button class="btn btn-csv" onclick="exportCSV('broker')">Download CSV</button>
-                </div>
-            </div>
+        <div class="card">
+            <h3>BROKER</h3>
+            <button class="btn" onclick="addRow('broker')" style="margin-top: 20px; margin-bottom: 25px; background-color: var(--row-hover); width: 100%; text-align: left;">+ Nieuwe Dagwaarde</button>
             <div style="overflow-x: auto;">
                 <table>
                     <thead><tr><th>Datum</th><th>Degiro</th><th>Bolero</th><th>Saxo</th><th></th></tr></thead>
                     <tbody id="brokerTableBody"></tbody>
                 </table>
             </div>
-            <button class="btn" onclick="addRow('broker')" style="margin-top:10px;">+ Nieuw</button>
         </div>
     </div>
 
-    <div id="cash-tab" class="sub-tab-content">
-        <div class="card">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
-                <h3>Cash Transacties</h3>
-                <div style="display:flex; gap:8px;">
-                    <button class="btn" style="background:var(--bg-color);" onclick="document.getElementById('importCashCSV').click()">Upload CSV</button>
-                    <input type="file" id="importCashCSV" style="display:none" accept=".csv" onchange="importCSV(this, 'cash')">
-                    <button class="btn btn-csv" onclick="exportCSV('cash')">Download CSV</button>
-                </div>
+<div id="cash-tab" class="sub-tab-content">
+    <style>
+        /* Verwijder de pijltjes (spinners) voor alle browsers */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+        
+        .cash-input-wrapper {
+            display: flex;
+            align-items: center;
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 10px 15px;
+            margin-top: 15px;
+        }
+        .currency-symbol {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--text-main);
+            margin-right: 5px;
+        }
+        .cash-input-field {
+            width: 100%;
+            background: transparent !important;
+            border: none !important;
+            color: var(--text-main);
+            font-size: 1.5rem;
+            font-weight: bold;
+            outline: none;
+            padding: 0;
+        }
+    </style>
+
+    <div class="stats-grid" style="margin-top: 20px; margin-bottom: 20px;">
+       
+        <div class="card card-degiro">
+            <h3>Totaal Cash Degiro</h3>
+            <div class="cash-input-wrapper">
+                <span class="currency-symbol">€</span>
+                <input type="number" id="inputCashDegiro" class="cash-input-field" 
+                       onchange="updateSingleCash('Degiro', this.value)">
             </div>
-            <div style="overflow-x: auto;">
-                <table>
-                    <thead><tr><th>Datum</th><th>Broker</th><th>Type</th><th>Bedrag (€)</th><th></th></tr></thead>
-                    <tbody id="cashTableBody"></tbody>
-                </table>
+        </div>
+
+        <div class="card card-bolero">
+            <h3>Totaal Cash Bolero</h3>
+            <div class="cash-input-wrapper">
+                <span class="currency-symbol">€</span>
+                <input type="number" id="inputCashBolero" class="cash-input-field" 
+                       onchange="updateSingleCash('Bolero', this.value)">
             </div>
-            <button class="btn" onclick="addRow('cash')" style="margin-top:10px;">+ Nieuw</button>
+        </div>
+
+        <div class="card card-saxo">
+            <h3>Totaal Cash Saxo</h3>
+            <div class="cash-input-wrapper">
+                <span class="currency-symbol">€</span>
+                <input type="number" id="inputCashSaxo" class="cash-input-field" 
+                       onchange="updateSingleCash('Saxo', this.value)">
+            </div>
         </div>
     </div>
 </div>
@@ -649,7 +691,68 @@ function closeNav() {
     document.getElementById("mySidebar").style.width = "0";
     document.getElementById("overlay").style.display = "none";
 }
+// Functie om de individuele cashbedragen op te slaan
+function updateSingleCash(broker, value) {
+    const amount = parseFloat(value) || 0;
+    const index = cashData.findIndex(item => item.broker === broker);
+    
+    if (index !== -1) {
+        cashData[index].amount = amount;
+    } else {
+        cashData.push({ date: new Date().toLocaleDateString(), broker: broker, type: 'Gestort', amount: amount });
+    }
+    
+    saveData();
+    updateDashboard();
+    renderTables(); // Voeg deze regel toe voor de live update van het totaalblok
+}
 
+// Zorg dat bij het laden van de pagina de velden worden ingevuld
+function renderTables() {
+    // 1. Broker Tabel (bestaande code voor de dagwaardes)
+    const bt = document.getElementById('brokerTableBody');
+    if (bt) {
+        bt.innerHTML = '';
+        brokerData.slice().reverse().forEach((r, reversedIndex) => {
+            const i = brokerData.length - 1 - reversedIndex;
+            bt.innerHTML += `<tr>
+                <td><input type="text" value="${r.date}" onchange="brokerData[${i}].date=this.value"></td>
+                <td><input type="number" value="${r.degiro}" onchange="brokerData[${i}].degiro=parseFloat(this.value)"></td>
+                <td><input type="number" value="${r.bolero}" onchange="brokerData[${i}].bolero=parseFloat(this.value)"></td>
+                <td><input type="number" value="${r.saxo}" onchange="brokerData[${i}].saxo=parseFloat(this.value)"></td>
+                <td><button onclick="brokerData.splice(${i},1);renderTables()">✕</button></td>
+            </tr>`;
+        });
+    }
+
+    // 2. Vul de Cash vakjes en bereken direct het totaal
+    let totaalCash = 0;
+    
+    cashData.forEach(item => {
+        const val = parseFloat(item.amount) || 0;
+        if (item.broker === 'Degiro') {
+            const el = document.getElementById('inputCashDegiro');
+            if (el) el.value = val;
+            totaalCash += val;
+        }
+        if (item.broker === 'Bolero') {
+            const el = document.getElementById('inputCashBolero');
+            if (el) el.value = val;
+            totaalCash += val;
+        }
+        if (item.broker === 'Saxo') {
+            const el = document.getElementById('inputCashSaxo');
+            if (el) el.value = val;
+            totaalCash += val;
+        }
+    });
+
+    // 3. Toon het totaal in het display element
+    const display = document.getElementById('totalCashDisplay');
+    if (display) {
+        display.innerText = totaalCash.toLocaleString('nl-NL');
+    }
+}
 // Pas je bestaande switchTab een klein beetje aan om closeNav() aan te roepen
 const originalSwitchTab = switchTab;
 switchTab = function(tabId, element) {
@@ -674,11 +777,11 @@ switchTab = function(tabId, element) {
     }
 
     let brokerData = JSON.parse(localStorage.getItem('v25_broker')) || [
-        { date: '13/04', degiro: 50850, bolero: 21720, saxo: 31720 },
-        { date: '14/04', degiro: 54090, bolero: 22414, saxo: 33640 },
-        { date: '15/04', degiro: 55400, bolero: 22650, saxo: 34260 },
-        { date: '16/04', degiro: 56000, bolero: 22700, saxo: 34100 },
-        { date: '17/04', degiro: 57170, bolero: 23132, saxo: 34940 }
+        { date: '13/04/2026', degiro: 50850, bolero: 21720, saxo: 31720 },
+        { date: '14/04/2026', degiro: 54090, bolero: 22414, saxo: 33640 },
+        { date: '15/04/2026', degiro: 55400, bolero: 22650, saxo: 34260 },
+        { date: '16/04/2026', degiro: 56000, bolero: 22700, saxo: 34100 },
+        { date: '17/04/2026', degiro: 57170, bolero: 23132, saxo: 34940 }
     ];
     
     let cashData = JSON.parse(localStorage.getItem('v25_cash')) || [
@@ -708,12 +811,15 @@ function toggleBlur() {
     }
 }
     function formatEuro(v) { return "€ " + (v || 0).toLocaleString('nl-NL', {minimumFractionDigits: 2}); }
-
-    function addRow(type) {
-        if(type === 'broker') brokerData.push({date: '', degiro: 0, bolero: 0, saxo: 0});
-        else cashData.push({date: '', broker: 'Degiro', type: 'Gestort', amount: 0});
-        renderTables();
+function addRow(type) {
+    if(type === 'broker') {
+        brokerData.push({date: '', degiro: 0, bolero: 0, saxo: 0});
+    } else {
+        // Standaard nieuwe rij in de algemene cashData lijst
+        cashData.push({date: '', broker: 'Degiro', type: 'Gestort', amount: 0});
     }
+    renderTables();
+}
 
     function saveData() {
         localStorage.setItem('v25_broker', JSON.stringify(brokerData));
@@ -723,11 +829,11 @@ function toggleBlur() {
     }
 
     function updateDashboard() {
-        brokerData.sort((a,b) => {
-            if(!a.date || !b.date) return 0;
-            const [d1, m1] = a.date.split('/').map(Number);
-            const [d2, m2] = b.date.split('/').map(Number);
-            return (m1 * 100 + d1) - (m2 * 100 + d2);
+    // 1. Dwing chronologische volgorde af voor de grafiek
+    brokerData.sort((a, b) => {
+        const dateA = a.date.split('/').reverse().join('');
+        const dateB = b.date.split('/').reverse().join('');
+        return dateA.localeCompare(dateB);
         });
         const last = brokerData[brokerData.length-1];
         const prev = brokerData[brokerData.length-2] || last;
@@ -762,8 +868,7 @@ function toggleBlur() {
             document.getElementById(`prof${b}Euro`).style.color = pEuro >= 0 ? 'var(--success)' : 'var(--danger)';
         });
 
-        document.getElementById('lastUpdate').innerText = `Laatst bijgewerkt op ${last.date} 2026`;
-        updateChange('totalChange', total, pTotal);
+document.getElementById('lastUpdate').innerText = `Laatst bijgewerkt op ${last.date}`;        updateChange('totalChange', total, pTotal);
         updateChange('chgDegiro', last.degiro, prev.degiro);
         updateChange('chgBolero', last.bolero, prev.bolero);
         updateChange('chgSaxo', last.saxo, prev.saxo);
@@ -778,9 +883,13 @@ function toggleBlur() {
         el.innerHTML = `<span>${diff >= 0 ? '▲' : '▼'}</span> <span class="blur-target">${formatEuro(Math.abs(diff))}</span> (${perc}%)`;
     }
 
-    function renderTables() {
-        const bt = document.getElementById('brokerTableBody'); bt.innerHTML = '';
-        brokerData.forEach((r, i) => {
+ function renderTables() {
+    // 1. BROKER TABEL (Onveranderd)
+    const bt = document.getElementById('brokerTableBody'); 
+    if (bt) {
+        bt.innerHTML = '';
+        brokerData.slice().reverse().forEach((r, reversedIndex) => {
+            const i = brokerData.length - 1 - reversedIndex;
             bt.innerHTML += `<tr>
                 <td><input type="text" value="${r.date}" onchange="brokerData[${i}].date=this.value"></td>
                 <td><input type="number" value="${r.degiro}" onchange="brokerData[${i}].degiro=parseFloat(this.value)"></td>
@@ -789,18 +898,33 @@ function toggleBlur() {
                 <td><button onclick="brokerData.splice(${i},1);renderTables()">✕</button></td>
             </tr>`;
         });
-        const ct = document.getElementById('cashTableBody'); ct.innerHTML = '';
-        cashData.forEach((r, i) => {
-            ct.innerHTML += `<tr>
-                <td><input type="text" value="${r.date}" onchange="cashData[${i}].date=this.value"></td>
-                <td><select onchange="cashData[${i}].broker=this.value"><option ${r.broker==='Degiro'?'selected':''}>Degiro</option><option ${r.broker==='Bolero'?'selected':''}>Bolero</option><option ${r.broker==='Saxo'?'selected':''}>Saxo</option></select></td>
-                <td><select onchange="cashData[${i}].type=this.value"><option ${r.type==='Gestort'?'selected':''}>Gestort</option><option ${r.type==='Opgenomen'?'selected':''}>Opgenomen</option></select></td>
-                <td><input type="number" value="${r.amount}" onchange="cashData[${i}].amount=parseFloat(this.value)"></td>
-                <td><button onclick="cashData.splice(${i},1);renderTables()">✕</button></td>
-            </tr>`;
-        });
     }
 
+    // 2. CASH INPUTS (Vult de 3 vakjes in de DATA tab)
+    const getAmount = (b) => {
+        const entry = cashData.find(item => item.broker === b);
+        return entry ? entry.amount : 0;
+    };
+
+    if (document.getElementById('inputCashDegiro')) document.getElementById('inputCashDegiro').value = getAmount('Degiro');
+    if (document.getElementById('inputCashBolero')) document.getElementById('inputCashBolero').value = getAmount('Bolero');
+    if (document.getElementById('inputCashSaxo')) document.getElementById('inputCashSaxo').value = getAmount('Saxo');
+}
+
+// Nieuwe simpele bewaarfunctie
+function updateSingleCash(broker, value) {
+    const amount = parseFloat(value) || 0;
+    const index = cashData.findIndex(item => item.broker === broker);
+    
+    if (index !== -1) {
+        cashData[index].amount = amount;
+    } else {
+        cashData.push({ date: 'Totaal', broker: broker, type: 'Gestort', amount: amount });
+    }
+    
+    localStorage.setItem('v25_cash', JSON.stringify(cashData)); // Direct opslaan
+    updateDashboard(); // Cijfers op portfolio pagina bijwerken
+}
     function exportCSV(type) {
         let csv = '', filename = '';
         if(type === 'broker') {
@@ -878,10 +1002,22 @@ function initCharts() {
     }
 }
         }, 
-        scales: { 
-            x: { grid: { display: false } }, 
-            y: { display: false } 
-        } 
+scales: {
+    x: {
+        ticks: {
+            callback: function(val, index) {
+                const total = this.chart.data.labels.length;
+                if (index === 0 || index === total - 1) {
+                    return this.getLabelForValue(val);
+                }
+                return '';
+            },
+            autoSkip: false,
+            maxRotation: 0
+        }
+    },
+    y: { beginAtZero: false }
+}
     };
 
     // 2. De Hoofdgrafiek aanmaken
@@ -993,7 +1129,7 @@ function initCharts() {
             // Start bij 1 om header over te slaan
             for (let i = 1; i < lines.length; i++) {
                 if (!lines[i].trim()) continue;
-                const cols = lines[i].split(',');
+                const cols = lines[i].split(';');
                 
                 if (type === 'broker') {
                     newRows.push({
