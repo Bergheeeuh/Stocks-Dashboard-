@@ -517,7 +517,9 @@
 
 
 
+
 <div class="container">
+
     <div id="dashboard" class="tab-content active">
         <div class="header">
             <div class="header-titles">
@@ -528,7 +530,7 @@
 
         <div class="stats-grid">
             <div class="card card-total">
-                <h3>Totaal Vermogen</h3>
+                <h3>Totaal</h3>
                 <div class="value blur-target" id="totalValue"></div>
                 <div id="totalChange" class="change-row"></div>
                 <div class="extra-info">
@@ -537,7 +539,7 @@
                 </div>
             </div>
             <div class="card card-degiro">
-                <h3>Degiro</h3>
+                <h3>DEGIRO</h3>
                 <div class="value blur-target" id="valDegiro"></div>
                 <div id="chgDegiro" class="change-row"></div>
                 <div class="extra-info">
@@ -566,7 +568,7 @@
         </div>
 
         <div class="charts-master-grid">
-            <div class="card chart-box span-2"><h3>TOTAAL VERMOGEN</h3><div class="chart-wrapper"><canvas id="growthChart"></canvas></div></div>
+            <div class="card chart-box span-2"><h3>TOTAAL</h3><div class="chart-wrapper"><canvas id="growthChart"></canvas></div></div>
             <div class="card chart-box"><h3>VERDELING</h3><div class="chart-wrapper"><canvas id="pieChart"></canvas></div></div>
             <div class="card chart-box"><h3>DEGIRO</h3><div class="chart-wrapper"><canvas id="chartDegiro"></canvas></div></div>
             <div class="card chart-box"><h3>BOLERO</h3><div class="chart-wrapper"><canvas id="chartBolero"></canvas></div></div>
@@ -580,6 +582,7 @@
  <div id="data-page" class="tab-content">
     <div class="header data-header-actions">
         <h1>DATA</h1>
+        
         <div class="header-btns">
             <button class="btn btn-icloud" onclick="exportMasterJSON()">Backup naar iCloud</button>
             <button class="btn" onclick="document.getElementById('importJSON').click()">Upload Backup</button>
@@ -605,13 +608,45 @@
             </div>
         </div>
     </div>
+
+    <div id="cash-tab" class="sub-tab-content">
+        <div class="stats-grid" style="margin-top: 20px; margin-bottom: 20px;">
+            <div class="card card-degiro">
+                <h3>Totaal Cash Degiro</h3>
+                <div class="cash-input-wrapper">
+                    <span class="currency-symbol">€</span>
+                    <input type="number" id="inputCashDegiro" class="cash-input-field" onchange="updateSingleCash('Degiro', this.value)">
+                </div>
+            </div>
+            <div class="card card-bolero">
+                <h3>Totaal Cash Bolero</h3>
+                <div class="cash-input-wrapper">
+                    <span class="currency-symbol">€</span>
+                    <input type="number" id="inputCashBolero" class="cash-input-field" onchange="updateSingleCash('Bolero', this.value)">
+                </div>
+            </div>
+            <div class="card card-saxo">
+                <h3>Totaal Cash Saxo</h3>
+                <div class="cash-input-wrapper">
+                    <span class="currency-symbol">€</span>
+                    <input type="number" id="inputCashSaxo" class="cash-input-field" onchange="updateSingleCash('Saxo', this.value)">
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div> <div id="aandelen-page" class="tab-content">
+    <div class="header">
+        <div class="header-titles">
+            <h1>MARKT</h1>
+        </div>
+    </div>
+    <div class="stats-grid" style="grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); align-items: start;">
+        </div>
 </div>
+    
 
 
-
-
-
-<div id="cash-tab" class="sub-tab-content">
     <style>
         /* Verwijder de pijltjes (spinners) voor alle browsers */
         input::-webkit-outer-spin-button,
@@ -649,78 +684,17 @@
             padding: 0;
         }
     </style>
-
-    <div class="stats-grid" style="margin-top: 20px; margin-bottom: 20px;">
-       
-        <div class="card card-degiro">
-            <h3>Totaal Cash Degiro</h3>
-            <div class="cash-input-wrapper">
-                <span class="currency-symbol">€</span>
-                <input type="number" id="inputCashDegiro" class="cash-input-field" 
-                       onchange="updateSingleCash('Degiro', this.value)">
-            </div>
-        </div>
-
-        <div class="card card-bolero">
-            <h3>Totaal Cash Bolero</h3>
-            <div class="cash-input-wrapper">
-                <span class="currency-symbol">€</span>
-                <input type="number" id="inputCashBolero" class="cash-input-field" 
-                       onchange="updateSingleCash('Bolero', this.value)">
-            </div>
-        </div>
-
-        <div class="card card-saxo">
-            <h3>Totaal Cash Saxo</h3>
-            <div class="cash-input-wrapper">
-                <span class="currency-symbol">€</span>
-                <input type="number" id="inputCashSaxo" class="cash-input-field" 
-                       onchange="updateSingleCash('Saxo', this.value)">
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
-<div id="aandelen-page" class="tab-content">
-    <div class="header">
-        <div class="header-titles">
-            <h1>MARKT</h1>
-        </div>
-    </div>
-
-    <div class="stats-grid" style="grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); align-items: start;">
-        
-
-
-        <script type="module" src="https://widgets.tradingview-widget.com/w/en/tv-ticker-tag.js"></script>
-        <tv-ticker-tag symbol="SAXO:EURUSD" preserve-text size="small"></tv-ticker-tag> 
-
-        <script type="module" src="https://widgets.tradingview-widget.com/w/en/tv-ticker-tag.js"></script>
-        <tv-ticker-tag symbol="SAXO:EURUSD" preserve-text size="small"></tv-ticker-tag> 
-
-        <script type="module" src="https://widgets.tradingview-widget.com/w/en/tv-ticker-tag.js"></script>
-        <tv-ticker-tag symbol="SAXO:EURUSD" preserve-text size="small"></tv-ticker-tag>
-
-        <script type="module" src="https://widgets.tradingview-widget.com/w/en/tv-ticker-tag.js"></script>
-        <tv-ticker-tag symbol="SAXO:EURUSD" preserve-text size="small"></tv-ticker-tag> 
-
-        <script type="module" src="https://widgets.tradingview-widget.com/w/en/tv-ticker-tag.js"></script>
-        <tv-ticker-tag symbol="SAXO:EURUSD" preserve-text size="small"></tv-ticker-tag> 
-
-    </div>
-</div>
-    
-
-
-
 <script>
+
+
+
+
+
     function openNav() {
     document.getElementById("mySidebar").style.width = "250px";
     document.getElementById("overlay").style.display = "block";
-}
-function switchDataTab(tabId, btn) {
+    }
+    function switchDataTab(tabId, btn) {
     // Verberg alle sub-content
     document.querySelectorAll('.sub-tab-content').forEach(content => {
         content.classList.remove('active');
@@ -733,13 +707,13 @@ function switchDataTab(tabId, btn) {
     // Toon de gekozen tab en zet knop op actief
     document.getElementById(tabId).classList.add('active');
     btn.classList.add('active');
-}
-function closeNav() {
+    }
+    function closeNav() {
     document.getElementById("mySidebar").style.width = "0";
     document.getElementById("overlay").style.display = "none";
-}
-// Functie om de individuele cashbedragen op te slaan
-function updateSingleCash(broker, value) {
+    }
+    // Functie om de individuele cashbedragen op te slaan
+    function updateSingleCash(broker, value) {
     const amount = parseFloat(value) || 0;
     const index = cashData.findIndex(item => item.broker === broker);
     
@@ -752,10 +726,10 @@ function updateSingleCash(broker, value) {
     saveData();
     updateDashboard();
     renderTables(); // Voeg deze regel toe voor de live update van het totaalblok
-}
+    }
 
-// Zorg dat bij het laden van de pagina de velden worden ingevuld
-function renderTables() {
+    // Zorg dat bij het laden van de pagina de velden worden ingevuld
+    function renderTables() {
     // 1. Broker Tabel (bestaande code voor de dagwaardes)
     const bt = document.getElementById('brokerTableBody');
     if (bt) {
@@ -799,10 +773,10 @@ function renderTables() {
     if (display) {
         display.innerText = totaalCash.toLocaleString('nl-NL');
     }
-}
-// Pas je bestaande switchTab een klein beetje aan om closeNav() aan te roepen
-const originalSwitchTab = switchTab;
-switchTab = function(tabId, element) {
+    }
+    // Pas je bestaande switchTab een klein beetje aan om closeNav() aan te roepen
+    const originalSwitchTab = switchTab;
+    switchTab = function(tabId, element) {
     // Verwijder active class van alle items in sidebar
     document.querySelectorAll('.sidebar .nav-item').forEach(i => i.classList.remove('active'));
     // Voeg toe aan geklikte item
@@ -812,7 +786,7 @@ switchTab = function(tabId, element) {
     document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
     document.getElementById(tabId).classList.add('active');
     closeNav();
-}
+    }
     Chart.register(ChartDataLabels);
     
     function toggleTheme() {
@@ -828,7 +802,8 @@ switchTab = function(tabId, element) {
         { date: '14/04/2026', degiro: 54090, bolero: 22414, saxo: 33640 },
         { date: '15/04/2026', degiro: 55400, bolero: 22650, saxo: 34260 },
         { date: '16/04/2026', degiro: 56000, bolero: 22700, saxo: 34100 },
-        { date: '17/04/2026', degiro: 57170, bolero: 23132, saxo: 34940 }
+        { date: '17/04/2026', degiro: 57170, bolero: 23132, saxo: 34940 },
+        { date: '20/04/2026', degiro: 57544, bolero: 23122, saxo: 34831 }
     ];
     
     let cashData = JSON.parse(localStorage.getItem('v25_cash')) || [
@@ -846,7 +821,7 @@ switchTab = function(tabId, element) {
         el.classList.add('active');
     }
 
-function toggleBlur() { 
+    function toggleBlur() { 
     // Wissel de blur op alle teksten
     document.querySelectorAll('.blur-target').forEach(e => e.classList.toggle('blur')); 
     
@@ -856,9 +831,9 @@ function toggleBlur() {
             charts[chartName].update();
         }
     }
-}
+    }
     function formatEuro(v) { return "€ " + (v || 0).toLocaleString('nl-NL', {minimumFractionDigits: 2}); }
-function addRow(type) {
+    function addRow(type) {
     if(type === 'broker') {
         brokerData.push({date: '', degiro: 0, bolero: 0, saxo: 0});
     } else {
@@ -866,7 +841,7 @@ function addRow(type) {
         cashData.push({date: '', broker: 'Degiro', type: 'Gestort', amount: 0});
     }
     renderTables();
-}
+    }
 
     function saveData() {
         localStorage.setItem('v25_broker', JSON.stringify(brokerData));
@@ -915,7 +890,7 @@ function addRow(type) {
             document.getElementById(`prof${b}Euro`).style.color = pEuro >= 0 ? 'var(--success)' : 'var(--danger)';
         });
 
-document.getElementById('lastUpdate').innerText = `Laatst bijgewerkt op ${last.date}`;        updateChange('totalChange', total, pTotal);
+    document.getElementById('lastUpdate').innerText = `Laatst bijgewerkt op ${last.date}`;        updateChange('totalChange', total, pTotal);
         updateChange('chgDegiro', last.degiro, prev.degiro);
         updateChange('chgBolero', last.bolero, prev.bolero);
         updateChange('chgSaxo', last.saxo, prev.saxo);
@@ -930,7 +905,7 @@ document.getElementById('lastUpdate').innerText = `Laatst bijgewerkt op ${last.d
         el.innerHTML = `<span>${diff >= 0 ? '▲' : '▼'}</span> <span class="blur-target">${formatEuro(Math.abs(diff))}</span> (${perc}%)`;
     }
 
- function renderTables() {
+    function renderTables() {
     // 1. BROKER TABEL (Onveranderd)
     const bt = document.getElementById('brokerTableBody'); 
     if (bt) {
@@ -956,10 +931,10 @@ document.getElementById('lastUpdate').innerText = `Laatst bijgewerkt op ${last.d
     if (document.getElementById('inputCashDegiro')) document.getElementById('inputCashDegiro').value = getAmount('Degiro');
     if (document.getElementById('inputCashBolero')) document.getElementById('inputCashBolero').value = getAmount('Bolero');
     if (document.getElementById('inputCashSaxo')) document.getElementById('inputCashSaxo').value = getAmount('Saxo');
-}
+    }
 
-// Nieuwe simpele bewaarfunctie
-function updateSingleCash(broker, value) {
+    // Nieuwe simpele bewaarfunctie
+    function updateSingleCash(broker, value) {
     const amount = parseFloat(value) || 0;
     const index = cashData.findIndex(item => item.broker === broker);
     
@@ -971,7 +946,7 @@ function updateSingleCash(broker, value) {
     
     localStorage.setItem('v25_cash', JSON.stringify(cashData)); // Direct opslaan
     updateDashboard(); // Cijfers op portfolio pagina bijwerken
-}
+    }
     function exportCSV(type) {
         let csv = '', filename = '';
         if(type === 'broker') {
@@ -1022,7 +997,7 @@ function updateSingleCash(broker, value) {
         });
     }
 
-function initCharts() {
+    function initCharts() {
     // 1. De instellingen voor alle lijngrafieken (inclusief de blur-logica)
     const lineOpt = { 
         responsive: true,
@@ -1047,9 +1022,9 @@ function initCharts() {
             }
         }
     }
-}
+    }
         }, 
-scales: {
+    scales: {
     x: {
         ticks: {
             callback: function(val, index) {
@@ -1064,7 +1039,7 @@ scales: {
         }
     },
     y: { beginAtZero: false }
-}
+    }
     };
 
     // 2. De Hoofdgrafiek aanmaken
@@ -1092,24 +1067,39 @@ scales: {
             cutout: '70%', 
             maintainAspectRatio: false, 
             plugins: { 
-                legend: { 
-                    display: true, 
-                    position: 'bottom',
-                    labels: { usePointStyle: true, font: { size: 12 } }
-                }, 
-                datalabels: { 
-                    display: true, 
-                    color: '#fff', 
-                    font: { weight: 'bold' }, 
-                    formatter: (v, c) => { 
-                        let s=0; c.chart.data.datasets[0].data.forEach(x=>s+=x); 
-                        return (v*100/s).toFixed(0)+"%"; 
-                    } 
-                } 
-            } 
+    legend: { 
+        display: true, 
+        position: 'bottom',
+        labels: { usePointStyle: true, font: { size: 12 } }
+    },
+    // VOEG DIT STUKJE TOE:
+    tooltip: {
+        callbacks: {
+            label: function(context) {
+                const label = context.label || '';
+                const value = context.parsed;
+                const isBlurred = document.querySelector('.blur-target').classList.contains('blur');
+                
+                if (isBlurred) {
+                    return label + ": € •••••";
+                }
+                return label + ": " + formatEuro(value);
+            }
+        }
+    },
+    datalabels: { 
+        display: true, 
+        color: '#fff', 
+        font: { weight: 'bold' }, 
+        formatter: (v, c) => { 
+            let s=0; c.chart.data.datasets[0].data.forEach(x=>s+=x); 
+            return (v*100/s).toFixed(0)+"%"; 
+        } 
+    } 
+}
         } 
     });
-}
+    }
 
     window.onload = () => {
         const savedTheme = localStorage.getItem('v25_theme') || 'light';
@@ -1209,5 +1199,14 @@ scales: {
     }
 
 </script>
+<div id="cagrModal" class="modal" style="display:none; position:fixed; z-index:1000; left:0; top:0; width:100%; height:100%; background-color: rgba(0,0,0,0.7); align-items:center; justify-content:center;">
+    <div class="card" style="width: 90%; max-width: 400px; position:relative;">
+        <span onclick="closeCagrModal()" style="position:absolute; right:15px; top:10px; cursor:pointer; font-size:24px;">&times;</span>
+        <h2 id="modalTitle">CAGR Details</h2>
+        <div id="modalContent" style="margin-top:20px; line-height: 1.6;">
+            </div>
+        <button class="btn btn-main" onclick="closeCagrModal()" style="width:100%; margin-top:20px;">Sluiten</button>
+    </div>
+</div>
 </body>
 </html>
