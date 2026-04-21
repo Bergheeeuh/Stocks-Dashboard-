@@ -492,6 +492,28 @@
             touch-action: manipulation;
             -webkit-tap-highlight-color: rgba(0,0,0,0);
         }
+        /* Styling voor het widget menu */
+.widget-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+    cursor: pointer;
+}
+
+.widget-option input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: var(--success); /* Dit maakt het vinkje groen */
+}
+
+.widget-option label {
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-main);
+}
     </style>
 </head>
 
@@ -511,7 +533,8 @@
     </div>
     <div style="display:flex; gap:10px; align-items:center;">
         <button class="btn btn-theme" onclick="toggleBlur()" title="Verberg Bedragen">👁️</button>
-        <button class="btn btn-theme" onclick="toggleTheme()" id="themeBtn">🌙</button>
+<button class="btn btn-theme" onclick="toggleWidgetMenu()" title="Widgets Beheren">⚙️</button> 
+<button class="btn btn-theme" onclick="toggleTheme()" id="themeBtn">🌙</button>
     </div>
 </div>
 
@@ -568,12 +591,12 @@
         </div>
 
         <div class="charts-master-grid">
-            <div class="card chart-box span-2"><h3>TOTAAL</h3><div class="chart-wrapper"><canvas id="growthChart"></canvas></div></div>
-            <div class="card chart-box"><h3>VERDELING</h3><div class="chart-wrapper"><canvas id="pieChart"></canvas></div></div>
-            <div class="card chart-box"><h3>DEGIRO</h3><div class="chart-wrapper"><canvas id="chartDegiro"></canvas></div></div>
-            <div class="card chart-box"><h3>BOLERO</h3><div class="chart-wrapper"><canvas id="chartBolero"></canvas></div></div>
-            <div class="card chart-box"><h3>SAXO</h3><div class="chart-wrapper"><canvas id="chartSaxo"></canvas></div></div>
-        </div>
+    <div id="growthChartContainer" class="card chart-box span-2"><h3>TOTAAL</h3><div class="chart-wrapper"><canvas id="growthChart"></canvas></div></div>
+    <div id="pieChartContainer" class="card chart-box"><h3>VERDELING</h3><div class="chart-wrapper"><canvas id="pieChart"></canvas></div></div>
+    <div id="degiroChartContainer" class="card chart-box"><h3>DEGIRO</h3><div class="chart-wrapper"><canvas id="chartDegiro"></canvas></div></div>
+    <div id="boleroChartContainer" class="card chart-box"><h3>BOLERO</h3><div class="chart-wrapper"><canvas id="chartBolero"></canvas></div></div>
+    <div id="saxoChartContainer" class="card chart-box"><h3>SAXO</h3><div class="chart-wrapper"><canvas id="chartSaxo"></canvas></div></div>
+</div>
     </div>
 
 
@@ -687,7 +710,19 @@
 <script>
 
 
+// Opent en sluit het menuutje
+function toggleWidgetMenu() {
+    const menu = document.getElementById('widgetMenu');
+    menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+}
 
+// Verbergt of toont de specifieke widget
+function toggleWidget(containerId, isChecked) {
+    const widget = document.getElementById(containerId);
+    if (widget) {
+        widget.style.display = isChecked ? 'block' : 'none';
+    }
+}
 
 
     function openNav() {
@@ -1199,14 +1234,36 @@
     }
 
 </script>
-<div id="cagrModal" class="modal" style="display:none; position:fixed; z-index:1000; left:0; top:0; width:100%; height:100%; background-color: rgba(0,0,0,0.7); align-items:center; justify-content:center;">
-    <div class="card" style="width: 90%; max-width: 400px; position:relative;">
-        <span onclick="closeCagrModal()" style="position:absolute; right:15px; top:10px; cursor:pointer; font-size:24px;">&times;</span>
-        <h2 id="modalTitle">CAGR Details</h2>
-        <div id="modalContent" style="margin-top:20px; line-height: 1.6;">
-            </div>
-        <button class="btn btn-main" onclick="closeCagrModal()" style="width:100%; margin-top:20px;">Sluiten</button>
+
+<div id="widgetMenu" class="card" style="display:none; position:fixed; top:70px; right:20px; z-index:1001; width:220px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); padding: 20px;">
+    <h3 style="margin-bottom:15px; font-size: 0.9rem;">DASHBOARD LAYOUT</h3>
+    
+    <div class="widget-option">
+        <input type="checkbox" id="checkGrowth" checked onchange="toggleWidget('growthChartContainer', this.checked)">
+        <label for="checkGrowth">TOTAAL</label>
     </div>
+    
+    <div class="widget-option">
+        <input type="checkbox" id="checkPie" checked onchange="toggleWidget('pieChartContainer', this.checked)">
+        <label for="checkPie">VERDELING</label>
+    </div>
+    
+    <div class="widget-option">
+        <input type="checkbox" id="checkDegiro" checked onchange="toggleWidget('degiroChartContainer', this.checked)">
+        <label for="checkDegiro">DEGIRO</label>
+    </div>
+    
+    <div class="widget-option">
+        <input type="checkbox" id="checkBolero" checked onchange="toggleWidget('boleroChartContainer', this.checked)">
+        <label for="checkBolero">BOLERO</label>
+    </div>
+    
+    <div class="widget-option">
+        <input type="checkbox" id="checkSaxo" checked onchange="toggleWidget('saxoChartContainer', this.checked)">
+        <label for="checkSaxo">SAXO</label>
+    </div>
+
+    <button class="btn btn-main" style="width:100%; margin-top:15px; justify-content: center;" onclick="toggleWidgetMenu()">Klaar</button>
 </div>
 </body>
 </html>
