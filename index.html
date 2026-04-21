@@ -1073,7 +1073,19 @@ function toggleWidget(containerId, isChecked) {
             maxRotation: 0
         }
     },
-    y: { beginAtZero: false }
+    y: { 
+    beginAtZero: false,
+    afterTickToLabelConversion: function(scaleInstance) {
+        // Haal alle berekende ticks op
+        const ticks = scaleInstance.ticks;
+        if (ticks.length > 2) {
+            // Maak alle labels leeg, behalve de eerste (onderste) en de laatste (bovenste)
+            for (let i = 1; i < ticks.length - 1; i++) {
+                ticks[i].label = ""; 
+            }
+        }
+    }
+}
     }
     };
 
