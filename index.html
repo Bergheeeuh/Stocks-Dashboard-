@@ -95,6 +95,52 @@
         reader.readAsText(file);
     }
 
+// 1. Definieer de startdatums (bovenaan je script gedeelte)
+const brokerStartDates = {
+    'Degiro': '2023-07-01',
+    'Bolero': '2021-01-01',
+    'Saxo': '2024-12-01'
+};
+
+// 2. De functie die de berekening uitvoert
+function calculateAndDisplayCAGR() {
+    const lastEntry = brokerData[brokerData.length - 1];
+    if (!lastEntry) return;
+
+    ['Degiro', 'Bolero', 'Saxo'].forEach(broker => {
+        const currentVal = lastEntry[broker.toLowerCase()];
+        
+        // Zoek de bijbehorende cash (inleg) op
+        const cashObj = cashData.find(c => c.broker === broker);
+        const cashVal = cashObj ? cashObj.amount : 0;
+        
+        const startDate = new Date(brokerStartDates[broker]);
+        const today = new Date();
+        
+        // Bereken het aantal jaren (verschil in ms / ms per jaar)
+        const years = (today - startDate) / (1000 * 60 * 60 * 24 * 365.25);
+
+        let cagrText = "0.00%";
+        let color = "var(--text-main)";
+
+        if (cashVal > 0 && currentVal > 0 && years > 0) {
+            // De CAGR formule: ((Eindwaarde / Beginwaarde) ^ (1 / jaren)) - 1
+            const cagr = (Math.pow((currentVal / cashVal), (1 / years)) - 1) * 100;
+            
+            // Hier plakken we het % teken erachter
+            cagrText = cagr.toFixed(2) + "%"; 
+            color = cagr >= 0 ? 'var(--success)' : 'var(--danger)';
+        }
+
+        // Zoek het HTML element op en vul het
+        const el = document.getElementById(`cagr${broker}`);
+        if (el) {
+            el.innerText = cagrText;
+            el.style.color = color;
+        }
+    });
+}
+
 </script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2">
     function exportMasterJSON() {
@@ -562,14 +608,18 @@
                 </div>
             </div>
             <div class="card card-degiro">
-                <h3>DEGIRO</h3>
-                <div class="value blur-target" id="valDegiro"></div>
-                <div id="chgDegiro" class="change-row"></div>
-                <div class="extra-info">
-                    <div class="info-line"><span class="info-label">Cash</span><span class="blur-target" id="cashDegiro"></span></div>
-                    <div class="info-line"><span class="info-label">Rendement</span><div class="info-values"><span class="blur-target main-value-small" id="profDegiroEuro"></span><span id="profDegiroPerc" class="sub-value-small"></span></div></div>
-                </div>
-            </div>
+    <h3>DEGIRO</h3>
+    <div class="value blur-target" id="valDegiro"></div>
+    <div id="chgDegiro" class="change-row"></div>
+    <div class="extra-info">
+        <div class="info-line"><span class="info-label">Cash</span><span class="blur-target" id="cashDegiro"></span></div>
+        <div class="info-line"><span class="info-label">Rendement</span><div class="info-values"><span class="blur-target main-value-small" id="profDegiroEuro"></span><span id="profDegiroPerc" class="sub-value-small"></span></div></div>
+        <div class="info-line">
+    <span class="info-label">CAGR</span>
+    <span id="cagrDegiro" class="cagr-badge">--</span>
+</div>
+    </div>
+</div>
             <div class="card card-bolero">
                 <h3>Bolero</h3>
                 <div class="value blur-target" id="valBolero"></div>
@@ -577,6 +627,7 @@
                 <div class="extra-info">
                     <div class="info-line"><span class="info-label">Cash</span><span class="blur-target" id="cashBolero"></span></div>
                     <div class="info-line"><span class="info-label">Rendement</span><div class="info-values"><span class="blur-target main-value-small" id="profBoleroEuro"></span><span id="profBoleroPerc" class="sub-value-small"></span></div></div>
+                    <div class="info-line"><span class="info-label">CAGR</span><span id="cagrBolero" style="font-weight:700;"></span></div>
                 </div>
             </div>
             <div class="card card-saxo">
@@ -586,6 +637,7 @@
                 <div class="extra-info">
                     <div class="info-line"><span class="info-label">Cash</span><span class="blur-target" id="cashSaxo"></span></div>
                     <div class="info-line"><span class="info-label">Rendement</span><div class="info-values"><span class="blur-target main-value-small" id="profSaxoEuro"></span><span id="profSaxoPerc" class="sub-value-small"></span></div></div>
+                    <div class="info-line"><span class="info-label">CAGR</span><span id="cagrSaxo" style="font-weight:700;"></span></div>
                 </div>
             </div>
         </div>
@@ -706,6 +758,28 @@
             outline: none;
             padding: 0;
         }
+
+    .cagr-badge {
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    background: var(--row-hover); /* Subtiele grijze achtergrond */
+    display: inline-block;
+}
+
+/* Optioneel: als je wilt dat de badge zelf kleurt ipv alleen de tekst */
+.cagr-positive {
+    background: rgba(46, 204, 113, 0.15); /* Lichtgroen */
+    color: #27ae60 !important;
+}
+
+.cagr-negative {
+    background: rgba(231, 76, 60, 0.15); /* Lichtrood */
+    color: #c0392b !important;
+}
+
+
     </style>
 <script>
 
@@ -886,6 +960,9 @@ function toggleWidget(containerId, isChecked) {
     }
 
     function updateDashboard() {
+
+        calculateAndDisplayCAGR(); // Voeg dit hier toe
+
     // 1. Dwing chronologische volgorde af voor de grafiek
     brokerData.sort((a, b) => {
         const dateA = a.date.split('/').reverse().join('');
@@ -982,6 +1059,40 @@ function toggleWidget(containerId, isChecked) {
     localStorage.setItem('v25_cash', JSON.stringify(cashData)); // Direct opslaan
     updateDashboard(); // Cijfers op portfolio pagina bijwerken
     }
+    const brokerStartDates = {
+    'Degiro': '2023-07-01',
+    'Bolero': '2021-01-01',
+    'Saxo': '2024-12-01'
+};
+
+function calculateAndDisplayCAGR() {
+    const lastEntry = brokerData[brokerData.length - 1];
+    if (!lastEntry) return;
+
+    ['Degiro', 'Bolero', 'Saxo'].forEach(broker => {
+        const currentVal = lastEntry[broker.toLowerCase()];
+        const cashObj = cashData.find(c => c.broker === broker);
+        const cashVal = cashObj ? cashObj.amount : 0;
+        
+        const startDate = new Date(brokerStartDates[broker]);
+        const today = new Date();
+        const years = (today - startDate) / (1000 * 60 * 60 * 24 * 365.25);
+
+        const el = document.getElementById(`cagr${broker}`);
+        if (!el) return;
+
+        if (cashVal > 0 && currentVal > 0 && years > 0) {
+            const cagr = (Math.pow((currentVal / cashVal), (1 / years)) - 1) * 100;
+            el.innerText = cagr.toFixed(2) + "%";
+            
+            // Verwijder oude klassen en voeg de nieuwe toe voor de kleur
+            el.classList.remove('cagr-positive', 'cagr-negative');
+            el.classList.add(cagr >= 0 ? 'cagr-positive' : 'cagr-negative');
+        }
+    });
+}
+
+
     function exportCSV(type) {
         let csv = '', filename = '';
         if(type === 'broker') {
@@ -1087,6 +1198,7 @@ function toggleWidget(containerId, isChecked) {
     }
 }
     }
+    
     };
 
     // 2. De Hoofdgrafiek aanmaken
@@ -1244,6 +1356,28 @@ function toggleWidget(containerId, isChecked) {
         };
         reader.readAsText(file);
     }
+
+['Degiro', 'Bolero', 'Saxo'].forEach(b => {
+    const currentVal = last[b.toLowerCase()];
+    const cashVal = cash[b];
+    const startDate = new Date(brokerStartDates[b]);
+    const today = new Date();
+    
+    // Bereken verschil in jaren
+    const years = (today - startDate) / (1000 * 60 * 60 * 24 * 365.25);
+    
+    let cagr = 0;
+    if (cashVal > 0 && currentVal > 0 && years > 0) {
+        // De CAGR formule
+        cagr = (Math.pow((currentVal / cashVal), (1 / years)) - 1) * 100;
+    }
+
+    const cagrEl = document.getElementById(`cagr${b}`);
+    if (cagrEl) {
+        cagrEl.innerText = cagr.toFixed(2) + "%";
+        cagrEl.style.color = cagr >= 0 ? 'var(--success)' : 'var(--danger)';
+    }
+});
 
 </script>
 
