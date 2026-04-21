@@ -4,235 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio v1</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js">
-    function exportMasterJSON() {
-        const fullData = {
-            version: "1",
-            timestamp: new Date().toISOString(),
-            brokerData: brokerData,
-            cashData: cashData,
-            theme: localStorage.getItem('v25_theme') || 'light'
-        };
-        const blob = new Blob([JSON.stringify(fullData, null, 2)], { type: 'application/json' });
-        const link = document.createElement("a");
-        const dateStr = new Date().toLocaleDateString('nl-NL').replace(/\//g, '-');
-        link.href = URL.createObjectURL(blob);
-        link.setAttribute("download", `Portfolio_Master_Backup_${dateStr}.json`);
-        link.click();
-        alert("Master Backup gegenereerd! Sla dit bestand op in je iCloud Drive.");
-    }
-
-    function importMasterJSON(input) {
-        const file = input.files[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            try {
-                const data = JSON.parse(e.target.result);
-                if (data.brokerData && data.cashData) {
-                    brokerData = data.brokerData;
-                    cashData = data.cashData;
-                    if (data.theme) {
-                        document.documentElement.setAttribute('data-theme', data.theme);
-                        localStorage.setItem('v25_theme', data.theme);
-                    }
-                    saveData();
-                    updateDashboard();
-                    alert("Succes! Alle data en instellingen zijn hersteld.");
-                } else {
-                    alert("Ongeldig backup bestand.");
-                }
-            } catch (err) {
-                alert("Fout bij het lezen van het bestand.");
-            }
-        };
-        reader.readAsText(file);
-    }
-
-
-    function importCSV(input, type) {
-        const file = input.files[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const text = e.target.result;
-            const lines = text.split('\n');
-            const newRows = [];
-            
-            // Start bij 1 om header over te slaan
-            for (let i = 1; i < lines.length; i++) {
-                if (!lines[i].trim()) continue;
-                const cols = lines[i].split(';');
-                
-                if (type === 'broker') {
-                    newRows.push({
-                        date: cols[0],
-                        degiro: parseFloat(cols[1]) || 0,
-                        bolero: parseFloat(cols[2]) || 0,
-                        saxo: parseFloat(cols[3]) || 0
-                    });
-                } else {
-                    newRows.push({
-                        date: cols[0],
-                        broker: cols[1],
-                        type: cols[2],
-                        amount: parseFloat(cols[3]) || 0
-                    });
-                }
-            }
-            
-            if (newRows.length > 0) {
-                if (confirm(`Weet je zeker dat je ${newRows.length} regels wilt importeren? Dit vervangt de huidige tabel.`)) {
-                    if (type === 'broker') brokerData = newRows;
-                    else cashData = newRows;
-                    saveData();
-                    updateDashboard();
-                    alert("Import geslaagd!");
-                }
-            }
-        };
-        reader.readAsText(file);
-    }
-
-// 1. Definieer de startdatums (bovenaan je script gedeelte)
-const brokerStartDates = {
-    'Degiro': '2023-07-01',
-    'Bolero': '2021-01-01',
-    'Saxo': '2024-12-01'
-};
-
-// 2. De functie die de berekening uitvoert
-function calculateAndDisplayCAGR() {
-    const lastEntry = brokerData[brokerData.length - 1];
-    if (!lastEntry) return;
-
-    ['Degiro', 'Bolero', 'Saxo'].forEach(broker => {
-        const currentVal = lastEntry[broker.toLowerCase()];
-        
-        // Zoek de bijbehorende cash (inleg) op
-        const cashObj = cashData.find(c => c.broker === broker);
-        const cashVal = cashObj ? cashObj.amount : 0;
-        
-        const startDate = new Date(brokerStartDates[broker]);
-        const today = new Date();
-        
-        // Bereken het aantal jaren (verschil in ms / ms per jaar)
-        const years = (today - startDate) / (1000 * 60 * 60 * 24 * 365.25);
-
-        let cagrText = "0.00%";
-        let color = "var(--text-main)";
-
-        if (cashVal > 0 && currentVal > 0 && years > 0) {
-            // De CAGR formule: ((Eindwaarde / Beginwaarde) ^ (1 / jaren)) - 1
-            const cagr = (Math.pow((currentVal / cashVal), (1 / years)) - 1) * 100;
-            
-            // Hier plakken we het % teken erachter
-            cagrText = cagr.toFixed(2) + "%"; 
-            color = cagr >= 0 ? 'var(--success)' : 'var(--danger)';
-        }
-
-        // Zoek het HTML element op en vul het
-        const el = document.getElementById(`cagr${broker}`);
-        if (el) {
-            el.innerText = cagrText;
-            el.style.color = color;
-        }
-    });
-}
-
-</script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2">
-    function exportMasterJSON() {
-        const fullData = {
-            version: "27.0",
-            timestamp: new Date().toISOString(),
-            brokerData: brokerData,
-            cashData: cashData,
-            theme: localStorage.getItem('v25_theme') || 'light'
-        };
-        const blob = new Blob([JSON.stringify(fullData, null, 2)], { type: 'application/json' });
-        const link = document.createElement("a");
-        const dateStr = new Date().toLocaleDateString('nl-NL').replace(/\//g, '-');
-        link.href = URL.createObjectURL(blob);
-        link.setAttribute("download", `Portfolio_Master_Backup_${dateStr}.json`);
-        link.click();
-        alert("Master Backup gegenereerd! Sla dit bestand op in je iCloud Drive.");
-    }
-
-    function importMasterJSON(input) {
-        const file = input.files[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            try {
-                const data = JSON.parse(e.target.result);
-                if (data.brokerData && data.cashData) {
-                    brokerData = data.brokerData;
-                    cashData = data.cashData;
-                    if (data.theme) {
-                        document.documentElement.setAttribute('data-theme', data.theme);
-                        localStorage.setItem('v25_theme', data.theme);
-                    }
-                    saveData();
-                    updateDashboard();
-                    alert("Succes! Alle data en instellingen zijn hersteld.");
-                } else {
-                    alert("Ongeldig backup bestand.");
-                }
-            } catch (err) {
-                alert("Fout bij het lezen van het bestand.");
-            }
-        };
-        reader.readAsText(file);
-    }
-
-
-    function importCSV(input, type) {
-        const file = input.files[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const text = e.target.result;
-            const lines = text.split('\n');
-            const newRows = [];
-            
-            // Start bij 1 om header over te slaan
-            for (let i = 1; i < lines.length; i++) {
-                if (!lines[i].trim()) continue;
-                const cols = lines[i].split(';');
-                
-                if (type === 'broker') {
-                    newRows.push({
-                        date: cols[0],
-                        degiro: parseFloat(cols[1]) || 0,
-                        bolero: parseFloat(cols[2]) || 0,
-                        saxo: parseFloat(cols[3]) || 0
-                    });
-                } else {
-                    newRows.push({
-                        date: cols[0],
-                        broker: cols[1],
-                        type: cols[2],
-                        amount: parseFloat(cols[3]) || 0
-                    });
-                }
-            }
-            
-            if (newRows.length > 0) {
-                if (confirm(`Weet je zeker dat je ${newRows.length} regels wilt importeren? Dit vervangt de huidige tabel.`)) {
-                    if (type === 'broker') brokerData = newRows;
-                    else cashData = newRows;
-                    saveData();
-                    updateDashboard();
-                    alert("Import geslaagd!");
-                }
-            }
-        };
-        reader.readAsText(file);
-    }
-
-</script>
+    <title>Portfolio v2</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
     <style>
         :root {
             --bg-color: #f4f7f9;
@@ -393,7 +167,7 @@ function calculateAndDisplayCAGR() {
             gap: 1.5rem;
             margin-bottom: 2rem;
         }
-        .card { padding: 1.2rem;  min-width: 0; 
+        .card { min-width: 0; 
             background: var(--card-bg);
             padding: 1.5rem;
             border-radius: var(--border-radius);
@@ -560,6 +334,41 @@ function calculateAndDisplayCAGR() {
     font-weight: 500;
     color: var(--text-main);
 }
+
+/* Algemene tabel styling */
+#weeklyReturnTable {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#weeklyReturnTable th, #weeklyReturnTable td {
+    padding: 10px 8px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+//* Specifieke optimalisatie voor Wekelijks Rendement op iPhone */
+@media (max-width: 480px) {
+    #weeklyReturnTable th {
+        font-size: 0.6rem !important;
+        padding: 8px 2px !important;
+    }
+    #weeklyReturnTable td {
+        padding: 8px 2px !important;
+    }
+    .return-euro {
+        font-size: 0.75rem !important;
+        font-weight: 800;
+        display: block;
+        line-height: 1.1;
+    }
+    .return-perc {
+        font-size: 0.6rem !important;
+        display: block;
+        margin-top: 2px;
+    }
+}
+
     </style>
 </head>
 
@@ -656,6 +465,10 @@ function calculateAndDisplayCAGR() {
     <div id="degiroChartContainer" class="card chart-box"><h3>DEGIRO</h3><div class="chart-wrapper"><canvas id="chartDegiro"></canvas></div></div>
     <div id="boleroChartContainer" class="card chart-box"><h3>BOLERO</h3><div class="chart-wrapper"><canvas id="chartBolero"></canvas></div></div>
     <div id="saxoChartContainer" class="card chart-box"><h3>SAXO</h3><div class="chart-wrapper"><canvas id="chartSaxo"></canvas></div></div>
+
+
+
+
 </div>
     </div>
 
@@ -799,9 +612,142 @@ function calculateAndDisplayCAGR() {
     gap: 4px;
 }
 
+/* Specifieke optimalisatie voor Wekelijks Rendement op iPhone */
+@media (max-width: 480px) {
+    #weeklyReturnTable th {
+        font-size: 0.65rem !important;
+        padding: 8px 2px !important;
+        letter-spacing: 0;
+    }
+    #weeklyReturnTable td {
+        padding: 8px 2px !important;
+        font-size: 0.75rem !important;
+    }
+    .return-euro {
+        font-size: 0.8rem !important;
+        font-weight: 800;
+        display: block;
+    }
+    .return-perc {
+        font-size: 0.65rem !important;
+        opacity: 0.8;
+        display: block;
+    }
+}
 
     </style>
 <script>
+
+function getISOWeek(dateString) {
+    const [d, m, y] = dateString.split('/').map(Number);
+    const date = new Date(y, m - 1, d);
+    date.setHours(0, 0, 0, 0);
+    date.setDate(date.getDate() + 3 - (date.getDay() + 6) % 7);
+    const week1 = new Date(date.getFullYear(), 0, 4);
+    return 1 + Math.round(((date.getTime() - week1.getTime()) / 86400000 - 3 + (week1.getDay() + 6) % 7) / 7);
+}
+
+function renderWeeklyReturns() {
+    const tbody = document.getElementById('weeklyReturnBody');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+
+    // 1. Filter: Bewaar per week alleen de LAATSTE bekende dag
+    const weeksMap = {};
+    brokerData.forEach(entry => {
+        const w = getISOWeek(entry.date);
+        const y = entry.date.split('/')[2];
+        const key = `${y}-W${w}`;
+        weeksMap[key] = entry; 
+    });
+
+    const sortedWeekKeys = Object.keys(weeksMap).sort().reverse();
+
+    // 2. Loop door de weken en bereken rendement t.o.v. vorige week
+    sortedWeekKeys.forEach((key, index) => {
+        if (index === sortedWeekKeys.length - 1) return; // Geen vergelijking mogelijk voor oudste week
+
+        const current = weeksMap[key];
+        const previous = weeksMap[sortedWeekKeys[index + 1]];
+        const weekNum = key.split('-W')[1];
+
+        const row = document.createElement('tr');
+        let html = `<td style="font-weight: 800; color: var(--text-muted); font-size: 0.75rem;">W${weekNum}</td>`;
+
+        const columns = [
+            { c: current.degiro + current.bolero + current.saxo, p: previous.degiro + previous.bolero + previous.saxo },
+            { c: current.degiro, p: previous.degiro },
+            { c: current.bolero, p: previous.bolero },
+            { c: current.saxo, p: previous.saxo }
+        ];
+
+        columns.forEach(m => {
+    const diff = m.c - m.p;
+    const perc = m.p !== 0 ? ((diff / m.p) * 100).toFixed(1) : 0;
+    const isPos = diff >= 0;
+
+    // De '+' en '-' zijn hier verwijderd. De kleur bepaalt de status.
+    html += `
+        <td>
+            <span class="return-euro blur-target" style="color: ${isPos ? 'var(--success)' : 'var(--danger)'};">
+                ${Math.round(Math.abs(diff))}
+            </span>
+            <span class="return-perc" style="color: var(--text-muted);">
+                ${Math.abs(perc)}%
+            </span>
+        </td>`;
+});
+
+        row.innerHTML = html;
+        tbody.appendChild(row);
+    });
+}
+
+function renderWeeklyReturns() {
+    const tbody = document.getElementById('weeklyReturnBody');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+
+    // We lopen van achteren naar voren (nieuwste data bovenaan)
+    for (let i = brokerData.length - 1; i > 0; i--) {
+        const current = brokerData[i];
+        const previous = brokerData[i - 1];
+        
+        const row = document.createElement('tr');
+        
+        // Datum kolom
+        let html = `<td style="font-weight: 600; font-size: 0.85rem;">${current.date}</td>`;
+        
+        // Bereken kolommen voor Totaal en de 3 brokers
+        const metrics = [
+            { cur: (current.degiro + current.bolero + current.saxo), prev: (previous.degiro + previous.bolero + previous.saxo) },
+            { cur: current.degiro, prev: previous.degiro },
+            { cur: current.bolero, prev: previous.bolero },
+            { cur: current.saxo, prev: previous.saxo }
+        ];
+
+        metrics.forEach(m => {
+            const diff = m.cur - m.prev;
+            const perc = m.prev !== 0 ? ((diff / m.prev) * 100).toFixed(2) : 0;
+            const color = diff >= 0 ? 'var(--success)' : 'var(--danger)';
+            const indicator = diff >= 0 ? '▲' : '▼';
+            
+            html += `
+                <td>
+                    <div style="color: ${color}; font-weight: 800; font-size: 0.9rem; display: flex; align-items: center; gap: 4px;">
+                        <span>${indicator}</span>
+                        <span class="blur-target">${formatEuro(Math.abs(diff))}</span>
+                    </div>
+                    <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">
+                        ${diff >= 0 ? '+' : ''}${perc}%
+                    </div>
+                </td>`;
+        });
+
+        row.innerHTML = html;
+        tbody.appendChild(row);
+    }
+}
 
 
 // Opent en sluit het menuutje
@@ -820,101 +766,18 @@ function toggleWidget(containerId, isChecked) {
 
 
     function openNav() {
-    document.getElementById("mySidebar").style.width = "250px";
-    document.getElementById("overlay").style.display = "block";
-    }
-    function switchDataTab(tabId, btn) {
-    // Verberg alle sub-content
-    document.querySelectorAll('.sub-tab-content').forEach(content => {
-        content.classList.remove('active');
-    });
-    // Deactiveer alle sub-tab knoppen
-    document.querySelectorAll('.data-tab-btn').forEach(button => {
-        button.classList.remove('active');
-    });
-    
-    // Toon de gekozen tab en zet knop op actief
-    document.getElementById(tabId).classList.add('active');
-    btn.classList.add('active');
+        document.getElementById("mySidebar").style.width = "250px";
+        document.getElementById("overlay").style.display = "block";
     }
     function closeNav() {
-    document.getElementById("mySidebar").style.width = "0";
-    document.getElementById("overlay").style.display = "none";
+        document.getElementById("mySidebar").style.width = "0";
+        document.getElementById("overlay").style.display = "none";
     }
-    // Functie om de individuele cashbedragen op te slaan
-    function updateSingleCash(broker, value) {
-    const amount = parseFloat(value) || 0;
-    const index = cashData.findIndex(item => item.broker === broker);
-    
-    if (index !== -1) {
-        cashData[index].amount = amount;
-    } else {
-        cashData.push({ date: new Date().toLocaleDateString(), broker: broker, type: 'Gestort', amount: amount });
-    }
-    
-    saveData();
-    updateDashboard();
-    renderTables(); // Voeg deze regel toe voor de live update van het totaalblok
-    }
-
-    // Zorg dat bij het laden van de pagina de velden worden ingevuld
-    function renderTables() {
-    // 1. Broker Tabel (bestaande code voor de dagwaardes)
-    const bt = document.getElementById('brokerTableBody');
-    if (bt) {
-        bt.innerHTML = '';
-        brokerData.slice().reverse().forEach((r, reversedIndex) => {
-            const i = brokerData.length - 1 - reversedIndex;
-            bt.innerHTML += `<tr>
-                <td><input type="text" value="${r.date}" onchange="brokerData[${i}].date=this.value"></td>
-                <td><input type="number" value="${r.degiro}" onchange="brokerData[${i}].degiro=parseFloat(this.value)"></td>
-                <td><input type="number" value="${r.bolero}" onchange="brokerData[${i}].bolero=parseFloat(this.value)"></td>
-                <td><input type="number" value="${r.saxo}" onchange="brokerData[${i}].saxo=parseFloat(this.value)"></td>
-                <td><button onclick="brokerData.splice(${i},1);renderTables()">✕</button></td>
-            </tr>`;
-        });
-    }
-
-    // 2. Vul de Cash vakjes en bereken direct het totaal
-    let totaalCash = 0;
-    
-    cashData.forEach(item => {
-        const val = parseFloat(item.amount) || 0;
-        if (item.broker === 'Degiro') {
-            const el = document.getElementById('inputCashDegiro');
-            if (el) el.value = val;
-            totaalCash += val;
-        }
-        if (item.broker === 'Bolero') {
-            const el = document.getElementById('inputCashBolero');
-            if (el) el.value = val;
-            totaalCash += val;
-        }
-        if (item.broker === 'Saxo') {
-            const el = document.getElementById('inputCashSaxo');
-            if (el) el.value = val;
-            totaalCash += val;
-        }
-    });
-
-    // 3. Toon het totaal in het display element
-    const display = document.getElementById('totalCashDisplay');
-    if (display) {
-        display.innerText = totaalCash.toLocaleString('nl-NL');
-    }
-    }
-    // Pas je bestaande switchTab een klein beetje aan om closeNav() aan te roepen
-    const originalSwitchTab = switchTab;
-    switchTab = function(tabId, element) {
-    // Verwijder active class van alle items in sidebar
-    document.querySelectorAll('.sidebar .nav-item').forEach(i => i.classList.remove('active'));
-    // Voeg toe aan geklikte item
-    element.classList.add('active');
-    
-    // Roep de rest van je logica aan
-    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-    document.getElementById(tabId).classList.add('active');
-    closeNav();
+    function switchDataTab(tabId, btn) {
+        document.querySelectorAll('.sub-tab-content').forEach(content => content.classList.remove('active'));
+        document.querySelectorAll('.data-tab-btn').forEach(button => button.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        btn.classList.add('active');
     }
     Chart.register(ChartDataLabels);
     
@@ -932,7 +795,8 @@ function toggleWidget(containerId, isChecked) {
         { date: '15/04/2026', degiro: 55400, bolero: 22650, saxo: 34260 },
         { date: '16/04/2026', degiro: 56000, bolero: 22700, saxo: 34100 },
         { date: '17/04/2026', degiro: 57170, bolero: 23132, saxo: 34940 },
-        { date: '20/04/2026', degiro: 57544, bolero: 23122, saxo: 34831 }
+        { date: '20/04/2026', degiro: 57544, bolero: 23122, saxo: 34831 },
+        { date: '21/04/2026', degiro: 57093, bolero: 22923, saxo: 33967 }
     ];
     
     let cashData = JSON.parse(localStorage.getItem('v25_cash')) || [
@@ -948,6 +812,7 @@ function toggleWidget(containerId, isChecked) {
         document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
         document.getElementById(id).classList.add('active');
         el.classList.add('active');
+        closeNav();
     }
 
     function toggleBlur() { 
@@ -972,17 +837,18 @@ function toggleWidget(containerId, isChecked) {
     renderTables();
     }
 
-    function saveData() {
+    function saveData(silent = false) {
         localStorage.setItem('v25_broker', JSON.stringify(brokerData));
         localStorage.setItem('v25_cash', JSON.stringify(cashData));
         updateDashboard();
-        alert("Gegevens opgeslagen!");
+        if (!silent) alert("Gegevens opgeslagen!");
     }
 
     function updateDashboard() {
 
         calculateAndDisplayCAGR(); // Voeg dit hier toe
-
+        // Voeg dit toe onderaan de bestaande updateDashboard() functie
+renderWeeklyReturns();
     // 1. Dwing chronologische volgorde af voor de grafiek
     brokerData.sort((a, b) => {
         const dateA = a.date.split('/').reverse().join('');
@@ -1065,19 +931,16 @@ function toggleWidget(containerId, isChecked) {
     if (document.getElementById('inputCashSaxo')) document.getElementById('inputCashSaxo').value = getAmount('Saxo');
     }
 
-    // Nieuwe simpele bewaarfunctie
+    // updateSingleCash: saves silently so no alert fires on input change
     function updateSingleCash(broker, value) {
-    const amount = parseFloat(value) || 0;
-    const index = cashData.findIndex(item => item.broker === broker);
-    
-    if (index !== -1) {
-        cashData[index].amount = amount;
-    } else {
-        cashData.push({ date: 'Totaal', broker: broker, type: 'Gestort', amount: amount });
-    }
-    
-    localStorage.setItem('v25_cash', JSON.stringify(cashData)); // Direct opslaan
-    updateDashboard(); // Cijfers op portfolio pagina bijwerken
+        const amount = parseFloat(value) || 0;
+        const index = cashData.findIndex(item => item.broker === broker);
+        if (index !== -1) {
+            cashData[index].amount = amount;
+        } else {
+            cashData.push({ date: 'Totaal', broker: broker, type: 'Gestort', amount: amount });
+        }
+        saveData(true); // silent = true, no alert
     }
     const brokerStartDates = {
     'Degiro': '2023-07-01',
@@ -1148,6 +1011,53 @@ function calculateAndDisplayCAGR() {
         reader.readAsText(file);
     }
 
+    // Exporteer alle data naar een JSON bestand voor iCloud/Backup
+function exportMasterJSON() {
+    const backupData = {
+        broker: brokerData,
+        cash: cashData,
+        version: "2.5",
+        exportDate: new Date().toISOString()
+    };
+
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backupData));
+    const downloadAnchorNode = document.createElement('a');
+    downloadAnchorNode.setAttribute("href", dataStr);
+    downloadAnchorNode.setAttribute("download", "portfolio_backup_" + new Date().toLocaleDateString() + ".json");
+    document.body.appendChild(downloadAnchorNode); 
+    downloadAnchorNode.click();
+    downloadAnchorNode.remove();
+}
+
+// Importeer een eerder gemaakte backup
+function importMasterJSON(input) {
+    const file = input.files[0];
+    const reader = new FileReader();
+    
+    reader.onload = function(e) {
+        try {
+            const importedData = JSON.parse(e.target.result);
+            
+            if (importedData.broker && importedData.cash) {
+                brokerData = importedData.broker;
+                cashData = importedData.cash;
+                
+                saveData(true); // Sla op in LocalStorage
+                renderTables();
+                updateDashboard();
+                
+                alert("Backup succesvol hersteld!");
+            } else {
+                alert("Ongeldig backup bestand.");
+            }
+        } catch (err) {
+            alert("Er is een fout opgetreden bij het lezen van het bestand.");
+        }
+    };
+    reader.readAsText(file);
+}
+
+
     function updateCharts() {
         const labels = brokerData.map(d => d.date);
         charts.main.data.labels = labels;
@@ -1162,6 +1072,49 @@ function calculateAndDisplayCAGR() {
             charts[b].update();
         });
     }
+
+function renderWeeklyReturns() {
+    const tbody = document.getElementById('weeklyReturnBody');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+
+    // We lopen van achteren naar voren door de data (nieuwste bovenaan)
+    for (let i = brokerData.length - 1; i > 0; i--) {
+        const current = brokerData[i];
+        const previous = brokerData[i - 1];
+        
+        const row = document.createElement('tr');
+        
+        // Datum kolom
+        let html = `<td>${current.date}</td>`;
+        
+        // Bereken kolommen voor Totaal en de 3 brokers
+        const types = [
+            { cur: (current.degiro + current.bolero + current.saxo), prev: (previous.degiro + previous.bolero + previous.saxo) },
+            { cur: current.degiro, prev: previous.degiro },
+            { cur: current.bolero, prev: previous.bolero },
+            { cur: current.saxo, prev: previous.saxo }
+        ];
+
+        types.forEach(data => {
+            const diff = data.cur - data.prev;
+            const perc = data.prev !== 0 ? ((diff / data.prev) * 100).toFixed(2) : 0;
+            const color = diff >= 0 ? 'var(--success)' : 'var(--danger)';
+            const symbol = diff >= 0 ? '+' : '';
+            
+            html += `
+                <td>
+                    <div style="color: ${color}; font-weight: bold;">
+                        <span class="blur-target">${symbol}${formatEuro(diff)}</span>
+                    </div>
+                    <div style="font-size: 0.7rem; color: var(--text-muted);">${symbol}${perc}%</div>
+                </td>`;
+        });
+
+        row.innerHTML = html;
+        tbody.appendChild(row);
+    }
+}
 
     function initCharts() {
     // 1. De instellingen voor alle lijngrafieken (inclusief de blur-logica)
@@ -1288,116 +1241,6 @@ function calculateAndDisplayCAGR() {
         updateDashboard(); 
     };
 
-    function exportMasterJSON() {
-        const fullData = {
-            version: "27.0",
-            timestamp: new Date().toISOString(),
-            brokerData: brokerData,
-            cashData: cashData,
-            theme: localStorage.getItem('v25_theme') || 'light'
-        };
-        const blob = new Blob([JSON.stringify(fullData, null, 2)], { type: 'application/json' });
-        const link = document.createElement("a");
-        const dateStr = new Date().toLocaleDateString('nl-NL').replace(/\//g, '-');
-        link.href = URL.createObjectURL(blob);
-        link.setAttribute("download", `Portfolio_Master_Backup_${dateStr}.json`);
-        link.click();
-        alert("Master Backup gegenereerd! Sla dit bestand op in je iCloud Drive.");
-    }
-
-    function importMasterJSON(input) {
-        const file = input.files[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            try {
-                const data = JSON.parse(e.target.result);
-                if (data.brokerData && data.cashData) {
-                    brokerData = data.brokerData;
-                    cashData = data.cashData;
-                    if (data.theme) {
-                        document.documentElement.setAttribute('data-theme', data.theme);
-                        localStorage.setItem('v25_theme', data.theme);
-                    }
-                    saveData();
-                    updateDashboard();
-                    alert("Succes! Alle data en instellingen zijn hersteld.");
-                } else {
-                    alert("Ongeldig backup bestand.");
-                }
-            } catch (err) {
-                alert("Fout bij het lezen van het bestand.");
-            }
-        };
-        reader.readAsText(file);
-    }
-
-
-    function importCSV(input, type) {
-        const file = input.files[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const text = e.target.result;
-            const lines = text.split('\n');
-            const newRows = [];
-            
-            // Start bij 1 om header over te slaan
-            for (let i = 1; i < lines.length; i++) {
-                if (!lines[i].trim()) continue;
-                const cols = lines[i].split(';');
-                
-                if (type === 'broker') {
-                    newRows.push({
-                        date: cols[0],
-                        degiro: parseFloat(cols[1]) || 0,
-                        bolero: parseFloat(cols[2]) || 0,
-                        saxo: parseFloat(cols[3]) || 0
-                    });
-                } else {
-                    newRows.push({
-                        date: cols[0],
-                        broker: cols[1],
-                        type: cols[2],
-                        amount: parseFloat(cols[3]) || 0
-                    });
-                }
-            }
-            
-            if (newRows.length > 0) {
-                if (confirm(`Weet je zeker dat je ${newRows.length} regels wilt importeren? Dit vervangt de huidige tabel.`)) {
-                    if (type === 'broker') brokerData = newRows;
-                    else cashData = newRows;
-                    saveData();
-                    updateDashboard();
-                    alert("Import geslaagd!");
-                }
-            }
-        };
-        reader.readAsText(file);
-    }
-
-['Degiro', 'Bolero', 'Saxo'].forEach(b => {
-    const currentVal = last[b.toLowerCase()];
-    const cashVal = cash[b];
-    const startDate = new Date(brokerStartDates[b]);
-    const today = new Date();
-    
-    // Bereken verschil in jaren
-    const years = (today - startDate) / (1000 * 60 * 60 * 24 * 365.25);
-    
-    let cagr = 0;
-    if (cashVal > 0 && currentVal > 0 && years > 0) {
-        // De CAGR formule
-        cagr = (Math.pow((currentVal / cashVal), (1 / years)) - 1) * 100;
-    }
-
-    const cagrEl = document.getElementById(`cagr${b}`);
-    if (cagrEl) {
-        cagrEl.innerText = cagr.toFixed(2) + "%";
-        cagrEl.style.color = cagr >= 0 ? 'var(--success)' : 'var(--danger)';
-    }
-});
 
 </script>
 
