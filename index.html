@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio v2</title>
+    <title>Portfolio v3</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
     <style>
@@ -223,6 +223,7 @@
             gap: 1.5rem;
         }
         .span-2 { grid-column: span 2; }
+        .span-3 { grid-column: span 3; }
         .chart-box { height: 350px; }
         .chart-wrapper { flex-grow: 1; position: relative; width: 100%; height: calc(100% - 40px); margin-top: 0.5rem; }
 
@@ -244,6 +245,7 @@
             .stats-grid { grid-template-columns: repeat(2, 1fr); }
             .charts-master-grid { grid-template-columns: 1fr; }
             .span-2 { grid-column: span 1; }
+            .span-3 { grid-column: span 1; }
         }
  /* Zorgt dat euro en percentage onder elkaar staan en rechts uitlijnen */
 .info-values {
@@ -465,8 +467,21 @@
     <div id="degiroChartContainer" class="card chart-box"><h3>DEGIRO</h3><div class="chart-wrapper"><canvas id="chartDegiro"></canvas></div></div>
     <div id="boleroChartContainer" class="card chart-box"><h3>BOLERO</h3><div class="chart-wrapper"><canvas id="chartBolero"></canvas></div></div>
     <div id="saxoChartContainer" class="card chart-box"><h3>SAXO</h3><div class="chart-wrapper"><canvas id="chartSaxo"></canvas></div></div>
-
-
+    <div id="dailyReturnChartContainer" class="card chart-box span-3">
+        <h3>DAGRENDEMENT BROKERS</h3>
+        <div style="display:flex; gap:16px; margin-bottom:4px; margin-top:4px;">
+            <span style="display:flex;align-items:center;gap:6px;font-size:0.75rem;font-weight:700;color:var(--degiro);">
+                <span style="width:12px;height:3px;background:var(--degiro);display:inline-block;border-radius:2px;"></span>DEGIRO
+            </span>
+            <span style="display:flex;align-items:center;gap:6px;font-size:0.75rem;font-weight:700;color:var(--bolero);">
+                <span style="width:12px;height:3px;background:var(--bolero);display:inline-block;border-radius:2px;"></span>BOLERO
+            </span>
+            <span style="display:flex;align-items:center;gap:6px;font-size:0.75rem;font-weight:700;color:var(--saxo);">
+                <span style="width:12px;height:3px;background:var(--saxo);display:inline-block;border-radius:2px;"></span>SAXO
+            </span>
+        </div>
+        <div class="chart-wrapper"><canvas id="chartDailyReturn"></canvas></div>
+    </div>
 
 
 </div>
@@ -790,13 +805,13 @@ function toggleWidget(containerId, isChecked) {
     }
 
     let brokerData = JSON.parse(localStorage.getItem('v25_broker')) || [
-        { date: '13/04/2026', degiro: 50850, bolero: 21720, saxo: 31720 },
-        { date: '14/04/2026', degiro: 54090, bolero: 22414, saxo: 33640 },
-        { date: '15/04/2026', degiro: 55400, bolero: 22650, saxo: 34260 },
-        { date: '16/04/2026', degiro: 56000, bolero: 22700, saxo: 34100 },
-        { date: '17/04/2026', degiro: 57170, bolero: 23132, saxo: 34940 },
-        { date: '20/04/2026', degiro: 57544, bolero: 23122, saxo: 34831 },
-        { date: '21/04/2026', degiro: 57093, bolero: 22923, saxo: 33967 }
+        { date: '13/04/2026', degiro: 50850, bolero: 21769, saxo: 31720 },
+        { date: '14/04/2026', degiro: 54090, bolero: 22466, saxo: 33644 },
+        { date: '15/04/2026', degiro: 55400, bolero: 22728, saxo: 34302 },
+        { date: '16/04/2026', degiro: 56000, bolero: 22674, saxo: 34174 },
+        { date: '17/04/2026', degiro: 57170, bolero: 23099, saxo: 35012 },
+        { date: '20/04/2026', degiro: 57544, bolero: 23164, saxo: 34928 },
+        { date: '21/04/2026', degiro: 57093, bolero: 22844, saxo: 33539 }
     ];
     
     let cashData = JSON.parse(localStorage.getItem('v25_cash')) || [
@@ -1071,6 +1086,19 @@ function importMasterJSON(input) {
             charts[b].data.datasets[0].data = brokerData.map(d => d[b]);
             charts[b].update();
         });
+
+        // Dagrendement: dagelijkse verandering per broker (t.o.v. vorige dag)
+        if (charts.dailyReturn) {
+            const drLabels = brokerData.slice(1).map(d => d.date);
+            const degiroReturns = brokerData.slice(1).map((d, i) => d.degiro - brokerData[i].degiro);
+            const boleroReturns = brokerData.slice(1).map((d, i) => d.bolero - brokerData[i].bolero);
+            const saxoReturns   = brokerData.slice(1).map((d, i) => d.saxo   - brokerData[i].saxo);
+            charts.dailyReturn.data.labels = drLabels;
+            charts.dailyReturn.data.datasets[0].data = degiroReturns;
+            charts.dailyReturn.data.datasets[1].data = boleroReturns;
+            charts.dailyReturn.data.datasets[2].data = saxoReturns;
+            charts.dailyReturn.update();
+        }
     }
 
 function renderWeeklyReturns() {
@@ -1191,6 +1219,37 @@ function renderWeeklyReturns() {
         });
     });
 
+    // 5. De Dagrendement-grafiek (alle 3 brokers gecombineerd) aanmaken
+    const dailyReturnOpt = JSON.parse(JSON.stringify(lineOpt));
+    dailyReturnOpt.plugins = dailyReturnOpt.plugins || {};
+    dailyReturnOpt.plugins.legend = { display: false };
+    dailyReturnOpt.plugins.datalabels = { display: false };
+    dailyReturnOpt.plugins.tooltip = {
+        mode: 'index',
+        intersect: false,
+        callbacks: {
+            label: function(context) {
+                const isBlurred = document.querySelector('.blur-target').classList.contains('blur');
+                const label = context.dataset.label || '';
+                if (isBlurred) return label + ": € •••••";
+                const val = context.parsed.y;
+                return label + ": " + (val >= 0 ? '+' : '') + formatEuro(val);
+            }
+        }
+    };
+    charts.dailyReturn = new Chart(document.getElementById('chartDailyReturn'), {
+        type: 'line',
+        data: {
+            labels: [],
+            datasets: [
+                { label: 'Degiro', data: [], borderColor: '#f1c40f', backgroundColor: 'transparent', fill: false, tension: 0.4, pointRadius: 4, pointHoverRadius: 6, borderWidth: 2.5 },
+                { label: 'Bolero', data: [], borderColor: '#3498db', backgroundColor: 'transparent', fill: false, tension: 0.4, pointRadius: 4, pointHoverRadius: 6, borderWidth: 2.5 },
+                { label: 'Saxo',   data: [], borderColor: '#e74c3c', backgroundColor: 'transparent', fill: false, tension: 0.4, pointRadius: 4, pointHoverRadius: 6, borderWidth: 2.5 }
+            ]
+        },
+        options: dailyReturnOpt
+    });
+
     // 4. De Taartdiagram (Distribution) aanmaken
     charts.pie = new Chart(document.getElementById('pieChart'), { 
         type: 'doughnut', 
@@ -1270,6 +1329,11 @@ function renderWeeklyReturns() {
     <div class="widget-option">
         <input type="checkbox" id="checkSaxo" checked onchange="toggleWidget('saxoChartContainer', this.checked)">
         <label for="checkSaxo">SAXO</label>
+    </div>
+
+    <div class="widget-option">
+        <input type="checkbox" id="checkDailyReturn" checked onchange="toggleWidget('dailyReturnChartContainer', this.checked)">
+        <label for="checkDailyReturn">DAGRENDEMENT</label>
     </div>
 
     <button class="btn btn-main" style="width:100%; margin-top:15px; justify-content: center;" onclick="toggleWidgetMenu()">Klaar</button>
