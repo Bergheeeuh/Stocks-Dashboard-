@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio v3</title>
+    <title>Portfolio v6</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
     <style>
@@ -314,6 +314,8 @@
             touch-action: manipulation;
             -webkit-tap-highlight-color: rgba(0,0,0,0);
         }
+        #statsTable tr:hover td { background: var(--row-hover); }
+        #statsTable td, #statsTable th { border: none; }
         /* Styling voor het widget menu */
 .widget-option {
     display: flex;
@@ -462,27 +464,59 @@
         </div>
 
         <div class="charts-master-grid">
+    <!-- Rij 1: TOTAAL grafiek, volle breedte -->
+    <div id="growthChartContainer" class="card chart-box span-3"><h3>TOTAAL</h3><div class="chart-wrapper"><canvas id="growthChart"></canvas></div></div>
+
+    <!-- Rij 2: VERDELING + STATISTIEKEN naast elkaar -->
     <div id="pieChartContainer" class="card chart-box"><h3>VERDELING</h3><div class="chart-wrapper"><canvas id="pieChart"></canvas></div></div>
-    <div id="growthChartContainer" class="card chart-box span-2"><h3>TOTAAL</h3><div class="chart-wrapper"><canvas id="growthChart"></canvas></div></div>
+    <div id="statsBlockContainer" class="card span-2" style="display:flex;flex-direction:column;">
+        <h3 style="margin-bottom:12px;">STATISTIEKEN</h3>
+        <table id="statsTable" style="width:100%;border-collapse:collapse;font-size:0.78rem;flex:1;">
+            <thead>
+                <tr>
+                    <th style="text-align:left;color:var(--text-muted);font-size:0.65rem;padding:4px 2px;font-weight:700;text-transform:uppercase;"></th>
+                    <th style="text-align:right;color:var(--degiro);font-size:0.65rem;padding:4px 2px;font-weight:700;text-transform:uppercase;">DEGIRO</th>
+                    <th style="text-align:right;color:var(--bolero);font-size:0.65rem;padding:4px 2px;font-weight:700;text-transform:uppercase;">BOLERO</th>
+                    <th style="text-align:right;color:var(--saxo);font-size:0.65rem;padding:4px 2px;font-weight:700;text-transform:uppercase;">SAXO</th>
+                </tr>
+            </thead>
+            <tbody id="statsTableBody"></tbody>
+        </table>
+    </div>
+
+    <!-- Rij 3: Individuele broker grafieken -->
     <div id="degiroChartContainer" class="card chart-box"><h3>DEGIRO</h3><div class="chart-wrapper"><canvas id="chartDegiro"></canvas></div></div>
     <div id="boleroChartContainer" class="card chart-box"><h3>BOLERO</h3><div class="chart-wrapper"><canvas id="chartBolero"></canvas></div></div>
     <div id="saxoChartContainer" class="card chart-box"><h3>SAXO</h3><div class="chart-wrapper"><canvas id="chartSaxo"></canvas></div></div>
+
+    <!-- Rij 4: Dagrendement, volle breedte -->
     <div id="dailyReturnChartContainer" class="card chart-box span-3">
         <h3>DAGRENDEMENT BROKERS</h3>
-        <div style="display:flex; gap:16px; margin-bottom:4px; margin-top:4px;">
-            <span style="display:flex;align-items:center;gap:6px;font-size:0.75rem;font-weight:700;color:var(--degiro);">
-                <span style="width:12px;height:3px;background:var(--degiro);display:inline-block;border-radius:2px;"></span>DEGIRO
-            </span>
-            <span style="display:flex;align-items:center;gap:6px;font-size:0.75rem;font-weight:700;color:var(--bolero);">
-                <span style="width:12px;height:3px;background:var(--bolero);display:inline-block;border-radius:2px;"></span>BOLERO
-            </span>
-            <span style="display:flex;align-items:center;gap:6px;font-size:0.75rem;font-weight:700;color:var(--saxo);">
-                <span style="width:12px;height:3px;background:var(--saxo);display:inline-block;border-radius:2px;"></span>SAXO
-            </span>
-        </div>
         <div class="chart-wrapper"><canvas id="chartDailyReturn"></canvas></div>
     </div>
 
+    <!-- Rij 5: Gecumuleerd rendement, volle breedte -->
+    <div id="cumulReturnChartContainer" class="card chart-box span-3">
+        <h3>GECUMULEERD RENDEMENT %</h3>
+        <div class="chart-wrapper"><canvas id="chartCumulReturn"></canvas></div>
+    </div>
+
+    <!-- Kalender heatmap -->
+    <div id="heatmapContainer" class="card span-3" style="min-height:220px;">
+        <h3 style="margin-bottom:12px;">RENDEMENT KALENDER</h3>
+        <div style="display:flex;gap:8px;margin-bottom:10px;align-items:center;flex-wrap:wrap;">
+            <button class="btn" id="heatmapBrokerBtn" onclick="cycleHeatmapBroker()" style="font-size:0.75rem;padding:6px 14px;">TOTAAL &#9662;</button>
+            <button class="btn" onclick="heatmapYear--; renderHeatmap();" style="font-size:0.75rem;padding:6px 10px;">&#9664;</button>
+            <span id="heatmapYearLabel" style="font-weight:700;font-size:0.9rem;min-width:40px;text-align:center;"></span>
+            <button class="btn" onclick="heatmapYear++; renderHeatmap();" style="font-size:0.75rem;padding:6px 10px;">&#9654;</button>
+            <div style="display:flex;gap:6px;align-items:center;margin-left:auto;font-size:0.7rem;color:var(--text-muted);">
+                <span style="width:14px;height:14px;border-radius:3px;background:#2ecc71;display:inline-block;opacity:0.85;"></span>Winst
+                <span style="width:14px;height:14px;border-radius:3px;background:#e74c3c;display:inline-block;margin-left:6px;opacity:0.85;"></span>Verlies
+                <span style="width:14px;height:14px;border-radius:3px;background:var(--border-color);display:inline-block;margin-left:6px;"></span>Geen data
+            </div>
+        </div>
+        <div id="heatmapGrid" style="overflow-x:auto;"></div>
+    </div>
 
 </div>
     </div>
@@ -840,6 +874,7 @@ function toggleWidget(containerId, isChecked) {
             charts[chartName].update();
         }
     }
+    renderStatsTable();
     }
     function formatEuro(v) { return "€ " + (v || 0).toLocaleString('nl-NL', {minimumFractionDigits: 2}); }
     function addRow(type) {
@@ -1099,6 +1134,21 @@ function importMasterJSON(input) {
             charts.dailyReturn.data.datasets[2].data = saxoReturns;
             charts.dailyReturn.update();
         }
+
+        // Gecumuleerd rendement % per broker (t.o.v. eerste datapunt)
+        if (charts.cumulReturn && brokerData.length > 0) {
+            const base = brokerData[0];
+            const crLabels = brokerData.map(d => d.date);
+            const getCumul = (broker) => brokerData.map(d => base[broker] !== 0 ? ((d[broker] - base[broker]) / base[broker]) * 100 : 0);
+            charts.cumulReturn.data.labels = crLabels;
+            charts.cumulReturn.data.datasets[0].data = getCumul('degiro');
+            charts.cumulReturn.data.datasets[1].data = getCumul('bolero');
+            charts.cumulReturn.data.datasets[2].data = getCumul('saxo');
+            charts.cumulReturn.update();
+        }
+
+        renderStatsTable();
+        renderHeatmap();
     }
 
 function renderWeeklyReturns() {
@@ -1220,23 +1270,6 @@ function renderWeeklyReturns() {
     });
 
     // 5. De Dagrendement-grafiek (alle 3 brokers gecombineerd) aanmaken
-    const dailyReturnOpt = JSON.parse(JSON.stringify(lineOpt));
-    dailyReturnOpt.plugins = dailyReturnOpt.plugins || {};
-    dailyReturnOpt.plugins.legend = { display: false };
-    dailyReturnOpt.plugins.datalabels = { display: false };
-    dailyReturnOpt.plugins.tooltip = {
-        mode: 'index',
-        intersect: false,
-        callbacks: {
-            label: function(context) {
-                const isBlurred = document.querySelector('.blur-target').classList.contains('blur');
-                const label = context.dataset.label || '';
-                if (isBlurred) return label + ": € •••••";
-                const val = context.parsed.y;
-                return label + ": " + (val >= 0 ? '+' : '') + formatEuro(val);
-            }
-        }
-    };
     charts.dailyReturn = new Chart(document.getElementById('chartDailyReturn'), {
         type: 'line',
         data: {
@@ -1247,7 +1280,121 @@ function renderWeeklyReturns() {
                 { label: 'Saxo',   data: [], borderColor: '#e74c3c', backgroundColor: 'transparent', fill: false, tension: 0.4, pointRadius: 4, pointHoverRadius: 6, borderWidth: 2.5 }
             ]
         },
-        options: dailyReturnOpt
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: { mode: 'index', intersect: false },
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'right',
+                    labels: { usePointStyle: true, pointStyleWidth: 16, font: { size: 12, weight: '700' }, padding: 20 }
+                },
+                datalabels: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const isBlurred = document.querySelector('.blur-target').classList.contains('blur');
+                            const label = context.dataset.label || '';
+                            if (isBlurred) return label + ": € •••••";
+                            const val = context.parsed.y;
+                            return label + ": " + (val >= 0 ? '+' : '') + formatEuro(val);
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    ticks: {
+                        callback: function(val, index) {
+                            const total = this.chart.data.labels.length;
+                            if (index === 0 || index === total - 1) {
+                                return this.getLabelForValue(val);
+                            }
+                            return '';
+                        },
+                        autoSkip: false,
+                        maxRotation: 0
+                    }
+                },
+                y: {
+                    beginAtZero: false,
+                    grid: {
+                        color: function(context) {
+                            if (context.tick.value === 0) return 'rgba(128,128,128,0.5)';
+                            return 'rgba(128,128,128,0.08)';
+                        },
+                        lineWidth: function(context) {
+                            if (context.tick.value === 0) return 2;
+                            return 1;
+                        }
+                    },
+                    afterTickToLabelConversion: function(scaleInstance) {
+                        const ticks = scaleInstance.ticks;
+                        if (ticks.length > 2) {
+                            for (let i = 1; i < ticks.length - 1; i++) {
+                                if (ticks[i].value !== 0) ticks[i].label = "";
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    // 6. Gecumuleerd rendement % per broker
+    charts.cumulReturn = new Chart(document.getElementById('chartCumulReturn'), {
+        type: 'line',
+        data: {
+            labels: [],
+            datasets: [
+                { label: 'Degiro', data: [], borderColor: '#f1c40f', backgroundColor: 'transparent', fill: false, tension: 0.4, pointRadius: 4, pointHoverRadius: 6, borderWidth: 2.5 },
+                { label: 'Bolero', data: [], borderColor: '#3498db', backgroundColor: 'transparent', fill: false, tension: 0.4, pointRadius: 4, pointHoverRadius: 6, borderWidth: 2.5 },
+                { label: 'Saxo',   data: [], borderColor: '#e74c3c', backgroundColor: 'transparent', fill: false, tension: 0.4, pointRadius: 4, pointHoverRadius: 6, borderWidth: 2.5 }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: { mode: 'index', intersect: false },
+            plugins: {
+                legend: { display: true, position: 'right', labels: { usePointStyle: true, pointStyleWidth: 16, font: { size: 12, weight: '700' }, padding: 20 } },
+                datalabels: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const label = context.dataset.label || '';
+                            const val = context.parsed.y;
+                            return label + ': ' + (val >= 0 ? '+' : '') + val.toFixed(2) + '%';
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    ticks: {
+                        callback: function(val, index) {
+                            const total = this.chart.data.labels.length;
+                            if (index === 0 || index === total - 1) return this.getLabelForValue(val);
+                            return '';
+                        },
+                        autoSkip: false, maxRotation: 0
+                    }
+                },
+                y: {
+                    beginAtZero: false,
+                    ticks: {
+                        callback: function(val) { return val.toFixed(1) + '%'; }
+                    },
+                    afterTickToLabelConversion: function(scaleInstance) {
+                        const ticks = scaleInstance.ticks;
+                        if (ticks.length > 2) {
+                            for (let i = 1; i < ticks.length - 1; i++) ticks[i].label = '';
+                        }
+                    }
+                }
+            }
+        }
     });
 
     // 4. De Taartdiagram (Distribution) aanmaken
@@ -1292,6 +1439,230 @@ function renderWeeklyReturns() {
     });
     }
 
+    // ── STATISTIEKEN TABEL ──────────────────────────────────────────────────
+    function renderStatsTable() {
+        const tbody = document.getElementById('statsTableBody');
+        if (!tbody || brokerData.length < 2) return;
+
+        const brokers = ['degiro', 'bolero', 'saxo'];
+
+        // Bereken dagrendementen per broker
+        const dailyReturns = {};
+        brokers.forEach(b => {
+            dailyReturns[b] = brokerData.slice(1).map((d, i) => d[b] - brokerData[i][b]);
+        });
+
+        const stats = brokers.map(b => {
+            const returns = dailyReturns[b];
+            const best  = Math.max(...returns);
+            const worst = Math.min(...returns);
+            const bestIdx  = returns.indexOf(best);
+            const worstIdx = returns.indexOf(worst);
+            const bestDate  = brokerData[bestIdx + 1].date;
+            const worstDate = brokerData[worstIdx + 1].date;
+            const avg = returns.reduce((a, v) => a + v, 0) / returns.length;
+            const variance = returns.reduce((a, v) => a + Math.pow(v - avg, 2), 0) / returns.length;
+            const stdDev = Math.sqrt(variance);
+
+            // Max drawdown
+            let peak = brokerData[0][b], maxDD = 0;
+            brokerData.forEach(d => {
+                if (d[b] > peak) peak = d[b];
+                const dd = peak > 0 ? ((d[b] - peak) / peak) * 100 : 0;
+                if (dd < maxDD) maxDD = dd;
+            });
+
+            return { best, worst, bestDate, worstDate, avg, stdDev, maxDD };
+        });
+
+        const isBlurred = () => document.querySelector('.blur-target') && document.querySelector('.blur-target').classList.contains('blur');
+
+        const fmt = (v) => isBlurred() ? '€ •••' : (v >= 0 ? '+' : '') + formatEuro(v);
+        const fmtAvg = (v) => isBlurred() ? '€ •••' : (v >= 0 ? '+' : '') + formatEuro(v);
+
+        const rows = [
+            {
+                label: '🏆 Beste dag',
+                vals: stats.map(s => ({
+                    main: fmt(s.best),
+                    sub: s.bestDate,
+                    color: 'var(--success)'
+                }))
+            },
+            {
+                label: '📉 Slechtste dag',
+                vals: stats.map(s => ({
+                    main: fmt(s.worst),
+                    sub: s.worstDate,
+                    color: 'var(--danger)'
+                }))
+            },
+            {
+                label: '⌀ Gem. dagrendement',
+                vals: stats.map(s => ({
+                    main: fmtAvg(s.avg),
+                    sub: '',
+                    color: s.avg >= 0 ? 'var(--success)' : 'var(--danger)'
+                }))
+            },
+            {
+                label: '⬇️ Max drawdown',
+                vals: stats.map(s => ({
+                    main: s.maxDD.toFixed(2) + '%',
+                    sub: '',
+                    color: 'var(--danger)'
+                }))
+            }
+        ];
+
+        tbody.innerHTML = rows.map(row => `
+            <tr style="border-bottom:1px solid var(--border-color);">
+                <td style="padding:7px 2px;color:var(--text-muted);font-size:0.7rem;font-weight:600;">${row.label}</td>
+                ${row.vals.map(v => `
+                    <td style="padding:7px 2px;text-align:right;">
+                        <span style="color:${v.color};font-weight:700;font-size:0.78rem;">${v.main}</span>
+                        ${v.sub ? `<br><span style="color:var(--text-muted);font-size:0.62rem;">${v.sub}</span>` : ''}
+                    </td>`).join('')}
+            </tr>`).join('');
+    }
+
+    // ── HEATMAP KALENDER ────────────────────────────────────────────────────
+    const HEATMAP_BROKERS = ['totaal', 'degiro', 'bolero', 'saxo'];
+    const HEATMAP_LABELS  = { totaal: 'TOTAAL', degiro: 'DEGIRO', bolero: 'BOLERO', saxo: 'SAXO' };
+    let heatmapBrokerIdx = 0;
+    let heatmapYear = new Date().getFullYear();
+
+    function cycleHeatmapBroker() {
+        heatmapBrokerIdx = (heatmapBrokerIdx + 1) % HEATMAP_BROKERS.length;
+        document.getElementById('heatmapBrokerBtn').innerText = HEATMAP_LABELS[HEATMAP_BROKERS[heatmapBrokerIdx]] + ' ▾';
+        renderHeatmap();
+    }
+
+    function renderHeatmap() {
+        const grid = document.getElementById('heatmapGrid');
+        const yearLabel = document.getElementById('heatmapYearLabel');
+        if (!grid || !yearLabel) return;
+        yearLabel.innerText = heatmapYear;
+
+        const broker = HEATMAP_BROKERS[heatmapBrokerIdx];
+
+        const returnMap = {};
+        for (let i = 1; i < brokerData.length; i++) {
+            const cur  = brokerData[i];
+            const prev = brokerData[i - 1];
+            const [d, m, y] = cur.date.split('/');
+            const key = `${y}-${m.padStart(2,'0')}-${d.padStart(2,'0')}`;
+            const val = broker === 'totaal'
+                ? (cur.degiro + cur.bolero + cur.saxo) - (prev.degiro + prev.bolero + prev.saxo)
+                : cur[broker] - prev[broker];
+            returnMap[key] = val;
+        }
+
+        const allVals = Object.values(returnMap).filter(v => isFinite(v));
+        const maxAbs = allVals.length > 0 ? Math.max(...allVals.map(Math.abs)) : 1;
+
+        const MONTH_NL = ['Jan','Feb','Mrt','Apr','Mei','Jun','Jul','Aug','Sep','Okt','Nov','Dec'];
+        const DAY_NL   = ['Ma','Di','Wo','Do','Vr','Za','Zo'];
+
+        let html = `<div style="display:flex;gap:12px;flex-wrap:wrap;">`;
+
+        for (let month = 0; month < 12; month++) {
+            const firstDay = new Date(heatmapYear, month, 1);
+            const daysInMonth = new Date(heatmapYear, month + 1, 0).getDate();
+            let startDow = (firstDay.getDay() + 6) % 7;
+
+            html += `<div style="min-width:130px;">`;
+            html += `<div style="font-size:0.7rem;font-weight:700;color:var(--text-muted);margin-bottom:4px;">${MONTH_NL[month]}</div>`;
+            html += `<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:2px;">`;
+            DAY_NL.forEach(d => {
+                html += `<div style="font-size:0.55rem;color:var(--text-muted);text-align:center;">${d}</div>`;
+            });
+            html += `</div>`;
+            html += `<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;">`;
+
+            for (let e = 0; e < startDow; e++) html += `<div></div>`;
+
+            for (let day = 1; day <= daysInMonth; day++) {
+                const mm = String(month + 1).padStart(2, '0');
+                const dd = String(day).padStart(2, '0');
+                const key = `${heatmapYear}-${mm}-${dd}`;
+                const val = returnMap[key];
+
+                let bg = 'var(--border-color)';
+                let dataTooltip = `${dd}/${mm}/${heatmapYear}: geen data`;
+
+                if (val !== undefined) {
+                    const intensity = maxAbs > 0 ? Math.min(Math.abs(val) / maxAbs, 1) : 0;
+                    const alpha = Math.round(55 + intensity * 200);
+                    const alphaHex = alpha.toString(16).padStart(2, '0');
+                    bg = val >= 0 ? `#2ecc71${alphaHex}` : `#e74c3c${alphaHex}`;
+                    const sign = val >= 0 ? '+' : '';
+                    const isBlurred = document.querySelector('.blur-target') && document.querySelector('.blur-target').classList.contains('blur');
+                    const displayVal = isBlurred ? '€ •••' : `${sign}€${Math.round(val).toLocaleString('nl-NL')}`;
+                    dataTooltip = `${dd}/${mm}/${heatmapYear}  ${displayVal}`;
+                }
+
+                html += `<div data-tip="${dataTooltip}" class="heatmap-cell" style="aspect-ratio:1;border-radius:2px;background:${bg};cursor:default;position:relative;"></div>`;
+            }
+
+            html += `</div></div>`;
+        }
+
+        html += `</div>`;
+        grid.innerHTML = html;
+
+        // Bind tooltip events op alle cellen
+        grid.querySelectorAll('.heatmap-cell').forEach(cell => {
+            cell.addEventListener('mouseenter', showHeatTip);
+            cell.addEventListener('mousemove', moveHeatTip);
+            cell.addEventListener('mouseleave', hideHeatTip);
+            cell.addEventListener('touchstart', showHeatTipTouch, { passive: true });
+        });
+    }
+
+    // Heatmap tooltip handlers
+    function getOrCreateTip() {
+        let tip = document.getElementById('heatTip');
+        if (!tip) {
+            tip = document.createElement('div');
+            tip.id = 'heatTip';
+            tip.style.cssText = 'position:fixed;pointer-events:none;background:var(--card-bg);color:var(--text-main);border:1px solid var(--border-color);border-radius:8px;padding:6px 12px;font-size:0.78rem;font-weight:600;box-shadow:0 4px 12px rgba(0,0,0,0.15);z-index:9999;display:none;white-space:nowrap;';
+            document.body.appendChild(tip);
+        }
+        return tip;
+    }
+    function showHeatTip(e) {
+        const tip = getOrCreateTip();
+        tip.innerText = e.currentTarget.dataset.tip;
+        tip.style.display = 'block';
+        positionTip(tip, e.clientX, e.clientY);
+    }
+    function moveHeatTip(e) {
+        const tip = getOrCreateTip();
+        positionTip(tip, e.clientX, e.clientY);
+    }
+    function hideHeatTip() {
+        const tip = getOrCreateTip();
+        tip.style.display = 'none';
+    }
+    function showHeatTipTouch(e) {
+        const tip = getOrCreateTip();
+        tip.innerText = e.currentTarget.dataset.tip;
+        tip.style.display = 'block';
+        const t = e.touches[0];
+        positionTip(tip, t.clientX, t.clientY);
+        setTimeout(() => { tip.style.display = 'none'; }, 2500);
+    }
+    function positionTip(tip, x, y) {
+        const offset = 14;
+        let left = x + offset;
+        let top  = y + offset;
+        if (left + 180 > window.innerWidth)  left = x - 180 - offset;
+        if (top  + 50  > window.innerHeight) top  = y - 50  - offset;
+        tip.style.left = left + 'px';
+        tip.style.top  = top  + 'px';
+    }
+
     window.onload = () => {
         const savedTheme = localStorage.getItem('v25_theme') || 'light';
         document.documentElement.setAttribute('data-theme', savedTheme);
@@ -1334,6 +1705,21 @@ function renderWeeklyReturns() {
     <div class="widget-option">
         <input type="checkbox" id="checkDailyReturn" checked onchange="toggleWidget('dailyReturnChartContainer', this.checked)">
         <label for="checkDailyReturn">DAGRENDEMENT</label>
+    </div>
+
+    <div class="widget-option">
+        <input type="checkbox" id="checkCumulReturn" checked onchange="toggleWidget('cumulReturnChartContainer', this.checked)">
+        <label for="checkCumulReturn">GECUMULEERD %</label>
+    </div>
+
+    <div class="widget-option">
+        <input type="checkbox" id="checkStatsBlock" checked onchange="toggleWidget('statsBlockContainer', this.checked)">
+        <label for="checkStatsBlock">STATISTIEKEN</label>
+    </div>
+
+    <div class="widget-option">
+        <input type="checkbox" id="checkHeatmap" checked onchange="toggleWidget('heatmapContainer', this.checked)">
+        <label for="checkHeatmap">KALENDER</label>
     </div>
 
     <button class="btn btn-main" style="width:100%; margin-top:15px; justify-content: center;" onclick="toggleWidgetMenu()">Klaar</button>
