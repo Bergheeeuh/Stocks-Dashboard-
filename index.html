@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio v11</title>
+    <title>Portfolio v12</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
     <style>
@@ -198,7 +198,6 @@
         .info-label { color: var(--text-muted); text-transform: uppercase; font-size: 0.65rem; }
 
         .blur { filter: blur(10px) !important; }
-        .blur-chart canvas { filter: blur(6px); }
 
         .btn-group { display: flex; gap: 10px; flex-wrap: wrap; }
         .btn {
@@ -403,6 +402,18 @@
         @media (max-width: 800px) {
             #aandelen-page > div:last-child { grid-template-columns: 1fr !important; }
             #aandelen-page .markt-section[style*="span 2"] { grid-column: span 1 !important; }
+        }
+        /* Op kleine schermen: verberg tijd-kolom FX en eenheidskolom futures */
+        @media (max-width: 480px) {
+            .markt-table { font-size: 0.78rem; }
+            .markt-table th, .markt-table td { padding: 7px 5px; }
+            .markt-table .col-hide { display: none; }
+            .markt-name-sub { display: none; } /* naam-sub verbergen geeft ruimte */
+            /* Crypto: verberg 24h high/low op mobiel */
+            #mb-cry tr td:nth-child(5),
+            #mb-cry tr td:nth-child(6),
+            #mb-cry tr th:nth-child(5),
+            #mb-cry tr th:nth-child(6) { display: none; }
         }
 
         /* Maandoverzicht tabel */
@@ -739,7 +750,7 @@
                 <span class="markt-section-icon">💱</span>
                 <h3>VALUTA</h3>
             </div>
-            <table class="markt-table"><thead><tr><th>Paar</th><th>Koers</th><th>Dag %</th><th>Tijd</th></tr></thead>
+            <table class="markt-table"><thead><tr><th>Paar</th><th>Koers</th><th>Dag %</th><th class="col-hide">Tijd</th></tr></thead>
             <tbody id="mb-fx"></tbody></table>
         </div>
 
@@ -1076,11 +1087,6 @@ function toggleWidget(containerId, isChecked) {
         }
         renderStatsTable();
         renderMaandoverzicht();
-        // Blur y-as labels via CSS op canvas wrapper
-        const isBlurred = document.querySelector('.blur-target') && document.querySelector('.blur-target').classList.contains('blur');
-        document.querySelectorAll('.chart-wrapper').forEach(w => {
-            w.classList.toggle('blur-chart', isBlurred);
-        });
     }
     function formatEuro(v) { return "€ " + (v || 0).toLocaleString('nl-NL', {minimumFractionDigits: 2}); }
     function addRow(type) {
@@ -2081,7 +2087,29 @@ function renderWeeklyReturns() {
         } catch { return null; }
     }
 
-    // Formatter helpers
+    // Binance public REST API — geen key nodig, CORS open
+    async function binanceQuote(symbol) {
+        try {
+            const [ticker24, bookTicker] = await Promise.all([
+                fetch(`https://api.binance.com/api/v3/ticker/24hr?symbol=${symbol}`).then(r => r.json()),
+                fetch(`https://api.binance.com/api/v3/ticker/price?symbol=${symbol}`).then(r => r.json()),
+            ]);
+            if (!ticker24.lastPrice) return null;
+            const price  = parseFloat(ticker24.lastPrice);
+            const change = parseFloat(ticker24.priceChange);
+            const pct    = parseFloat(ticker24.priceChangePercent);
+            const high   = parseFloat(ticker24.highPrice);
+            const low    = parseFloat(ticker24.lowPrice);
+            return { price, change, pct, high, low, time: new Date() };
+        } catch { return null; }
+    }
+
+    // Slim: probeer eerst Finnhub, dan Binance direct
+    async function cryptoQuote(fhSym, binanceSym) {
+        const fh = await fhQuote(fhSym);
+        if (fh && fh.price > 0) return fh;
+        return binanceQuote(binanceSym);
+    }
     function fmtTime(date) {
         if (!date || isNaN(date)) return '–';
         return date.toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' });
@@ -2111,12 +2139,12 @@ function renderWeeklyReturns() {
             <td><strong>${label}</strong><span class="markt-name-sub">${sub}</span></td>
             <td><strong>${fmtNum(d.price, 4)}</strong></td>
             <td>${pctSpan(d.pct)}</td>
-            <td style="color:var(--text-muted);font-size:0.72rem;">${fmtTime(d.time)}</td>
+            <td class="col-hide" style="color:var(--text-muted);font-size:0.72rem;">${fmtTime(d.time)}</td>
         </tr>`;
     }
     function rowQuote(label, sub, d, unit = '') {
         if (!d) return errRow(label, sub, 3);
-        const u = unit ? `<span style="color:var(--text-muted);font-size:0.7rem;"> ${unit}</span>` : '';
+        const u = unit ? `<span class="col-hide" style="color:var(--text-muted);font-size:0.7rem;"> ${unit}</span>` : '';
         return `<tr>
             <td><strong>${label}</strong><span class="markt-name-sub">${sub}</span></td>
             <td><strong>${fmtNum(d.price)}</strong>${u}</td>
@@ -2164,9 +2192,9 @@ function renderWeeklyReturns() {
             yhQuote('ES=F'), yhQuote('NQ=F'), yhQuote('RTY=F'),
         ]);
         document.getElementById('mb-idx').innerHTML = [
-            rowQuote('S&P 500',     'E-mini Future (ES=F)',  sp,  'USD'),
-            rowQuote('Nasdaq 100',  'E-mini Future (NQ=F)',  nq,  'USD'),
-            rowQuote('Russell 2000','E-mini Future (RTY=F)', rut, 'USD'),
+            rowQuote('S&P 500',      'US Large Cap 500',   sp,  'USD'),
+            rowQuote('Nasdaq 100',   'US Tech 100',        nq,  'USD'),
+            rowQuote('Russell 2000', 'US Small Cap 2000',  rut, 'USD'),
         ].join('');
 
         // ── COMMODITIES (Yahoo futures) ──────────────────────────────────────
@@ -2192,18 +2220,18 @@ function renderWeeklyReturns() {
             rowQuote('TTF Gas',   'EU Gas (TTF=F)',      ttf,   'EUR/MWh'),
         ].join('');
 
-        // ── CRYPTO (Finnhub — Binance + MEXC voor HYPE) ──────────────────────
+        // ── CRYPTO (Finnhub + Binance fallback) ──────────────────────────────
         const cryptos = [
-            { label: 'Bitcoin',    sub: 'BTC',  sym: 'BINANCE:BTCUSDT'   },
-            { label: 'Ethereum',   sub: 'ETH',  sym: 'BINANCE:ETHUSDT'   },
-            { label: 'Solana',     sub: 'SOL',  sym: 'BINANCE:SOLUSDT'   },
-            { label: 'Avalanche',  sub: 'AVAX', sym: 'BINANCE:AVAXUSDT'  },
-            { label: 'Aave',       sub: 'AAVE', sym: 'BINANCE:AAVEUSDT'  },
-            { label: 'Render',     sub: 'RNDR', sym: 'BINANCE:RENDERUSDT'},
-            { label: 'Bittensor', sub: 'TAO',  sym: 'BINANCE:TAOUSDT'   },
-            { label: 'Hyperliquid',sub: 'HYPE', sym: 'MEXC:HYPEUSDT'     },
+            { label: 'Bitcoin',    sub: 'BTC',  fh: 'BINANCE:BTCUSDT',    bn: 'BTCUSDT'    },
+            { label: 'Ethereum',   sub: 'ETH',  fh: 'BINANCE:ETHUSDT',    bn: 'ETHUSDT'    },
+            { label: 'Solana',     sub: 'SOL',  fh: 'BINANCE:SOLUSDT',    bn: 'SOLUSDT'    },
+            { label: 'Avalanche',  sub: 'AVAX', fh: 'BINANCE:AVAXUSDT',   bn: 'AVAXUSDT'   },
+            { label: 'Aave',       sub: 'AAVE', fh: 'BINANCE:AAVEUSDT',   bn: 'AAVEUSDT'   },
+            { label: 'Render',     sub: 'RNDR', fh: 'BINANCE:RENDERUSDT', bn: 'RENDERUSDT' },
+            { label: 'Bittensor',  sub: 'TAO',  fh: 'BINANCE:TAOUSDT',    bn: 'TAOUSDT'    },
+            { label: 'Hyperliquid',sub: 'HYPE', fh: 'MEXC:HYPEUSDT',      bn: 'HYPEUSDT'   },
         ];
-        const cryptoResults = await Promise.all(cryptos.map(c => fhQuote(c.sym)));
+        const cryptoResults = await Promise.all(cryptos.map(c => cryptoQuote(c.fh, c.bn)));
         document.getElementById('mb-cry').innerHTML = cryptos.map((c, i) =>
             rowCrypto(c.label, c.sub, cryptoResults[i])
         ).join('');
