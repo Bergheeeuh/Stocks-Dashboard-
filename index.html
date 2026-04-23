@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio v12</title>
+    <title>Portfolio v14</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
     <style>
@@ -416,6 +416,31 @@
             #mb-cry tr th:nth-child(6) { display: none; }
         }
 
+        /* Benchmark toggles */
+        .bench-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            cursor: pointer;
+            user-select: none;
+            transition: color 0.15s;
+        }
+        .bench-toggle input { display: none; }
+        .bench-dot {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            border: 2px solid var(--c);
+            background: transparent;
+            transition: background 0.15s;
+            flex-shrink: 0;
+        }
+        .bench-toggle input:checked ~ .bench-dot { background: var(--c); }
+        .bench-toggle input:checked ~ * { color: var(--text-main); }
+        .bench-toggle:has(input:checked) { color: var(--text-main); }
+
         /* Maandoverzicht tabel */
         #maandTable th {
             padding: 8px 10px;
@@ -599,7 +624,30 @@
 
         <div class="charts-master-grid">
     <!-- Rij 1: TOTAAL grafiek, volle breedte -->
-    <div id="growthChartContainer" class="card chart-box span-3"><h3>TOTAAL</h3><div class="chart-wrapper"><canvas id="growthChart"></canvas></div></div>
+    <div id="growthChartContainer" class="card chart-box span-3">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:4px;">
+            <h3>TOTAAL</h3>
+            <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;" id="benchmarkToggles">
+                <label class="bench-toggle" style="--c:#e67e22;">
+                    <input type="checkbox" id="benchSP" onchange="updateBenchmarks()">
+                    <span class="bench-dot"></span> S&amp;P 500
+                </label>
+                <label class="bench-toggle" style="--c:#8e44ad;">
+                    <input type="checkbox" id="benchMSCI" onchange="updateBenchmarks()">
+                    <span class="bench-dot"></span> MSCI World
+                </label>
+                <label class="bench-toggle" style="--c:#16a085;">
+                    <input type="checkbox" id="benchNASDAQ" onchange="updateBenchmarks()">
+                    <span class="bench-dot"></span> Nasdaq 100
+                </label>
+                <label class="bench-toggle" style="--c:#c0392b;">
+                    <input type="checkbox" id="benchBTC" onchange="updateBenchmarks()">
+                    <span class="bench-dot"></span> Bitcoin
+                </label>
+            </div>
+        </div>
+        <div class="chart-wrapper"><canvas id="growthChart"></canvas></div>
+    </div>
 
     <!-- Rij 2: VERDELING + STATISTIEKEN naast elkaar -->
     <div id="pieChartContainer" class="card chart-box"><h3>VERDELING</h3><div class="chart-wrapper"><canvas id="pieChart"></canvas></div></div>
@@ -1029,6 +1077,63 @@ function toggleWidget(containerId, isChecked) {
         document.getElementById("mySidebar").style.width = "0";
         document.getElementById("overlay").style.display = "none";
     }
+
+    // ── SWIPE NAVIGATIE ──────────────────────────────────────────────────────
+    const TABS = ['dashboard', 'data-page', 'aandelen-page'];
+    const TAB_NAV_ITEMS = () => document.querySelectorAll('.nav-item');
+
+    function getActiveTabIndex() {
+        return TABS.findIndex(id => document.getElementById(id)?.classList.contains('active'));
+    }
+
+    function switchToTabIndex(idx) {
+        if (idx < 0 || idx >= TABS.length) return;
+        const tabId = TABS[idx];
+        // Vind het matching nav-item in de sidebar
+        const navItems = document.querySelectorAll('#mySidebar .nav-item');
+        switchTab(tabId, navItems[idx] || navItems[0]);
+    }
+
+    (function initSwipe() {
+        let touchStartX = 0, touchStartY = 0, touchStartTime = 0;
+        const SWIPE_THRESHOLD = 60;   // min px horizontaal
+        const SWIPE_MAX_Y     = 80;   // max px verticaal (voorkomen scroll-conflict)
+        const SWIPE_MAX_TIME  = 400;  // max ms
+
+        document.addEventListener('touchstart', e => {
+            touchStartX    = e.touches[0].clientX;
+            touchStartY    = e.touches[0].clientY;
+            touchStartTime = Date.now();
+        }, { passive: true });
+
+        document.addEventListener('touchend', e => {
+            const dx   = e.changedTouches[0].clientX - touchStartX;
+            const dy   = e.changedTouches[0].clientY - touchStartY;
+            const dt   = Date.now() - touchStartTime;
+            const sidebar = document.getElementById('mySidebar');
+            const isOpen  = parseInt(sidebar.style.width) > 0;
+
+            // Niet triggeren als het een scroll of lange druk was
+            if (Math.abs(dy) > SWIPE_MAX_Y || dt > SWIPE_MAX_TIME) return;
+            if (Math.abs(dx) < SWIPE_THRESHOLD) return;
+
+            if (dx > 0 && touchStartX < 30) {
+                // Swipe rechts vanuit linkerrand → open menu
+                openNav();
+            } else if (dx < 0 && isOpen) {
+                // Swipe links terwijl menu open → sluit menu
+                closeNav();
+            } else if (dx < 0 && !isOpen) {
+                // Swipe links door pagina → volgende tab
+                const cur = getActiveTabIndex();
+                if (cur < TABS.length - 1) switchToTabIndex(cur + 1);
+            } else if (dx > 0 && !isOpen) {
+                // Swipe rechts door pagina → vorige tab
+                const cur = getActiveTabIndex();
+                if (cur > 0) switchToTabIndex(cur - 1);
+            }
+        }, { passive: true });
+    })();
     function switchDataTab(tabId, btn) {
         document.querySelectorAll('.sub-tab-content').forEach(content => content.classList.remove('active'));
         document.querySelectorAll('.data-tab-btn').forEach(button => button.classList.remove('active'));
@@ -1054,6 +1159,8 @@ function toggleWidget(containerId, isChecked) {
         { date: '20/04/2026', degiro: 57544, bolero: 23164, saxo: 34928 },
         { date: '21/04/2026', degiro: 57093, bolero: 22844, saxo: 33539 },
         { date: '22/04/2026', degiro: 59130, bolero: 23300, saxo: 35327 },
+        { date: '23/04/2026', degiro: 59420, bolero: 23009, saxo: 36065 },
+
     ];
     
     let cashData = JSON.parse(localStorage.getItem('v25_cash')) || [
@@ -1334,6 +1441,13 @@ function importMasterJSON(input) {
         charts.main.data.labels = labels;
         charts.main.data.datasets[0].data = brokerData.map(d => d.degiro + d.bolero + d.saxo);
         charts.main.update();
+        // Benchmarks heruitlijnen op nieuwe portfolio data
+        const anyBenchActive = BENCHMARKS.some(b => document.getElementById(b.id)?.checked);
+        if (anyBenchActive) {
+            // Cache leegmaken zodat nieuwe datums opnieuw uitlijnen
+            BENCHMARKS.forEach(b => { if (benchCache[b.ticker]) delete benchCache[b.ticker]; });
+            updateBenchmarks();
+        }
         const last = brokerData[brokerData.length-1];
         charts.pie.data.datasets[0].data = [last.degiro, last.bolero, last.saxo];
         charts.pie.update();
@@ -1474,11 +1588,77 @@ function renderWeeklyReturns() {
     
     };
 
-    // 2. De Hoofdgrafiek aanmaken
-    charts.main = new Chart(document.getElementById('growthChart'), { 
-        type: 'line', 
-        data: { labels: [], datasets: [{ data: [], borderColor: '#6c757d', backgroundColor: '#6c757d15', fill: true, tension: 0.4, pointRadius: 4, pointHoverRadius: 6, borderWidth: 3 }] }, 
-        options: lineOpt 
+    // 2. De Hoofdgrafiek aanmaken (met benchmark datasets)
+    const mainChartOpt = JSON.parse(JSON.stringify(lineOpt));
+    // Override tooltip voor hoofd + benchmarks
+    mainChartOpt.plugins.tooltip = {
+        callbacks: {
+            label: function(context) {
+                const isBlurred = document.querySelector('.blur-target').classList.contains('blur');
+                const label = context.dataset.label || '';
+                if (context.datasetIndex === 0) {
+                    // Portfolio lijn
+                    return isBlurred ? '  € •••••' : '  ' + formatEuro(context.parsed.y);
+                }
+                // Benchmark: toon % verandering t.o.v. startpunt
+                const pct = context.parsed.y;
+                return `  ${label}: ${pct >= 0 ? '+' : ''}${pct.toFixed(2)}%`;
+            },
+            labelColor: function(context) {
+                const colors = ['#6c757d','#e67e22','#8e44ad','#16a085','#c0392b'];
+                return { borderColor: colors[context.datasetIndex] || '#999', backgroundColor: colors[context.datasetIndex] || '#999' };
+            }
+        }
+    };
+    mainChartOpt.plugins.legend = { display: false };
+    charts.main = new Chart(document.getElementById('growthChart'), {
+        type: 'line',
+        data: {
+            labels: [],
+            datasets: [
+                // Dataset 0: portfolio totaal
+                { label: 'Portfolio', data: [], borderColor: '#6c757d', backgroundColor: '#6c757d15', fill: true, tension: 0.4, pointRadius: 4, pointHoverRadius: 6, borderWidth: 3 },
+                // Dataset 1: S&P 500 (% scaled)
+                { label: 'S&P 500',    data: [], borderColor: '#e67e22', backgroundColor: 'transparent', fill: false, tension: 0.4, pointRadius: 0, pointHoverRadius: 5, borderWidth: 2, borderDash: [5,3], yAxisID: 'yBench', hidden: true },
+                // Dataset 2: MSCI World
+                { label: 'MSCI World', data: [], borderColor: '#8e44ad', backgroundColor: 'transparent', fill: false, tension: 0.4, pointRadius: 0, pointHoverRadius: 5, borderWidth: 2, borderDash: [5,3], yAxisID: 'yBench', hidden: true },
+                // Dataset 3: Nasdaq 100
+                { label: 'Nasdaq 100', data: [], borderColor: '#16a085', backgroundColor: 'transparent', fill: false, tension: 0.4, pointRadius: 0, pointHoverRadius: 5, borderWidth: 2, borderDash: [5,3], yAxisID: 'yBench', hidden: true },
+                // Dataset 4: Bitcoin
+                { label: 'Bitcoin',    data: [], borderColor: '#c0392b', backgroundColor: 'transparent', fill: false, tension: 0.4, pointRadius: 0, pointHoverRadius: 5, borderWidth: 2, borderDash: [5,3], yAxisID: 'yBench', hidden: true },
+            ]
+        },
+        options: {
+            ...mainChartOpt,
+            scales: {
+                x: mainChartOpt.scales?.x || {
+                    ticks: {
+                        callback: function(val, index) {
+                            const total = this.chart.data.labels.length;
+                            return (index === 0 || index === total - 1) ? this.getLabelForValue(val) : '';
+                        },
+                        autoSkip: false, maxRotation: 0
+                    }
+                },
+                y: {
+                    beginAtZero: false,
+                    position: 'left',
+                    afterTickToLabelConversion: function(s) {
+                        if (s.ticks.length > 2) for (let i = 1; i < s.ticks.length - 1; i++) s.ticks[i].label = '';
+                    }
+                },
+                yBench: {
+                    beginAtZero: false,
+                    position: 'right',
+                    display: false, // Toon rechter-as alleen als benchmark actief is
+                    grid: { drawOnChartArea: false },
+                    ticks: { callback: v => v.toFixed(1) + '%' },
+                    afterTickToLabelConversion: function(s) {
+                        if (s.ticks.length > 2) for (let i = 1; i < s.ticks.length - 1; i++) s.ticks[i].label = '';
+                    }
+                }
+            }
+        }
     });
 
     // 3. De Broker-grafieken (Degiro, Bolero, Saxo) aanmaken
@@ -1632,18 +1812,16 @@ function renderWeeklyReturns() {
         position: 'bottom',
         labels: { usePointStyle: true, font: { size: 12 } }
     },
-    // VOEG DIT STUKJE TOE:
     tooltip: {
         callbacks: {
+            title: function(context) {
+                // Toon brokernaam als title (buiten het label)
+                return context[0]?.label || '';
+            },
             label: function(context) {
-                const label = context.label || '';
-                const value = context.parsed;
                 const isBlurred = document.querySelector('.blur-target').classList.contains('blur');
-                
-                if (isBlurred) {
-                    return label + ": € •••••";
-                }
-                return label + ": " + formatEuro(value);
+                if (isBlurred) return '  € •••••';
+                return '  ' + formatEuro(context.parsed);
             }
         }
     },
@@ -2247,6 +2425,105 @@ function renderWeeklyReturns() {
             const tab = document.getElementById('aandelen-page');
             if (tab && tab.classList.contains('active')) loadMarktData();
         }, 30000);
+    }
+
+    // ── BENCHMARK LIJNEN ────────────────────────────────────────────────────
+    const BENCHMARKS = [
+        { id: 'benchSP',     ticker: 'SPY',  label: 'S&P 500',    dsIdx: 1 },
+        { id: 'benchMSCI',   ticker: 'URTH', label: 'MSCI World',  dsIdx: 2 },
+        { id: 'benchNASDAQ', ticker: 'QQQ',  label: 'Nasdaq 100',  dsIdx: 3 },
+        { id: 'benchBTC',    ticker: 'BTC-USD', label: 'Bitcoin',  dsIdx: 4 },
+    ];
+
+    const benchCache = {}; // ticker → array van sluitingskoersen
+
+    // Haal dagelijkse sluitingskoersen op via Yahoo Finance (corsproxy)
+    async function fetchBenchmarkHistory(ticker, fromDate) {
+        if (benchCache[ticker]) return benchCache[ticker];
+        try {
+            // from als Unix timestamp
+            const from = Math.floor(new Date(fromDate).getTime() / 1000) - 86400 * 5;
+            const to   = Math.floor(Date.now() / 1000);
+            const url  = `https://corsproxy.io/?url=${encodeURIComponent(
+                `https://query2.finance.yahoo.com/v8/finance/chart/${ticker}?interval=1d&period1=${from}&period2=${to}`
+            )}`;
+            const r = await fetch(url);
+            if (!r.ok) throw new Error(r.status);
+            const data = await r.json();
+            const result = data?.chart?.result?.[0];
+            if (!result) return null;
+            const timestamps = result.timestamps ?? result.timestamp ?? [];
+            const closes     = result.indicators?.quote?.[0]?.close ?? [];
+            // Bouw datum→koers map
+            const map = {};
+            timestamps.forEach((ts, i) => {
+                if (closes[i] == null) return;
+                const d = new Date(ts * 1000);
+                const key = `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
+                map[key] = closes[i];
+            });
+            benchCache[ticker] = map;
+            return map;
+        } catch { return null; }
+    }
+
+    // Zet historische koersen om naar % t.o.v. eerste overlappende datum met portfolio
+    function alignBenchmark(priceMap, portfolioDates) {
+        if (!priceMap) return null;
+        // Zoek eerste datum in portfolio die ook in de benchmark zit (of dichtbijgelegen)
+        let basePrice = null;
+        const result = [];
+        for (const date of portfolioDates) {
+            // Probeer exacte datum, anders zoek ±3 dagen
+            let price = priceMap[date];
+            if (price == null) {
+                // Probeer naburige werkdagen
+                const [d, m, y] = date.split('/').map(Number);
+                for (let offset = -3; offset <= 3; offset++) {
+                    const try_ = new Date(y, m-1, d+offset);
+                    const k = `${String(try_.getDate()).padStart(2,'0')}/${String(try_.getMonth()+1).padStart(2,'0')}/${try_.getFullYear()}`;
+                    if (priceMap[k]) { price = priceMap[k]; break; }
+                }
+            }
+            if (price == null) { result.push(null); continue; }
+            if (basePrice === null) basePrice = price;
+            result.push(basePrice > 0 ? ((price - basePrice) / basePrice) * 100 : 0);
+        }
+        return basePrice !== null ? result : null;
+    }
+
+    async function updateBenchmarks() {
+        if (!charts.main || brokerData.length === 0) return;
+        const portfolioDates = brokerData.map(d => d.date);
+        // Eerste datum van portfolio als startdatum voor fetch
+        const [fd, fm, fy] = portfolioDates[0].split('/').map(Number);
+        const fromDate = `${fy}-${String(fm).padStart(2,'0')}-${String(fd).padStart(2,'0')}`;
+
+        let anyActive = false;
+
+        for (const bench of BENCHMARKS) {
+            const cb = document.getElementById(bench.id);
+            const ds = charts.main.data.datasets[bench.dsIdx];
+            if (!cb || !ds) continue;
+
+            if (cb.checked) {
+                anyActive = true;
+                ds.hidden = false;
+                if (!benchCache[bench.ticker]) {
+                    ds.data = []; // toon leeg terwijl laden
+                    charts.main.update('none');
+                }
+                const map = await fetchBenchmarkHistory(bench.ticker, fromDate);
+                ds.data = alignBenchmark(map, portfolioDates) ?? [];
+            } else {
+                ds.hidden = true;
+                ds.data = [];
+            }
+        }
+
+        // Rechter y-as tonen/verbergen
+        charts.main.options.scales.yBench.display = anyActive;
+        charts.main.update();
     }
 
     window.onload = () => {
