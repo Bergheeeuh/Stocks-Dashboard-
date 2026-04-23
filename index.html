@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio v10</title>
+    <title>Portfolio v11</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
     <style>
@@ -198,6 +198,7 @@
         .info-label { color: var(--text-muted); text-transform: uppercase; font-size: 0.65rem; }
 
         .blur { filter: blur(10px) !important; }
+        .blur-chart canvas { filter: blur(6px); }
 
         .btn-group { display: flex; gap: 10px; flex-wrap: wrap; }
         .btn {
@@ -317,68 +318,92 @@
         #statsTable tr:hover td { background: var(--row-hover); }
         #statsTable td, #statsTable th { border: none; }
 
-        /* ATH badge */
+        /* ATH badge — subtiel rechtsbovenin de kaart */
         .ath-badge {
-            display: inline-flex;
+            position: absolute;
+            top: 10px;
+            right: 14px;
+            display: none;
             align-items: center;
-            background: linear-gradient(135deg, #f6d365, #fda085);
-            color: #fff;
-            font-size: 0.6rem;
+            gap: 4px;
+            background: rgba(246, 211, 101, 0.15);
+            color: #c8951a;
+            font-size: 0.58rem;
             font-weight: 800;
-            padding: 2px 8px;
+            padding: 3px 8px;
             border-radius: 99px;
-            letter-spacing: 0.04em;
-            vertical-align: middle;
-            margin-left: 4px;
-            animation: athPulse 2s ease-in-out infinite;
+            letter-spacing: 0.06em;
+            border: 1px solid rgba(246, 211, 101, 0.4);
+            animation: athPulse 3s ease-in-out infinite;
         }
+        [data-theme="dark"] .ath-badge {
+            background: rgba(246, 211, 101, 0.1);
+            color: #f6d365;
+            border-color: rgba(246, 211, 101, 0.25);
+        }
+        .ath-badge.visible { display: inline-flex; }
         @keyframes athPulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50%       { opacity: 0.8; transform: scale(1.05); }
+            0%, 100% { opacity: 1; }
+            50%       { opacity: 0.6; }
         }
+
+        /* Markt secties */
+        .markt-section { padding: 1.2rem 1.5rem; }
+        .markt-section-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 14px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .markt-section-icon { font-size: 1rem; }
+        .markt-section h3 { margin: 0; }
 
         /* Markt tabel */
         .markt-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 0.88rem;
+            font-size: 0.85rem;
         }
         .markt-table th {
-            padding: 8px 12px;
+            padding: 6px 8px;
             text-align: right;
-            font-size: 0.68rem;
+            font-size: 0.64rem;
             font-weight: 700;
             text-transform: uppercase;
             color: var(--text-muted);
-            border-bottom: 2px solid var(--border-color);
-            letter-spacing: 0.04em;
+            border-bottom: 1px solid var(--border-color);
+            letter-spacing: 0.05em;
+            white-space: nowrap;
         }
         .markt-table th:first-child { text-align: left; }
         .markt-table td {
-            padding: 11px 12px;
+            padding: 9px 8px;
             text-align: right;
             border: none;
             border-bottom: 1px solid var(--border-color);
             background: transparent;
+            font-size: 0.84rem;
+            white-space: nowrap;
         }
-        .markt-table td:first-child {
-            text-align: left;
-            font-weight: 700;
-        }
+        .markt-table td:first-child { text-align: left; font-weight: 600; }
         .markt-table tr:last-child td { border-bottom: none; }
-        .markt-table tr:hover td { background: var(--row-hover); }
-        .markt-loading {
-            text-align: center !important;
-            color: var(--text-muted);
-            font-size: 0.82rem;
-            padding: 20px !important;
-        }
+        .markt-table tr:hover td { background: var(--row-hover); transition: background 0.15s; }
+        .markt-loading { text-align: center !important; color: var(--text-muted); font-size: 0.8rem; padding: 16px !important; }
         .markt-pos { color: var(--success); font-weight: 700; }
         .markt-neg { color: var(--danger);  font-weight: 700; }
-        .markt-name-sub { font-size: 0.68rem; color: var(--text-muted); font-weight: 400; display: block; margin-top: 1px; }
-        .markt-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; vertical-align: middle; }
-        .markt-dot-live { background: var(--success); animation: athPulse 1.5s ease-in-out infinite; }
-        .markt-dot-stale { background: var(--text-muted); }
+        .markt-neu { color: var(--text-muted); font-weight: 600; }
+        .markt-name-sub { font-size: 0.66rem; color: var(--text-muted); font-weight: 400; display: block; margin-top: 1px; }
+        .markt-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 5px; vertical-align: middle; }
+        .markt-dot-live { background: var(--success); animation: athPulse 2s ease-in-out infinite; }
+        .markt-dot-stale { background: #e74c3c; }
+        .markt-dot-loading { background: var(--text-muted); }
+        .markt-err { color: var(--text-muted); font-size: 0.75rem; font-style: italic; }
+        @media (max-width: 800px) {
+            #aandelen-page > div:last-child { grid-template-columns: 1fr !important; }
+            #aandelen-page .markt-section[style*="span 2"] { grid-column: span 1 !important; }
+        }
 
         /* Maandoverzicht tabel */
         #maandTable th {
@@ -498,13 +523,17 @@
         <div class="header">
             <div class="header-titles">
                 <h1>PORTFOLIO</h1>
-                <p id="lastUpdate" style="color: var(--text-muted); font-size: 0.9rem;"></p>
+            </div>
+            <div id="lastUpdate" style="text-align:right;line-height:1.4;">
+                <span style="font-size:0.75rem;font-weight:700;text-transform:uppercase;color:var(--text-muted);letter-spacing:0.04em;">Laatste update</span><br>
+                <span id="lastUpdateVal" style="font-size:0.95rem;font-weight:600;color:var(--text-main);"></span>
             </div>
         </div>
 
         <div class="stats-grid">
             <div class="card card-total">
-                <h3>Totaal <span id="athTotal" class="ath-badge" style="display:none;">🏆 ATH</span></h3>
+                <span id="athTotal" class="ath-badge">🏆 ATH</span>
+                <h3>Totaal</h3>
                 <div class="value blur-target" id="totalValue"></div>
                 <div id="totalChange" class="change-row"></div>
                 <div class="extra-info">
@@ -514,7 +543,8 @@
             </div>
 
             <div class="card card-degiro">
-                <h3>DEGIRO <span id="athDegiro" class="ath-badge" style="display:none;">🏆 ATH</span></h3>
+                <span id="athDegiro" class="ath-badge">🏆 ATH</span>
+                <h3>DEGIRO</h3>
                 <div class="value blur-target" id="valDegiro"></div>
                 <div id="chgDegiro" class="change-row"></div>
                 <div class="extra-info">
@@ -528,7 +558,8 @@
 </div>
 
             <div class="card card-bolero">
-                <h3>Bolero <span id="athBolero" class="ath-badge" style="display:none;">🏆 ATH</span></h3>
+                <span id="athBolero" class="ath-badge">🏆 ATH</span>
+                <h3>Bolero</h3>
                 <div class="value blur-target" id="valBolero"></div>
                 <div id="chgBolero" class="change-row"></div>
                 <div class="extra-info">
@@ -540,9 +571,9 @@
     </div>
 </div>
 
-
             <div class="card card-saxo">
-                <h3>Saxo <span id="athSaxo" class="ath-badge" style="display:none;">🏆 ATH</span></h3>
+                <span id="athSaxo" class="ath-badge">🏆 ATH</span>
+                <h3>Saxo</h3>
                 <div class="value blur-target" id="valSaxo"></div>
                 <div id="chgSaxo" class="change-row"></div>
                 <div class="extra-info">
@@ -695,50 +726,64 @@
     <div class="header" style="margin-bottom:16px;">
         <div class="header-titles"><h1>MARKT</h1></div>
         <div style="display:flex;align-items:center;gap:10px;">
-            <span id="marktStatus" style="font-size:0.75rem;color:var(--text-muted);"></span>
-            <button class="btn" onclick="loadMarktData()" style="font-size:0.8rem;padding:8px 14px;">↻ Vernieuwen</button>
+            <span id="marktStatus" style="font-size:0.75rem;color:var(--text-muted);display:flex;align-items:center;gap:5px;"></span>
+            <button class="btn" onclick="loadMarktData(true)" style="font-size:0.8rem;padding:8px 14px;">↻ Vernieuwen</button>
         </div>
     </div>
 
-    <div class="card">
-    <h3></h3>
-    <table class="markt-table">
-        <thead><tr><th>VALUTA</th><th>Koers</th><th>Verschil</th><th>Dag %</th><th>Tijd</th></tr></thead>
-        <tbody id="fxTableBody"></tbody>
-    </table>
-</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
 
-<div class="card">
-    <h3></h3>
-    <table class="markt-table">
-        <thead><tr><th>Core Indices</th><th>Koers</th><th>Verschil</th><th>Dag %</th><th>Tijd</th></tr></thead>
-        <tbody id="futTableBody"></tbody>
-    </table>
-</div>
+        <!-- VALUTA -->
+        <div class="card markt-section">
+            <div class="markt-section-header">
+                <span class="markt-section-icon">💱</span>
+                <h3>VALUTA</h3>
+            </div>
+            <table class="markt-table"><thead><tr><th>Paar</th><th>Koers</th><th>Dag %</th><th>Tijd</th></tr></thead>
+            <tbody id="mb-fx"></tbody></table>
+        </div>
 
-<div class="card">
-    <h3></h3>
-    <table class="markt-table">
-        <thead><tr><th>COMMODITIES</th><th>Koers</th><th>Verschil</th><th>Dag %</th><th>Tijd</th></tr></thead>
-        <tbody id="metalTableBody"></tbody>
-    </table>
-</div>
+        <!-- CORE INDICES -->
+        <div class="card markt-section">
+            <div class="markt-section-header">
+                <span class="markt-section-icon">📈</span>
+                <h3>CORE INDICES</h3>
+            </div>
+            <table class="markt-table"><thead><tr><th>Index</th><th>Koers</th><th>Dag △</th><th>Dag %</th></tr></thead>
+            <tbody id="mb-idx"></tbody></table>
+        </div>
 
-<div class="card">
-    <h3></h3>
-    <table class="markt-table">
-        <thead><tr><th>ENERGY COMMODITIES</th><th>Koers</th><th>Verschil</th><th>Dag %</th><th>Tijd</th></tr></thead>
-        <tbody id="commTableBody"></tbody>
-    </table>
-</div>
+        <!-- COMMODITIES -->
+        <div class="card markt-section">
+            <div class="markt-section-header">
+                <span class="markt-section-icon">🥇</span>
+                <h3>COMMODITIES</h3>
+            </div>
+            <table class="markt-table"><thead><tr><th>Grondstof</th><th>Koers</th><th>Dag △</th><th>Dag %</th></tr></thead>
+            <tbody id="mb-com"></tbody></table>
+        </div>
 
-<div class="card">
-    <h3></h3>
-    <table class="markt-table">
-        <thead><tr><th>CRYPTO</th><th>Koers</th><th>Verschil</th><th>Dag %</th><th>Tijd</th></tr></thead>
-        <tbody id="cryptoTableBody"></tbody>
-    </table>
-</div>
+        <!-- ENERGY -->
+        <div class="card markt-section">
+            <div class="markt-section-header">
+                <span class="markt-section-icon">⚡</span>
+                <h3>ENERGY</h3>
+            </div>
+            <table class="markt-table"><thead><tr><th>Instrument</th><th>Koers</th><th>Dag △</th><th>Dag %</th></tr></thead>
+            <tbody id="mb-nrg"></tbody></table>
+        </div>
+
+        <!-- CRYPTO (span beide kolommen) -->
+        <div class="card markt-section" style="grid-column:span 2;">
+            <div class="markt-section-header">
+                <span class="markt-section-icon">₿</span>
+                <h3>CRYPTO</h3>
+            </div>
+            <table class="markt-table"><thead><tr><th>Coin</th><th>Koers (USD)</th><th>Dag △</th><th>Dag %</th><th>24h High</th><th>24h Low</th></tr></thead>
+            <tbody id="mb-cry"></tbody></table>
+        </div>
+
+    </div>
 </div>
     
 
@@ -998,7 +1043,6 @@ function toggleWidget(containerId, isChecked) {
         { date: '20/04/2026', degiro: 57544, bolero: 23164, saxo: 34928 },
         { date: '21/04/2026', degiro: 57093, bolero: 22844, saxo: 33539 },
         { date: '22/04/2026', degiro: 59130, bolero: 23300, saxo: 35327 },
-
     ];
     
     let cashData = JSON.parse(localStorage.getItem('v25_cash')) || [
@@ -1022,20 +1066,21 @@ function toggleWidget(containerId, isChecked) {
         document.getElementById(id).classList.add('active');
         el.classList.add('active');
         closeNav();
-        if (id === 'aandelen-page') loadMarktData();
+        if (id === 'aandelen-page') loadMarktData(true);
     }
 
     function toggleBlur() { 
-    // Wissel de blur op alle teksten
-    document.querySelectorAll('.blur-target').forEach(e => e.classList.toggle('blur')); 
-    
-    // Ververs de grafieken zodat de tooltips ook geblurred worden
-    for (let chartName in charts) {
-        if (charts[chartName]) {
-            charts[chartName].update();
+        document.querySelectorAll('.blur-target').forEach(e => e.classList.toggle('blur')); 
+        for (let chartName in charts) {
+            if (charts[chartName]) charts[chartName].update();
         }
-    }
-    renderStatsTable();
+        renderStatsTable();
+        renderMaandoverzicht();
+        // Blur y-as labels via CSS op canvas wrapper
+        const isBlurred = document.querySelector('.blur-target') && document.querySelector('.blur-target').classList.contains('blur');
+        document.querySelectorAll('.chart-wrapper').forEach(w => {
+            w.classList.toggle('blur-chart', isBlurred);
+        });
     }
     function formatEuro(v) { return "€ " + (v || 0).toLocaleString('nl-NL', {minimumFractionDigits: 2}); }
     function addRow(type) {
@@ -1100,7 +1145,14 @@ renderWeeklyReturns();
             document.getElementById(`prof${b}Euro`).style.color = pEuro >= 0 ? 'var(--success)' : 'var(--danger)';
         });
 
-    document.getElementById('lastUpdate').innerText = `Laatst bijgewerkt op ${last.date}`;        updateChange('totalChange', total, pTotal);
+        const DAGEN = ['zondag','maandag','dinsdag','woensdag','donderdag','vrijdag','zaterdag'];
+        const [ld, lm, ly] = last.date.split('/').map(Number);
+        const dateObj = new Date(ly, lm - 1, ld);
+        const dagNaam = DAGEN[dateObj.getDay()];
+        const luEl = document.getElementById('lastUpdateVal');
+        if (luEl) luEl.innerText = `${dagNaam} ${last.date}`;
+
+        updateChange('totalChange', total, pTotal);
         updateChange('chgDegiro', last.degiro, prev.degiro);
         updateChange('chgBolero', last.bolero, prev.bolero);
         updateChange('chgSaxo', last.saxo, prev.saxo);
@@ -1842,7 +1894,7 @@ function renderWeeklyReturns() {
 
         const show = (id, isATH) => {
             const el = document.getElementById(id);
-            if (el) el.style.display = isATH ? 'inline-flex' : 'none';
+            if (el) el.classList.toggle('visible', isATH);
         };
 
         show('athTotal',  lastTotal    > maxTotal);
@@ -1947,9 +1999,9 @@ function renderWeeklyReturns() {
             const eindStr  = isBlurred ? '€ •••' : formatEuro(m.end);
             return `<tr>
                 <td>${MAAND_NL[m.month - 1]}</td>
-                <td style="color:${color};font-weight:700;">${euroStr}</td>
+                <td style="color:${color};font-weight:700;" class="maand-euro-cell">${euroStr}</td>
                 <td style="color:${color};font-weight:700;">${percStr}</td>
-                <td class="blur-target">${eindStr}</td>
+                <td class="maand-euro-cell">${eindStr}</td>
             </tr>`;
         }).join('');
 
@@ -1959,7 +2011,7 @@ function renderWeeklyReturns() {
             const sign  = jaarDiff >= 0 ? '+' : '';
             body.innerHTML += `<tr class="maand-totaal">
                 <td>Jaar ${maandYear}</td>
-                <td style="color:${color};">${isBlurred ? '€ •••' : sign + formatEuro(jaarDiff)}</td>
+                <td style="color:${color};" class="maand-euro-cell">${isBlurred ? '€ •••' : sign + formatEuro(jaarDiff)}</td>
                 <td style="color:${color};">${jaarPerc !== null ? sign + jaarPerc.toFixed(2) + '%' : '–'}</td>
                 <td></td>
             </tr>`;
@@ -1967,179 +2019,208 @@ function renderWeeklyReturns() {
     }
 
     // ── MARKT: LIVE DATA ────────────────────────────────────────────────────
+    const FINNHUB_KEY = 'd4g9371r01qm5b34gb90d4g9371r01qm5b34gb9g';
 
-    // Yahoo Finance via allorigins CORS proxy
-    async function fetchYahoo(ticker) {
-        const yahooUrl = `https://query2.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(ticker)}?interval=1d&range=5d`;
-        const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(yahooUrl)}`;
+    // Finnhub — werkt voor crypto (Binance feed)
+    async function fhQuote(symbol) {
         try {
-            const res = await fetch(proxyUrl);
-            if (!res.ok) throw new Error('proxy ' + res.status);
-            const outer = await res.json();
-            const data = JSON.parse(outer.contents);
-            const meta = data.chart.result[0].meta;
-            const price    = meta.regularMarketPrice;
+            const r = await fetch(`https://finnhub.io/api/v1/quote?symbol=${encodeURIComponent(symbol)}&token=${FINNHUB_KEY}`);
+            if (!r.ok) throw new Error(r.status);
+            const d = await r.json();
+            if (!d.c || d.c === 0) return null;
+            const change = d.c - d.pc;
+            const pct    = d.pc ? (change / d.pc) * 100 : 0;
+            return { price: d.c, change, pct, high: d.h, low: d.l, prevClose: d.pc, time: d.t ? new Date(d.t * 1000) : new Date() };
+        } catch { return null; }
+    }
+
+    // Yahoo Finance via corsproxy.io — voor futures & commodities
+    async function yhQuote(ticker) {
+        const url = `https://corsproxy.io/?url=${encodeURIComponent('https://query2.finance.yahoo.com/v8/finance/chart/' + ticker + '?interval=1d&range=2d')}`;
+        try {
+            const r = await fetch(url);
+            if (!r.ok) throw new Error(r.status);
+            const data = await r.json();
+            const meta = data?.chart?.result?.[0]?.meta;
+            if (!meta || !meta.regularMarketPrice) return null;
+            const price     = meta.regularMarketPrice;
             const prevClose = meta.chartPreviousClose ?? meta.previousClose ?? price;
-            const change   = price - prevClose;
-            const changePct = prevClose !== 0 ? (change / prevClose) * 100 : 0;
-            const ts = meta.regularMarketTime ? new Date(meta.regularMarketTime * 1000) : new Date();
-            return { price, change, changePct, time: ts, currency: meta.currency || '' };
-        } catch(e) {
-            return null;
-        }
+            const change    = price - prevClose;
+            const pct       = prevClose ? (change / prevClose) * 100 : 0;
+            return { price, change, pct, high: meta.regularMarketDayHigh, low: meta.regularMarketDayLow, time: meta.regularMarketTime ? new Date(meta.regularMarketTime * 1000) : new Date() };
+        } catch { return null; }
     }
 
-    // EUR/USD via open.er-api.com (gratis, geen key, CORS ok) + gisteren via frankfurter
-    async function fetchFX(base, target) {
+    // open.er-api.com — voor wisselkoersen (gratis, CORS ok, geen key)
+    let _fxCache = null, _fxCacheTime = 0;
+    async function fxRate(from, to) {
         try {
-            const res = await fetch(`https://open.er-api.com/v6/latest/${base}`);
-            if (!res.ok) throw new Error('er-api ' + res.status);
-            const data = await res.json();
-            const rate = data.rates[target];
-
-            // Vorige werkdag via frankfurter voor % verandering
-            let changePct = 0;
-            try {
-                const res2 = await fetch(`https://api.frankfurter.app/${getPrevWorkday()}?from=${base}&to=${target}`);
-                const data2 = await res2.json();
-                const prevRate = data2.rates?.[target] ?? rate;
-                changePct = prevRate !== 0 ? ((rate - prevRate) / prevRate) * 100 : 0;
-            } catch(_) {}
-
-            return { price: rate, changePct, time: new Date(), currency: target };
-        } catch(e) {
-            // Fallback: frankfurter alleen
-            try {
-                const res = await fetch(`https://api.frankfurter.app/latest?from=${base}&to=${target}`);
-                const data = await res.json();
-                const rate = data.rates[target];
-                return { price: rate, changePct: 0, time: new Date(data.date), currency: target };
-            } catch(_) {
-                return null;
+            // Cache 5 min
+            if (_fxCache && _fxCache.base === from && Date.now() - _fxCacheTime < 300000) {
+                const rate = _fxCache.rates[to];
+                return rate ? { price: rate, pct: 0, time: new Date(_fxCacheTime) } : null;
             }
-        }
+            const r = await fetch(`https://open.er-api.com/v6/latest/${from}`);
+            if (!r.ok) throw new Error(r.status);
+            const data = await r.json();
+            _fxCache = data; _fxCacheTime = Date.now();
+            const rate = data.rates[to];
+            if (!rate) return null;
+            // Dagverandering via frankfurter (kan falen, dan pct=0)
+            let pct = 0;
+            try {
+                const prev = new Date(); prev.setDate(prev.getDate() - 1);
+                while (prev.getDay() === 0 || prev.getDay() === 6) prev.setDate(prev.getDate() - 1);
+                const prevStr = prev.toISOString().split('T')[0];
+                const r2 = await fetch(`https://api.frankfurter.app/${prevStr}?from=${from}&to=${to}`);
+                const d2 = await r2.json();
+                const prevRate = d2.rates?.[to];
+                if (prevRate) pct = ((rate - prevRate) / prevRate) * 100;
+            } catch {}
+            return { price: rate, pct, time: new Date() };
+        } catch { return null; }
     }
 
-    function getPrevWorkday() {
-        const d = new Date();
-        d.setDate(d.getDate() - 1);
-        while (d.getDay() === 0 || d.getDay() === 6) d.setDate(d.getDate() - 1);
-        return d.toISOString().split('T')[0];
-    }
-
+    // Formatter helpers
     function fmtTime(date) {
+        if (!date || isNaN(date)) return '–';
         return date.toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' });
     }
-
-    function fmtPrice(val, decimals = 2) {
-        return val.toLocaleString('nl-NL', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+    function fmtNum(v, dec = 2) {
+        if (v == null || isNaN(v)) return '–';
+        return v.toLocaleString('nl-NL', { minimumFractionDigits: dec, maximumFractionDigits: dec });
+    }
+    function pctSpan(pct) {
+        if (pct == null || isNaN(pct)) return '<span class="markt-neu">–</span>';
+        const s = pct >= 0 ? '+' : '';
+        const c = Math.abs(pct) < 0.005 ? 'markt-neu' : pct > 0 ? 'markt-pos' : 'markt-neg';
+        return `<span class="${c}">${s}${fmtNum(pct)}%</span>`;
+    }
+    function chgSpan(chg, dec = 2) {
+        if (chg == null || isNaN(chg)) return '<span class="markt-neu">–</span>';
+        const s = chg >= 0 ? '+' : '';
+        const c = chg === 0 ? 'markt-neu' : chg > 0 ? 'markt-pos' : 'markt-neg';
+        return `<span class="${c}">${s}${fmtNum(chg, dec)}</span>`;
+    }
+    function errRow(label, sub, cols) {
+        return `<tr><td><strong>${label}</strong><span class="markt-name-sub">${sub}</span></td><td colspan="${cols}" class="markt-err">Niet beschikbaar</td></tr>`;
+    }
+    function rowFx(label, sub, d) {
+        if (!d) return errRow(label, sub, 3);
+        return `<tr>
+            <td><strong>${label}</strong><span class="markt-name-sub">${sub}</span></td>
+            <td><strong>${fmtNum(d.price, 4)}</strong></td>
+            <td>${pctSpan(d.pct)}</td>
+            <td style="color:var(--text-muted);font-size:0.72rem;">${fmtTime(d.time)}</td>
+        </tr>`;
+    }
+    function rowQuote(label, sub, d, unit = '') {
+        if (!d) return errRow(label, sub, 3);
+        const u = unit ? `<span style="color:var(--text-muted);font-size:0.7rem;"> ${unit}</span>` : '';
+        return `<tr>
+            <td><strong>${label}</strong><span class="markt-name-sub">${sub}</span></td>
+            <td><strong>${fmtNum(d.price)}</strong>${u}</td>
+            <td>${chgSpan(d.change)}</td>
+            <td>${pctSpan(d.pct)}</td>
+        </tr>`;
+    }
+    function rowCrypto(label, sub, d) {
+        if (!d) return errRow(label, sub, 5);
+        const dec = d.price < 1 ? 4 : d.price < 100 ? 3 : 2;
+        return `<tr>
+            <td><strong>${label}</strong><span class="markt-name-sub">${sub}</span></td>
+            <td><strong>$${fmtNum(d.price, dec)}</strong></td>
+            <td>${chgSpan(d.change, dec)}</td>
+            <td>${pctSpan(d.pct)}</td>
+            <td style="color:var(--success);font-size:0.8rem;">$${fmtNum(d.high ?? 0, dec)}</td>
+            <td style="color:var(--danger);font-size:0.8rem;">$${fmtNum(d.low ?? 0, dec)}</td>
+        </tr>`;
+    }
+    function setLoading(id, cols) {
+        const el = document.getElementById(id);
+        if (el) el.innerHTML = `<tr><td colspan="${cols}" class="markt-loading">⏳ Laden…</td></tr>`;
     }
 
-    function pctCell(pct) {
-        const sign = pct >= 0 ? '+' : '';
-        const cls  = pct >= 0 ? 'markt-pos' : 'markt-neg';
-        return `<span class="${cls}">${sign}${pct.toFixed(2)}%</span>`;
-    }
+    let marktRefreshTimer = null;
 
-    function changeCell(change) {
-        const sign = change >= 0 ? '+' : '';
-        const cls  = change >= 0 ? 'markt-pos' : 'markt-neg';
-        return `<span class="${cls}">${sign}${fmtPrice(change)}</span>`;
-    }
-
-    const FINNHUB_API_KEY = 'd4g9371r01qm5b34gb90d4g9371r01qm5b34gb9g';
-
-    function openNav() { document.getElementById("mySidebar").style.width = "250px"; document.getElementById("overlay").style.display = "block"; }
-    function closeNav() { document.getElementById("mySidebar").style.width = "0"; document.getElementById("overlay").style.display = "none"; }
-    function switchTab(tabId, btn) {
-        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-        document.getElementById(tabId).classList.add('active');
-        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-        btn.classList.add('active');
-    }
-    function toggleTheme() {
-        const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-        document.documentElement.setAttribute('data-theme', theme);
-    }
-
-    async function fetchFinnhubQuote(symbol) {
-        try {
-            const response = await fetch(`https://finnhub.io/api/v1/quote?symbol=${symbol}&token=${FINNHUB_API_KEY}`);
-            return await response.json();
-        } catch (e) { return null; }
-    }
-
-async function loadMarktData() {
-    const statusEl = document.getElementById('marktStatus');
-    if (statusEl) statusEl.innerText = "Laden...";
-
-    // Configuratie van de tabellen
-    const tables = {
-        'fxTableBody': [
-            { n: 'EUR/USD', s: 'OANDA:EUR_USD', u: '' }
-        ],
-        'futTableBody': [
-            { n: 'S&P 500', s: 'SPY', sub: 'SPY)', u: '' },
-            { n: 'Nasdaq 100', s: 'QQQ', sub: 'QQQ', u: '' },
-            { n: 'Russell 2000', s: 'IWM', sub: 'IWM', u: '' }
-        ],
-        'metalTableBody': [
-            { n: 'Goud', s: 'GLD', sub: 'GLD', u: '$' },
-            { n: 'Zilver', s: 'SLV', sub: 'SLV', u: '$' },
-            { n: 'Koper', s: 'CPER', sub: 'CPER', u: '$' },
-            { n: 'Platinum', s: 'PPLT', sub: 'PPLT', u: '$' },
-            { n: 'Palladium', s: 'PALL', sub: 'PALL', u: '$' },
-        ],
-        'commTableBody': [
-            { n: 'Brent Oil', s: 'BNO', sub: 'BNO', u: '$' },
-            { n: 'Crude Oil', s: 'UCO', sub: 'UCO', u: '$' },
-        ],
-        'cryptoTableBody': [
-            { n: 'Bitcoin', s: 'BINANCE:BTCUSDT', sub: 'BTC', u: '$' },
-            { n: 'Ethereum', s: 'BINANCE:ETHUSDT', sub: 'ETH', u: '$' },
-            { n: 'Render', s: 'BINANCE:RENDERUSDT', sub: 'RNDR', u: '$' },
-            { n: 'Bittensor', s: 'BINANCE:TAOUSDT', sub: 'TAO', u: '$' },
-            { n: 'Aave', s: 'BINANCE:AAVEUSDT', sub: 'AAVE', u: '$' },
-            { n: 'Avalanche', s: 'BINANCE:AVAXUSDT', sub: 'AVAX', u: '$' },
-            { n: 'Solana', s: 'BINANCE:SOLUSDT', sub: 'SOL', u: '$' },
-
-        ]
-    };
-
-    for (const [tableId, items] of Object.entries(tables)) {
-        const tbody = document.getElementById(tableId);
-        if (!tbody) continue;
-        tbody.innerHTML = '';
-
-        for (const item of items) {
-            const data = await fetchFinnhubQuote(item.s);
-            if (data && data.c) {
-                const diff = (data.c - data.pc).toFixed(2);
-                const perc = (data.dp || 0).toFixed(2);
-                const color = data.dp >= 0 ? 'markt-pos' : 'markt-neg';
-                const formattedPrice = item.s.includes('EUR_USD') ? data.c.toFixed(4) : data.c.toLocaleString(undefined, { minimumFractionDigits: 2 });
-
-                tbody.innerHTML += `
-                    <tr>
-                        <td>
-                            <span class="markt-dot markt-dot-live"></span>
-                            ${item.n}
-                            ${item.sub ? `<span class="markt-name-sub">${item.sub}</span>` : ''}
-                        </td>
-                        <td>${item.u}${formattedPrice}</td>
-                        <td class="${color}">${diff > 0 ? '+' : ''}${diff}</td>
-                        <td class="${color}">${perc}%</td>
-                        <td>${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</td>
-                    </tr>`;
-            }
+    async function loadMarktData(manual = false) {
+        if (manual) {
+            document.getElementById('marktStatus').innerHTML =
+                `<span class="markt-dot markt-dot-loading"></span> Ophalen…`;
         }
-    }
-    if (statusEl) statusEl.innerText = "Laatste update: " + new Date().toLocaleTimeString();
-}
+        setLoading('mb-fx', 4); setLoading('mb-idx', 4);
+        setLoading('mb-com', 4); setLoading('mb-nrg', 4);
+        setLoading('mb-cry', 6);
 
-// Start automatisch en herhaal elke 5 minuten
-window.addEventListener('DOMContentLoaded', loadMarktData);
-setInterval(loadMarktData, 300000);
+        // ── VALUTA ───────────────────────────────────────────────────────────
+        const [eurusd, usdeur] = await Promise.all([fxRate('EUR','USD'), fxRate('USD','EUR')]);
+        document.getElementById('mb-fx').innerHTML = [
+            rowFx('EUR/USD', 'Euro → US Dollar', eurusd),
+            rowFx('USD/EUR', 'US Dollar → Euro', usdeur),
+        ].join('');
+
+        // ── CORE INDICES (Yahoo futures) ─────────────────────────────────────
+        const [sp, nq, rut] = await Promise.all([
+            yhQuote('ES=F'), yhQuote('NQ=F'), yhQuote('RTY=F'),
+        ]);
+        document.getElementById('mb-idx').innerHTML = [
+            rowQuote('S&P 500',     'E-mini Future (ES=F)',  sp,  'USD'),
+            rowQuote('Nasdaq 100',  'E-mini Future (NQ=F)',  nq,  'USD'),
+            rowQuote('Russell 2000','E-mini Future (RTY=F)', rut, 'USD'),
+        ].join('');
+
+        // ── COMMODITIES (Yahoo futures) ──────────────────────────────────────
+        const [gold, silver, copper, plat, pall] = await Promise.all([
+            yhQuote('GC=F'), yhQuote('SI=F'), yhQuote('HG=F'), yhQuote('PL=F'), yhQuote('PA=F'),
+        ]);
+        document.getElementById('mb-com').innerHTML = [
+            rowQuote('Goud',      'Gold (GC=F)',      gold,   'USD/oz'),
+            rowQuote('Zilver',    'Silver (SI=F)',    silver, 'USD/oz'),
+            rowQuote('Koper',     'Copper (HG=F)',    copper, 'USD/lb'),
+            rowQuote('Platinum',  'Platinum (PL=F)',  plat,   'USD/oz'),
+            rowQuote('Palladium', 'Palladium (PA=F)', pall,   'USD/oz'),
+        ].join('');
+
+        // ── ENERGY (Yahoo futures) ───────────────────────────────────────────
+        const [brent, wti, gas, ttf] = await Promise.all([
+            yhQuote('BZ=F'), yhQuote('CL=F'), yhQuote('NG=F'), yhQuote('TTF=F'),
+        ]);
+        document.getElementById('mb-nrg').innerHTML = [
+            rowQuote('Brent Oil', 'Brent Crude (BZ=F)',  brent, 'USD/bbl'),
+            rowQuote('Crude Oil', 'WTI Crude (CL=F)',    wti,   'USD/bbl'),
+            rowQuote('Nat. Gas',  'Henry Hub (NG=F)',    gas,   'USD/MMBtu'),
+            rowQuote('TTF Gas',   'EU Gas (TTF=F)',      ttf,   'EUR/MWh'),
+        ].join('');
+
+        // ── CRYPTO (Finnhub — Binance + MEXC voor HYPE) ──────────────────────
+        const cryptos = [
+            { label: 'Bitcoin',    sub: 'BTC',  sym: 'BINANCE:BTCUSDT'   },
+            { label: 'Ethereum',   sub: 'ETH',  sym: 'BINANCE:ETHUSDT'   },
+            { label: 'Solana',     sub: 'SOL',  sym: 'BINANCE:SOLUSDT'   },
+            { label: 'Avalanche',  sub: 'AVAX', sym: 'BINANCE:AVAXUSDT'  },
+            { label: 'Aave',       sub: 'AAVE', sym: 'BINANCE:AAVEUSDT'  },
+            { label: 'Render',     sub: 'RNDR', sym: 'BINANCE:RENDERUSDT'},
+            { label: 'Bittensor', sub: 'TAO',  sym: 'BINANCE:TAOUSDT'   },
+            { label: 'Hyperliquid',sub: 'HYPE', sym: 'MEXC:HYPEUSDT'     },
+        ];
+        const cryptoResults = await Promise.all(cryptos.map(c => fhQuote(c.sym)));
+        document.getElementById('mb-cry').innerHTML = cryptos.map((c, i) =>
+            rowCrypto(c.label, c.sub, cryptoResults[i])
+        ).join('');
+
+        // Status
+        const now = new Date().toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' });
+        const anyFailed = [sp, nq, gold, brent, eurusd].some(x => x === null);
+        document.getElementById('marktStatus').innerHTML =
+            `<span class="markt-dot ${anyFailed ? 'markt-dot-stale' : 'markt-dot-live'}"></span> ${anyFailed ? 'Gedeeltelijk' : 'Live'} · ${now} · auto-refresh 30s`;
+
+        if (marktRefreshTimer) clearTimeout(marktRefreshTimer);
+        marktRefreshTimer = setTimeout(() => {
+            const tab = document.getElementById('aandelen-page');
+            if (tab && tab.classList.contains('active')) loadMarktData();
+        }, 30000);
+    }
+
     window.onload = () => {
         const savedTheme = localStorage.getItem('v25_theme') || 'light';
         document.documentElement.setAttribute('data-theme', savedTheme);
