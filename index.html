@@ -1,10 +1,10 @@
-
 <!DOCTYPE html>
+
 <html lang="nl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio v14</title>
+    <title>Portfolio v15</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
     <style>
@@ -25,516 +25,555 @@
             --success: #2ecc71;
         }
 
-        [data-theme="dark"] {
-            --bg-color: #0b0e11;
-            --card-bg: #15191c;
-            --nav-bg: #15191c;
-            --text-main: #e4e6eb;
-            --text-muted: #b0b3b8;
-            --border-color: #2f3336;
-            --row-hover: #1c2125;
-        }
-#data-page h2 {
-    margin-top: 0;
-    margin-bottom: 20px;
-    font-weight: 700;
-}
-        body {
-            font-family: 'Inter', -apple-system, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            margin: 0;
-            padding: 0;
-            transition: background-color 0.3s, color 0.3s;
-        }
-        .nav {
-            background: var(--nav-bg);
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        .nav-links { display: flex; gap: 2rem; }
-        .nav-item {
-            cursor: pointer;
-            font-weight: 600;
-            color: var(--text-muted);
-            padding: 8px 12px;
-            border-radius: 8px;
-            transition: all 0.2s;
-        }
-        .nav-item.active {
-            color: var(--text-main);
-            background: var(--row-hover);
-        }
-        .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px; /* Verklein dit van bijv. 40px naar 20px */
-    padding-top: 10px; /* Zorgt dat de inhoud direct onder de nav-balk begint */
-}
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
+```
+    [data-theme="dark"] {
+        --bg-color: #0b0e11;
+        --card-bg: #15191c;
+        --nav-bg: #15191c;
+        --text-main: #e4e6eb;
+        --text-muted: #b0b3b8;
+        --border-color: #2f3336;
+        --row-hover: #1c2125;
+    }
+```
 
-        .header {
-    display: flex;
-    justify-content: space-between; /* Portfolio links, Datum rechts */
-    align-items: baseline; /* Lijnt de onderkant van de tekst perfect uit */
-    margin-bottom: 25px; /* Ruimte onder de titel voordat de kaarten beginnen */
-    margin-top: 0;
+#data-page h2 {
+margin-top: 0;
+margin-bottom: 20px;
+font-weight: 700;
+}
+body {
+font-family: ‘Inter’, -apple-system, sans-serif;
+background-color: var(–bg-color);
+color: var(–text-main);
+margin: 0;
+padding: 0;
+transition: background-color 0.3s, color 0.3s;
+}
+.nav {
+background: var(–nav-bg);
+padding: 1rem 2rem;
+display: flex;
+justify-content: space-between;
+align-items: center;
+box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+position: sticky;
+top: 0;
+z-index: 100;
+}
+.nav-links { display: flex; gap: 2rem; }
+.nav-item {
+cursor: pointer;
+font-weight: 600;
+color: var(–text-muted);
+padding: 8px 12px;
+border-radius: 8px;
+transition: all 0.2s;
+}
+.nav-item.active {
+color: var(–text-main);
+background: var(–row-hover);
+}
+.container {
+max-width: 1200px;
+margin: 0 auto;
+padding: 20px; /* Verklein dit van bijv. 40px naar 20px */
+padding-top: 10px; /* Zorgt dat de inhoud direct onder de nav-balk begint */
+}
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+```
+    .header {
+display: flex;
+justify-content: space-between; /* Portfolio links, Datum rechts */
+align-items: baseline; /* Lijnt de onderkant van de tekst perfect uit */
+margin-bottom: 25px; /* Ruimte onder de titel voordat de kaarten beginnen */
+margin-top: 0;
+```
+
 }
 
 .header h1 {
-    margin: 0;
-    font-size: 2rem;
-    letter-spacing: -1px; /* Maakt de titel wat moderner/strakker */
+margin: 0;
+font-size: 2rem;
+letter-spacing: -1px; /* Maakt de titel wat moderner/strakker */
 }
-        .header-titles h1 { margin: 0; font-weight: 800; letter-spacing: -0.5px; }
-        /* Sidebar basis stijl */
+.header-titles h1 { margin: 0; font-weight: 800; letter-spacing: -0.5px; }
+/* Sidebar basis stijl */
 .sidebar {
-    height: 100%;
-    width: 0; /* Standaard gesloten */
-    position: fixed;
-    z-index: 2000;
-    top: 0;
-    left: 0;
-    background-color: var(--card-bg);
-    overflow-x: hidden;
-    transition: 0.3s; /* Snelheid van openschuiven */
-    padding-top: 60px;
-    border-right: 1px solid var(--border-color);
+height: 100%;
+width: 0; /* Standaard gesloten */
+position: fixed;
+z-index: 2000;
+top: 0;
+left: 0;
+background-color: var(–card-bg);
+overflow-x: hidden;
+transition: 0.3s; /* Snelheid van openschuiven */
+padding-top: 60px;
+border-right: 1px solid var(–border-color);
 }
 
 /* De links in het menu */
 .sidebar .nav-item {
-    padding: 15px 25px;
-    font-size: 1.1rem;
-    display: block;
-    transition: 0.2s;
-    border-bottom: none;
+padding: 15px 25px;
+font-size: 1.1rem;
+display: block;
+transition: 0.2s;
+border-bottom: none;
 }
 /* Nieuwe styling voor de sub-tabs in DATA */
 .data-tabs {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-    border-bottom: 1px solid var(--border-color);
-    padding-bottom: 10px;
+display: flex;
+gap: 10px;
+margin-bottom: 20px;
+border-bottom: 1px solid var(–border-color);
+padding-bottom: 10px;
 }
 .data-tab-btn {
-    background: none;
-    border: none;
-    color: var(--text-muted);
-    font-weight: 700;
-    padding: 10px 20px;
-    cursor: pointer;
-    border-radius: 8px;
-    transition: 0.2s;
+background: none;
+border: none;
+color: var(–text-muted);
+font-weight: 700;
+padding: 10px 20px;
+cursor: pointer;
+border-radius: 8px;
+transition: 0.2s;
 }
 .data-tab-btn.active {
-    background: var(--row-hover);
-    color: var(--bolero); /* Of een andere accentkleur */
+background: var(–row-hover);
+color: var(–bolero); /* Of een andere accentkleur */
 }
 .sub-tab-content { display: none; }
 .sub-tab-content.active { display: block; }
 /* De sandwich knop styling */
 .menu-btn {
-    font-size: 1.5rem;
-    cursor: pointer;
-    background: none;
-    border: none;
-    color: var(--text-color);
-    padding: 10px;
+font-size: 1.5rem;
+cursor: pointer;
+background: none;
+border: none;
+color: var(–text-color);
+padding: 10px;
 }
 
 /* Overlay als menu open is */
 .overlay {
-    display: none;
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    top: 0; left: 0;
-    background: rgba(0,0,0,0.5);
-    z-index: 1999;
+display: none;
+position: fixed;
+width: 100%;
+height: 100%;
+top: 0; left: 0;
+background: rgba(0,0,0,0.5);
+z-index: 1999;
 }
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-        .card { min-width: 0; 
-            background: var(--card-bg);
-            padding: 1.5rem;
-            border-radius: var(--border-radius);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            border: 1px solid var(--border-color);
-        }
-        .card::before {
-            content: "";
-            position: absolute;
-            top: 0; left: 0; width: 6px; height: 100%;
-        }
-        .card-total::before { background: var(--total-gray); }
-        .card-degiro::before { background: var(--degiro); }
-        .card-bolero::before { background: var(--bolero); }
-        .card-saxo::before { background: var(--saxo); }
+.stats-grid {
+display: grid;
+grid-template-columns: repeat(4, 1fr);
+gap: 1.5rem;
+margin-bottom: 2rem;
+}
+.card { min-width: 0;
+background: var(–card-bg);
+padding: 1.5rem;
+border-radius: var(–border-radius);
+box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+position: relative;
+overflow: hidden;
+display: flex;
+flex-direction: column;
+border: 1px solid var(–border-color);
+}
+.card::before {
+content: “”;
+position: absolute;
+top: 0; left: 0; width: 6px; height: 100%;
+}
+.card-total::before { background: var(–total-gray); }
+.card-degiro::before { background: var(–degiro); }
+.card-bolero::before { background: var(–bolero); }
+.card-saxo::before { background: var(–saxo); }
 
-        .card h3 { margin: 0; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.5px; }
-        .card .value { font-size: 1.7rem; font-weight: 800; margin: 0.5rem 0; }
-        
-        .change-row { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 0.85rem; margin-bottom: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; }
-        
-        .extra-info { display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
-        .info-line { display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; font-weight: 600; }
-        .info-label { color: var(--text-muted); text-transform: uppercase; font-size: 0.65rem; }
+```
+    .card h3 { margin: 0; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.5px; }
+    .card .value { font-size: 1.7rem; font-weight: 800; margin: 0.5rem 0; }
+    
+    .change-row { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 0.85rem; margin-bottom: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; }
+    
+    .extra-info { display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
+    .info-line { display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; font-weight: 600; }
+    .info-label { color: var(--text-muted); text-transform: uppercase; font-size: 0.65rem; }
 
-        .blur { filter: blur(10px) !important; }
+    .blur { filter: blur(10px) !important; }
 
-        .btn-group { display: flex; gap: 10px; flex-wrap: wrap; }
-        .btn {
-            background: var(--row-hover);
-            color: var(--text-main);
-            border: 1px solid var(--border-color);
-            padding: 10px 16px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.85rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .btn-main { background: var(--text-main); color: var(--bg-color); border: none; }
-        .btn-csv { background: #27ae60; color: white; border: none; }
-        .btn-theme { padding: 8px; border-radius: 50%; width: 40px; height: 40px; justify-content: center; }
+    .btn-group { display: flex; gap: 10px; flex-wrap: wrap; }
+    .btn {
+        background: var(--row-hover);
+        color: var(--text-main);
+        border: 1px solid var(--border-color);
+        padding: 10px 16px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 0.85rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+    .btn-main { background: var(--text-main); color: var(--bg-color); border: none; }
+    .btn-csv { background: #27ae60; color: white; border: none; }
+    .btn-theme { padding: 8px; border-radius: 50%; width: 40px; height: 40px; justify-content: center; }
 
-        .charts-master-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1.5rem;
-        }
-        .span-2 { grid-column: span 2; }
-        .span-3 { grid-column: span 3; }
-        .chart-box { height: 350px; }
-        .chart-wrapper { flex-grow: 1; position: relative; width: 100%; height: calc(100% - 40px); margin-top: 0.5rem; }
+    .charts-master-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+    }
+    .span-2 { grid-column: span 2; }
+    .span-3 { grid-column: span 3; }
+    .chart-box { height: 350px; }
+    .chart-wrapper { flex-grow: 1; position: relative; width: 100%; height: calc(100% - 40px); margin-top: 0.5rem; }
 
-        table { width: 100%; border-collapse: separate; border-spacing: 0 8px; }
-        th { padding: 12px; color: var(--text-muted); font-size: 0.8rem; text-align: left; text-transform: uppercase; }
-        td { padding: 12px; background: var(--card-bg); border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); }
-        td:first-child { border-left: 1px solid var(--border-color); border-radius: 8px 0 0 8px; }
-        td:last-child { border-right: 1px solid var(--border-color); border-radius: 0 8px 8px 0; }
-        
-        input, select { 
-            width: 92%; padding: 8px; 
-            border: 1px solid var(--border-color); 
-            border-radius: 8px; 
-            background: var(--bg-color); 
-            color: var(--text-main);
-        }
+    table { width: 100%; border-collapse: separate; border-spacing: 0 8px; }
+    th { padding: 12px; color: var(--text-muted); font-size: 0.8rem; text-align: left; text-transform: uppercase; }
+    td { padding: 12px; background: var(--card-bg); border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); }
+    td:first-child { border-left: 1px solid var(--border-color); border-radius: 8px 0 0 8px; }
+    td:last-child { border-right: 1px solid var(--border-color); border-radius: 0 8px 8px 0; }
+    
+    input, select { 
+        width: 92%; padding: 8px; 
+        border: 1px solid var(--border-color); 
+        border-radius: 8px; 
+        background: var(--bg-color); 
+        color: var(--text-main);
+    }
 
-        @media (max-width: 1200px) {
-            .stats-grid { grid-template-columns: repeat(2, 1fr); }
-            .charts-master-grid { grid-template-columns: 1fr; }
-            .span-2 { grid-column: span 1; }
-            .span-3 { grid-column: span 1; }
-        }
- /* Zorgt dat euro en percentage onder elkaar staan en rechts uitlijnen */
+    @media (max-width: 1200px) {
+        .stats-grid { grid-template-columns: repeat(2, 1fr); }
+        .charts-master-grid { grid-template-columns: 1fr; }
+        .span-2 { grid-column: span 1; }
+        .span-3 { grid-column: span 1; }
+    }
+```
+
+/* Zorgt dat euro en percentage onder elkaar staan en rechts uitlijnen */
 .info-values {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: flex-end !important;
-    text-align: right !important;
+display: flex !important;
+flex-direction: column !important;
+align-items: flex-end !important;
+text-align: right !important;
 }
 
 /* Optioneel: wat extra ruimte tussen het euroteken en het percentage */
 .sub-value-small {
-    font-size: 0.75rem !important;
-    margin-top: 2px !important;
-    display: block !important;
-}   
+font-size: 0.75rem !important;
+margin-top: 2px !important;
+display: block !important;
+}  
 @media (max-width: 480px) {
-        /* Grid naar 1 kolom voor kaarten */
-        .stats-grid { 
-            grid-template-columns: 1fr !important; 
-            gap: 1rem;
-        }
-
-        /* Zorgt dat labels en waardes op één lijn staan */
-        .info-line {
-            display: flex !important;
-            justify-content: space-between !important;
-            align-items: flex-start !important;
-            margin-bottom: 10px;
-            padding: 2px 0;
-            position: relative;
-        }
-
-        /* De rechterkant waar de euro's staan */
-        .info-values {
-            display: flex !important;
-            flex-direction: column !important;
-            align-items: flex-end !important;
-            text-align: right !important;
-            min-width: 120px; /* Geeft ruimte zodat tekst niet overlapt */
-        }
-
-        /* Het euro bedrag (haalt de zwevende euro weg) */
-        .main-value-small {
-            font-size: 0.9rem !important;
-            font-weight: 600 !important;
-            display: inline-block !important; /* Voorkomt dat het een los blok wordt */
-            line-height: 1.2 !important;
-            margin: 0 !important;
-        }
-
-        /* Het percentage */
-        .sub-value-small {
-            font-size: 0.75rem !important;
-            display: block !important;
-            margin-top: 2px !important;
-        }
-
-        /* Fix voor de overlap: label mag niet te breed zijn */
-        .info-label {
-            font-size: 0.7rem;
-            flex-shrink: 0;
-            padding-right: 10px;
-        }
-    }
-        canvas {
-            touch-action: manipulation;
-            -webkit-tap-highlight-color: rgba(0,0,0,0);
-        }
-        #statsTable tr:hover td { background: var(--row-hover); }
-        #statsTable td, #statsTable th { border: none; }
-
-        /* ATH badge — subtiel rechtsbovenin de kaart */
-        .ath-badge {
-            position: absolute;
-            top: 10px;
-            right: 14px;
-            display: none;
-            align-items: center;
-            gap: 4px;
-            background: rgba(246, 211, 101, 0.15);
-            color: #c8951a;
-            font-size: 0.58rem;
-            font-weight: 800;
-            padding: 3px 8px;
-            border-radius: 99px;
-            letter-spacing: 0.06em;
-            border: 1px solid rgba(246, 211, 101, 0.4);
-            animation: athPulse 3s ease-in-out infinite;
-        }
-        [data-theme="dark"] .ath-badge {
-            background: rgba(246, 211, 101, 0.1);
-            color: #f6d365;
-            border-color: rgba(246, 211, 101, 0.25);
-        }
-        .ath-badge.visible { display: inline-flex; }
-        @keyframes athPulse {
-            0%, 100% { opacity: 1; }
-            50%       { opacity: 0.6; }
-        }
-
-        /* Markt secties */
-        .markt-section { padding: 1.2rem 1.5rem; }
-        .markt-section-header {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 14px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid var(--border-color);
-        }
-        .markt-section-icon { font-size: 1rem; }
-        .markt-section h3 { margin: 0; }
-
-        /* Markt tabel */
-        .markt-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.85rem;
-        }
-        .markt-table th {
-            padding: 6px 8px;
-            text-align: right;
-            font-size: 0.64rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            color: var(--text-muted);
-            border-bottom: 1px solid var(--border-color);
-            letter-spacing: 0.05em;
-            white-space: nowrap;
-        }
-        .markt-table th:first-child { text-align: left; }
-        .markt-table td {
-            padding: 9px 8px;
-            text-align: right;
-            border: none;
-            border-bottom: 1px solid var(--border-color);
-            background: transparent;
-            font-size: 0.84rem;
-            white-space: nowrap;
-        }
-        .markt-table td:first-child { text-align: left; font-weight: 600; }
-        .markt-table tr:last-child td { border-bottom: none; }
-        .markt-table tr:hover td { background: var(--row-hover); transition: background 0.15s; }
-        .markt-loading { text-align: center !important; color: var(--text-muted); font-size: 0.8rem; padding: 16px !important; }
-        .markt-pos { color: var(--success); font-weight: 700; }
-        .markt-neg { color: var(--danger);  font-weight: 700; }
-        .markt-neu { color: var(--text-muted); font-weight: 600; }
-        .markt-name-sub { font-size: 0.66rem; color: var(--text-muted); font-weight: 400; display: block; margin-top: 1px; }
-        .markt-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 5px; vertical-align: middle; }
-        .markt-dot-live { background: var(--success); animation: athPulse 2s ease-in-out infinite; }
-        .markt-dot-stale { background: #e74c3c; }
-        .markt-dot-loading { background: var(--text-muted); }
-        .markt-err { color: var(--text-muted); font-size: 0.75rem; font-style: italic; }
-        @media (max-width: 800px) {
-            #aandelen-page > div:last-child { grid-template-columns: 1fr !important; }
-            #aandelen-page .markt-section[style*="span 2"] { grid-column: span 1 !important; }
-        }
-        /* Op kleine schermen: verberg tijd-kolom FX en eenheidskolom futures */
-        @media (max-width: 480px) {
-            .markt-table { font-size: 0.78rem; }
-            .markt-table th, .markt-table td { padding: 7px 5px; }
-            .markt-table .col-hide { display: none; }
-            .markt-name-sub { display: none; } /* naam-sub verbergen geeft ruimte */
-            /* Crypto: verberg 24h high/low op mobiel */
-            #mb-cry tr td:nth-child(5),
-            #mb-cry tr td:nth-child(6),
-            #mb-cry tr th:nth-child(5),
-            #mb-cry tr th:nth-child(6) { display: none; }
-        }
-
-        /* Benchmark toggles */
-        .bench-toggle {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            font-size: 0.72rem;
-            font-weight: 700;
-            color: var(--text-muted);
-            cursor: pointer;
-            user-select: none;
-            transition: color 0.15s;
-        }
-        .bench-toggle input { display: none; }
-        .bench-dot {
-            width: 10px; height: 10px;
-            border-radius: 50%;
-            border: 2px solid var(--c);
-            background: transparent;
-            transition: background 0.15s;
-            flex-shrink: 0;
-        }
-        .bench-toggle input:checked ~ .bench-dot { background: var(--c); }
-        .bench-toggle input:checked ~ * { color: var(--text-main); }
-        .bench-toggle:has(input:checked) { color: var(--text-main); }
-
-        /* Maandoverzicht tabel */
-        #maandTable th {
-            padding: 8px 10px;
-            text-align: right;
-            font-size: 0.7rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            color: var(--text-muted);
-            border-bottom: 2px solid var(--border-color);
-            white-space: nowrap;
-        }
-        #maandTable th:first-child { text-align: left; }
-        #maandTable td {
-            padding: 7px 10px;
-            text-align: right;
-            border: none;
-            border-bottom: 1px solid var(--border-color);
-            font-size: 0.82rem;
-            background: transparent;
-        }
-        #maandTable td:first-child { text-align: left; font-weight: 700; color: var(--text-muted); }
-        #maandTable tr:hover td { background: var(--row-hover); }
-        #maandTable tr.maand-totaal td {
-            font-weight: 800;
-            border-top: 2px solid var(--border-color);
-            border-bottom: none;
-            color: var(--text-main);
-        }
-        /* Styling voor het widget menu */
-.widget-option {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 12px;
-    cursor: pointer;
+/* Grid naar 1 kolom voor kaarten */
+.stats-grid {
+grid-template-columns: 1fr !important;
+gap: 1rem;
 }
 
-.widget-option input[type="checkbox"] {
-    width: 18px;
-    height: 18px;
-    cursor: pointer;
-    accent-color: var(--success); /* Dit maakt het vinkje groen */
+```
+    /* Zorgt dat labels en waardes op één lijn staan */
+    .info-line {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: flex-start !important;
+        margin-bottom: 10px;
+        padding: 2px 0;
+        position: relative;
+    }
+
+    /* De rechterkant waar de euro's staan */
+    .info-values {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: flex-end !important;
+        text-align: right !important;
+        min-width: 120px; /* Geeft ruimte zodat tekst niet overlapt */
+    }
+
+    /* Het euro bedrag (haalt de zwevende euro weg) */
+    .main-value-small {
+        font-size: 0.9rem !important;
+        font-weight: 600 !important;
+        display: inline-block !important; /* Voorkomt dat het een los blok wordt */
+        line-height: 1.2 !important;
+        margin: 0 !important;
+    }
+
+    /* Het percentage */
+    .sub-value-small {
+        font-size: 0.75rem !important;
+        display: block !important;
+        margin-top: 2px !important;
+    }
+
+    /* Fix voor de overlap: label mag niet te breed zijn */
+    .info-label {
+        font-size: 0.7rem;
+        flex-shrink: 0;
+        padding-right: 10px;
+    }
+}
+    canvas {
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: rgba(0,0,0,0);
+    }
+    #statsTable tr:hover td { background: var(--row-hover); }
+    #statsTable td, #statsTable th { border: none; }
+
+    /* ATH badge — subtiel rechtsbovenin de kaart */
+    .ath-badge {
+        position: absolute;
+        top: 10px;
+        right: 14px;
+        display: none;
+        align-items: center;
+        gap: 4px;
+        background: rgba(246, 211, 101, 0.15);
+        color: #c8951a;
+        font-size: 0.58rem;
+        font-weight: 800;
+        padding: 3px 8px;
+        border-radius: 99px;
+        letter-spacing: 0.06em;
+        border: 1px solid rgba(246, 211, 101, 0.4);
+        animation: athPulse 3s ease-in-out infinite;
+    }
+    [data-theme="dark"] .ath-badge {
+        background: rgba(246, 211, 101, 0.1);
+        color: #f6d365;
+        border-color: rgba(246, 211, 101, 0.25);
+    }
+    .ath-badge.visible { display: inline-flex; }
+    @keyframes athPulse {
+        0%, 100% { opacity: 1; }
+        50%       { opacity: 0.6; }
+    }
+
+    /* Markt secties */
+    .markt-section { padding: 1.2rem 1.5rem; }
+    .markt-section-header {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 14px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid var(--border-color);
+    }
+    .markt-section-icon { font-size: 1rem; }
+    .markt-section h3 { margin: 0; }
+
+    /* Markt tabel */
+    .markt-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.85rem;
+    }
+    .markt-table th {
+        padding: 6px 8px;
+        text-align: right;
+        font-size: 0.64rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--border-color);
+        letter-spacing: 0.05em;
+        white-space: nowrap;
+    }
+    .markt-table th:first-child { text-align: left; }
+    .markt-table td {
+        padding: 9px 8px;
+        text-align: right;
+        border: none;
+        border-bottom: 1px solid var(--border-color);
+        background: transparent;
+        font-size: 0.84rem;
+        white-space: nowrap;
+    }
+    .markt-table td:first-child { text-align: left; font-weight: 600; }
+    .markt-table tr:last-child td { border-bottom: none; }
+    .markt-table tr:hover td { background: var(--row-hover); transition: background 0.15s; }
+    .markt-loading { text-align: center !important; color: var(--text-muted); font-size: 0.8rem; padding: 16px !important; }
+    .markt-pos { color: var(--success); font-weight: 700; }
+    .markt-neg { color: var(--danger);  font-weight: 700; }
+    .markt-neu { color: var(--text-muted); font-weight: 600; }
+    .markt-name-sub { font-size: 0.66rem; color: var(--text-muted); font-weight: 400; display: block; margin-top: 1px; }
+    .markt-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 5px; vertical-align: middle; }
+    .markt-dot-live { background: var(--success); animation: athPulse 2s ease-in-out infinite; }
+    .markt-dot-stale { background: #e74c3c; }
+    .markt-dot-loading { background: var(--text-muted); }
+    .markt-err { color: var(--text-muted); font-size: 0.75rem; font-style: italic; }
+    @media (max-width: 800px) {
+        #aandelen-page > div:last-child { grid-template-columns: 1fr !important; }
+        #aandelen-page .markt-section[style*="span 2"] { grid-column: span 1 !important; }
+    }
+    /* Op kleine schermen: verberg tijd-kolom FX en eenheidskolom futures */
+    @media (max-width: 480px) {
+        .markt-table { font-size: 0.78rem; }
+        .markt-table th, .markt-table td { padding: 7px 5px; }
+        .markt-table .col-hide { display: none; }
+        .markt-name-sub { display: none; } /* naam-sub verbergen geeft ruimte */
+        /* Crypto: verberg 24h high/low op mobiel */
+        #mb-cry tr td:nth-child(5),
+        #mb-cry tr td:nth-child(6),
+        #mb-cry tr th:nth-child(5),
+        #mb-cry tr th:nth-child(6) { display: none; }
+    }
+
+    /* Heatmap pagina */
+    .hm-sort-btn {
+        background: var(--row-hover); border: 1px solid var(--border-color);
+        color: var(--text-muted); font-size: 0.72rem; font-weight: 700;
+        padding: 5px 12px; border-radius: 20px; cursor: pointer;
+    }
+    .hm-sort-btn.active { background: var(--text-main); color: var(--card-bg); border-color: var(--text-main); }
+    .hm-cell {
+        border-radius: 10px; padding: 10px 8px; cursor: pointer;
+        position: relative; overflow: hidden; min-height: 80px;
+        display: flex; flex-direction: column; justify-content: space-between;
+        transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .hm-cell:hover { transform: scale(1.03); box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
+    .hm-cell:active { transform: scale(0.97); }
+    .hm-cell .hm-ticker { font-size: 0.7rem; font-weight: 800; opacity: 0.85; letter-spacing: 0.04em; }
+    .hm-cell .hm-name   { font-size: 0.62rem; opacity: 0.7; margin-top:1px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .hm-cell .hm-pct    { font-size: 1.1rem; font-weight: 800; margin-top: auto; padding-top: 6px; }
+    .hm-cell .hm-price  { font-size: 0.65rem; opacity: 0.75; }
+    .hm-cell .hm-del    { position:absolute;top:4px;right:6px;font-size:0.7rem;opacity:0;transition:opacity 0.2s;cursor:pointer;font-weight:700; }
+    .hm-cell:hover .hm-del { opacity: 0.6; }
+    .hm-cell.loading    { background: var(--row-hover) !important; animation: hmPulse 1.2s ease-in-out infinite; }
+    @keyframes hmPulse   { 0%,100%{opacity:1} 50%{opacity:0.5} }
+
+    /* Benchmark toggles */
+    .bench-toggle {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: var(--text-muted);
+        cursor: pointer;
+        user-select: none;
+        transition: color 0.15s;
+    }
+    .bench-toggle input { display: none; }
+    .bench-dot {
+        width: 10px; height: 10px;
+        border-radius: 50%;
+        border: 2px solid var(--c);
+        background: transparent;
+        transition: background 0.15s;
+        flex-shrink: 0;
+    }
+    .bench-toggle input:checked ~ .bench-dot { background: var(--c); }
+    .bench-toggle input:checked ~ * { color: var(--text-main); }
+    .bench-toggle:has(input:checked) { color: var(--text-main); }
+
+    /* Maandoverzicht tabel */
+    #maandTable th {
+        padding: 8px 10px;
+        text-align: right;
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        border-bottom: 2px solid var(--border-color);
+        white-space: nowrap;
+    }
+    #maandTable th:first-child { text-align: left; }
+    #maandTable td {
+        padding: 7px 10px;
+        text-align: right;
+        border: none;
+        border-bottom: 1px solid var(--border-color);
+        font-size: 0.82rem;
+        background: transparent;
+    }
+    #maandTable td:first-child { text-align: left; font-weight: 700; color: var(--text-muted); }
+    #maandTable tr:hover td { background: var(--row-hover); }
+    #maandTable tr.maand-totaal td {
+        font-weight: 800;
+        border-top: 2px solid var(--border-color);
+        border-bottom: none;
+        color: var(--text-main);
+    }
+    /* Styling voor het widget menu */
+```
+
+.widget-option {
+display: flex;
+align-items: center;
+gap: 12px;
+margin-bottom: 12px;
+cursor: pointer;
+}
+
+.widget-option input[type=“checkbox”] {
+width: 18px;
+height: 18px;
+cursor: pointer;
+accent-color: var(–success); /* Dit maakt het vinkje groen */
 }
 
 .widget-option label {
-    cursor: pointer;
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: var(--text-main);
+cursor: pointer;
+font-size: 0.9rem;
+font-weight: 500;
+color: var(–text-main);
 }
 
 /* Algemene tabel styling */
 #weeklyReturnTable {
-    width: 100%;
-    border-collapse: collapse;
+width: 100%;
+border-collapse: collapse;
 }
 
 #weeklyReturnTable th, #weeklyReturnTable td {
-    padding: 10px 8px;
-    text-align: left;
-    border-bottom: 1px solid var(--border-color);
+padding: 10px 8px;
+text-align: left;
+border-bottom: 1px solid var(–border-color);
 }
 
 //* Specifieke optimalisatie voor Wekelijks Rendement op iPhone */
 @media (max-width: 480px) {
-    #weeklyReturnTable th {
-        font-size: 0.6rem !important;
-        padding: 8px 2px !important;
-    }
-    #weeklyReturnTable td {
-        padding: 8px 2px !important;
-    }
-    .return-euro {
-        font-size: 0.75rem !important;
-        font-weight: 800;
-        display: block;
-        line-height: 1.1;
-    }
-    .return-perc {
-        font-size: 0.6rem !important;
-        display: block;
-        margin-top: 2px;
-    }
+#weeklyReturnTable th {
+font-size: 0.6rem !important;
+padding: 8px 2px !important;
+}
+#weeklyReturnTable td {
+padding: 8px 2px !important;
+}
+.return-euro {
+font-size: 0.75rem !important;
+font-weight: 800;
+display: block;
+line-height: 1.1;
+}
+.return-perc {
+font-size: 0.6rem !important;
+display: block;
+margin-top: 2px;
+}
 }
 
-    </style>
-</head>
+```
+</style>
+```
 
+</head>
 
 <body>
 <div id="mySidebar" class="sidebar">
     <div class="nav-item active" onclick="switchTab('dashboard', this); closeNav()">PORTFOLIO</div>
     <div class="nav-item" onclick="switchTab('data-page', this); closeNav()">DATA</div>
-        <div class="nav-item" onclick="switchTab('aandelen-page', this); closeNav()">MARKT</div>
+    <div class="nav-item" onclick="switchTab('aandelen-page', this); closeNav()">LIVE</div>
+    <div class="nav-item" onclick="switchTab('heatmap-page', this); closeNav()">HEATMAP</div>
 
 </div>
 <div id="overlay" class="overlay" onclick="closeNav()"></div>
@@ -550,396 +589,462 @@
     </div>
 </div>
 
-
-
-
 <div class="container">
 
-    <div id="dashboard" class="tab-content active">
-        <div class="header">
-            <div class="header-titles">
-                <h1>PORTFOLIO</h1>
-            </div>
-            <div id="lastUpdate" style="text-align:right;line-height:1.4;">
-                <span style="font-size:0.75rem;font-weight:700;text-transform:uppercase;color:var(--text-muted);letter-spacing:0.04em;">Laatste update</span><br>
-                <span id="lastUpdateVal" style="font-size:0.95rem;font-weight:600;color:var(--text-main);"></span>
+```
+<div id="dashboard" class="tab-content active">
+    <div class="header">
+        <div class="header-titles">
+            <h1>PORTFOLIO</h1>
+        </div>
+        <div id="lastUpdate" style="text-align:right;line-height:1.4;">
+            <span style="font-size:0.75rem;font-weight:700;text-transform:uppercase;color:var(--text-muted);letter-spacing:0.04em;">Laatste update</span><br>
+            <span id="lastUpdateVal" style="font-size:0.95rem;font-weight:600;color:var(--text-main);"></span>
+        </div>
+    </div>
+
+    <div class="stats-grid">
+        <div class="card card-total">
+            <span id="athTotal" class="ath-badge">🏆 ATH</span>
+            <h3>Totaal</h3>
+            <div class="value blur-target" id="totalValue"></div>
+            <div id="totalChange" class="change-row"></div>
+            <div class="extra-info">
+                <div class="info-line"><span class="info-label">Cash</span><span class="blur-target" id="netInleg"></span></div>
+                <div class="info-line"><span class="info-label">Rendement</span><div class="info-values"><span class="blur-target main-value-small" id="profitEuro"></span><span id="profitPerc" class="sub-value-small"></span></div></div>
             </div>
         </div>
 
-        <div class="stats-grid">
-            <div class="card card-total">
-                <span id="athTotal" class="ath-badge">🏆 ATH</span>
-                <h3>Totaal</h3>
-                <div class="value blur-target" id="totalValue"></div>
-                <div id="totalChange" class="change-row"></div>
-                <div class="extra-info">
-                    <div class="info-line"><span class="info-label">Cash</span><span class="blur-target" id="netInleg"></span></div>
-                    <div class="info-line"><span class="info-label">Rendement</span><div class="info-values"><span class="blur-target main-value-small" id="profitEuro"></span><span id="profitPerc" class="sub-value-small"></span></div></div>
-                </div>
-            </div>
-
-            <div class="card card-degiro">
-                <span id="athDegiro" class="ath-badge">🏆 ATH</span>
-                <h3>DEGIRO</h3>
-                <div class="value blur-target" id="valDegiro"></div>
-                <div id="chgDegiro" class="change-row"></div>
-                <div class="extra-info">
-                <div class="info-line"><span class="info-label">Cash</span><span class="blur-target" id="cashDegiro"></span></div>
-                <div class="info-line"><span class="info-label">Rendement</span><div class="info-values"><span class="blur-target main-value-small" id="profDegiroEuro"></span><span id="profDegiroPerc" class="sub-value-small"></span></div></div>
-                <div class="info-line">
-                <span class="info-label">CAGR</span>
-                <span id="cagrDegiro" class="cagr-badge">--</span>
-        </div>
+        <div class="card card-degiro">
+            <span id="athDegiro" class="ath-badge">🏆 ATH</span>
+            <h3>DEGIRO</h3>
+            <div class="value blur-target" id="valDegiro"></div>
+            <div id="chgDegiro" class="change-row"></div>
+            <div class="extra-info">
+            <div class="info-line"><span class="info-label">Cash</span><span class="blur-target" id="cashDegiro"></span></div>
+            <div class="info-line"><span class="info-label">Rendement</span><div class="info-values"><span class="blur-target main-value-small" id="profDegiroEuro"></span><span id="profDegiroPerc" class="sub-value-small"></span></div></div>
+            <div class="info-line">
+            <span class="info-label">CAGR</span>
+            <span id="cagrDegiro" class="cagr-badge">--</span>
     </div>
 </div>
+```
 
-            <div class="card card-bolero">
-                <span id="athBolero" class="ath-badge">🏆 ATH</span>
-                <h3>Bolero</h3>
-                <div class="value blur-target" id="valBolero"></div>
-                <div id="chgBolero" class="change-row"></div>
-                <div class="extra-info">
-                    <div class="info-line"><span class="info-label">Cash</span><span class="blur-target" id="cashBolero"></span></div>
-                    <div class="info-line"><span class="info-label">Rendement</span><div class="info-values"><span class="blur-target main-value-small" id="profBoleroEuro"></span><span id="profBoleroPerc" class="sub-value-small"></span></div></div>
-                    <div class="info-line"><span class="info-label">CAGR</span>
-            <span id="cagrBolero" class="cagr-badge">--</span>
-        </div>
-    </div>
 </div>
 
-            <div class="card card-saxo">
-                <span id="athSaxo" class="ath-badge">🏆 ATH</span>
-                <h3>Saxo</h3>
-                <div class="value blur-target" id="valSaxo"></div>
-                <div id="chgSaxo" class="change-row"></div>
-                <div class="extra-info">
-                    <div class="info-line"><span class="info-label">Cash</span><span class="blur-target" id="cashSaxo"></span></div>
-                    <div class="info-line"><span class="info-label">Rendement</span><div class="info-values"><span class="blur-target main-value-small" id="profSaxoEuro"></span><span id="profSaxoPerc" class="sub-value-small"></span></div></div>
-                    <div class="info-line"><span class="info-label">CAGR</span>
-                        <span id="cagrSaxo" class="cagr-badge">--</span>
-                    </div>
+```
+        <div class="card card-bolero">
+            <span id="athBolero" class="ath-badge">🏆 ATH</span>
+            <h3>Bolero</h3>
+            <div class="value blur-target" id="valBolero"></div>
+            <div id="chgBolero" class="change-row"></div>
+            <div class="extra-info">
+                <div class="info-line"><span class="info-label">Cash</span><span class="blur-target" id="cashBolero"></span></div>
+                <div class="info-line"><span class="info-label">Rendement</span><div class="info-values"><span class="blur-target main-value-small" id="profBoleroEuro"></span><span id="profBoleroPerc" class="sub-value-small"></span></div></div>
+                <div class="info-line"><span class="info-label">CAGR</span>
+        <span id="cagrBolero" class="cagr-badge">--</span>
+    </div>
+</div>
+```
+
+</div>
+
+```
+        <div class="card card-saxo">
+            <span id="athSaxo" class="ath-badge">🏆 ATH</span>
+            <h3>Saxo</h3>
+            <div class="value blur-target" id="valSaxo"></div>
+            <div id="chgSaxo" class="change-row"></div>
+            <div class="extra-info">
+                <div class="info-line"><span class="info-label">Cash</span><span class="blur-target" id="cashSaxo"></span></div>
+                <div class="info-line"><span class="info-label">Rendement</span><div class="info-values"><span class="blur-target main-value-small" id="profSaxoEuro"></span><span id="profSaxoPerc" class="sub-value-small"></span></div></div>
+                <div class="info-line"><span class="info-label">CAGR</span>
+                    <span id="cagrSaxo" class="cagr-badge">--</span>
                 </div>
             </div>
         </div>
-
-        <div class="charts-master-grid">
-    <!-- Rij 1: TOTAAL grafiek, volle breedte -->
-    <div id="growthChartContainer" class="card chart-box span-3">
-        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:4px;">
-            <h3>TOTAAL</h3>
-            <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;" id="benchmarkToggles">
-                <label class="bench-toggle" style="--c:#e67e22;">
-                    <input type="checkbox" id="benchSP" onchange="updateBenchmarks()">
-                    <span class="bench-dot"></span> S&amp;P 500
-                </label>
-                <label class="bench-toggle" style="--c:#8e44ad;">
-                    <input type="checkbox" id="benchMSCI" onchange="updateBenchmarks()">
-                    <span class="bench-dot"></span> MSCI World
-                </label>
-                <label class="bench-toggle" style="--c:#16a085;">
-                    <input type="checkbox" id="benchNASDAQ" onchange="updateBenchmarks()">
-                    <span class="bench-dot"></span> Nasdaq 100
-                </label>
-                <label class="bench-toggle" style="--c:#c0392b;">
-                    <input type="checkbox" id="benchBTC" onchange="updateBenchmarks()">
-                    <span class="bench-dot"></span> Bitcoin
-                </label>
-            </div>
-        </div>
-        <div class="chart-wrapper"><canvas id="growthChart"></canvas></div>
     </div>
 
-    <!-- Rij 2: VERDELING + STATISTIEKEN naast elkaar -->
-    <div id="pieChartContainer" class="card chart-box"><h3>VERDELING</h3><div class="chart-wrapper"><canvas id="pieChart"></canvas></div></div>
-    <div id="statsBlockContainer" class="card span-2" style="display:flex;flex-direction:column;">
-        <h3 style="margin-bottom:12px;">STATISTIEKEN</h3>
-        <table id="statsTable" style="width:100%;border-collapse:collapse;font-size:0.78rem;flex:1;">
-            <thead>
-                <tr>
-                    <th style="text-align:left;color:var(--text-muted);font-size:0.65rem;padding:4px 2px;font-weight:700;text-transform:uppercase;"></th>
-                    <th style="text-align:right;color:var(--degiro);font-size:0.65rem;padding:4px 2px;font-weight:700;text-transform:uppercase;">DEGIRO</th>
-                    <th style="text-align:right;color:var(--bolero);font-size:0.65rem;padding:4px 2px;font-weight:700;text-transform:uppercase;">BOLERO</th>
-                    <th style="text-align:right;color:var(--saxo);font-size:0.65rem;padding:4px 2px;font-weight:700;text-transform:uppercase;">SAXO</th>
-                </tr>
-            </thead>
-            <tbody id="statsTableBody"></tbody>
+    <div class="charts-master-grid">
+<!-- Rij 1: TOTAAL grafiek, volle breedte -->
+<div id="growthChartContainer" class="card chart-box span-3">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:4px;">
+        <h3>TOTAAL</h3>
+        <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;" id="benchmarkToggles">
+            <label class="bench-toggle" style="--c:#e67e22;">
+                <input type="checkbox" id="benchSP" onchange="updateBenchmarks()">
+                <span class="bench-dot"></span> S&amp;P 500
+            </label>
+            <label class="bench-toggle" style="--c:#8e44ad;">
+                <input type="checkbox" id="benchMSCI" onchange="updateBenchmarks()">
+                <span class="bench-dot"></span> MSCI World
+            </label>
+            <label class="bench-toggle" style="--c:#16a085;">
+                <input type="checkbox" id="benchNASDAQ" onchange="updateBenchmarks()">
+                <span class="bench-dot"></span> Nasdaq 100
+            </label>
+            <label class="bench-toggle" style="--c:#c0392b;">
+                <input type="checkbox" id="benchBTC" onchange="updateBenchmarks()">
+                <span class="bench-dot"></span> Bitcoin
+            </label>
+        </div>
+    </div>
+    <div class="chart-wrapper"><canvas id="growthChart"></canvas></div>
+</div>
+
+<!-- Rij 2: VERDELING + STATISTIEKEN naast elkaar -->
+<div id="pieChartContainer" class="card chart-box"><h3>VERDELING</h3><div class="chart-wrapper"><canvas id="pieChart"></canvas></div></div>
+<div id="statsBlockContainer" class="card span-2" style="display:flex;flex-direction:column;">
+    <h3 style="margin-bottom:12px;">STATISTIEKEN</h3>
+    <table id="statsTable" style="width:100%;border-collapse:collapse;font-size:0.78rem;flex:1;">
+        <thead>
+            <tr>
+                <th style="text-align:left;color:var(--text-muted);font-size:0.65rem;padding:4px 2px;font-weight:700;text-transform:uppercase;"></th>
+                <th style="text-align:right;color:var(--degiro);font-size:0.65rem;padding:4px 2px;font-weight:700;text-transform:uppercase;">DEGIRO</th>
+                <th style="text-align:right;color:var(--bolero);font-size:0.65rem;padding:4px 2px;font-weight:700;text-transform:uppercase;">BOLERO</th>
+                <th style="text-align:right;color:var(--saxo);font-size:0.65rem;padding:4px 2px;font-weight:700;text-transform:uppercase;">SAXO</th>
+            </tr>
+        </thead>
+        <tbody id="statsTableBody"></tbody>
+    </table>
+</div>
+
+<!-- Rij 3: Individuele broker grafieken -->
+<div id="degiroChartContainer" class="card chart-box"><h3>DEGIRO</h3><div class="chart-wrapper"><canvas id="chartDegiro"></canvas></div></div>
+<div id="boleroChartContainer" class="card chart-box"><h3>BOLERO</h3><div class="chart-wrapper"><canvas id="chartBolero"></canvas></div></div>
+<div id="saxoChartContainer" class="card chart-box"><h3>SAXO</h3><div class="chart-wrapper"><canvas id="chartSaxo"></canvas></div></div>
+
+<!-- Rij 4: Dagrendement, volle breedte -->
+<div id="dailyReturnChartContainer" class="card chart-box span-3">
+    <h3>DAGRENDEMENT</h3>
+    <div class="chart-wrapper"><canvas id="chartDailyReturn"></canvas></div>
+</div>
+
+<!-- Rij 5: Gecumuleerd rendement, volle breedte -->
+<div id="cumulReturnChartContainer" class="card chart-box span-3">
+    <h3>GECUMULEERD RENDEMENT %</h3>
+    <div class="chart-wrapper"><canvas id="chartCumulReturn"></canvas></div>
+</div>
+
+<!-- Kalender heatmap -->
+<div id="heatmapContainer" class="card span-3" style="min-height:220px;">
+    <h3 style="margin-bottom:12px;">RENDEMENT KALENDER</h3>
+    <div style="display:flex;gap:8px;margin-bottom:10px;align-items:center;flex-wrap:wrap;">
+        <button class="btn" id="heatmapBrokerBtn" onclick="cycleHeatmapBroker()" style="font-size:0.75rem;padding:6px 14px;">TOTAAL &#9662;</button>
+        <button class="btn" onclick="heatmapYear--; renderHeatmap();" style="font-size:0.75rem;padding:6px 10px;">&#9664;</button>
+        <span id="heatmapYearLabel" style="font-weight:700;font-size:0.9rem;min-width:40px;text-align:center;"></span>
+        <button class="btn" onclick="heatmapYear++; renderHeatmap();" style="font-size:0.75rem;padding:6px 10px;">&#9654;</button>
+        <div style="display:flex;gap:6px;align-items:center;margin-left:auto;font-size:0.7rem;color:var(--text-muted);">
+            <span style="width:14px;height:14px;border-radius:3px;background:#2ecc71;display:inline-block;opacity:0.85;"></span>Winst
+            <span style="width:14px;height:14px;border-radius:3px;background:#e74c3c;display:inline-block;margin-left:6px;opacity:0.85;"></span>Verlies
+            <span style="width:14px;height:14px;border-radius:3px;background:var(--border-color);display:inline-block;margin-left:6px;"></span>Geen data
+        </div>
+    </div>
+    <div id="heatmapGrid" style="overflow-x:auto;"></div>
+</div>
+
+<!-- Maandoverzicht tabel -->
+<div id="maandoverzichtContainer" class="card span-3">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px;">
+        <h3 style="margin:0;">MAANDOVERZICHT</h3>
+        <div style="display:flex;gap:8px;align-items:center;">
+            <button class="btn" id="maandBrokerBtn" onclick="cycleMaandBroker()" style="font-size:0.75rem;padding:6px 14px;">TOTAAL &#9662;</button>
+            <button class="btn" onclick="maandYear--; renderMaandoverzicht();" style="font-size:0.75rem;padding:6px 10px;">&#9664;</button>
+            <span id="maandYearLabel" style="font-weight:700;font-size:0.9rem;min-width:40px;text-align:center;"></span>
+            <button class="btn" onclick="maandYear++; renderMaandoverzicht();" style="font-size:0.75rem;padding:6px 10px;">&#9654;</button>
+        </div>
+    </div>
+    <div style="overflow-x:auto;">
+        <table id="maandTable" style="width:100%;border-collapse:collapse;font-size:0.82rem;">
+            <thead id="maandTableHead"></thead>
+            <tbody id="maandTableBody"></tbody>
         </table>
     </div>
-
-    <!-- Rij 3: Individuele broker grafieken -->
-    <div id="degiroChartContainer" class="card chart-box"><h3>DEGIRO</h3><div class="chart-wrapper"><canvas id="chartDegiro"></canvas></div></div>
-    <div id="boleroChartContainer" class="card chart-box"><h3>BOLERO</h3><div class="chart-wrapper"><canvas id="chartBolero"></canvas></div></div>
-    <div id="saxoChartContainer" class="card chart-box"><h3>SAXO</h3><div class="chart-wrapper"><canvas id="chartSaxo"></canvas></div></div>
-
-    <!-- Rij 4: Dagrendement, volle breedte -->
-    <div id="dailyReturnChartContainer" class="card chart-box span-3">
-        <h3>DAGRENDEMENT</h3>
-        <div class="chart-wrapper"><canvas id="chartDailyReturn"></canvas></div>
-    </div>
-
-    <!-- Rij 5: Gecumuleerd rendement, volle breedte -->
-    <div id="cumulReturnChartContainer" class="card chart-box span-3">
-        <h3>GECUMULEERD RENDEMENT %</h3>
-        <div class="chart-wrapper"><canvas id="chartCumulReturn"></canvas></div>
-    </div>
-
-    <!-- Kalender heatmap -->
-    <div id="heatmapContainer" class="card span-3" style="min-height:220px;">
-        <h3 style="margin-bottom:12px;">RENDEMENT KALENDER</h3>
-        <div style="display:flex;gap:8px;margin-bottom:10px;align-items:center;flex-wrap:wrap;">
-            <button class="btn" id="heatmapBrokerBtn" onclick="cycleHeatmapBroker()" style="font-size:0.75rem;padding:6px 14px;">TOTAAL &#9662;</button>
-            <button class="btn" onclick="heatmapYear--; renderHeatmap();" style="font-size:0.75rem;padding:6px 10px;">&#9664;</button>
-            <span id="heatmapYearLabel" style="font-weight:700;font-size:0.9rem;min-width:40px;text-align:center;"></span>
-            <button class="btn" onclick="heatmapYear++; renderHeatmap();" style="font-size:0.75rem;padding:6px 10px;">&#9654;</button>
-            <div style="display:flex;gap:6px;align-items:center;margin-left:auto;font-size:0.7rem;color:var(--text-muted);">
-                <span style="width:14px;height:14px;border-radius:3px;background:#2ecc71;display:inline-block;opacity:0.85;"></span>Winst
-                <span style="width:14px;height:14px;border-radius:3px;background:#e74c3c;display:inline-block;margin-left:6px;opacity:0.85;"></span>Verlies
-                <span style="width:14px;height:14px;border-radius:3px;background:var(--border-color);display:inline-block;margin-left:6px;"></span>Geen data
-            </div>
-        </div>
-        <div id="heatmapGrid" style="overflow-x:auto;"></div>
-    </div>
-
-    <!-- Maandoverzicht tabel -->
-    <div id="maandoverzichtContainer" class="card span-3">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px;">
-            <h3 style="margin:0;">MAANDOVERZICHT</h3>
-            <div style="display:flex;gap:8px;align-items:center;">
-                <button class="btn" id="maandBrokerBtn" onclick="cycleMaandBroker()" style="font-size:0.75rem;padding:6px 14px;">TOTAAL &#9662;</button>
-                <button class="btn" onclick="maandYear--; renderMaandoverzicht();" style="font-size:0.75rem;padding:6px 10px;">&#9664;</button>
-                <span id="maandYearLabel" style="font-weight:700;font-size:0.9rem;min-width:40px;text-align:center;"></span>
-                <button class="btn" onclick="maandYear++; renderMaandoverzicht();" style="font-size:0.75rem;padding:6px 10px;">&#9654;</button>
-            </div>
-        </div>
-        <div style="overflow-x:auto;">
-            <table id="maandTable" style="width:100%;border-collapse:collapse;font-size:0.82rem;">
-                <thead id="maandTableHead"></thead>
-                <tbody id="maandTableBody"></tbody>
-            </table>
-        </div>
-    </div>
+</div>
+```
 
 </div>
     </div>
-
-
-
 
  <div id="data-page" class="tab-content">
     <div class="header data-header-actions">
         <h1>DATA</h1>
-        
-        <div class="header-btns">
-            <button class="btn btn-icloud" onclick="exportMasterJSON()">Backup naar iCloud</button>
-            <button class="btn" onclick="document.getElementById('importJSON').click()">Upload Backup</button>
-            <input type="file" id="importJSON" style="display:none" accept=".json" onchange="importMasterJSON(this)">
-            <button class="btn btn-main" onclick="saveData()">UPDATE</button>
+
+```
+    <div class="header-btns">
+        <button class="btn btn-icloud" onclick="exportMasterJSON()">Backup naar iCloud</button>
+        <button class="btn" onclick="document.getElementById('importJSON').click()">Upload Backup</button>
+        <input type="file" id="importJSON" style="display:none" accept=".json" onchange="importMasterJSON(this)">
+        <button class="btn btn-main" onclick="saveData()">UPDATE</button>
+    </div>
+</div>
+
+<div class="data-tabs">
+    <button class="data-tab-btn active" onclick="switchDataTab('broker-tab', this)">BROKER</button>
+    <button class="data-tab-btn" onclick="switchDataTab('cash-tab', this)">CASH</button>
+</div>
+
+<div id="broker-tab" class="sub-tab-content active">
+    <div class="card">
+        <h3>BROKER</h3>
+        <button class="btn" onclick="addRow('broker')" style="margin-top: 20px; margin-bottom: 25px; background-color: var(--row-hover); width: 100%; text-align: left;">+ Nieuw</button>
+        <div style="overflow-x: auto;">
+            <table>
+                <thead><tr><th>Datum</th><th>Degiro</th><th>Bolero</th><th>Saxo</th><th></th></tr></thead>
+                <tbody id="brokerTableBody"></tbody>
+            </table>
         </div>
     </div>
+</div>
 
-    <div class="data-tabs">
-        <button class="data-tab-btn active" onclick="switchDataTab('broker-tab', this)">BROKER</button>
-        <button class="data-tab-btn" onclick="switchDataTab('cash-tab', this)">CASH</button>
-    </div>
-
-    <div id="broker-tab" class="sub-tab-content active">
-        <div class="card">
-            <h3>BROKER</h3>
-            <button class="btn" onclick="addRow('broker')" style="margin-top: 20px; margin-bottom: 25px; background-color: var(--row-hover); width: 100%; text-align: left;">+ Nieuw</button>
-            <div style="overflow-x: auto;">
-                <table>
-                    <thead><tr><th>Datum</th><th>Degiro</th><th>Bolero</th><th>Saxo</th><th></th></tr></thead>
-                    <tbody id="brokerTableBody"></tbody>
-                </table>
+<div id="cash-tab" class="sub-tab-content">
+    <div class="stats-grid" style="margin-top: 20px; margin-bottom: 20px;">
+        <div class="card card-degiro">
+            <h3>Totaal Cash Degiro</h3>
+            <div class="cash-input-wrapper">
+                <span class="currency-symbol">€</span>
+                <input type="number" id="inputCashDegiro" class="cash-input-field" onchange="updateSingleCash('Degiro', this.value)">
+            </div>
+        </div>
+        <div class="card card-bolero">
+            <h3>Totaal Cash Bolero</h3>
+            <div class="cash-input-wrapper">
+                <span class="currency-symbol">€</span>
+                <input type="number" id="inputCashBolero" class="cash-input-field" onchange="updateSingleCash('Bolero', this.value)">
+            </div>
+        </div>
+        <div class="card card-saxo">
+            <h3>Totaal Cash Saxo</h3>
+            <div class="cash-input-wrapper">
+                <span class="currency-symbol">€</span>
+                <input type="number" id="inputCashSaxo" class="cash-input-field" onchange="updateSingleCash('Saxo', this.value)">
             </div>
         </div>
     </div>
-
-    <div id="cash-tab" class="sub-tab-content">
-        <div class="stats-grid" style="margin-top: 20px; margin-bottom: 20px;">
-            <div class="card card-degiro">
-                <h3>Totaal Cash Degiro</h3>
-                <div class="cash-input-wrapper">
-                    <span class="currency-symbol">€</span>
-                    <input type="number" id="inputCashDegiro" class="cash-input-field" onchange="updateSingleCash('Degiro', this.value)">
-                </div>
-            </div>
-            <div class="card card-bolero">
-                <h3>Totaal Cash Bolero</h3>
-                <div class="cash-input-wrapper">
-                    <span class="currency-symbol">€</span>
-                    <input type="number" id="inputCashBolero" class="cash-input-field" onchange="updateSingleCash('Bolero', this.value)">
-                </div>
-            </div>
-            <div class="card card-saxo">
-                <h3>Totaal Cash Saxo</h3>
-                <div class="cash-input-wrapper">
-                    <span class="currency-symbol">€</span>
-                    <input type="number" id="inputCashSaxo" class="cash-input-field" onchange="updateSingleCash('Saxo', this.value)">
-                </div>
-            </div>
-        </div>
-    </div>
+</div>
+```
 
 </div> <div id="aandelen-page" class="tab-content">
     <div class="header" style="margin-bottom:16px;">
-        <div class="header-titles"><h1>MARKT</h1></div>
+        <div class="header-titles"><h1>LIVE</h1></div>
         <div style="display:flex;align-items:center;gap:10px;">
             <span id="marktStatus" style="font-size:0.75rem;color:var(--text-muted);display:flex;align-items:center;gap:5px;"></span>
             <button class="btn" onclick="loadMarktData(true)" style="font-size:0.8rem;padding:8px 14px;">↻ Vernieuwen</button>
         </div>
     </div>
 
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
-
-        <!-- VALUTA -->
-        <div class="card markt-section">
-            <div class="markt-section-header">
-                <span class="markt-section-icon">💱</span>
-                <h3>VALUTA</h3>
+```
+<!-- Rij 1: VIX + Fear & Greed -->
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:1.5rem;">
+    <div class="card markt-section">
+        <div class="markt-section-header"><span class="markt-section-icon">🌊</span><h3>VIX — VOLATILITEITSINDEX</h3></div>
+        <div style="display:flex;align-items:center;gap:20px;padding:6px 0;">
+            <div style="flex:1;">
+                <div id="vixValue" style="font-size:2.2rem;font-weight:800;line-height:1;">–</div>
+                <div id="vixChange" style="font-size:0.85rem;margin-top:4px;"></div>
+                <div style="font-size:0.68rem;color:var(--text-muted);margin-top:5px;">CBOE Volatility Index (^VIX)</div>
             </div>
-            <table class="markt-table"><thead><tr><th>Paar</th><th>Koers</th><th>Dag %</th><th class="col-hide">Tijd</th></tr></thead>
-            <tbody id="mb-fx"></tbody></table>
+            <div id="vixLabelBox" style="text-align:center;padding:8px 14px;border-radius:10px;font-size:0.72rem;font-weight:800;letter-spacing:0.05em;"></div>
         </div>
+        <div style="margin-top:10px;height:6px;border-radius:3px;background:linear-gradient(to right,#2ecc71,#f1c40f,#e67e22,#e74c3c);position:relative;">
+            <div id="vixNeedle" style="position:absolute;top:-4px;width:3px;height:14px;background:var(--text-main);border-radius:2px;transform:translateX(-50%);transition:left 0.8s ease;left:50%;"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:0.58rem;color:var(--text-muted);margin-top:3px;">
+            <span>Laag (&lt;15)</span><span>Normaal</span><span>Hoog (&gt;25)</span><span>Extreem (&gt;40)</span>
+        </div>
+    </div>
 
-        <!-- CORE INDICES -->
-        <div class="card markt-section">
-            <div class="markt-section-header">
-                <span class="markt-section-icon">📈</span>
-                <h3>CORE INDICES</h3>
+    <div class="card markt-section">
+        <div class="markt-section-header"><span class="markt-section-icon">🧠</span><h3>FEAR &amp; GREED INDEX</h3></div>
+        <div style="display:flex;align-items:center;gap:20px;padding:6px 0;">
+            <div style="flex:1;">
+                <div id="fgValue" style="font-size:2.2rem;font-weight:800;line-height:1;">–</div>
+                <div id="fgClassification" style="font-size:1rem;font-weight:700;margin-top:4px;"></div>
+                <div style="font-size:0.68rem;color:var(--text-muted);margin-top:5px;">alternative.me · crypto markt sentiment</div>
             </div>
-            <table class="markt-table"><thead><tr><th>Index</th><th>Koers</th><th>Dag △</th><th>Dag %</th></tr></thead>
-            <tbody id="mb-idx"></tbody></table>
-        </div>
-
-        <!-- COMMODITIES -->
-        <div class="card markt-section">
-            <div class="markt-section-header">
-                <span class="markt-section-icon">🥇</span>
-                <h3>COMMODITIES</h3>
+            <div style="text-align:center;">
+                <div id="fgEmoji" style="font-size:2.6rem;line-height:1;"></div>
+                <div id="fgYesterday" style="font-size:0.68rem;color:var(--text-muted);margin-top:4px;"></div>
             </div>
-            <table class="markt-table"><thead><tr><th>Grondstof</th><th>Koers</th><th>Dag △</th><th>Dag %</th></tr></thead>
-            <tbody id="mb-com"></tbody></table>
         </div>
-
-        <!-- ENERGY -->
-        <div class="card markt-section">
-            <div class="markt-section-header">
-                <span class="markt-section-icon">⚡</span>
-                <h3>ENERGY</h3>
-            </div>
-            <table class="markt-table"><thead><tr><th>Instrument</th><th>Koers</th><th>Dag △</th><th>Dag %</th></tr></thead>
-            <tbody id="mb-nrg"></tbody></table>
+        <div style="margin-top:10px;height:6px;border-radius:3px;background:linear-gradient(to right,#e74c3c,#e67e22,#f1c40f,#2ecc71,#27ae60);position:relative;">
+            <div id="fgNeedle" style="position:absolute;top:-4px;width:3px;height:14px;background:var(--text-main);border-radius:2px;transform:translateX(-50%);transition:left 0.8s ease;left:50%;"></div>
         </div>
-
-        <!-- CRYPTO (span beide kolommen) -->
-        <div class="card markt-section" style="grid-column:span 2;">
-            <div class="markt-section-header">
-                <span class="markt-section-icon">₿</span>
-                <h3>CRYPTO</h3>
-            </div>
-            <table class="markt-table"><thead><tr><th>Coin</th><th>Koers (USD)</th><th>Dag △</th><th>Dag %</th><th>24h High</th><th>24h Low</th></tr></thead>
-            <tbody id="mb-cry"></tbody></table>
+        <div style="display:flex;justify-content:space-between;font-size:0.58rem;color:var(--text-muted);margin-top:3px;">
+            <span>Extreme Fear</span><span>Fear</span><span>Neutral</span><span>Greed</span><span>Extreme Greed</span>
         </div>
-
     </div>
 </div>
+
+<!-- Rij 2: Marktdata -->
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
+    <div class="card markt-section">
+        <div class="markt-section-header"><span class="markt-section-icon">💱</span><h3>VALUTA</h3></div>
+        <table class="markt-table"><thead><tr><th>Paar</th><th>Koers</th><th>Dag %</th><th class="col-hide">Tijd</th></tr></thead>
+        <tbody id="mb-fx"></tbody></table>
+    </div>
+    <div class="card markt-section">
+        <div class="markt-section-header"><span class="markt-section-icon">📈</span><h3>CORE INDICES</h3></div>
+        <table class="markt-table"><thead><tr><th>Index</th><th>Koers</th><th>Dag △</th><th>Dag %</th></tr></thead>
+        <tbody id="mb-idx"></tbody></table>
+    </div>
+    <div class="card markt-section">
+        <div class="markt-section-header"><span class="markt-section-icon">🥇</span><h3>COMMODITIES</h3></div>
+        <table class="markt-table"><thead><tr><th>Grondstof</th><th>Koers</th><th>Dag △</th><th>Dag %</th></tr></thead>
+        <tbody id="mb-com"></tbody></table>
+    </div>
+    <div class="card markt-section">
+        <div class="markt-section-header"><span class="markt-section-icon">⚡</span><h3>ENERGY</h3></div>
+        <table class="markt-table"><thead><tr><th>Instrument</th><th>Koers</th><th>Dag △</th><th>Dag %</th></tr></thead>
+        <tbody id="mb-nrg"></tbody></table>
+    </div>
+    <div class="card markt-section" style="grid-column:span 2;">
+        <div class="markt-section-header"><span class="markt-section-icon">₿</span><h3>CRYPTO</h3></div>
+        <table class="markt-table"><thead><tr><th>Coin</th><th>Koers (USD)</th><th>Dag △</th><th>Dag %</th><th>24h High</th><th>24h Low</th></tr></thead>
+        <tbody id="mb-cry"></tbody></table>
+    </div>
+</div>
+```
+
+</div>
+
+<!-- HEATMAP PAGINA -->
+
+<div id="heatmap-page" class="tab-content">
+    <div class="header" style="margin-bottom:16px;">
+        <div class="header-titles"><h1>HEATMAP</h1></div>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+            <button class="btn" onclick="refreshHeatmapPage()" style="font-size:0.8rem;padding:8px 14px;">↻ Vernieuwen</button>
+            <button class="btn" onclick="showAddStock()" style="font-size:0.8rem;padding:8px 14px;">+ Aandeel</button>
+        </div>
+    </div>
+
+```
+<!-- Sorteer opties -->
+<div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;align-items:center;">
+    <span style="font-size:0.72rem;color:var(--text-muted);font-weight:700;">SORTEER:</span>
+    <button class="hm-sort-btn active" onclick="setHmSort('pct',this)">Dag %</button>
+    <button class="hm-sort-btn" onclick="setHmSort('name',this)">Naam</button>
+    <button class="hm-sort-btn" onclick="setHmSort('value',this)">Marktwaarde</button>
+    <span style="font-size:0.72rem;color:var(--text-muted);margin-left:8px;" id="hmLastUpdate"></span>
+</div>
+
+<!-- Add stock modal -->
+<div id="addStockModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:3000;align-items:center;justify-content:center;">
+    <div class="card" style="width:320px;padding:24px;position:relative;">
+        <h3 style="margin-bottom:16px;">Aandeel toevoegen</h3>
+        <input id="addStockTicker" placeholder="Ticker (bijv. AAPL)" class="cash-input-field" style="width:100%;border:1px solid var(--border-color);border-radius:8px;padding:10px;font-size:1rem;background:var(--bg-color);color:var(--text-main);margin-bottom:10px;">
+        <input id="addStockName" placeholder="Naam (bijv. Apple)" class="cash-input-field" style="width:100%;border:1px solid var(--border-color);border-radius:8px;padding:10px;font-size:1rem;background:var(--bg-color);color:var(--text-main);margin-bottom:16px;">
+        <div style="display:flex;gap:8px;">
+            <button class="btn btn-main" onclick="confirmAddStock()" style="flex:1;">Toevoegen</button>
+            <button class="btn" onclick="hideAddStock()" style="flex:1;">Annuleer</button>
+        </div>
+    </div>
+</div>
+
+<div id="hmGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;"></div>
+```
+
+</div>
+
+```
+<style>
+    /* Verwijder de pijltjes (spinners) voor alle browsers */
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+    input[type=number] {
+        -moz-appearance: textfield;
+    }
     
-
-
-    <style>
-        /* Verwijder de pijltjes (spinners) voor alle browsers */
-        input::-webkit-outer-spin-button,
-        input::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
-        input[type=number] {
-            -moz-appearance: textfield;
-        }
-        
-        .cash-input-wrapper {
-            display: flex;
-            align-items: center;
-            background: var(--bg-color);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 10px 15px;
-            margin-top: 15px;
-        }
-        .currency-symbol {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--text-main);
-            margin-right: 5px;
-        }
-        .cash-input-field {
-            width: 100%;
-            background: transparent !important;
-            border: none !important;
-            color: var(--text-main);
-            font-size: 1.5rem;
-            font-weight: bold;
-            outline: none;
-            padding: 0;
-        }
+    .cash-input-wrapper {
+        display: flex;
+        align-items: center;
+        background: var(--bg-color);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        padding: 10px 15px;
+        margin-top: 15px;
+    }
+    .currency-symbol {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: var(--text-main);
+        margin-right: 5px;
+    }
+    .cash-input-field {
+        width: 100%;
+        background: transparent !important;
+        border: none !important;
+        color: var(--text-main);
+        font-size: 1.5rem;
+        font-weight: bold;
+        outline: none;
+        padding: 0;
+    }
+```
 
 /* De Badge */
 .cagr-badge {
-    padding: 2px 10px;
-    border-radius: 99px; /* Pill vorm */
-    font-size: 0.7rem;
-    font-weight: 800;
-    letter-spacing: 0.02em;
-    display: inline-flex;
-    align-items: center;
+padding: 2px 10px;
+border-radius: 99px; /* Pill vorm */
+font-size: 0.7rem;
+font-weight: 800;
+letter-spacing: 0.02em;
+display: inline-flex;
+align-items: center;
 }
 
 /* Groene badge: zachte achtergrond, donkere tekst */
 .cagr-positive {
-    background: rgba(46, 204, 113, 0.12);
-    color: #2ecc71 !important;
-    border: 1px solid rgba(46, 204, 113, 0.2);
+background: rgba(46, 204, 113, 0.12);
+color: #2ecc71 !important;
+border: 1px solid rgba(46, 204, 113, 0.2);
 }
 
 /* Rode badge: zachte achtergrond, donkere tekst */
 .cagr-negative {
-    background: rgba(231, 76, 60, 0.12);
-    color: #e74c3c !important;
-    border: 1px solid rgba(231, 76, 60, 0.2);
+background: rgba(231, 76, 60, 0.12);
+color: #e74c3c !important;
+border: 1px solid rgba(231, 76, 60, 0.2);
 }
 
 /* Informatie label subtieler maken */
 .info-label {
-    display: flex;
-    align-items: center;
-    gap: 4px;
+display: flex;
+align-items: center;
+gap: 4px;
 }
 
 /* Specifieke optimalisatie voor Wekelijks Rendement op iPhone */
 @media (max-width: 480px) {
-    #weeklyReturnTable th {
-        font-size: 0.65rem !important;
-        padding: 8px 2px !important;
-        letter-spacing: 0;
-    }
-    #weeklyReturnTable td {
-        padding: 8px 2px !important;
-        font-size: 0.75rem !important;
-    }
-    .return-euro {
-        font-size: 0.8rem !important;
-        font-weight: 800;
-        display: block;
-    }
-    .return-perc {
-        font-size: 0.65rem !important;
-        opacity: 0.8;
-        display: block;
-    }
+#weeklyReturnTable th {
+font-size: 0.65rem !important;
+padding: 8px 2px !important;
+letter-spacing: 0;
+}
+#weeklyReturnTable td {
+padding: 8px 2px !important;
+font-size: 0.75rem !important;
+}
+.return-euro {
+font-size: 0.8rem !important;
+font-weight: 800;
+display: block;
+}
+.return-perc {
+font-size: 0.65rem !important;
+opacity: 0.8;
+display: block;
+}
 }
 
-    </style>
+```
+</style>
+```
+
 <script>
 
 function getISOWeek(dateString) {
@@ -1079,7 +1184,7 @@ function toggleWidget(containerId, isChecked) {
     }
 
     // ── SWIPE NAVIGATIE ──────────────────────────────────────────────────────
-    const TABS = ['dashboard', 'data-page', 'aandelen-page'];
+    const TABS = ['dashboard', 'data-page', 'aandelen-page', 'heatmap-page'];
     const TAB_NAV_ITEMS = () => document.querySelectorAll('.nav-item');
 
     function getActiveTabIndex() {
@@ -1159,8 +1264,6 @@ function toggleWidget(containerId, isChecked) {
         { date: '20/04/2026', degiro: 57544, bolero: 23164, saxo: 34928 },
         { date: '21/04/2026', degiro: 57093, bolero: 22844, saxo: 33539 },
         { date: '22/04/2026', degiro: 59130, bolero: 23300, saxo: 35327 },
-        { date: '23/04/2026', degiro: 59420, bolero: 23009, saxo: 36065 },
-
     ];
     
     let cashData = JSON.parse(localStorage.getItem('v25_cash')) || [
@@ -1185,6 +1288,7 @@ function toggleWidget(containerId, isChecked) {
         el.classList.add('active');
         closeNav();
         if (id === 'aandelen-page') loadMarktData(true);
+        if (id === 'heatmap-page') initHeatmapPage();
     }
 
     function toggleBlur() { 
@@ -1595,14 +1699,12 @@ function renderWeeklyReturns() {
         callbacks: {
             label: function(context) {
                 const isBlurred = document.querySelector('.blur-target').classList.contains('blur');
-                const label = context.dataset.label || '';
+                const dsLabel = context.dataset.label || '';
                 if (context.datasetIndex === 0) {
-                    // Portfolio lijn
                     return isBlurred ? '  € •••••' : '  ' + formatEuro(context.parsed.y);
                 }
-                // Benchmark: toon % verandering t.o.v. startpunt
-                const pct = context.parsed.y;
-                return `  ${label}: ${pct >= 0 ? '+' : ''}${pct.toFixed(2)}%`;
+                // Benchmark: ook in €
+                return isBlurred ? `  ${dsLabel}: € •••••` : `  ${dsLabel}: ` + formatEuro(context.parsed.y);
             },
             labelColor: function(context) {
                 const colors = ['#6c757d','#e67e22','#8e44ad','#16a085','#c0392b'];
@@ -1619,13 +1721,13 @@ function renderWeeklyReturns() {
                 // Dataset 0: portfolio totaal
                 { label: 'Portfolio', data: [], borderColor: '#6c757d', backgroundColor: '#6c757d15', fill: true, tension: 0.4, pointRadius: 4, pointHoverRadius: 6, borderWidth: 3 },
                 // Dataset 1: S&P 500 (% scaled)
-                { label: 'S&P 500',    data: [], borderColor: '#e67e22', backgroundColor: 'transparent', fill: false, tension: 0.4, pointRadius: 0, pointHoverRadius: 5, borderWidth: 2, borderDash: [5,3], yAxisID: 'yBench', hidden: true },
+                { label: 'S&P 500',    data: [], borderColor: '#e67e22', backgroundColor: 'transparent', fill: false, tension: 0.4, pointRadius: 0, pointHoverRadius: 5, borderWidth: 2, borderDash: [5,3], hidden: true },
                 // Dataset 2: MSCI World
-                { label: 'MSCI World', data: [], borderColor: '#8e44ad', backgroundColor: 'transparent', fill: false, tension: 0.4, pointRadius: 0, pointHoverRadius: 5, borderWidth: 2, borderDash: [5,3], yAxisID: 'yBench', hidden: true },
+                { label: 'MSCI World', data: [], borderColor: '#8e44ad', backgroundColor: 'transparent', fill: false, tension: 0.4, pointRadius: 0, pointHoverRadius: 5, borderWidth: 2, borderDash: [5,3], hidden: true },
                 // Dataset 3: Nasdaq 100
-                { label: 'Nasdaq 100', data: [], borderColor: '#16a085', backgroundColor: 'transparent', fill: false, tension: 0.4, pointRadius: 0, pointHoverRadius: 5, borderWidth: 2, borderDash: [5,3], yAxisID: 'yBench', hidden: true },
+                { label: 'Nasdaq 100', data: [], borderColor: '#16a085', backgroundColor: 'transparent', fill: false, tension: 0.4, pointRadius: 0, pointHoverRadius: 5, borderWidth: 2, borderDash: [5,3], hidden: true },
                 // Dataset 4: Bitcoin
-                { label: 'Bitcoin',    data: [], borderColor: '#c0392b', backgroundColor: 'transparent', fill: false, tension: 0.4, pointRadius: 0, pointHoverRadius: 5, borderWidth: 2, borderDash: [5,3], yAxisID: 'yBench', hidden: true },
+                { label: 'Bitcoin',    data: [], borderColor: '#c0392b', backgroundColor: 'transparent', fill: false, tension: 0.4, pointRadius: 0, pointHoverRadius: 5, borderWidth: 2, borderDash: [5,3], hidden: true },
             ]
         },
         options: {
@@ -2358,6 +2460,44 @@ function renderWeeklyReturns() {
         setLoading('mb-com', 4); setLoading('mb-nrg', 4);
         setLoading('mb-cry', 6);
 
+        // ── VIX + Fear & Greed (parallel) ────────────────────────────────────
+        const [vixData, fgRaw] = await Promise.all([
+            yhQuote('%5EVIX'),
+            fetch('https://api.alternative.me/fng/?limit=2').then(r=>r.json()).catch(()=>null)
+        ]);
+        if (vixData) {
+            const v = vixData.price;
+            document.getElementById('vixValue').textContent = v.toFixed(2);
+            const sign = vixData.change >= 0 ? '+' : '';
+            document.getElementById('vixChange').innerHTML =
+                `<span style="color:${vixData.change>=0?'var(--danger)':'var(--success)'}">${sign}${vixData.change.toFixed(2)} (${sign}${vixData.pct.toFixed(2)}%)</span>`;
+            let label='NORMAAL', bg='#f1c40f22', col='#f1c40f', needle=30;
+            if (v < 15)      { label='LAAG';     bg='#2ecc7122'; col='#2ecc71'; needle=10; }
+            else if (v < 20) { label='NORMAAL';  bg='#f1c40f22'; col='#f1c40f'; needle=33; }
+            else if (v < 30) { label='VERHOOGD'; bg='#e67e2222'; col='#e67e22'; needle=56; }
+            else if (v < 40) { label='HOOG';     bg='#e74c3c22'; col='#e74c3c'; needle=76; }
+            else             { label='EXTREEM';  bg='#c0392b33'; col='#c0392b'; needle=93; }
+            const lb = document.getElementById('vixLabelBox');
+            if (lb) { lb.textContent=label; lb.style.background=bg; lb.style.color=col; lb.style.border=`1px solid ${col}55`; }
+            const n = document.getElementById('vixNeedle');
+            if (n) n.style.left = needle + '%';
+        }
+        if (fgRaw?.data?.[0]) {
+            const fg = fgRaw.data[0];
+            const val = parseInt(fg.value);
+            const col = val<=25?'#e74c3c':val<=45?'#e67e22':val<=55?'#f1c40f':val<=75?'#2ecc71':'#27ae60';
+            const em  = val<=25?'😱':val<=45?'😨':val<=55?'😐':val<=75?'😊':'🤑';
+            const fgV=document.getElementById('fgValue'); if(fgV) fgV.textContent=val;
+            const fgC=document.getElementById('fgClassification'); if(fgC){fgC.textContent=fg.value_classification;fgC.style.color=col;}
+            const fgE=document.getElementById('fgEmoji'); if(fgE) fgE.textContent=em;
+            const fgN=document.getElementById('fgNeedle'); if(fgN) fgN.style.left=val+'%';
+            if (fgRaw.data[1]) {
+                const prev=parseInt(fgRaw.data[1].value), diff=val-prev;
+                const fgY=document.getElementById('fgYesterday');
+                if(fgY) fgY.textContent=`Gisteren: ${prev} (${diff>=0?'+':''}${diff})`;
+            }
+        }
+
         // ── VALUTA ───────────────────────────────────────────────────────────
         const [eurusd, usdeur] = await Promise.all([fxRate('EUR','USD'), fxRate('USD','EUR')]);
         document.getElementById('mb-fx').innerHTML = [
@@ -2365,19 +2505,17 @@ function renderWeeklyReturns() {
             rowFx('USD/EUR', 'US Dollar → Euro', usdeur),
         ].join('');
 
-        // ── CORE INDICES (Yahoo futures) ─────────────────────────────────────
-        const [sp, nq, rut] = await Promise.all([
-            yhQuote('ES=F'), yhQuote('NQ=F'), yhQuote('RTY=F'),
-        ]);
+        // ── CORE INDICES ─────────────────────────────────────────────────────
+        const [sp, nq, rut] = await Promise.all([yhQuote('ES=F'), yhQuote('NQ=F'), yhQuote('RTY=F')]);
         document.getElementById('mb-idx').innerHTML = [
-            rowQuote('S&P 500',      'US Large Cap 500',   sp,  'USD'),
-            rowQuote('Nasdaq 100',   'US Tech 100',        nq,  'USD'),
-            rowQuote('Russell 2000', 'US Small Cap 2000',  rut, 'USD'),
+            rowQuote('S&P 500',      'US Large Cap 500',  sp,  'USD'),
+            rowQuote('Nasdaq 100',   'US Tech 100',       nq,  'USD'),
+            rowQuote('Russell 2000', 'US Small Cap 2000', rut, 'USD'),
         ].join('');
 
-        // ── COMMODITIES (Yahoo futures) ──────────────────────────────────────
+        // ── COMMODITIES ──────────────────────────────────────────────────────
         const [gold, silver, copper, plat, pall] = await Promise.all([
-            yhQuote('GC=F'), yhQuote('SI=F'), yhQuote('HG=F'), yhQuote('PL=F'), yhQuote('PA=F'),
+            yhQuote('GC=F'), yhQuote('SI=F'), yhQuote('HG=F'), yhQuote('PL=F'), yhQuote('PA=F')
         ]);
         document.getElementById('mb-com').innerHTML = [
             rowQuote('Goud',      'Gold (GC=F)',      gold,   'USD/oz'),
@@ -2387,43 +2525,56 @@ function renderWeeklyReturns() {
             rowQuote('Palladium', 'Palladium (PA=F)', pall,   'USD/oz'),
         ].join('');
 
-        // ── ENERGY (Yahoo futures) ───────────────────────────────────────────
+        // ── ENERGY ───────────────────────────────────────────────────────────
         const [brent, wti, gas, ttf] = await Promise.all([
-            yhQuote('BZ=F'), yhQuote('CL=F'), yhQuote('NG=F'), yhQuote('TTF=F'),
+            yhQuote('BZ=F'), yhQuote('CL=F'), yhQuote('NG=F'), yhQuote('TTF=F')
         ]);
         document.getElementById('mb-nrg').innerHTML = [
-            rowQuote('Brent Oil', 'Brent Crude (BZ=F)',  brent, 'USD/bbl'),
-            rowQuote('Crude Oil', 'WTI Crude (CL=F)',    wti,   'USD/bbl'),
-            rowQuote('Nat. Gas',  'Henry Hub (NG=F)',    gas,   'USD/MMBtu'),
-            rowQuote('TTF Gas',   'EU Gas (TTF=F)',      ttf,   'EUR/MWh'),
+            rowQuote('Brent Oil', 'Brent Crude (BZ=F)', brent, 'USD/bbl'),
+            rowQuote('Crude Oil', 'WTI Crude (CL=F)',   wti,   'USD/bbl'),
+            rowQuote('Nat. Gas',  'Henry Hub (NG=F)',   gas,   'USD/MMBtu'),
+            rowQuote('TTF Gas',   'EU Gas (TTF=F)',     ttf,   'EUR/MWh'),
         ].join('');
 
-        // ── CRYPTO (Finnhub + Binance fallback) ──────────────────────────────
+        // ── CRYPTO ───────────────────────────────────────────────────────────
+        async function hypeQuote() {
+            try {
+                const [mids, meta] = await Promise.all([
+                    fetch('https://api.hyperliquid.xyz/info',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({type:'allMids'})}).then(r=>r.json()),
+                    fetch('https://api.hyperliquid.xyz/info',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({type:'metaAndAssetCtxs'})}).then(r=>r.json())
+                ]);
+                const price = parseFloat(mids['HYPE']); if (!price) return null;
+                const assets = meta[0]?.universe??[], ctxs = meta[1]??[];
+                const idx = assets.findIndex(a=>a.name==='HYPE');
+                if (idx>=0 && ctxs[idx]) {
+                    const ctx=ctxs[idx], prev=parseFloat(ctx.prevDayPx), change=price-prev, pct=prev?(change/prev)*100:0;
+                    return {price,change,pct,high:parseFloat(ctx.dayHigh??price),low:parseFloat(ctx.dayLow??price),time:new Date()};
+                }
+                return {price,change:0,pct:0,high:price,low:price,time:new Date()};
+            } catch { return null; }
+        }
+
         const cryptos = [
-            { label: 'Bitcoin',    sub: 'BTC',  fh: 'BINANCE:BTCUSDT',    bn: 'BTCUSDT'    },
-            { label: 'Ethereum',   sub: 'ETH',  fh: 'BINANCE:ETHUSDT',    bn: 'ETHUSDT'    },
-            { label: 'Solana',     sub: 'SOL',  fh: 'BINANCE:SOLUSDT',    bn: 'SOLUSDT'    },
-            { label: 'Avalanche',  sub: 'AVAX', fh: 'BINANCE:AVAXUSDT',   bn: 'AVAXUSDT'   },
-            { label: 'Aave',       sub: 'AAVE', fh: 'BINANCE:AAVEUSDT',   bn: 'AAVEUSDT'   },
-            { label: 'Render',     sub: 'RNDR', fh: 'BINANCE:RENDERUSDT', bn: 'RENDERUSDT' },
-            { label: 'Bittensor',  sub: 'TAO',  fh: 'BINANCE:TAOUSDT',    bn: 'TAOUSDT'    },
-            { label: 'Hyperliquid',sub: 'HYPE', fh: 'MEXC:HYPEUSDT',      bn: 'HYPEUSDT'   },
+            { label:'Bitcoin',    sub:'BTC',  fh:'BINANCE:BTCUSDT',    bn:'BTCUSDT'    },
+            { label:'Ethereum',   sub:'ETH',  fh:'BINANCE:ETHUSDT',    bn:'ETHUSDT'    },
+            { label:'Solana',     sub:'SOL',  fh:'BINANCE:SOLUSDT',    bn:'SOLUSDT'    },
+            { label:'Avalanche',  sub:'AVAX', fh:'BINANCE:AVAXUSDT',   bn:'AVAXUSDT'   },
+            { label:'Aave',       sub:'AAVE', fh:'BINANCE:AAVEUSDT',   bn:'AAVEUSDT'   },
+            { label:'Render',     sub:'RNDR', fh:'BINANCE:RENDERUSDT', bn:'RENDERUSDT' },
+            { label:'Bittensor',  sub:'TAO',  fh:'BINANCE:TAOUSDT',    bn:'TAOUSDT'    },
+            { label:'Hyperliquid',sub:'HYPE', hl:true },
         ];
-        const cryptoResults = await Promise.all(cryptos.map(c => cryptoQuote(c.fh, c.bn)));
-        document.getElementById('mb-cry').innerHTML = cryptos.map((c, i) =>
-            rowCrypto(c.label, c.sub, cryptoResults[i])
-        ).join('');
+        const cryptoResults = await Promise.all(cryptos.map(c => c.hl ? hypeQuote() : cryptoQuote(c.fh, c.bn)));
+        document.getElementById('mb-cry').innerHTML = cryptos.map((c,i) => rowCrypto(c.label,c.sub,cryptoResults[i])).join('');
 
-        // Status
-        const now = new Date().toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' });
-        const anyFailed = [sp, nq, gold, brent, eurusd].some(x => x === null);
+        const now = new Date().toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit'});
+        const anyFailed = [sp,nq,gold,brent,eurusd].some(x=>x===null);
         document.getElementById('marktStatus').innerHTML =
-            `<span class="markt-dot ${anyFailed ? 'markt-dot-stale' : 'markt-dot-live'}"></span> ${anyFailed ? 'Gedeeltelijk' : 'Live'} · ${now} · auto-refresh 30s`;
-
+            `<span class="markt-dot ${anyFailed?'markt-dot-stale':'markt-dot-live'}"></span> ${anyFailed?'Gedeeltelijk':'Live'} · ${now} · auto-refresh 30s`;
         if (marktRefreshTimer) clearTimeout(marktRefreshTimer);
-        marktRefreshTimer = setTimeout(() => {
-            const tab = document.getElementById('aandelen-page');
-            if (tab && tab.classList.contains('active')) loadMarktData();
+        marktRefreshTimer = setTimeout(()=>{
+            const tab=document.getElementById('aandelen-page');
+            if(tab&&tab.classList.contains('active')) loadMarktData();
         }, 30000);
     }
 
@@ -2467,17 +2618,17 @@ function renderWeeklyReturns() {
         } catch { return null; }
     }
 
-    // Zet historische koersen om naar % t.o.v. eerste overlappende datum met portfolio
-    function alignBenchmark(priceMap, portfolioDates) {
-        if (!priceMap) return null;
-        // Zoek eerste datum in portfolio die ook in de benchmark zit (of dichtbijgelegen)
+    // Zet historische koersen om naar € t.o.v. portfolio startwaarde
+    function alignBenchmark(priceMap, portfolioDates, portfolioValues) {
+        if (!priceMap || portfolioDates.length === 0) return null;
+        // Zoek de startprijs van de benchmark op de eerste portfoliodatum
         let basePrice = null;
+        const basePortfolio = portfolioValues[0];
         const result = [];
-        for (const date of portfolioDates) {
-            // Probeer exacte datum, anders zoek ±3 dagen
+        for (let i = 0; i < portfolioDates.length; i++) {
+            const date = portfolioDates[i];
             let price = priceMap[date];
             if (price == null) {
-                // Probeer naburige werkdagen
                 const [d, m, y] = date.split('/').map(Number);
                 for (let offset = -3; offset <= 3; offset++) {
                     const try_ = new Date(y, m-1, d+offset);
@@ -2487,43 +2638,201 @@ function renderWeeklyReturns() {
             }
             if (price == null) { result.push(null); continue; }
             if (basePrice === null) basePrice = price;
-            result.push(basePrice > 0 ? ((price - basePrice) / basePrice) * 100 : 0);
+            // Schaal: als benchmark X% groeit, wat zou portfolio dan waard zijn?
+            const benchPct = basePrice > 0 ? (price - basePrice) / basePrice : 0;
+            result.push(basePortfolio * (1 + benchPct));
         }
         return basePrice !== null ? result : null;
     }
 
     async function updateBenchmarks() {
         if (!charts.main || brokerData.length === 0) return;
-        const portfolioDates = brokerData.map(d => d.date);
-        // Eerste datum van portfolio als startdatum voor fetch
+        const portfolioDates  = brokerData.map(d => d.date);
+        const portfolioValues = brokerData.map(d => d.degiro + d.bolero + d.saxo);
         const [fd, fm, fy] = portfolioDates[0].split('/').map(Number);
         const fromDate = `${fy}-${String(fm).padStart(2,'0')}-${String(fd).padStart(2,'0')}`;
 
         let anyActive = false;
-
         for (const bench of BENCHMARKS) {
             const cb = document.getElementById(bench.id);
             const ds = charts.main.data.datasets[bench.dsIdx];
             if (!cb || !ds) continue;
-
             if (cb.checked) {
                 anyActive = true;
                 ds.hidden = false;
-                if (!benchCache[bench.ticker]) {
-                    ds.data = []; // toon leeg terwijl laden
-                    charts.main.update('none');
-                }
                 const map = await fetchBenchmarkHistory(bench.ticker, fromDate);
-                ds.data = alignBenchmark(map, portfolioDates) ?? [];
+                ds.data = alignBenchmark(map, portfolioDates, portfolioValues) ?? [];
             } else {
                 ds.hidden = true;
                 ds.data = [];
             }
         }
-
-        // Rechter y-as tonen/verbergen
-        charts.main.options.scales.yBench.display = anyActive;
+        // Rechter y-as verbergen (alles nu in €, zelfde schaal)
+        charts.main.options.scales.yBench.display = false;
         charts.main.update();
+    }
+
+    // ── HEATMAP PAGINA ──────────────────────────────────────────────────────
+    const DEFAULT_STOCKS = [
+        {ticker:'NVDA',  name:'NVIDIA'},       {ticker:'PYPL',  name:'PayPal'},
+        {ticker:'BMNR',  name:'Bitmine'},       {ticker:'ABCL',  name:'AbCellera'},
+        {ticker:'AMZN',  name:'Amazon'},        {ticker:'APLD',  name:'Applied Digital'},
+        {ticker:'ACHR',  name:'Archer Aviation'},{ticker:'CRCL', name:'Circle'},
+        {ticker:'CRWV',  name:'CoreWeave'},     {ticker:'CRDO',  name:'Credo'},
+        {ticker:'IONQ',  name:'IonQ'},          {ticker:'KEEL',  name:'Keel'},
+        {ticker:'LMND',  name:'Lemonade'},      {ticker:'MRLN',  name:'Merlin'},
+        {ticker:'MSFT',  name:'Microsoft'},     {ticker:'OUST',  name:'Ouster'},
+        {ticker:'RR',    name:'Richtech'},      {ticker:'SBET',  name:'SharpLink'},
+        {ticker:'SOI.PA',name:'Soitec'},        {ticker:'TOYO',  name:'Toyo'},
+        {ticker:'UBER',  name:'Uber'},          {ticker:'UAMY',  name:'US Antimony'},
+        {ticker:'2B76.L',name:'iSh. Automation'},{ticker:'DAPP', name:'VanEck Crypto'},
+        {ticker:'REMX',  name:'VanEck Rare Earth'},{ticker:'SMH', name:'VanEck Semi'},
+        {ticker:'3HCL',  name:'WT Copper'},     {ticker:'MIGI',  name:'Mawson'},
+        {ticker:'QBTS',  name:'D-Wave'},        {ticker:'IREN',  name:'IREN'},
+        {ticker:'JD',    name:'JD.com'},        {ticker:'CIFR',  name:'Cipher Digital'},
+        {ticker:'CLSK',  name:'CleanSpark'},    {ticker:'BKKT',  name:'Bakkt'},
+        {ticker:'SOFI',  name:'SoFi'},          {ticker:'GOOGL', name:'Alphabet'},
+        {ticker:'AMD',   name:'AMD'},           {ticker:'SYM',   name:'Symbotic'},
+        {ticker:'RXRX',  name:'Recursion'},     {ticker:'ABAT',  name:'Am. Battery'},
+        {ticker:'XPEV',  name:'XPeng'},         {ticker:'CRM',   name:'Salesforce'},
+        {ticker:'ZENA',  name:'Zenatech'},      {ticker:'SGLD',  name:'Inv. Gold'},
+    ];
+
+    let hmStocks = JSON.parse(localStorage.getItem('hm_stocks') || 'null') || DEFAULT_STOCKS;
+    let hmSortMode = 'pct';
+    let hmData = {}; // ticker -> quote data
+    let hmInitialized = false;
+
+    function saveHmStocks() { localStorage.setItem('hm_stocks', JSON.stringify(hmStocks)); }
+
+    function setHmSort(mode, btn) {
+        hmSortMode = mode;
+        document.querySelectorAll('.hm-sort-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderHmGrid();
+    }
+
+    function pctColor(pct) {
+        if (pct === null || isNaN(pct)) return { bg: 'var(--row-hover)', text: 'var(--text-muted)' };
+        const abs = Math.min(Math.abs(pct), 8);
+        const intensity = abs / 8;
+        if (pct > 0) {
+            const g = Math.round(120 + intensity * 80);
+            return { bg: `rgba(46,${g},113,0.85)`, text: '#fff' };
+        } else {
+            const r = Math.round(160 + intensity * 75);
+            return { bg: `rgba(${r},60,60,0.85)`, text: '#fff' };
+        }
+    }
+
+    function renderHmGrid() {
+        const grid = document.getElementById('hmGrid');
+        if (!grid) return;
+
+        let stocks = [...hmStocks];
+        if (hmSortMode === 'pct') {
+            stocks.sort((a, b) => {
+                const pa = hmData[a.ticker]?.pct ?? -999;
+                const pb = hmData[b.ticker]?.pct ?? -999;
+                return pb - pa;
+            });
+        } else if (hmSortMode === 'name') {
+            stocks.sort((a, b) => a.name.localeCompare(b.name));
+        } else if (hmSortMode === 'value') {
+            stocks.sort((a, b) => {
+                const va = hmData[a.ticker]?.price ?? 0;
+                const vb = hmData[b.ticker]?.price ?? 0;
+                return vb - va;
+            });
+        }
+
+        grid.innerHTML = stocks.map(s => {
+            const d = hmData[s.ticker];
+            const isLoading = !d;
+            const pct = d?.pct ?? null;
+            const { bg, text } = pctColor(pct);
+            const sign = pct !== null && pct >= 0 ? '+' : '';
+            const pctStr = pct !== null ? `${sign}${pct.toFixed(2)}%` : '–';
+            const priceStr = d?.price != null ? `$${d.price.toLocaleString('nl-NL', {minimumFractionDigits:2,maximumFractionDigits:2})}` : '';
+            return `<div class="hm-cell ${isLoading?'loading':''}" style="background:${bg};color:${text};" data-ticker="${s.ticker}">
+                <span class="hm-del" onclick="removeHmStock('${s.ticker}',event)">✕</span>
+                <div>
+                    <div class="hm-ticker">${s.ticker}</div>
+                    <div class="hm-name" style="color:${text};">${s.name}</div>
+                </div>
+                <div>
+                    <div class="hm-pct">${pctStr}</div>
+                    <div class="hm-price" style="color:${text};">${priceStr}</div>
+                </div>
+            </div>`;
+        }).join('');
+
+        const lu = document.getElementById('hmLastUpdate');
+        if (lu && Object.keys(hmData).length > 0) {
+            lu.textContent = 'Bijgewerkt: ' + new Date().toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit'});
+        }
+    }
+
+    async function fetchHmQuotes() {
+        // Haal alle tickers op via Yahoo (corsproxy), 4 tegelijk om rate limit te vermijden
+        const tickers = hmStocks.map(s => s.ticker);
+        const chunks = [];
+        for (let i = 0; i < tickers.length; i += 6) chunks.push(tickers.slice(i, i+6));
+
+        for (const chunk of chunks) {
+            await Promise.all(chunk.map(async ticker => {
+                const d = await yhQuote(ticker);
+                if (d) hmData[ticker] = d;
+            }));
+            renderHmGrid(); // Update grid na elk chunk
+        }
+    }
+
+    async function initHeatmapPage() {
+        if (!hmInitialized) {
+            hmInitialized = true;
+            renderHmGrid(); // Toon loading state
+        }
+        await fetchHmQuotes();
+    }
+
+    async function refreshHeatmapPage() {
+        hmData = {};
+        renderHmGrid();
+        await fetchHmQuotes();
+    }
+
+    function removeHmStock(ticker, event) {
+        event.stopPropagation();
+        if (!confirm(`${ticker} verwijderen uit de heatmap?`)) return;
+        hmStocks = hmStocks.filter(s => s.ticker !== ticker);
+        delete hmData[ticker];
+        saveHmStocks();
+        renderHmGrid();
+    }
+
+    function showAddStock() {
+        const modal = document.getElementById('addStockModal');
+        if (modal) { modal.style.display = 'flex'; document.getElementById('addStockTicker').focus(); }
+    }
+    function hideAddStock() {
+        const modal = document.getElementById('addStockModal');
+        if (modal) modal.style.display = 'none';
+    }
+    async function confirmAddStock() {
+        const ticker = document.getElementById('addStockTicker').value.trim().toUpperCase();
+        const name   = document.getElementById('addStockName').value.trim() || ticker;
+        if (!ticker) return;
+        if (hmStocks.find(s => s.ticker === ticker)) { alert(`${ticker} staat al in de lijst.`); return; }
+        hmStocks.push({ ticker, name });
+        saveHmStocks();
+        hideAddStock();
+        document.getElementById('addStockTicker').value = '';
+        document.getElementById('addStockName').value = '';
+        renderHmGrid();
+        const d = await yhQuote(ticker);
+        if (d) hmData[ticker] = d;
+        renderHmGrid();
     }
 
     window.onload = () => {
@@ -2539,58 +2848,61 @@ function renderWeeklyReturns() {
 
 <div id="widgetMenu" class="card" style="display:none; position:fixed; top:70px; right:20px; z-index:1001; width:220px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); padding: 20px;">
     <h3 style="margin-bottom:15px; font-size: 0.9rem;">DASHBOARD LAYOUT</h3>
-    
-    <div class="widget-option">
-        <input type="checkbox" id="checkGrowth" checked onchange="toggleWidget('growthChartContainer', this.checked)">
-        <label for="checkGrowth">TOTAAL</label>
-    </div>
 
-    <div class="widget-option">
-        <input type="checkbox" id="checkPie" checked onchange="toggleWidget('pieChartContainer', this.checked)">
-        <label for="checkPie">VERDELING</label>
-    </div>
+```
+<div class="widget-option">
+    <input type="checkbox" id="checkGrowth" checked onchange="toggleWidget('growthChartContainer', this.checked)">
+    <label for="checkGrowth">TOTAAL</label>
+</div>
 
-    <div class="widget-option">
-        <input type="checkbox" id="checkStatsBlock" checked onchange="toggleWidget('statsBlockContainer', this.checked)">
-        <label for="checkStatsBlock">STATISTIEKEN</label>
-    </div>
+<div class="widget-option">
+    <input type="checkbox" id="checkPie" checked onchange="toggleWidget('pieChartContainer', this.checked)">
+    <label for="checkPie">VERDELING</label>
+</div>
 
-    <div class="widget-option">
-        <input type="checkbox" id="checkDegiro" checked onchange="toggleWidget('degiroChartContainer', this.checked)">
-        <label for="checkDegiro">DEGIRO</label>
-    </div>
+<div class="widget-option">
+    <input type="checkbox" id="checkStatsBlock" checked onchange="toggleWidget('statsBlockContainer', this.checked)">
+    <label for="checkStatsBlock">STATISTIEKEN</label>
+</div>
 
-    <div class="widget-option">
-        <input type="checkbox" id="checkBolero" checked onchange="toggleWidget('boleroChartContainer', this.checked)">
-        <label for="checkBolero">BOLERO</label>
-    </div>
+<div class="widget-option">
+    <input type="checkbox" id="checkDegiro" checked onchange="toggleWidget('degiroChartContainer', this.checked)">
+    <label for="checkDegiro">DEGIRO</label>
+</div>
 
-    <div class="widget-option">
-        <input type="checkbox" id="checkSaxo" checked onchange="toggleWidget('saxoChartContainer', this.checked)">
-        <label for="checkSaxo">SAXO</label>
-    </div>
+<div class="widget-option">
+    <input type="checkbox" id="checkBolero" checked onchange="toggleWidget('boleroChartContainer', this.checked)">
+    <label for="checkBolero">BOLERO</label>
+</div>
 
-    <div class="widget-option">
-        <input type="checkbox" id="checkDailyReturn" checked onchange="toggleWidget('dailyReturnChartContainer', this.checked)">
-        <label for="checkDailyReturn">DAGRENDEMENT</label>
-    </div>
+<div class="widget-option">
+    <input type="checkbox" id="checkSaxo" checked onchange="toggleWidget('saxoChartContainer', this.checked)">
+    <label for="checkSaxo">SAXO</label>
+</div>
 
-    <div class="widget-option">
-        <input type="checkbox" id="checkCumulReturn" checked onchange="toggleWidget('cumulReturnChartContainer', this.checked)">
-        <label for="checkCumulReturn">GECUMULEERD %</label>
-    </div>
+<div class="widget-option">
+    <input type="checkbox" id="checkDailyReturn" checked onchange="toggleWidget('dailyReturnChartContainer', this.checked)">
+    <label for="checkDailyReturn">DAGRENDEMENT</label>
+</div>
 
-    <div class="widget-option">
-        <input type="checkbox" id="checkHeatmap" checked onchange="toggleWidget('heatmapContainer', this.checked)">
-        <label for="checkHeatmap">KALENDER</label>
-    </div>
+<div class="widget-option">
+    <input type="checkbox" id="checkCumulReturn" checked onchange="toggleWidget('cumulReturnChartContainer', this.checked)">
+    <label for="checkCumulReturn">GECUMULEERD %</label>
+</div>
 
-    <div class="widget-option">
-        <input type="checkbox" id="checkMaand" checked onchange="toggleWidget('maandoverzichtContainer', this.checked)">
-        <label for="checkMaand">MAANDOVERZICHT</label>
-    </div>
+<div class="widget-option">
+    <input type="checkbox" id="checkHeatmap" checked onchange="toggleWidget('heatmapContainer', this.checked)">
+    <label for="checkHeatmap">KALENDER</label>
+</div>
 
-    <button class="btn btn-main" style="width:100%; margin-top:15px; justify-content: center;" onclick="toggleWidgetMenu()">Klaar</button>
+<div class="widget-option">
+    <input type="checkbox" id="checkMaand" checked onchange="toggleWidget('maandoverzichtContainer', this.checked)">
+    <label for="checkMaand">MAANDOVERZICHT</label>
+</div>
+
+<button class="btn btn-main" style="width:100%; margin-top:15px; justify-content: center;" onclick="toggleWidgetMenu()">Klaar</button>
+```
+
 </div>
 </body>
 </html>
