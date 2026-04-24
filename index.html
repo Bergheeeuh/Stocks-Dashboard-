@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio v17</title>
+    <title>Portfolio v18</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
     <style>
@@ -418,6 +418,17 @@
             #mb-cry tr th:nth-child(6) { display: none; }
         }
 
+        .kal-month-picker {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        @media (max-width: 500px) {
+            #kalender-page .header { flex-direction: column; align-items: flex-start; gap: 10px; }
+            .kal-month-picker { width: 100%; }
+        }
+
         /* ── KALENDER ──────────────────────────────────────────────────────── */
         .kal-header-cell {
             padding: 8px 4px;
@@ -549,6 +560,20 @@
         .hm-cell .hm-del    { position:absolute;top:4px;right:6px;font-size:0.7rem;opacity:0;transition:opacity 0.2s;cursor:pointer;font-weight:700; }
         .hm-cell:hover .hm-del { opacity: 0.6; }
         .hm-cell.loading    { background: var(--row-hover) !important; animation: hmPulse 1.2s ease-in-out infinite; }
+        .hm-cell-compact {
+            border-radius: 8px;
+            padding: 7px 5px;
+            cursor: pointer;
+            min-height: 44px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            transition: transform 0.15s;
+        }
+        .hm-cell-compact:hover { transform: scale(1.06); }
+        .hm-cell-compact.loading { background: var(--row-hover) !important; animation: hmPulse 1.2s ease-in-out infinite; }
         @keyframes hmPulse   { 0%,100%{opacity:1} 50%{opacity:0.5} }
 
         /* Benchmark toggles */
@@ -877,6 +902,8 @@
     <div class="data-tabs">
         <button class="data-tab-btn active" onclick="switchDataTab('broker-tab', this)">BROKER</button>
         <button class="data-tab-btn" onclick="switchDataTab('cash-tab', this)">CASH</button>
+        <button class="data-tab-btn" onclick="switchDataTab('aandelen-data-tab', this)">AANDELEN</button>
+        <button class="data-tab-btn" onclick="switchDataTab('crypto-data-tab', this)">CRYPTO</button>
     </div>
 
     <div id="broker-tab" class="sub-tab-content active">
@@ -918,6 +945,65 @@
         </div>
     </div>
 
+    <!-- AANDELEN TAB -->
+    <div id="aandelen-data-tab" class="sub-tab-content">
+        <div class="card" style="margin-top:16px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px;">
+                <h3 style="margin:0;">AANDELEN &amp; ETFs</h3>
+                <button class="btn btn-main" onclick="showAddStockData('stock')" style="font-size:0.8rem;">+ Toevoegen</button>
+            </div>
+            <div style="overflow-x:auto;">
+                <table style="width:100%;border-collapse:collapse;font-size:0.85rem;">
+                    <thead><tr>
+                        <th style="text-align:left;padding:8px 6px;color:var(--text-muted);font-size:0.68rem;font-weight:700;border-bottom:2px solid var(--border-color);">Ticker</th>
+                        <th style="text-align:left;padding:8px 6px;color:var(--text-muted);font-size:0.68rem;font-weight:700;border-bottom:2px solid var(--border-color);">Naam</th>
+                        <th style="text-align:right;padding:8px 6px;color:var(--text-muted);font-size:0.68rem;font-weight:700;border-bottom:2px solid var(--border-color);">Type</th>
+                        <th style="padding:8px 6px;border-bottom:2px solid var(--border-color);"></th>
+                    </tr></thead>
+                    <tbody id="aandelenDataBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- CRYPTO TAB -->
+    <div id="crypto-data-tab" class="sub-tab-content">
+        <div class="card" style="margin-top:16px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px;">
+                <h3 style="margin:0;">CRYPTO POSITIES</h3>
+                <button class="btn btn-main" onclick="showAddStockData('crypto')" style="font-size:0.8rem;">+ Toevoegen</button>
+            </div>
+            <div style="overflow-x:auto;">
+                <table style="width:100%;border-collapse:collapse;font-size:0.85rem;">
+                    <thead><tr>
+                        <th style="text-align:left;padding:8px 6px;color:var(--text-muted);font-size:0.68rem;font-weight:700;border-bottom:2px solid var(--border-color);">Ticker</th>
+                        <th style="text-align:left;padding:8px 6px;color:var(--text-muted);font-size:0.68rem;font-weight:700;border-bottom:2px solid var(--border-color);">Naam</th>
+                        <th style="padding:8px 6px;border-bottom:2px solid var(--border-color);"></th>
+                    </tr></thead>
+                    <tbody id="cryptoDataBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add stock/crypto modal for data page -->
+    <div id="addStockDataModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:3000;align-items:center;justify-content:center;">
+        <div class="card" style="width:320px;padding:24px;">
+            <h3 id="addStockDataTitle" style="margin-bottom:16px;">Toevoegen</h3>
+            <input id="addSdTicker" placeholder="Ticker (bijv. AAPL)" class="cash-input-field" style="width:100%;border:1px solid var(--border-color);border-radius:8px;padding:10px;font-size:1rem;background:var(--bg-color);color:var(--text-main);margin-bottom:10px;">
+            <input id="addSdName"   placeholder="Naam (bijv. Apple)" class="cash-input-field" style="width:100%;border:1px solid var(--border-color);border-radius:8px;padding:10px;font-size:1rem;background:var(--bg-color);color:var(--text-main);margin-bottom:10px;">
+            <select id="addSdType" style="width:100%;border:1px solid var(--border-color);border-radius:8px;padding:10px;font-size:1rem;background:var(--bg-color);color:var(--text-main);margin-bottom:16px;">
+                <option value="stock">Aandeel</option>
+                <option value="etf">ETF</option>
+                <option value="crypto">Crypto</option>
+            </select>
+            <div style="display:flex;gap:8px;">
+                <button class="btn btn-main" onclick="confirmAddStockData()" style="flex:1;">Toevoegen</button>
+                <button class="btn" onclick="hideAddStockData()" style="flex:1;">Annuleer</button>
+            </div>
+        </div>
+    </div>
+
 </div> <div id="aandelen-page" class="tab-content">
     <div class="header" style="margin-bottom:16px;">
         <div class="header-titles"><h1>LIVE</h1></div>
@@ -949,22 +1035,30 @@
 
         <div class="card markt-section">
             <div class="markt-section-header"><span class="markt-section-icon">🧠</span><h3>FEAR &amp; GREED INDEX</h3></div>
-            <div style="display:flex;align-items:center;gap:20px;padding:6px 0;">
-                <div style="flex:1;">
-                    <div id="fgValue" style="font-size:2.2rem;font-weight:800;line-height:1;">–</div>
-                    <div id="fgClassification" style="font-size:1rem;font-weight:700;margin-top:4px;"></div>
-                    <div style="font-size:0.68rem;color:var(--text-muted);margin-top:5px;">alternative.me · crypto markt sentiment</div>
-                </div>
-                <div style="text-align:center;">
-                    <div id="fgEmoji" style="font-size:2.6rem;line-height:1;"></div>
+            <div style="display:flex;gap:16px;padding:6px 0;">
+                <div style="flex:1;border-right:1px solid var(--border-color);padding-right:16px;">
+                    <div style="font-size:0.65rem;font-weight:700;color:var(--text-muted);letter-spacing:0.05em;margin-bottom:4px;">CRYPTO</div>
+                    <div id="fgValue" style="font-size:2rem;font-weight:800;line-height:1;">–</div>
+                    <div id="fgClassification" style="font-size:0.9rem;font-weight:700;margin-top:3px;"></div>
                     <div id="fgYesterday" style="font-size:0.68rem;color:var(--text-muted);margin-top:4px;"></div>
+                </div>
+                <div style="flex:1;">
+                    <div style="font-size:0.65rem;font-weight:700;color:var(--text-muted);letter-spacing:0.05em;margin-bottom:4px;">AANDELEN (CNN)</div>
+                    <div id="fgStockValue" style="font-size:2rem;font-weight:800;line-height:1;">–</div>
+                    <div id="fgStockClass" style="font-size:0.9rem;font-weight:700;margin-top:3px;"></div>
+                    <div id="fgStockPrev" style="font-size:0.68rem;color:var(--text-muted);margin-top:4px;"></div>
                 </div>
             </div>
             <div style="margin-top:10px;height:6px;border-radius:3px;background:linear-gradient(to right,#e74c3c,#e67e22,#f1c40f,#2ecc71,#27ae60);position:relative;">
                 <div id="fgNeedle" style="position:absolute;top:-4px;width:3px;height:14px;background:var(--text-main);border-radius:2px;transform:translateX(-50%);transition:left 0.8s ease;left:50%;"></div>
+                <div id="fgStockNeedle" style="position:absolute;top:-4px;width:3px;height:14px;background:var(--bolero);border-radius:2px;transform:translateX(-50%);transition:left 0.8s ease;left:50%;opacity:0.7;"></div>
             </div>
             <div style="display:flex;justify-content:space-between;font-size:0.58rem;color:var(--text-muted);margin-top:3px;">
                 <span>Extreme Fear</span><span>Fear</span><span>Neutral</span><span>Greed</span><span>Extreme Greed</span>
+            </div>
+            <div style="font-size:0.62rem;color:var(--text-muted);margin-top:6px;">
+                <span style="display:inline-flex;align-items:center;gap:3px;margin-right:10px;"><span style="width:8px;height:8px;background:var(--text-main);border-radius:2px;display:inline-block;"></span>Crypto</span>
+                <span style="display:inline-flex;align-items:center;gap:3px;"><span style="width:8px;height:8px;background:var(--bolero);border-radius:2px;display:inline-block;opacity:0.7;"></span>Aandelen</span>
             </div>
         </div>
     </div>
@@ -973,7 +1067,7 @@
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
         <div class="card markt-section">
             <div class="markt-section-header"><span class="markt-section-icon">💱</span><h3>VALUTA</h3></div>
-            <table class="markt-table"><thead><tr><th>Paar</th><th>Koers</th><th>Dag %</th><th class="col-hide">Tijd</th></tr></thead>
+            <table class="markt-table"><thead><tr><th>Paar</th><th>Koers</th><th>Dag %</th><th class="col-hide">Vorige dag</th></tr></thead>
             <tbody id="mb-fx"></tbody></table>
         </div>
         <div class="card markt-section">
@@ -1005,8 +1099,16 @@
         <div class="header-titles"><h1>HEATMAP</h1></div>
         <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
             <button class="btn" onclick="refreshHeatmapPage()" style="font-size:0.8rem;padding:8px 14px;">↻ Vernieuwen</button>
+            <button class="btn" id="hmCompactBtn" onclick="toggleHmCompact()" style="font-size:0.8rem;padding:8px 14px;">⊟ Compact</button>
             <button class="btn" onclick="showAddStock()" style="font-size:0.8rem;padding:8px 14px;">+ Aandeel</button>
         </div>
+    </div>
+
+    <!-- Tabs: Alle / Aandelen & ETFs / Crypto -->
+    <div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;">
+        <button class="hm-tab-btn hm-sort-btn active" onclick="setHmTab('all',this)">Alle</button>
+        <button class="hm-tab-btn hm-sort-btn" onclick="setHmTab('stock',this)">Aandelen & ETFs</button>
+        <button class="hm-tab-btn hm-sort-btn" onclick="setHmTab('etf',this)">ETFs</button>
     </div>
 
     <!-- Sorteer opties -->
@@ -1014,7 +1116,7 @@
         <span style="font-size:0.72rem;color:var(--text-muted);font-weight:700;">SORTEER:</span>
         <button class="hm-sort-btn active" onclick="setHmSort('pct',this)">Dag %</button>
         <button class="hm-sort-btn" onclick="setHmSort('name',this)">Naam</button>
-        <button class="hm-sort-btn" onclick="setHmSort('value',this)">Marktwaarde</button>
+        <button class="hm-sort-btn" onclick="setHmSort('value',this)">Koers</button>
         <span style="font-size:0.72rem;color:var(--text-muted);margin-left:8px;" id="hmLastUpdate"></span>
     </div>
 
@@ -1036,9 +1138,9 @@
 
 <!-- KALENDER PAGINA -->
 <div id="kalender-page" class="tab-content">
-    <div class="header" style="margin-bottom:16px;">
+    <div class="header" style="margin-bottom:8px;">
         <div class="header-titles"><h1>KALENDER</h1></div>
-        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+        <div class="kal-month-picker">
             <button class="btn" onclick="kalenderPrevMonth()" style="padding:8px 12px;">◀</button>
             <span id="kalMonthLabel" style="font-weight:800;font-size:1rem;min-width:140px;text-align:center;"></span>
             <button class="btn" onclick="kalenderNextMonth()" style="padding:8px 12px;">▶</button>
@@ -1399,6 +1501,8 @@ function toggleWidget(containerId, isChecked) {
         document.querySelectorAll('.data-tab-btn').forEach(button => button.classList.remove('active'));
         document.getElementById(tabId).classList.add('active');
         btn.classList.add('active');
+        if (tabId === 'aandelen-data-tab') renderAandelenData();
+        if (tabId === 'crypto-data-tab')   renderCryptoData();
     }
     Chart.register(ChartDataLabels);
     
@@ -1420,6 +1524,7 @@ function toggleWidget(containerId, isChecked) {
         { date: '21/04/2026', degiro: 57093, bolero: 22844, saxo: 33539 },
         { date: '22/04/2026', degiro: 59130, bolero: 23300, saxo: 35327 },
         { date: '23/04/2026', degiro: 59420, bolero: 23009, saxo: 36065 },
+        { date: '24/04/2026', degiro: 59205, bolero: 23844, saxo: 35864 },
 
     ];
     
@@ -1894,13 +1999,14 @@ function renderWeeklyReturns() {
         options: {
             ...mainChartOpt,
             scales: {
-                x: mainChartOpt.scales?.x || {
+                x: {
                     ticks: {
                         callback: function(val, index) {
                             const total = this.chart.data.labels.length;
                             return (index === 0 || index === total - 1) ? this.getLabelForValue(val) : '';
                         },
-                        autoSkip: false, maxRotation: 0
+                        autoSkip: false,
+                        maxRotation: 0
                     }
                 },
                 y: {
@@ -2502,10 +2608,9 @@ function renderWeeklyReturns() {
     let _fxCache = null, _fxCacheTime = 0;
     async function fxRate(from, to) {
         try {
-            // Cache 5 min
             if (_fxCache && _fxCache.base === from && Date.now() - _fxCacheTime < 300000) {
                 const rate = _fxCache.rates[to];
-                return rate ? { price: rate, pct: 0, time: new Date(_fxCacheTime) } : null;
+                return rate ? { price: rate, pct: 0, prevRate: null, time: new Date(_fxCacheTime) } : null;
             }
             const r = await fetch(`https://open.er-api.com/v6/latest/${from}`);
             if (!r.ok) throw new Error(r.status);
@@ -2513,18 +2618,17 @@ function renderWeeklyReturns() {
             _fxCache = data; _fxCacheTime = Date.now();
             const rate = data.rates[to];
             if (!rate) return null;
-            // Dagverandering via frankfurter (kan falen, dan pct=0)
-            let pct = 0;
+            let pct = 0, prevRate = null;
             try {
                 const prev = new Date(); prev.setDate(prev.getDate() - 1);
                 while (prev.getDay() === 0 || prev.getDay() === 6) prev.setDate(prev.getDate() - 1);
                 const prevStr = prev.toISOString().split('T')[0];
                 const r2 = await fetch(`https://api.frankfurter.app/${prevStr}?from=${from}&to=${to}`);
                 const d2 = await r2.json();
-                const prevRate = d2.rates?.[to];
+                prevRate = d2.rates?.[to] ?? null;
                 if (prevRate) pct = ((rate - prevRate) / prevRate) * 100;
             } catch {}
-            return { price: rate, pct, time: new Date() };
+            return { price: rate, pct, prevRate, time: new Date() };
         } catch { return null; }
     }
 
@@ -2576,11 +2680,12 @@ function renderWeeklyReturns() {
     }
     function rowFx(label, sub, d) {
         if (!d) return errRow(label, sub, 3);
+        const prevStr = d.prevRate != null ? fmtNum(d.prevRate, 4) : '–';
         return `<tr>
             <td><strong>${label}</strong><span class="markt-name-sub">${sub}</span></td>
             <td><strong>${fmtNum(d.price, 4)}</strong></td>
             <td>${pctSpan(d.pct)}</td>
-            <td class="col-hide" style="color:var(--text-muted);font-size:0.72rem;">${fmtTime(d.time)}</td>
+            <td class="col-hide" style="color:var(--text-muted);font-size:0.82rem;">${prevStr}</td>
         </tr>`;
     }
     function rowQuote(label, sub, d, unit = '') {
@@ -2622,9 +2727,12 @@ function renderWeeklyReturns() {
         setLoading('mb-cry', 6);
 
         // ── VIX + Fear & Greed (parallel) ────────────────────────────────────
-        const [vixData, fgRaw] = await Promise.all([
+        const [vixData, fgRaw, fgStockRaw] = await Promise.all([
             yhQuote('%5EVIX'),
-            fetch('https://api.alternative.me/fng/?limit=2').then(r=>r.json()).catch(()=>null)
+            fetch('https://api.alternative.me/fng/?limit=2').then(r=>r.json()).catch(()=>null),
+            // CNN Fear & Greed via corsproxy (public scrape)
+            fetch(`https://corsproxy.io/?url=${encodeURIComponent('https://production.dataviz.cnn.io/index/fearandgreed/graphdata')}`)
+                .then(r=>r.json()).catch(()=>null)
         ]);
         if (vixData) {
             const v = vixData.price;
@@ -2647,15 +2755,29 @@ function renderWeeklyReturns() {
             const fg = fgRaw.data[0];
             const val = parseInt(fg.value);
             const col = val<=25?'#e74c3c':val<=45?'#e67e22':val<=55?'#f1c40f':val<=75?'#2ecc71':'#27ae60';
-            const em  = val<=25?'😱':val<=45?'😨':val<=55?'😐':val<=75?'😊':'🤑';
-            const fgV=document.getElementById('fgValue'); if(fgV) fgV.textContent=val;
+            const fgV=document.getElementById('fgValue'); if(fgV){fgV.textContent=val;fgV.style.color=col;}
             const fgC=document.getElementById('fgClassification'); if(fgC){fgC.textContent=fg.value_classification;fgC.style.color=col;}
-            const fgE=document.getElementById('fgEmoji'); if(fgE) fgE.textContent=em;
             const fgN=document.getElementById('fgNeedle'); if(fgN) fgN.style.left=val+'%';
             if (fgRaw.data[1]) {
                 const prev=parseInt(fgRaw.data[1].value), diff=val-prev;
                 const fgY=document.getElementById('fgYesterday');
                 if(fgY) fgY.textContent=`Gisteren: ${prev} (${diff>=0?'+':''}${diff})`;
+            }
+        }
+
+        // CNN Stock Fear & Greed
+        if (fgStockRaw?.fear_and_greed) {
+            const fg = fgStockRaw.fear_and_greed;
+            const val = Math.round(fg.score);
+            const col = val<=25?'#e74c3c':val<=45?'#e67e22':val<=55?'#f1c40f':val<=75?'#2ecc71':'#27ae60';
+            const cls = val<=25?'Extreme Fear':val<=45?'Fear':val<=55?'Neutral':val<=75?'Greed':'Extreme Greed';
+            const fgSV=document.getElementById('fgStockValue'); if(fgSV){fgSV.textContent=val;fgSV.style.color=col;}
+            const fgSC=document.getElementById('fgStockClass'); if(fgSC){fgSC.textContent=cls;fgSC.style.color=col;}
+            const fgSN=document.getElementById('fgStockNeedle'); if(fgSN) fgSN.style.left=val+'%';
+            if (fg.previous_close) {
+                const prev=Math.round(fg.previous_close), diff=val-prev;
+                const fgSP=document.getElementById('fgStockPrev');
+                if(fgSP) fgSP.textContent=`Gisteren: ${prev} (${diff>=0?'+':''}${diff})`;
             }
         }
 
@@ -2833,35 +2955,132 @@ function renderWeeklyReturns() {
         charts.main.update();
     }
 
+    // ── DATA PAGINA: AANDELEN & CRYPTO TABS ─────────────────────────────────
+    function renderAandelenData() {
+        const body = document.getElementById('aandelenDataBody');
+        if (!body) return;
+        const stocks = hmStocks.filter(s => s.type !== 'crypto');
+        body.innerHTML = stocks.length === 0
+            ? `<tr><td colspan="4" style="padding:16px;color:var(--text-muted);text-align:center;">Geen aandelen. Voeg er toe via + Toevoegen.</td></tr>`
+            : stocks.map(s => `<tr style="border-bottom:1px solid var(--border-color);">
+                <td style="padding:8px 6px;font-weight:700;">${s.ticker}</td>
+                <td style="padding:8px 6px;">${s.name}</td>
+                <td style="padding:8px 6px;text-align:right;color:var(--text-muted);font-size:0.8rem;">${s.type?.toUpperCase()||'STOCK'}</td>
+                <td style="padding:8px 6px;text-align:right;">
+                    <button onclick="removeHmStockData('${s.ticker}')" style="background:none;border:none;color:var(--danger);cursor:pointer;font-size:0.85rem;font-weight:700;">✕</button>
+                </td>
+            </tr>`).join('');
+    }
+
+    function renderCryptoData() {
+        const body = document.getElementById('cryptoDataBody');
+        if (!body) return;
+        const cryptos = hmStocks.filter(s => s.type === 'crypto');
+        body.innerHTML = cryptos.length === 0
+            ? `<tr><td colspan="3" style="padding:16px;color:var(--text-muted);text-align:center;">Geen crypto. Voeg toe via + Toevoegen.</td></tr>`
+            : cryptos.map(s => `<tr style="border-bottom:1px solid var(--border-color);">
+                <td style="padding:8px 6px;font-weight:700;">${s.ticker}</td>
+                <td style="padding:8px 6px;">${s.name}</td>
+                <td style="padding:8px 6px;text-align:right;">
+                    <button onclick="removeHmStockData('${s.ticker}')" style="background:none;border:none;color:var(--danger);cursor:pointer;font-size:0.85rem;font-weight:700;">✕</button>
+                </td>
+            </tr>`).join('');
+    }
+
+    let _addSdMode = 'stock';
+    function showAddStockData(mode) {
+        _addSdMode = mode;
+        document.getElementById('addStockDataTitle').textContent = mode === 'crypto' ? 'Crypto toevoegen' : 'Aandeel / ETF toevoegen';
+        document.getElementById('addSdType').value = mode;
+        document.getElementById('addSdTicker').value = '';
+        document.getElementById('addSdName').value = '';
+        document.getElementById('addStockDataModal').style.display = 'flex';
+        document.getElementById('addSdTicker').focus();
+    }
+    function hideAddStockData() {
+        document.getElementById('addStockDataModal').style.display = 'none';
+    }
+    async function confirmAddStockData() {
+        const ticker = document.getElementById('addSdTicker').value.trim().toUpperCase();
+        const name   = document.getElementById('addSdName').value.trim() || ticker;
+        const type   = document.getElementById('addSdType').value;
+        if (!ticker) return;
+        if (hmStocks.find(s => s.ticker === ticker)) { alert(`${ticker} staat al in de lijst.`); return; }
+        hmStocks.push({ ticker, name, type });
+        saveHmStocks();
+        hideAddStockData();
+        renderAandelenData();
+        renderCryptoData();
+        renderHmGrid();
+        // Fetch quote
+        const d = await yhQuote(ticker);
+        if (d) { hmData[ticker] = d; renderHmGrid(); }
+    }
+    function removeHmStockData(ticker) {
+        if (!confirm(`${ticker} verwijderen?`)) return;
+        hmStocks = hmStocks.filter(s => s.ticker !== ticker);
+        delete hmData[ticker];
+        saveHmStocks();
+        renderAandelenData();
+        renderCryptoData();
+        renderHmGrid();
+    }
+
     // ── HEATMAP PAGINA ──────────────────────────────────────────────────────
     const DEFAULT_STOCKS = [
-        {ticker:'NVDA',  name:'NVIDIA'},       {ticker:'PYPL',  name:'PayPal'},
-        {ticker:'BMNR',  name:'Bitmine'},       {ticker:'ABCL',  name:'AbCellera'},
-        {ticker:'AMZN',  name:'Amazon'},        {ticker:'APLD',  name:'Applied Digital'},
-        {ticker:'ACHR',  name:'Archer Aviation'},{ticker:'CRCL', name:'Circle'},
-        {ticker:'CRWV',  name:'CoreWeave'},     {ticker:'CRDO',  name:'Credo'},
-        {ticker:'IONQ',  name:'IonQ'},          {ticker:'KEEL',  name:'Keel'},
-        {ticker:'LMND',  name:'Lemonade'},      {ticker:'MRLN',  name:'Merlin'},
-        {ticker:'MSFT',  name:'Microsoft'},     {ticker:'OUST',  name:'Ouster'},
-        {ticker:'RR',    name:'Richtech'},      {ticker:'SBET',  name:'SharpLink'},
-        {ticker:'SOI.PA',name:'Soitec'},        {ticker:'TOYO',  name:'Toyo'},
-        {ticker:'UBER',  name:'Uber'},          {ticker:'UAMY',  name:'US Antimony'},
-        {ticker:'2B76.L',name:'iSh. Automation'},{ticker:'DAPP', name:'VanEck Crypto'},
-        {ticker:'REMX',  name:'VanEck Rare Earth'},{ticker:'SMH', name:'VanEck Semi'},
-        {ticker:'3HCL',  name:'WT Copper'},     {ticker:'MIGI',  name:'Mawson'},
-        {ticker:'QBTS',  name:'D-Wave'},        {ticker:'IREN',  name:'IREN'},
-        {ticker:'JD',    name:'JD.com'},        {ticker:'CIFR',  name:'Cipher Digital'},
-        {ticker:'CLSK',  name:'CleanSpark'},    {ticker:'BKKT',  name:'Bakkt'},
-        {ticker:'SOFI',  name:'SoFi'},          {ticker:'GOOGL', name:'Alphabet'},
-        {ticker:'AMD',   name:'AMD'},           {ticker:'SYM',   name:'Symbotic'},
-        {ticker:'RXRX',  name:'Recursion'},     {ticker:'ABAT',  name:'Am. Battery'},
-        {ticker:'XPEV',  name:'XPeng'},         {ticker:'CRM',   name:'Salesforce'},
-        {ticker:'ZENA',  name:'Zenatech'},      {ticker:'SGLD',  name:'Inv. Gold'},
+        {ticker:'NVDA',   name:'NVIDIA',            type:'stock'},
+        {ticker:'PYPL',   name:'PayPal',             type:'stock'},
+        {ticker:'BMNR',   name:'Bitmine',            type:'stock'},
+        {ticker:'ABCL',   name:'AbCellera',          type:'stock'},
+        {ticker:'AMZN',   name:'Amazon',             type:'stock'},
+        {ticker:'APLD',   name:'Applied Digital',    type:'stock'},
+        {ticker:'ACHR',   name:'Archer Aviation',    type:'stock'},
+        {ticker:'CRCL',   name:'Circle',             type:'stock'},
+        {ticker:'CRWV',   name:'CoreWeave',          type:'stock'},
+        {ticker:'CRDO',   name:'Credo',              type:'stock'},
+        {ticker:'IONQ',   name:'IonQ',               type:'stock'},
+        {ticker:'KEEL',   name:'Keel',               type:'stock'},
+        {ticker:'LMND',   name:'Lemonade',           type:'stock'},
+        {ticker:'MRLN',   name:'Merlin',             type:'stock'},
+        {ticker:'MSFT',   name:'Microsoft',          type:'stock'},
+        {ticker:'OUST',   name:'Ouster',             type:'stock'},
+        {ticker:'RR',     name:'Richtech',           type:'stock'},
+        {ticker:'SBET',   name:'SharpLink',          type:'stock'},
+        {ticker:'SOI.PA', name:'Soitec',             type:'stock'},
+        {ticker:'TOYO',   name:'Toyo',               type:'stock'},
+        {ticker:'UBER',   name:'Uber',               type:'stock'},
+        {ticker:'UAMY',   name:'US Antimony',        type:'stock'},
+        {ticker:'2B76.L', name:'iSh. Automation',   type:'etf'},
+        {ticker:'DAPP',   name:'VanEck Crypto',      type:'etf'},
+        {ticker:'REMX',   name:'VanEck Rare Earth',  type:'etf'},
+        {ticker:'SMH',    name:'VanEck Semi',        type:'etf'},
+        {ticker:'3HCL',   name:'WT Copper',          type:'etf'},
+        {ticker:'SGLD',   name:'Inv. Gold',          type:'etf'},
+        {ticker:'MIGI',   name:'Mawson',             type:'stock'},
+        {ticker:'QBTS',   name:'D-Wave',             type:'stock'},
+        {ticker:'IREN',   name:'IREN',               type:'stock'},
+        {ticker:'JD',     name:'JD.com',             type:'stock'},
+        {ticker:'CIFR',   name:'Cipher Digital',     type:'stock'},
+        {ticker:'CLSK',   name:'CleanSpark',         type:'stock'},
+        {ticker:'BKKT',   name:'Bakkt',              type:'stock'},
+        {ticker:'SOFI',   name:'SoFi',               type:'stock'},
+        {ticker:'GOOGL',  name:'Alphabet',           type:'stock'},
+        {ticker:'AMD',    name:'AMD',                type:'stock'},
+        {ticker:'SYM',    name:'Symbotic',           type:'stock'},
+        {ticker:'RXRX',   name:'Recursion',          type:'stock'},
+        {ticker:'ABAT',   name:'Am. Battery',        type:'stock'},
+        {ticker:'XPEV',   name:'XPeng',              type:'stock'},
+        {ticker:'CRM',    name:'Salesforce',         type:'stock'},
+        {ticker:'ZENA',   name:'Zenatech',           type:'stock'},
     ];
 
     let hmStocks = JSON.parse(localStorage.getItem('hm_stocks') || 'null') || DEFAULT_STOCKS;
-    let hmSortMode = 'pct';
-    let hmData = {}; // ticker -> quote data
+    // Zorg dat bestaande entries altijd een type hebben
+    hmStocks = hmStocks.map(s => ({ type: 'stock', ...s }));
+    let hmSortMode  = 'pct';
+    let hmTabMode   = 'all';   // 'all' | 'stock' | 'etf'
+    let hmCompact   = false;
+    let hmData = {};
     let hmInitialized = false;
 
     function saveHmStocks() { localStorage.setItem('hm_stocks', JSON.stringify(hmStocks)); }
@@ -2890,7 +3109,14 @@ function renderWeeklyReturns() {
         const grid = document.getElementById('hmGrid');
         if (!grid) return;
 
-        let stocks = [...hmStocks];
+        // Filter op tab
+        let stocks = hmStocks.filter(s => {
+            if (hmTabMode === 'all') return true;
+            if (hmTabMode === 'etf') return s.type === 'etf';
+            return s.type === 'stock' || !s.type;
+        });
+
+        // Sorteer
         if (hmSortMode === 'pct') {
             stocks.sort((a, b) => {
                 const pa = hmData[a.ticker]?.pct ?? -999;
@@ -2907,31 +3133,67 @@ function renderWeeklyReturns() {
             });
         }
 
-        grid.innerHTML = stocks.map(s => {
-            const d = hmData[s.ticker];
-            const isLoading = !d;
-            const pct = d?.pct ?? null;
-            const { bg, text } = pctColor(pct);
-            const sign = pct !== null && pct >= 0 ? '+' : '';
-            const pctStr = pct !== null ? `${sign}${pct.toFixed(2)}%` : '–';
-            const priceStr = d?.price != null ? `$${d.price.toLocaleString('nl-NL', {minimumFractionDigits:2,maximumFractionDigits:2})}` : '';
-            return `<div class="hm-cell ${isLoading?'loading':''}" style="background:${bg};color:${text};" data-ticker="${s.ticker}">
-                <span class="hm-del" onclick="removeHmStock('${s.ticker}',event)">✕</span>
-                <div>
-                    <div class="hm-ticker">${s.ticker}</div>
-                    <div class="hm-name" style="color:${text};">${s.name}</div>
-                </div>
-                <div>
-                    <div class="hm-pct">${pctStr}</div>
-                    <div class="hm-price" style="color:${text};">${priceStr}</div>
-                </div>
-            </div>`;
-        }).join('');
+        if (hmCompact) {
+            // Compact view: kleine vakjes met alleen ticker
+            grid.style.gridTemplateColumns = 'repeat(auto-fill,minmax(62px,1fr))';
+            grid.innerHTML = stocks.map(s => {
+                const d = hmData[s.ticker];
+                const pct = d?.pct ?? null;
+                const { bg, text } = pctColor(pct);
+                const sign = pct !== null && pct >= 0 ? '+' : '';
+                const pctStr = pct !== null ? `${sign}${pct.toFixed(1)}%` : '–';
+                const isLoading = !d;
+                return `<div class="hm-cell-compact ${isLoading?'loading':''}" style="background:${isLoading?'var(--row-hover)':bg};color:${isLoading?'var(--text-muted)':text};" title="${s.name}: ${pctStr}" onclick="void(0)">
+                    <div style="font-size:0.62rem;font-weight:800;letter-spacing:0.02em;">${s.ticker}</div>
+                    <div style="font-size:0.65rem;font-weight:700;margin-top:1px;">${pctStr}</div>
+                </div>`;
+            }).join('');
+        } else {
+            // Normale view
+            grid.style.gridTemplateColumns = 'repeat(auto-fill,minmax(120px,1fr))';
+            grid.innerHTML = stocks.map(s => {
+                const d = hmData[s.ticker];
+                const isLoading = !d;
+                const pct = d?.pct ?? null;
+                const { bg, text } = pctColor(pct);
+                const sign = pct !== null && pct >= 0 ? '+' : '';
+                const pctStr = pct !== null ? `${sign}${pct.toFixed(2)}%` : '–';
+                const priceStr = d?.price != null ? `$${d.price.toLocaleString('nl-NL', {minimumFractionDigits:2,maximumFractionDigits:2})}` : '';
+                // Gebruik var(--row-hover) voor loading zodat het nooit transparant/kleurloos is
+                const cellBg   = isLoading ? 'var(--row-hover)' : bg;
+                const cellText = isLoading ? 'var(--text-muted)' : text;
+                return `<div class="hm-cell ${isLoading?'loading':''}" style="background:${cellBg};color:${cellText};" data-ticker="${s.ticker}">
+                    <span class="hm-del" onclick="removeHmStock('${s.ticker}',event)">✕</span>
+                    <div>
+                        <div class="hm-ticker">${s.ticker}</div>
+                        <div class="hm-name" style="color:${cellText};">${s.name}</div>
+                    </div>
+                    <div>
+                        <div class="hm-pct">${pctStr}</div>
+                        <div class="hm-price" style="color:${cellText};">${priceStr}</div>
+                    </div>
+                </div>`;
+            }).join('');
+        }
 
         const lu = document.getElementById('hmLastUpdate');
         if (lu && Object.keys(hmData).length > 0) {
             lu.textContent = 'Bijgewerkt: ' + new Date().toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit'});
         }
+    }
+
+    function setHmTab(mode, btn) {
+        hmTabMode = mode;
+        document.querySelectorAll('.hm-tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderHmGrid();
+    }
+
+    function toggleHmCompact() {
+        hmCompact = !hmCompact;
+        const btn = document.getElementById('hmCompactBtn');
+        if (btn) btn.textContent = hmCompact ? '⊞ Normaal' : '⊟ Compact';
+        renderHmGrid();
     }
 
     async function fetchHmQuotes() {
