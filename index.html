@@ -25,7 +25,6 @@
             --success: #2ecc71;
         }
 
-```
     [data-theme="dark"] {
         --bg-color: #0b0e11;
         --card-bg: #15191c;
@@ -35,7 +34,6 @@
         --border-color: #2f3336;
         --row-hover: #1c2125;
     }
-```
 
 #data-page h2 {
 margin-top: 0;
@@ -83,14 +81,12 @@ padding-top: 10px; /* Zorgt dat de inhoud direct onder de nav-balk begint */
 .tab-content { display: none; }
 .tab-content.active { display: block; }
 
-```
     .header {
 display: flex;
 justify-content: space-between; /* Portfolio links, Datum rechts */
 align-items: baseline; /* Lijnt de onderkant van de tekst perfect uit */
 margin-bottom: 25px; /* Ruimte onder de titel voordat de kaarten beginnen */
 margin-top: 0;
-```
 
 }
 
@@ -194,7 +190,6 @@ top: 0; left: 0; width: 6px; height: 100%;
 .card-bolero::before { background: var(–bolero); }
 .card-saxo::before { background: var(–saxo); }
 
-```
     .card h3 { margin: 0; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.5px; }
     .card .value { font-size: 1.7rem; font-weight: 800; margin: 0.5rem 0; }
     
@@ -254,7 +249,6 @@ top: 0; left: 0; width: 6px; height: 100%;
         .span-2 { grid-column: span 1; }
         .span-3 { grid-column: span 1; }
     }
-```
 
 /* Zorgt dat euro en percentage onder elkaar staan en rechts uitlijnen */
 .info-values {
@@ -277,7 +271,6 @@ grid-template-columns: 1fr !important;
 gap: 1rem;
 }
 
-```
     /* Zorgt dat labels en waardes op één lijn staan */
     .info-line {
         display: flex !important;
@@ -504,7 +497,7 @@ gap: 1rem;
         color: var(--text-main);
     }
     /* Styling voor het widget menu */
-```
+
 
 .widget-option {
 display: flex;
@@ -562,9 +555,9 @@ margin-top: 2px;
 }
 }
 
-```
+
 </style>
-```
+
 
 </head>
 
@@ -591,7 +584,7 @@ margin-top: 2px;
 
 <div class="container">
 
-```
+
 <div id="dashboard" class="tab-content active">
     <div class="header">
         <div class="header-titles">
@@ -628,11 +621,11 @@ margin-top: 2px;
             <span id="cagrDegiro" class="cagr-badge">--</span>
     </div>
 </div>
-```
+
 
 </div>
 
-```
+
         <div class="card card-bolero">
             <span id="athBolero" class="ath-badge">🏆 ATH</span>
             <h3>Bolero</h3>
@@ -645,11 +638,11 @@ margin-top: 2px;
         <span id="cagrBolero" class="cagr-badge">--</span>
     </div>
 </div>
-```
+
 
 </div>
 
-```
+
         <div class="card card-saxo">
             <span id="athSaxo" class="ath-badge">🏆 ATH</span>
             <h3>Saxo</h3>
@@ -761,7 +754,7 @@ margin-top: 2px;
         </table>
     </div>
 </div>
-```
+
 
 </div>
     </div>
@@ -770,7 +763,7 @@ margin-top: 2px;
     <div class="header data-header-actions">
         <h1>DATA</h1>
 
-```
+
     <div class="header-btns">
         <button class="btn btn-icloud" onclick="exportMasterJSON()">Backup naar iCloud</button>
         <button class="btn" onclick="document.getElementById('importJSON').click()">Upload Backup</button>
@@ -822,7 +815,7 @@ margin-top: 2px;
         </div>
     </div>
 </div>
-```
+
 
 </div> <div id="aandelen-page" class="tab-content">
     <div class="header" style="margin-bottom:16px;">
@@ -833,7 +826,7 @@ margin-top: 2px;
         </div>
     </div>
 
-```
+
 <!-- Rij 1: VIX + Fear & Greed -->
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:1.5rem;">
     <div class="card markt-section">
@@ -904,7 +897,7 @@ margin-top: 2px;
         <tbody id="mb-cry"></tbody></table>
     </div>
 </div>
-```
+
 
 </div>
 
@@ -919,7 +912,7 @@ margin-top: 2px;
         </div>
     </div>
 
-```
+
 <!-- Sorteer opties -->
 <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;align-items:center;">
     <span style="font-size:0.72rem;color:var(--text-muted);font-weight:700;">SORTEER:</span>
@@ -943,11 +936,11 @@ margin-top: 2px;
 </div>
 
 <div id="hmGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;"></div>
-```
+
 
 </div>
 
-```
+
 <style>
     /* Verwijder de pijltjes (spinners) voor alle browsers */
     input::-webkit-outer-spin-button,
@@ -984,7 +977,7 @@ margin-top: 2px;
         outline: none;
         padding: 0;
     }
-```
+
 
 /* De Badge */
 .cagr-badge {
@@ -1041,9 +1034,9 @@ display: block;
 }
 }
 
-```
+
 </style>
-```
+
 
 <script>
 
@@ -2849,7 +2842,7 @@ function renderWeeklyReturns() {
 <div id="widgetMenu" class="card" style="display:none; position:fixed; top:70px; right:20px; z-index:1001; width:220px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); padding: 20px;">
     <h3 style="margin-bottom:15px; font-size: 0.9rem;">DASHBOARD LAYOUT</h3>
 
-```
+
 <div class="widget-option">
     <input type="checkbox" id="checkGrowth" checked onchange="toggleWidget('growthChartContainer', this.checked)">
     <label for="checkGrowth">TOTAAL</label>
@@ -2901,7 +2894,7 @@ function renderWeeklyReturns() {
 </div>
 
 <button class="btn btn-main" style="width:100%; margin-top:15px; justify-content: center;" onclick="toggleWidgetMenu()">Klaar</button>
-```
+
 
 </div>
 </body>
