@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio v22</title>
+    <title>Portfolio v23</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
     <style>
@@ -316,6 +316,47 @@
             touch-action: manipulation;
             -webkit-tap-highlight-color: rgba(0,0,0,0);
         }
+
+        /* Tijdsfilter knoppen */
+        .time-filter-btns { display: flex; gap: 4px; }
+        .time-btn {
+            padding: 4px 10px !important;
+            font-size: 0.72rem !important;
+            border-radius: 6px !important;
+            font-weight: 700 !important;
+            opacity: 0.55;
+        }
+        .time-btn.active-time {
+            opacity: 1;
+            background: var(--text-main) !important;
+            color: var(--bg-color) !important;
+            border-color: var(--text-main) !important;
+        }
+
+        /* Drag-to-reorder widget items */
+        .widget-drag-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+            cursor: grab;
+            padding: 6px 8px;
+            border-radius: 8px;
+            border: 1px solid transparent;
+            transition: background 0.15s, border-color 0.15s;
+            user-select: none;
+        }
+        .widget-drag-item:hover { background: var(--row-hover); }
+        .widget-drag-item.drag-over { border-color: var(--bolero); background: var(--row-hover); }
+        .widget-drag-item.dragging { opacity: 0.4; }
+        .drag-handle { color: var(--text-muted); font-size: 0.9rem; cursor: grab; flex-shrink: 0; }
+        .widget-arrow-btns { display: flex; flex-direction: column; gap: 1px; margin-left: auto; }
+        .widget-arrow-btn {
+            background: none; border: none; color: var(--text-muted);
+            cursor: pointer; font-size: 0.7rem; padding: 1px 4px;
+            border-radius: 4px; line-height: 1;
+        }
+        .widget-arrow-btn:hover { background: var(--row-hover); color: var(--text-main); }
         #statsTable tr:hover td { background: var(--row-hover); }
         #statsTable td, #statsTable th { border: none; }
 
@@ -790,23 +831,35 @@
     <div id="growthChartContainer" class="card chart-box span-3">
         <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:4px;">
             <h3>TOTAAL</h3>
-            <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;" id="benchmarkToggles">
-                <label class="bench-toggle" style="--c:#e67e22;">
-                    <input type="checkbox" id="benchSP" onchange="updateBenchmarks()">
-                    <span class="bench-dot"></span> S&amp;P 500
-                </label>
-                <label class="bench-toggle" style="--c:#8e44ad;">
-                    <input type="checkbox" id="benchMSCI" onchange="updateBenchmarks()">
-                    <span class="bench-dot"></span> MSCI World
-                </label>
-                <label class="bench-toggle" style="--c:#16a085;">
-                    <input type="checkbox" id="benchNASDAQ" onchange="updateBenchmarks()">
-                    <span class="bench-dot"></span> Nasdaq 100
-                </label>
-                <label class="bench-toggle" style="--c:#c0392b;">
-                    <input type="checkbox" id="benchBTC" onchange="updateBenchmarks()">
-                    <span class="bench-dot"></span> Bitcoin
-                </label>
+            <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+                <div class="time-filter-btns" data-chart="main">
+                    <button class="btn time-btn" onclick="setTimeFilter('main','1w',this)">1W</button>
+                    <button class="btn time-btn" onclick="setTimeFilter('main','1m',this)">1M</button>
+                    <button class="btn time-btn" onclick="setTimeFilter('main','ytd',this)">YTD</button>
+                    <button class="btn time-btn active-time" onclick="setTimeFilter('main','all',this)">Alles</button>
+                </div>
+                <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;" id="benchmarkToggles">
+                    <label class="bench-toggle" style="--c:#e67e22;">
+                        <input type="checkbox" id="benchSP" onchange="updateBenchmarks()">
+                        <span class="bench-dot"></span> S&amp;P 500
+                    </label>
+                    <label class="bench-toggle" style="--c:#8e44ad;">
+                        <input type="checkbox" id="benchMSCI" onchange="updateBenchmarks()">
+                        <span class="bench-dot"></span> MSCI World
+                    </label>
+                    <label class="bench-toggle" style="--c:#16a085;">
+                        <input type="checkbox" id="benchNASDAQ" onchange="updateBenchmarks()">
+                        <span class="bench-dot"></span> Nasdaq 100
+                    </label>
+                    <label class="bench-toggle" style="--c:#c0392b;">
+                        <input type="checkbox" id="benchBTC" onchange="updateBenchmarks()">
+                        <span class="bench-dot"></span> Bitcoin
+                    </label>
+                    <label class="bench-toggle" style="--c:#2980b9;">
+                        <input type="checkbox" id="benchBEL20" onchange="updateBenchmarks()">
+                        <span class="bench-dot"></span> BEL 20
+                    </label>
+                </div>
             </div>
         </div>
         <div class="chart-wrapper"><canvas id="growthChart"></canvas></div>
@@ -829,10 +882,43 @@
         </table>
     </div>
 
-    <!-- Rij 3: Individuele broker grafieken -->
-    <div id="degiroChartContainer" class="card chart-box"><h3>DEGIRO</h3><div class="chart-wrapper"><canvas id="chartDegiro"></canvas></div></div>
-    <div id="boleroChartContainer" class="card chart-box"><h3>BOLERO</h3><div class="chart-wrapper"><canvas id="chartBolero"></canvas></div></div>
-    <div id="saxoChartContainer" class="card chart-box"><h3>SAXO</h3><div class="chart-wrapper"><canvas id="chartSaxo"></canvas></div></div>
+    <!-- Rij 3: Individuele broker grafieken (nu ook full width) -->
+    <div id="degiroChartContainer" class="card chart-box span-3">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:4px;">
+            <h3>DEGIRO</h3>
+            <div class="time-filter-btns" data-chart="degiro">
+                <button class="btn time-btn" onclick="setTimeFilter('degiro','1w',this)">1W</button>
+                <button class="btn time-btn" onclick="setTimeFilter('degiro','1m',this)">1M</button>
+                <button class="btn time-btn" onclick="setTimeFilter('degiro','ytd',this)">YTD</button>
+                <button class="btn time-btn active-time" onclick="setTimeFilter('degiro','all',this)">Alles</button>
+            </div>
+        </div>
+        <div class="chart-wrapper"><canvas id="chartDegiro"></canvas></div>
+    </div>
+    <div id="boleroChartContainer" class="card chart-box span-3">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:4px;">
+            <h3>BOLERO</h3>
+            <div class="time-filter-btns" data-chart="bolero">
+                <button class="btn time-btn" onclick="setTimeFilter('bolero','1w',this)">1W</button>
+                <button class="btn time-btn" onclick="setTimeFilter('bolero','1m',this)">1M</button>
+                <button class="btn time-btn" onclick="setTimeFilter('bolero','ytd',this)">YTD</button>
+                <button class="btn time-btn active-time" onclick="setTimeFilter('bolero','all',this)">Alles</button>
+            </div>
+        </div>
+        <div class="chart-wrapper"><canvas id="chartBolero"></canvas></div>
+    </div>
+    <div id="saxoChartContainer" class="card chart-box span-3">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:4px;">
+            <h3>SAXO</h3>
+            <div class="time-filter-btns" data-chart="saxo">
+                <button class="btn time-btn" onclick="setTimeFilter('saxo','1w',this)">1W</button>
+                <button class="btn time-btn" onclick="setTimeFilter('saxo','1m',this)">1M</button>
+                <button class="btn time-btn" onclick="setTimeFilter('saxo','ytd',this)">YTD</button>
+                <button class="btn time-btn active-time" onclick="setTimeFilter('saxo','all',this)">Alles</button>
+            </div>
+        </div>
+        <div class="chart-wrapper"><canvas id="chartSaxo"></canvas></div>
+    </div>
 
     <!-- Rij 4: Dagrendement, volle breedte -->
     <div id="dailyReturnChartContainer" class="card chart-box span-3">
@@ -883,7 +969,7 @@
     </div>
 
     <!-- Weekoverzicht tabel -->
-    <div id="weekoverzichtContainer" class="card span-3">
+    <div id="weekoverzichtContainer" class="card span-2">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px;">
             <h3 style="margin:0;">WEEKOVERZICHT</h3>
             <div style="display:flex;gap:8px;align-items:center;">
@@ -1439,14 +1525,183 @@ function renderWeeklyReturns() {
 // Opent en sluit het menuutje
 function toggleWidgetMenu() {
     const menu = document.getElementById('widgetMenu');
-    menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+    const isOpen = menu.style.display !== 'none';
+    if (!isOpen) renderWidgetSortList();
+    menu.style.display = isOpen ? 'none' : 'block';
 }
 
-// Verbergt of toont de specifieke widget
+// Widget order management
+const WIDGET_DEFS = [
+    { id: 'growthChartContainer',      label: 'TOTAAL' },
+    { id: 'pieChartContainer',         label: 'VERDELING' },
+    { id: 'statsBlockContainer',       label: 'STATISTIEKEN' },
+    { id: 'degiroChartContainer',      label: 'DEGIRO' },
+    { id: 'boleroChartContainer',      label: 'BOLERO' },
+    { id: 'saxoChartContainer',        label: 'SAXO' },
+    { id: 'dailyReturnChartContainer', label: 'DAGRENDEMENT' },
+    { id: 'cumulReturnChartContainer', label: 'GECUMULEERD %' },
+    { id: 'heatmapContainer',          label: 'KALENDER' },
+    { id: 'maandoverzichtContainer',   label: 'MAANDOVERZICHT' },
+    { id: 'weekoverzichtContainer',    label: 'WEEKOVERZICHT' },
+];
+let widgetOrder   = JSON.parse(localStorage.getItem('v25_widget_order'))   || WIDGET_DEFS.map(w => w.id);
+let widgetVisible = JSON.parse(localStorage.getItem('v25_widget_visible')) || {};
+
+function saveWidgetState() {
+    localStorage.setItem('v25_widget_order',   JSON.stringify(widgetOrder));
+    localStorage.setItem('v25_widget_visible', JSON.stringify(widgetVisible));
+}
+
+function applyWidgetOrder() {
+    const grid = document.querySelector('.charts-master-grid');
+    if (!grid) return;
+    widgetOrder.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) grid.appendChild(el);
+    });
+    // Apply visibility
+    widgetOrder.forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        const visible = widgetVisible[id] !== false;
+        el.style.display = visible ? '' : 'none';
+    });
+}
+
+function renderWidgetSortList() {
+    const list = document.getElementById('widgetSortList');
+    if (!list) return;
+    list.innerHTML = '';
+    let dragSrcIdx = null;
+
+    widgetOrder.forEach((id, idx) => {
+        const def = WIDGET_DEFS.find(w => w.id === id);
+        if (!def) return;
+        const visible = widgetVisible[id] !== false;
+
+        const item = document.createElement('div');
+        item.className = 'widget-drag-item';
+        item.draggable = true;
+        item.dataset.idx = idx;
+        item.innerHTML = `
+            <span class="drag-handle">☰</span>
+            <input type="checkbox" ${visible ? 'checked' : ''} style="width:16px;height:16px;cursor:pointer;accent-color:var(--success);" data-id="${id}">
+            <span style="font-size:0.85rem;font-weight:600;flex:1;">${def.label}</span>
+            <div class="widget-arrow-btns">
+                <button class="widget-arrow-btn" data-move="-1" data-idx="${idx}" title="Omhoog">▲</button>
+                <button class="widget-arrow-btn" data-move="1"  data-idx="${idx}" title="Omlaag">▼</button>
+            </div>`;
+
+        // Checkbox toggle
+        item.querySelector('input').addEventListener('change', function() {
+            widgetVisible[this.dataset.id] = this.checked;
+            applyWidgetOrder();
+            saveWidgetState();
+        });
+
+        // Arrow buttons
+        item.querySelectorAll('.widget-arrow-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const i = parseInt(this.dataset.idx);
+                const move = parseInt(this.dataset.move);
+                const j = i + move;
+                if (j < 0 || j >= widgetOrder.length) return;
+                [widgetOrder[i], widgetOrder[j]] = [widgetOrder[j], widgetOrder[i]];
+                applyWidgetOrder();
+                saveWidgetState();
+                renderWidgetSortList();
+            });
+        });
+
+        // Drag events
+        item.addEventListener('dragstart', e => {
+            dragSrcIdx = idx;
+            e.dataTransfer.effectAllowed = 'move';
+            setTimeout(() => item.classList.add('dragging'), 0);
+        });
+        item.addEventListener('dragend', () => {
+            item.classList.remove('dragging');
+            list.querySelectorAll('.widget-drag-item').forEach(i => i.classList.remove('drag-over'));
+        });
+        item.addEventListener('dragover', e => {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+            list.querySelectorAll('.widget-drag-item').forEach(i => i.classList.remove('drag-over'));
+            item.classList.add('drag-over');
+        });
+        item.addEventListener('drop', e => {
+            e.preventDefault();
+            const toIdx = parseInt(item.dataset.idx);
+            if (dragSrcIdx === null || dragSrcIdx === toIdx) return;
+            const moved = widgetOrder.splice(dragSrcIdx, 1)[0];
+            widgetOrder.splice(toIdx, 0, moved);
+            dragSrcIdx = null;
+            applyWidgetOrder();
+            saveWidgetState();
+            renderWidgetSortList();
+        });
+
+        list.appendChild(item);
+    });
+}
+
+// Verbergt of toont de specifieke widget (legacy-compat)
 function toggleWidget(containerId, isChecked) {
-    const widget = document.getElementById(containerId);
-    if (widget) {
-        widget.style.display = isChecked ? 'block' : 'none';
+    widgetVisible[containerId] = isChecked;
+    applyWidgetOrder();
+    saveWidgetState();
+}
+
+// ── TIJDSFILTER VOOR LIJNGRAFIEKEN ──────────────────────────────────────────
+const chartTimeFilter = { main: 'all', degiro: 'all', bolero: 'all', saxo: 'all' };
+
+function setTimeFilter(chartKey, range, btn) {
+    chartTimeFilter[chartKey] = range;
+    // Update active button styling
+    const container = btn.closest('.time-filter-btns');
+    if (container) {
+        container.querySelectorAll('.time-btn').forEach(b => b.classList.remove('active-time'));
+    }
+    btn.classList.add('active-time');
+    applyTimeFilter(chartKey);
+}
+
+function getFilteredData(range) {
+    if (!brokerData || brokerData.length === 0) return brokerData;
+    const now = new Date();
+    let cutoff = null;
+    if (range === '1w') {
+        cutoff = new Date(now); cutoff.setDate(now.getDate() - 7);
+    } else if (range === '1m') {
+        cutoff = new Date(now); cutoff.setMonth(now.getMonth() - 1);
+    } else if (range === 'ytd') {
+        cutoff = new Date(now.getFullYear(), 0, 1);
+    }
+    if (!cutoff) return brokerData;
+    return brokerData.filter(d => {
+        const [dd, mm, yyyy] = d.date.split('/').map(Number);
+        return new Date(yyyy, mm - 1, dd) >= cutoff;
+    });
+}
+
+function applyTimeFilter(chartKey) {
+    const range = chartTimeFilter[chartKey];
+    const filtered = getFilteredData(range);
+    if (!filtered || filtered.length === 0) return;
+    const labels = filtered.map(d => d.date);
+
+    if (chartKey === 'main' && charts.main) {
+        charts.main.data.labels = labels;
+        charts.main.data.datasets[0].data = filtered.map(d => d.degiro + d.bolero + d.saxo);
+        charts.main.update();
+        // Benchmarks bijwerken op gefilterde data
+        const anyBenchActive = BENCHMARKS.some(b => document.getElementById(b.id)?.checked);
+        if (anyBenchActive) updateBenchmarks();
+    } else if (['degiro','bolero','saxo'].includes(chartKey) && charts[chartKey]) {
+        charts[chartKey].data.labels = labels;
+        charts[chartKey].data.datasets[0].data = filtered.map(d => d[chartKey]);
+        charts[chartKey].update();
     }
 }
 
@@ -1533,7 +1788,7 @@ function toggleWidget(containerId, isChecked) {
         localStorage.setItem('v25_theme', next);
         document.getElementById('themeBtn').innerText = next === 'dark' ? '☀️' : '🌙';
     }
-
+// DATA DATA
     let brokerData = JSON.parse(localStorage.getItem('v25_broker')) || [
         { date: '13/04/2026', degiro: 50850, bolero: 21769, saxo: 31720 },
         { date: '14/04/2026', degiro: 54090, bolero: 22466, saxo: 33644 },
@@ -1545,6 +1800,9 @@ function toggleWidget(containerId, isChecked) {
         { date: '22/04/2026', degiro: 59130, bolero: 23293, saxo: 35346 },
         { date: '23/04/2026', degiro: 59420, bolero: 22963, saxo: 35893 },
         { date: '24/04/2026', degiro: 59205, bolero: 23917, saxo: 35820 },
+
+
+        
 
     ];
     
@@ -1830,24 +2088,17 @@ function importMasterJSON(input) {
 
     function updateCharts() {
         const labels = brokerData.map(d => d.date);
-        charts.main.data.labels = labels;
-        charts.main.data.datasets[0].data = brokerData.map(d => d.degiro + d.bolero + d.saxo);
-        charts.main.update();
+        // Apply time filters for each chart
+        ['main','degiro','bolero','saxo'].forEach(k => applyTimeFilter(k));
         // Benchmarks heruitlijnen op nieuwe portfolio data
         const anyBenchActive = BENCHMARKS.some(b => document.getElementById(b.id)?.checked);
         if (anyBenchActive) {
-            // Cache leegmaken zodat nieuwe datums opnieuw uitlijnen
             BENCHMARKS.forEach(b => { if (benchCache[b.ticker]) delete benchCache[b.ticker]; });
             updateBenchmarks();
         }
         const last = brokerData[brokerData.length-1];
         charts.pie.data.datasets[0].data = [last.degiro, last.bolero, last.saxo];
         charts.pie.update();
-        ['degiro', 'bolero', 'saxo'].forEach(b => {
-            charts[b].data.labels = labels;
-            charts[b].data.datasets[0].data = brokerData.map(d => d[b]);
-            charts[b].update();
-        });
 
         // Dagrendement: dagelijkse verandering per broker (t.o.v. vorige dag)
         if (charts.dailyReturn) {
@@ -1996,7 +2247,7 @@ function renderWeeklyReturns() {
                 return isBlurred ? `  ${dsLabel}: € •••••` : `  ${dsLabel}: ` + formatEuro(context.parsed.y);
             },
             labelColor: function(context) {
-                const colors = ['#6c757d','#e67e22','#8e44ad','#16a085','#c0392b'];
+                const colors = ['#6c757d','#e67e22','#8e44ad','#16a085','#c0392b','#2980b9'];
                 return { borderColor: colors[context.datasetIndex] || '#999', backgroundColor: colors[context.datasetIndex] || '#999' };
             }
         }
@@ -2017,6 +2268,8 @@ function renderWeeklyReturns() {
                 { label: 'Nasdaq 100', data: [], borderColor: '#16a085', backgroundColor: 'transparent', fill: false, tension: 0.4, pointRadius: 0, pointHoverRadius: 5, borderWidth: 2, borderDash: [5,3], hidden: true },
                 // Dataset 4: Bitcoin
                 { label: 'Bitcoin',    data: [], borderColor: '#c0392b', backgroundColor: 'transparent', fill: false, tension: 0.4, pointRadius: 0, pointHoverRadius: 5, borderWidth: 2, borderDash: [5,3], hidden: true },
+                // Dataset 5: BEL 20
+                { label: 'BEL 20',     data: [], borderColor: '#2980b9', backgroundColor: 'transparent', fill: false, tension: 0.4, pointRadius: 0, pointHoverRadius: 5, borderWidth: 2, borderDash: [5,3], hidden: true },
             ]
         },
         options: {
@@ -3040,10 +3293,11 @@ function renderWeeklyReturns() {
 
     // ── BENCHMARK LIJNEN ────────────────────────────────────────────────────
     const BENCHMARKS = [
-        { id: 'benchSP',     ticker: 'SPY',  label: 'S&P 500',    dsIdx: 1 },
-        { id: 'benchMSCI',   ticker: 'URTH', label: 'MSCI World',  dsIdx: 2 },
-        { id: 'benchNASDAQ', ticker: 'QQQ',  label: 'Nasdaq 100',  dsIdx: 3 },
-        { id: 'benchBTC',    ticker: 'BTC-USD', label: 'Bitcoin',  dsIdx: 4 },
+        { id: 'benchSP',     ticker: 'SPY',     label: 'S&P 500',    dsIdx: 1 },
+        { id: 'benchMSCI',   ticker: 'URTH',    label: 'MSCI World',  dsIdx: 2 },
+        { id: 'benchNASDAQ', ticker: 'QQQ',     label: 'Nasdaq 100',  dsIdx: 3 },
+        { id: 'benchBTC',    ticker: 'BTC-USD', label: 'Bitcoin',     dsIdx: 4 },
+        { id: 'benchBEL20',  ticker: 'BEL20.BR',label: 'BEL 20',      dsIdx: 5 },
     ];
 
     const benchCache = {}; // ticker → array van sluitingskoersen
@@ -3107,8 +3361,9 @@ function renderWeeklyReturns() {
 
     async function updateBenchmarks() {
         if (!charts.main || brokerData.length === 0) return;
-        const portfolioDates  = brokerData.map(d => d.date);
-        const portfolioValues = brokerData.map(d => d.degiro + d.bolero + d.saxo);
+        const filtered = getFilteredData(chartTimeFilter['main']);
+        const portfolioDates  = filtered.map(d => d.date);
+        const portfolioValues = filtered.map(d => d.degiro + d.bolero + d.saxo);
         const [fd, fm, fy] = portfolioDates[0].split('/').map(Number);
         const fromDate = `${fy}-${String(fm).padStart(2,'0')}-${String(fd).padStart(2,'0')}`;
 
@@ -3805,7 +4060,8 @@ function renderWeeklyReturns() {
         document.documentElement.setAttribute('data-theme', savedTheme);
         document.getElementById('themeBtn').innerText = savedTheme === 'dark' ? '☀️' : '🌙';
         initCharts(); 
-        updateDashboard(); 
+        updateDashboard();
+        applyWidgetOrder();
     };
 
 
@@ -4176,63 +4432,11 @@ function formatEarningsDate(dateStr) {
 }
 </script>
 
-<div id="widgetMenu" class="card" style="display:none; position:fixed; top:70px; right:20px; z-index:1001; width:220px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); padding: 20px;">
-    <h3 style="margin-bottom:15px; font-size: 0.9rem;">DASHBOARD LAYOUT</h3>
+<div id="widgetMenu" class="card" style="display:none; position:fixed; top:70px; right:20px; z-index:1001; width:260px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); padding: 20px; max-height: 80vh; overflow-y: auto;">
+    <h3 style="margin-bottom:4px; font-size: 0.9rem;">DASHBOARD LAYOUT</h3>
+    <p style="font-size:0.7rem;color:var(--text-muted);margin-bottom:12px;">Sleep of gebruik pijltjes om te herordenen</p>
     
-    <div class="widget-option">
-        <input type="checkbox" id="checkGrowth" checked onchange="toggleWidget('growthChartContainer', this.checked)">
-        <label for="checkGrowth">TOTAAL</label>
-    </div>
-
-    <div class="widget-option">
-        <input type="checkbox" id="checkPie" checked onchange="toggleWidget('pieChartContainer', this.checked)">
-        <label for="checkPie">VERDELING</label>
-    </div>
-
-    <div class="widget-option">
-        <input type="checkbox" id="checkStatsBlock" checked onchange="toggleWidget('statsBlockContainer', this.checked)">
-        <label for="checkStatsBlock">STATISTIEKEN</label>
-    </div>
-
-    <div class="widget-option">
-        <input type="checkbox" id="checkDegiro" checked onchange="toggleWidget('degiroChartContainer', this.checked)">
-        <label for="checkDegiro">DEGIRO</label>
-    </div>
-
-    <div class="widget-option">
-        <input type="checkbox" id="checkBolero" checked onchange="toggleWidget('boleroChartContainer', this.checked)">
-        <label for="checkBolero">BOLERO</label>
-    </div>
-
-    <div class="widget-option">
-        <input type="checkbox" id="checkSaxo" checked onchange="toggleWidget('saxoChartContainer', this.checked)">
-        <label for="checkSaxo">SAXO</label>
-    </div>
-
-    <div class="widget-option">
-        <input type="checkbox" id="checkDailyReturn" checked onchange="toggleWidget('dailyReturnChartContainer', this.checked)">
-        <label for="checkDailyReturn">DAGRENDEMENT</label>
-    </div>
-
-    <div class="widget-option">
-        <input type="checkbox" id="checkCumulReturn" checked onchange="toggleWidget('cumulReturnChartContainer', this.checked)">
-        <label for="checkCumulReturn">GECUMULEERD %</label>
-    </div>
-
-    <div class="widget-option">
-        <input type="checkbox" id="checkHeatmap" checked onchange="toggleWidget('heatmapContainer', this.checked)">
-        <label for="checkHeatmap">KALENDER</label>
-    </div>
-
-    <div class="widget-option">
-        <input type="checkbox" id="checkMaand" checked onchange="toggleWidget('maandoverzichtContainer', this.checked)">
-        <label for="checkMaand">MAANDOVERZICHT</label>
-    </div>
-
-    <div class="widget-option">
-        <input type="checkbox" id="checkWeek" checked onchange="toggleWidget('weekoverzichtContainer', this.checked)">
-        <label for="checkWeek">WEEKOVERZICHT</label>
-    </div>
+    <div id="widgetSortList"></div>
 
     <button class="btn btn-main" style="width:100%; margin-top:15px; justify-content: center;" onclick="toggleWidgetMenu()">Klaar</button>
 </div>
