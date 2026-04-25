@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio v19</title>
+    <title>Portfolio v21</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
     <style>
@@ -61,6 +61,4000 @@
         .nav-links { display: flex; gap: 2rem; }
         .nav-item {
             cursor: pointer;
+            font-weight: 600;
+            color: var(--text-muted);
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+        .nav-item.active {
+            color: var(--text-main);
+            background: var(--row-hover);
+        }
+        .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px; /* Verklein dit van bijv. 40px naar 20px */
+    padding-top: 10px; /* Zorgt dat de inhoud direct onder de nav-balk begint */
+}
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        .header {
+    display: flex;
+    justify-content: space-between; /* Portfolio links, Datum rechts */
+    align-items: baseline; /* Lijnt de onderkant van de tekst perfect uit */
+    margin-bottom: 25px; /* Ruimte onder de titel voordat de kaarten beginnen */
+    margin-top: 0;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 2rem;
+    letter-spacing: -1px; /* Maakt de titel wat moderner/strakker */
+}
+        .header-titles h1 { margin: 0; font-weight: 800; letter-spacing: -0.5px; }
+        /* Sidebar basis stijl */
+.sidebar {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 2000;
+    top: 0;
+    left: 0;
+    background-color: var(--card-bg);
+    overflow: hidden;
+    transition: 0.3s;
+    padding-top: 60px;
+    border-right: 1px solid var(--border-color);
+}
+
+/* De links in het menu */
+.sidebar .nav-item {
+    padding: 15px 25px;
+    font-size: 1.1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    display: block;
+    transition: 0.2s;
+    border-bottom: none;
+}
+/* Nieuwe styling voor de sub-tabs in DATA */
+.data-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 10px;
+}
+.data-tab-btn {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-weight: 700;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: 0.2s;
+}
+.data-tab-btn.active {
+    background: var(--row-hover);
+    color: var(--bolero); /* Of een andere accentkleur */
+}
+.sub-tab-content { display: none; }
+.sub-tab-content.active { display: block; }
+/* De sandwich knop styling */
+.menu-btn {
+    font-size: 1.5rem;
+    cursor: pointer;
+    background: none;
+    border: none;
+    color: var(--text-color);
+    padding: 10px;
+}
+
+/* Overlay als menu open is */
+.overlay {
+    display: none;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0; left: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 1999;
+}
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .card { min-width: 0; 
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid var(--border-color);
+        }
+        .card::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; width: 6px; height: 100%;
+        }
+        .card-total::before { background: var(--total-gray); }
+        .card-degiro::before { background: var(--degiro); }
+        .card-bolero::before { background: var(--bolero); }
+        .card-saxo::before { background: var(--saxo); }
+
+        .card h3 { margin: 0; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.5px; }
+        .card .value { font-size: 1.7rem; font-weight: 800; margin: 0.5rem 0; }
+        
+        .change-row { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 0.85rem; margin-bottom: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; }
+        
+        .extra-info { display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
+        .info-line { display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; font-weight: 600; }
+        .info-label { color: var(--text-muted); text-transform: uppercase; font-size: 0.65rem; }
+
+        .blur { filter: blur(10px) !important; }
+
+        .btn-group { display: flex; gap: 10px; flex-wrap: wrap; }
+        .btn {
+            background: var(--row-hover);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            padding: 10px 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-main { background: var(--text-main); color: var(--bg-color); border: none; }
+        .btn-csv { background: #27ae60; color: white; border: none; }
+        .btn-theme { padding: 8px; border-radius: 50%; width: 40px; height: 40px; justify-content: center; }
+
+        .charts-master-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+        .span-2 { grid-column: span 2; }
+        .span-3 { grid-column: span 3; }
+        .chart-box { height: 350px; }
+        .chart-wrapper { flex-grow: 1; position: relative; width: 100%; height: calc(100% - 40px); margin-top: 0.5rem; }
+
+        table { width: 100%; border-collapse: separate; border-spacing: 0 8px; }
+        th { padding: 12px; color: var(--text-muted); font-size: 0.8rem; text-align: left; text-transform: uppercase; }
+        td { padding: 12px; background: var(--card-bg); border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); }
+        td:first-child { border-left: 1px solid var(--border-color); border-radius: 8px 0 0 8px; }
+        td:last-child { border-right: 1px solid var(--border-color); border-radius: 0 8px 8px 0; }
+        
+        input, select { 
+            width: 92%; padding: 8px; 
+            border: 1px solid var(--border-color); 
+            border-radius: 8px; 
+            background: var(--bg-color); 
+            color: var(--text-main);
+        }
+
+        @media (max-width: 1200px) {
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .charts-master-grid { grid-template-columns: 1fr; }
+            .span-2 { grid-column: span 1; }
+            .span-3 { grid-column: span 1; }
+        }
+ /* Zorgt dat euro en percentage onder elkaar staan en rechts uitlijnen */
+.info-values {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-end !important;
+    text-align: right !important;
+}
+
+/* Optioneel: wat extra ruimte tussen het euroteken en het percentage */
+.sub-value-small {
+    font-size: 0.75rem !important;
+    margin-top: 2px !important;
+    display: block !important;
+}   
+@media (max-width: 480px) {
+        /* Grid naar 1 kolom voor kaarten */
+        .stats-grid { 
+            grid-template-columns: 1fr !important; 
+            gap: 1rem;
+        }
+
+        /* Zorgt dat labels en waardes op één lijn staan */
+        .info-line {
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: flex-start !important;
+            margin-bottom: 10px;
+            padding: 2px 0;
+            position: relative;
+        }
+
+        /* De rechterkant waar de euro's staan */
+        .info-values {
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: flex-end !important;
+            text-align: right !important;
+            min-width: 120px; /* Geeft ruimte zodat tekst niet overlapt */
+        }
+
+        /* Het euro bedrag (haalt de zwevende euro weg) */
+        .main-value-small {
+            font-size: 0.9rem !important;
+            font-weight: 600 !important;
+            display: inline-block !important; /* Voorkomt dat het een los blok wordt */
+            line-height: 1.2 !important;
+            margin: 0 !important;
+        }
+
+        /* Het percentage */
+        .sub-value-small {
+            font-size: 0.75rem !important;
+            display: block !important;
+            margin-top: 2px !important;
+        }
+
+        /* Fix voor de overlap: label mag niet te breed zijn */
+        .info-label {
+            font-size: 0.7rem;
+            flex-shrink: 0;
+            padding-right: 10px;
+        }
+    }
+        canvas {
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: rgba(0,0,0,0);
+        }
+        #statsTable tr:hover td { background: var(--row-hover); }
+        #statsTable td, #statsTable th { border: none; }
+
+        /* ATH badge — subtiel rechtsbovenin de kaart */
+        .ath-badge {
+            position: absolute;
+            top: 10px;
+            right: 14px;
+            display: none;
+            align-items: center;
+            gap: 4px;
+            background: rgba(246, 211, 101, 0.15);
+            color: #c8951a;
+            font-size: 0.58rem;
+            font-weight: 800;
+            padding: 3px 8px;
+            border-radius: 99px;
+            letter-spacing: 0.06em;
+            border: 1px solid rgba(246, 211, 101, 0.4);
+            animation: athPulse 3s ease-in-out infinite;
+        }
+        [data-theme="dark"] .ath-badge {
+            background: rgba(246, 211, 101, 0.1);
+            color: #f6d365;
+            border-color: rgba(246, 211, 101, 0.25);
+        }
+        .ath-badge.visible { display: inline-flex; }
+        @keyframes athPulse {
+            0%, 100% { opacity: 1; }
+            50%       { opacity: 0.6; }
+        }
+
+        /* Markt secties */
+        .markt-section { padding: 1.2rem 1.5rem; }
+        .markt-section-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 14px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .markt-section-icon { font-size: 1rem; }
+        .markt-section h3 { margin: 0; }
+
+        /* Markt tabel */
+        .markt-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+        .markt-table th {
+            padding: 6px 8px;
+            text-align: right;
+            font-size: 0.64rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            border-bottom: 1px solid var(--border-color);
+            letter-spacing: 0.05em;
+            white-space: nowrap;
+        }
+        .markt-table th:first-child { text-align: left; }
+        .markt-table td {
+            padding: 9px 8px;
+            text-align: right;
+            border: none;
+            border-bottom: 1px solid var(--border-color);
+            background: transparent;
+            font-size: 0.84rem;
+            white-space: nowrap;
+        }
+        .markt-table td:first-child { text-align: left; font-weight: 600; }
+        .markt-table tr:last-child td { border-bottom: none; }
+        .markt-table tr:hover td { background: var(--row-hover); transition: background 0.15s; }
+        .markt-loading { text-align: center !important; color: var(--text-muted); font-size: 0.8rem; padding: 16px !important; }
+        .markt-pos { color: var(--success); font-weight: 700; }
+        .markt-neg { color: var(--danger);  font-weight: 700; }
+        .markt-neu { color: var(--text-muted); font-weight: 600; }
+        .markt-name-sub { font-size: 0.66rem; color: var(--text-muted); font-weight: 400; display: block; margin-top: 1px; }
+        .markt-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 5px; vertical-align: middle; }
+        .markt-dot-live { background: var(--success); animation: athPulse 2s ease-in-out infinite; }
+        .markt-dot-stale { background: #e74c3c; }
+        .markt-dot-loading { background: var(--text-muted); }
+        .markt-err { color: var(--text-muted); font-size: 0.75rem; font-style: italic; }
+        @media (max-width: 800px) {
+            #aandelen-page > div:last-child { grid-template-columns: 1fr !important; }
+            #aandelen-page .markt-section[style*="span 2"] { grid-column: span 1 !important; }
+        }
+        /* Op kleine schermen: verberg tijd-kolom FX en eenheidskolom futures */
+        @media (max-width: 480px) {
+            .markt-table { font-size: 0.78rem; }
+            .markt-table th, .markt-table td { padding: 7px 5px; }
+            .markt-table .col-hide { display: none; }
+            .markt-name-sub { display: none; } /* naam-sub verbergen geeft ruimte */
+            /* Crypto: verberg 24h high/low op mobiel */
+            #mb-cry tr td:nth-child(5),
+            #mb-cry tr td:nth-child(6),
+            #mb-cry tr th:nth-child(5),
+            #mb-cry tr th:nth-child(6) { display: none; }
+        }
+
+        .kal-month-picker {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        @media (max-width: 500px) {
+            .kal-month-picker { width: 100%; }
+        }
+
+        /* ── KALENDER ──────────────────────────────────────────────────────── */
+        .kal-header-cell {
+            padding: 8px 4px;
+            text-align: center;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            letter-spacing: 0.04em;
+        }
+        .kal-day {
+            min-height: 80px;
+            border-top: 1px solid var(--border-color);
+            border-right: 1px solid var(--border-color);
+            padding: 5px 4px 4px;
+            cursor: pointer;
+            position: relative;
+            transition: background 0.15s;
+        }
+        .kal-day:hover { background: var(--row-hover); }
+        .kal-day:nth-child(7n) { border-right: none; }
+        .kal-day.other-month { opacity: 0.3; }
+        .kal-day.today { background: var(--row-hover); }
+        .kal-day.today .kal-daynum {
+            background: var(--text-main);
+            color: var(--card-bg);
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .kal-daynum {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 3px;
+        }
+        .kal-day.weekend .kal-daynum { color: var(--text-muted); opacity: 0.5; }
+        .kal-event {
+            font-size: 0.58rem;
+            font-weight: 700;
+            padding: 2px 4px;
+            border-radius: 3px;
+            margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            cursor: pointer;
+            letter-spacing: 0.01em;
+        }
+        .kal-event.earnings { background: #3498db22; color: #3498db; border-left: 2px solid #3498db; }
+        .kal-event.dividend { background: #e74c3c22; color: #e74c3c; border-left: 2px solid #e74c3c; }
+        .kal-event.fed      { background: #8e44ad22; color: #8e44ad; border-left: 2px solid #8e44ad; }
+        .kal-event.macro    { background: #e67e2222; color: #e67e22; border-left: 2px solid #e67e22; }
+        .kal-event.custom   { background: #27ae6022; color: #27ae60; border-left: 2px solid #27ae60; }
+        .kal-more { font-size: 0.58rem; color: var(--text-muted); font-weight: 600; padding: 0 4px; }
+        .kal-legend-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            padding: 4px 10px;
+            border-radius: 20px;
+            background: var(--row-hover);
+            border: 1px solid var(--border-color);
+        }
+        .kal-legend-item::before {
+            content: '';
+            width: 8px; height: 8px;
+            border-radius: 2px;
+            background: var(--lc);
+            flex-shrink: 0;
+        }
+        .kal-detail-event {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .kal-detail-event:last-child { border-bottom: none; }
+        .kal-detail-dot {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            margin-top: 3px;
+            flex-shrink: 0;
+        }
+        @media (max-width: 480px) {
+            .kal-day { min-height: 55px; }
+            .kal-event { display: none; }
+            .kal-day.has-events::after {
+                content: '';
+                display: block;
+                width: 5px; height: 5px;
+                border-radius: 50%;
+                background: #3498db;
+                margin: 2px auto 0;
+            }
+        }
+
+        
+        /* Heatmap pagina */
+        .hm-sort-btn {
+            background: var(--row-hover); border: 1px solid var(--border-color);
+            color: var(--text-muted); font-size: 0.72rem; font-weight: 700;
+            padding: 5px 12px; border-radius: 20px; cursor: pointer;
+        }
+        .hm-sort-btn.active { background: var(--text-main); color: var(--card-bg); border-color: var(--text-main); }
+        .hm-cell {
+            border-radius: 10px; padding: 10px 8px; cursor: pointer;
+            position: relative; overflow: hidden; min-height: 80px;
+            display: flex; flex-direction: column; justify-content: space-between;
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+        .hm-cell:hover { transform: scale(1.03); box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
+        .hm-cell:active { transform: scale(0.97); }
+        .hm-cell .hm-ticker { font-size: 0.7rem; font-weight: 800; opacity: 0.85; letter-spacing: 0.04em; }
+        .hm-cell .hm-name   { font-size: 0.62rem; opacity: 0.7; margin-top:1px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .hm-cell .hm-pct    { font-size: 1.1rem; font-weight: 800; margin-top: auto; padding-top: 6px; }
+        .hm-cell .hm-price  { font-size: 0.65rem; opacity: 0.75; }
+        .hm-cell .hm-del    { position:absolute;top:4px;right:6px;font-size:0.7rem;opacity:0;transition:opacity 0.2s;cursor:pointer;font-weight:700; }
+        .hm-cell:hover .hm-del { opacity: 0.6; }
+        .hm-cell.loading    { background: var(--row-hover) !important; animation: hmPulse 1.2s ease-in-out infinite; }
+        .hm-cell-compact {
+            border-radius: 8px;
+            padding: 7px 5px;
+            cursor: pointer;
+            min-height: 44px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            transition: transform 0.15s;
+        }
+        .hm-cell-compact:hover { transform: scale(1.06); }
+        .hm-cell-compact.loading { background: var(--row-hover) !important; animation: hmPulse 1.2s ease-in-out infinite; }
+        @keyframes hmPulse   { 0%,100%{opacity:1} 50%{opacity:0.5} }
+
+        /* Benchmark toggles */
+        .bench-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            cursor: pointer;
+            user-select: none;
+            transition: color 0.15s;
+        }
+        .bench-toggle input { display: none; }
+        .bench-dot {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            border: 2px solid var(--c);
+            background: transparent;
+            transition: background 0.15s;
+            flex-shrink: 0;
+        }
+        .bench-toggle input:checked ~ .bench-dot { background: var(--c); }
+        .bench-toggle input:checked ~ * { color: var(--text-main); }
+        .bench-toggle:has(input:checked) { color: var(--text-main); }
+
+        /* Maandoverzicht tabel */
+        #maandTable th {
+            padding: 8px 10px;
+            text-align: right;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            border-bottom: 2px solid var(--border-color);
+            white-space: nowrap;
+        }
+        #maandTable th:first-child { text-align: left; }
+        #maandTable td {
+            padding: 7px 10px;
+            text-align: right;
+            border: none;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.82rem;
+            background: transparent;
+        }
+        #maandTable td:first-child { text-align: left; font-weight: 700; color: var(--text-muted); }
+        #maandTable tr:hover td { background: var(--row-hover); }
+        #maandTable tr.maand-totaal td {
+            font-weight: 800;
+            border-top: 2px solid var(--border-color);
+            border-bottom: none;
+            color: var(--text-main);
+        }
+        /* Styling voor het widget menu */
+.widget-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+    cursor: pointer;
+}
+
+.widget-option input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: var(--success); /* Dit maakt het vinkje groen */
+}
+
+.widget-option label {
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-main);
+}
+
+/* Algemene tabel styling */
+#weeklyReturnTable {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#weeklyReturnTable th, #weeklyReturnTable td {
+    padding: 10px 8px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+//* Specifieke optimalisatie voor Wekelijks Rendement op iPhone */
+@media (max-width: 480px) {
+    #weeklyReturnTable th {
+        font-size: 0.6rem !important;
+        padding: 8px 2px !important;
+    }
+    #weeklyReturnTable td {
+        padding: 8px 2px !important;
+    }
+    .return-euro {
+        font-size: 0.75rem !important;
+        font-weight: 800;
+        display: block;
+        line-height: 1.1;
+    }
+    .return-perc {
+        font-size: 0.6rem !important;
+        display: block;
+        margin-top: 2px;
+    }
+}
+
+    </style>
+</head>
+
+
+<body>
+<div id="mySidebar" class="sidebar">
+    <div class="nav-item active" onclick="switchTab('dashboard', this); closeNav()">PORTFOLIO</div>
+    <div class="nav-item" onclick="switchTab('data-page', this); closeNav()">DATA</div>
+    <div class="nav-item" onclick="switchTab('aandelen-page', this); closeNav()">LIVE</div>
+    <div class="nav-item" onclick="switchTab('heatmap-page', this); closeNav()">HEATMAP</div>
+    <div class="nav-item" onclick="switchTab('kalender-page', this); closeNav()">KALENDER</div>
+    <div class="nav-item" onclick="switchTab('cijfer-page', this); closeNav()">CIJFERS</div>
+
+</div>
+<div id="overlay" class="overlay" onclick="closeNav()"></div>
+<div class="nav">
+    <div style="display:flex; align-items:center;">
+        <button class="menu-btn" onclick="openNav()">☰</button>
+        <span style="font-weight:bold; margin-left:10px;">DASHBOARD</span>
+    </div>
+    <div style="display:flex; gap:10px; align-items:center;">
+        <button class="btn btn-theme" onclick="toggleBlur()" title="Verberg Bedragen">👁️</button>
+<button class="btn btn-theme" onclick="toggleWidgetMenu()" title="Widgets Beheren">⚙️</button> 
+<button class="btn btn-theme" onclick="toggleTheme()" id="themeBtn">🌙</button>
+    </div>
+</div>
+
+
+
+
+<div class="container">
+
+    <div id="dashboard" class="tab-content active">
+        <div class="header">
+            <div class="header-titles">
+                <h1>PORTFOLIO</h1>
+            </div>
+            <div id="lastUpdate" style="text-align:right;line-height:1.4;">
+                <span style="font-size:0.75rem;font-weight:700;text-transform:uppercase;color:var(--text-muted);letter-spacing:0.04em;">Laatste update</span><br>
+                <span id="lastUpdateVal" style="font-size:0.95rem;font-weight:600;color:var(--text-main);"></span>
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="card card-total">
+                <span id="athTotal" class="ath-badge">🏆 ATH</span>
+                <h3>Totaal</h3>
+                <div class="value blur-target" id="totalValue"></div>
+                <div id="totalChange" class="change-row"></div>
+                <div class="extra-info">
+                    <div class="info-line"><span class="info-label">Cash</span><span class="blur-target" id="netInleg"></span></div>
+                    <div class="info-line"><span class="info-label">Rendement</span><div class="info-values"><span class="blur-target main-value-small" id="profitEuro"></span><span id="profitPerc" class="sub-value-small"></span></div></div>
+                </div>
+            </div>
+
+            <div class="card card-degiro">
+                <span id="athDegiro" class="ath-badge">🏆 ATH</span>
+                <h3>DEGIRO</h3>
+                <div class="value blur-target" id="valDegiro"></div>
+                <div id="chgDegiro" class="change-row"></div>
+                <div class="extra-info">
+                <div class="info-line"><span class="info-label">Cash</span><span class="blur-target" id="cashDegiro"></span></div>
+                <div class="info-line"><span class="info-label">Rendement</span><div class="info-values"><span class="blur-target main-value-small" id="profDegiroEuro"></span><span id="profDegiroPerc" class="sub-value-small"></span></div></div>
+                <div class="info-line">
+                <span class="info-label">CAGR</span>
+                <span id="cagrDegiro" class="cagr-badge">--</span>
+        </div>
+    </div>
+</div>
+
+            <div class="card card-bolero">
+                <span id="athBolero" class="ath-badge">🏆 ATH</span>
+                <h3>Bolero</h3>
+                <div class="value blur-target" id="valBolero"></div>
+                <div id="chgBolero" class="change-row"></div>
+                <div class="extra-info">
+                    <div class="info-line"><span class="info-label">Cash</span><span class="blur-target" id="cashBolero"></span></div>
+                    <div class="info-line"><span class="info-label">Rendement</span><div class="info-values"><span class="blur-target main-value-small" id="profBoleroEuro"></span><span id="profBoleroPerc" class="sub-value-small"></span></div></div>
+                    <div class="info-line"><span class="info-label">CAGR</span>
+            <span id="cagrBolero" class="cagr-badge">--</span>
+        </div>
+    </div>
+</div>
+
+            <div class="card card-saxo">
+                <span id="athSaxo" class="ath-badge">🏆 ATH</span>
+                <h3>Saxo</h3>
+                <div class="value blur-target" id="valSaxo"></div>
+                <div id="chgSaxo" class="change-row"></div>
+                <div class="extra-info">
+                    <div class="info-line"><span class="info-label">Cash</span><span class="blur-target" id="cashSaxo"></span></div>
+                    <div class="info-line"><span class="info-label">Rendement</span><div class="info-values"><span class="blur-target main-value-small" id="profSaxoEuro"></span><span id="profSaxoPerc" class="sub-value-small"></span></div></div>
+                    <div class="info-line"><span class="info-label">CAGR</span>
+                        <span id="cagrSaxo" class="cagr-badge">--</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="charts-master-grid">
+    <!-- Rij 1: TOTAAL grafiek, volle breedte -->
+    <div id="growthChartContainer" class="card chart-box span-3">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:4px;">
+            <h3>TOTAAL</h3>
+            <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;" id="benchmarkToggles">
+                <label class="bench-toggle" style="--c:#e67e22;">
+                    <input type="checkbox" id="benchSP" onchange="updateBenchmarks()">
+                    <span class="bench-dot"></span> S&amp;P 500
+                </label>
+                <label class="bench-toggle" style="--c:#8e44ad;">
+                    <input type="checkbox" id="benchMSCI" onchange="updateBenchmarks()">
+                    <span class="bench-dot"></span> MSCI World
+                </label>
+                <label class="bench-toggle" style="--c:#16a085;">
+                    <input type="checkbox" id="benchNASDAQ" onchange="updateBenchmarks()">
+                    <span class="bench-dot"></span> Nasdaq 100
+                </label>
+                <label class="bench-toggle" style="--c:#c0392b;">
+                    <input type="checkbox" id="benchBTC" onchange="updateBenchmarks()">
+                    <span class="bench-dot"></span> Bitcoin
+                </label>
+            </div>
+        </div>
+        <div class="chart-wrapper"><canvas id="growthChart"></canvas></div>
+    </div>
+
+    <!-- Rij 2: VERDELING + STATISTIEKEN naast elkaar -->
+    <div id="pieChartContainer" class="card chart-box"><h3>VERDELING</h3><div class="chart-wrapper"><canvas id="pieChart"></canvas></div></div>
+    <div id="statsBlockContainer" class="card span-2" style="display:flex;flex-direction:column;">
+        <h3 style="margin-bottom:12px;">STATISTIEKEN</h3>
+        <table id="statsTable" style="width:100%;border-collapse:collapse;font-size:0.78rem;flex:1;">
+            <thead>
+                <tr>
+                    <th style="text-align:left;color:var(--text-muted);font-size:0.65rem;padding:4px 2px;font-weight:700;text-transform:uppercase;"></th>
+                    <th style="text-align:right;color:var(--degiro);font-size:0.65rem;padding:4px 2px;font-weight:700;text-transform:uppercase;">DEGIRO</th>
+                    <th style="text-align:right;color:var(--bolero);font-size:0.65rem;padding:4px 2px;font-weight:700;text-transform:uppercase;">BOLERO</th>
+                    <th style="text-align:right;color:var(--saxo);font-size:0.65rem;padding:4px 2px;font-weight:700;text-transform:uppercase;">SAXO</th>
+                </tr>
+            </thead>
+            <tbody id="statsTableBody"></tbody>
+        </table>
+    </div>
+
+    <!-- Rij 3: Individuele broker grafieken -->
+    <div id="degiroChartContainer" class="card chart-box"><h3>DEGIRO</h3><div class="chart-wrapper"><canvas id="chartDegiro"></canvas></div></div>
+    <div id="boleroChartContainer" class="card chart-box"><h3>BOLERO</h3><div class="chart-wrapper"><canvas id="chartBolero"></canvas></div></div>
+    <div id="saxoChartContainer" class="card chart-box"><h3>SAXO</h3><div class="chart-wrapper"><canvas id="chartSaxo"></canvas></div></div>
+
+    <!-- Rij 4: Dagrendement, volle breedte -->
+    <div id="dailyReturnChartContainer" class="card chart-box span-3">
+        <h3>DAGRENDEMENT</h3>
+        <div class="chart-wrapper"><canvas id="chartDailyReturn"></canvas></div>
+    </div>
+
+    <!-- Rij 5: Gecumuleerd rendement, volle breedte -->
+    <div id="cumulReturnChartContainer" class="card chart-box span-3">
+        <h3>GECUMULEERD RENDEMENT %</h3>
+        <div class="chart-wrapper"><canvas id="chartCumulReturn"></canvas></div>
+    </div>
+
+    <!-- Kalender heatmap -->
+    <div id="heatmapContainer" class="card span-3" style="min-height:220px;">
+        <h3 style="margin-bottom:12px;">RENDEMENT KALENDER</h3>
+        <div style="display:flex;gap:8px;margin-bottom:10px;align-items:center;flex-wrap:wrap;">
+            <button class="btn" id="heatmapBrokerBtn" onclick="cycleHeatmapBroker()" style="font-size:0.75rem;padding:6px 14px;">TOTAAL &#9662;</button>
+            <button class="btn" onclick="heatmapYear--; renderHeatmap();" style="font-size:0.75rem;padding:6px 10px;">&#9664;</button>
+            <span id="heatmapYearLabel" style="font-weight:700;font-size:0.9rem;min-width:40px;text-align:center;"></span>
+            <button class="btn" onclick="heatmapYear++; renderHeatmap();" style="font-size:0.75rem;padding:6px 10px;">&#9654;</button>
+            <div style="display:flex;gap:6px;align-items:center;margin-left:auto;font-size:0.7rem;color:var(--text-muted);">
+                <span style="width:14px;height:14px;border-radius:3px;background:#2ecc71;display:inline-block;opacity:0.85;"></span>Winst
+                <span style="width:14px;height:14px;border-radius:3px;background:#e74c3c;display:inline-block;margin-left:6px;opacity:0.85;"></span>Verlies
+                <span style="width:14px;height:14px;border-radius:3px;background:var(--border-color);display:inline-block;margin-left:6px;"></span>Geen data
+            </div>
+        </div>
+        <div id="heatmapGrid" style="overflow-x:auto;"></div>
+    </div>
+
+    <!-- Maandoverzicht tabel -->
+    <div id="maandoverzichtContainer" class="card span-2">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px;">
+            <h3 style="margin:0;">MAANDOVERZICHT</h3>
+            <div style="display:flex;gap:8px;align-items:center;">
+                <button class="btn" id="maandBrokerBtn" onclick="cycleMaandBroker()" style="font-size:0.75rem;padding:6px 14px;">TOTAAL &#9662;</button>
+                <button class="btn" onclick="maandYear--; renderMaandoverzicht();" style="font-size:0.75rem;padding:6px 10px;">&#9664;</button>
+                <span id="maandYearLabel" style="font-weight:700;font-size:0.9rem;min-width:40px;text-align:center;"></span>
+                <button class="btn" onclick="maandYear++; renderMaandoverzicht();" style="font-size:0.75rem;padding:6px 10px;">&#9654;</button>
+            </div>
+        </div>
+        <div style="overflow-x:auto;">
+            <table id="maandTable" style="width:100%;border-collapse:collapse;font-size:0.82rem;">
+                <thead id="maandTableHead"></thead>
+                <tbody id="maandTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+    </div>
+
+
+
+
+ <div id="data-page" class="tab-content">
+    <div class="header data-header-actions">
+        <h1>DATA</h1>
+        
+        <div class="header-btns">
+            <button class="btn btn-icloud" onclick="exportMasterJSON()">Backup naar iCloud</button>
+            <button class="btn" onclick="document.getElementById('importJSON').click()">Upload Backup</button>
+            <input type="file" id="importJSON" style="display:none" accept=".json" onchange="importMasterJSON(this)">
+            <button class="btn btn-main" onclick="saveData()">UPDATE</button>
+        </div>
+    </div>
+
+    <div class="data-tabs">
+        <button class="data-tab-btn active" onclick="switchDataTab('broker-tab', this)">BROKER</button>
+        <button class="data-tab-btn" onclick="switchDataTab('cash-tab', this)">CASH</button>
+        <button class="data-tab-btn" onclick="switchDataTab('aandelen-data-tab', this)">AANDELEN</button>
+        <button class="data-tab-btn" onclick="switchDataTab('crypto-data-tab', this)">CRYPTO</button>
+    </div>
+
+    <div id="broker-tab" class="sub-tab-content active">
+        <div class="card">
+            <h3>BROKER</h3>
+            <button class="btn" onclick="addRow('broker')" style="margin-top: 20px; margin-bottom: 25px; background-color: var(--row-hover); width: 100%; text-align: left;">+ Nieuw</button>
+            <div style="overflow-x: auto;">
+                <table>
+                    <thead><tr><th>Datum</th><th>Degiro</th><th>Bolero</th><th>Saxo</th><th></th></tr></thead>
+                    <tbody id="brokerTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="cash-tab" class="sub-tab-content">
+        <div class="stats-grid" style="margin-top: 20px; margin-bottom: 20px;">
+            <div class="card card-degiro">
+                <h3>Totaal Cash Degiro</h3>
+                <div class="cash-input-wrapper">
+                    <span class="currency-symbol">€</span>
+                    <input type="number" id="inputCashDegiro" class="cash-input-field" onchange="updateSingleCash('Degiro', this.value)">
+                </div>
+            </div>
+            <div class="card card-bolero">
+                <h3>Totaal Cash Bolero</h3>
+                <div class="cash-input-wrapper">
+                    <span class="currency-symbol">€</span>
+                    <input type="number" id="inputCashBolero" class="cash-input-field" onchange="updateSingleCash('Bolero', this.value)">
+                </div>
+            </div>
+            <div class="card card-saxo">
+                <h3>Totaal Cash Saxo</h3>
+                <div class="cash-input-wrapper">
+                    <span class="currency-symbol">€</span>
+                    <input type="number" id="inputCashSaxo" class="cash-input-field" onchange="updateSingleCash('Saxo', this.value)">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AANDELEN TAB -->
+    <div id="aandelen-data-tab" class="sub-tab-content">
+        <!-- Aandelen tabel -->
+        <div class="card" style="margin-top:16px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px;">
+                <h3 style="margin:0;">AANDELEN</h3>
+                <button class="btn btn-main" onclick="showAddStockData('stock')" style="font-size:0.8rem;">+ Toevoegen</button>
+            </div>
+            <div style="overflow-x:auto;">
+                <table style="width:100%;border-collapse:collapse;font-size:0.85rem;">
+                    <thead><tr>
+                        <th style="text-align:left;padding:8px 6px;color:var(--text-muted);font-size:0.68rem;font-weight:700;border-bottom:2px solid var(--border-color);">Ticker</th>
+                        <th style="text-align:left;padding:8px 6px;color:var(--text-muted);font-size:0.68rem;font-weight:700;border-bottom:2px solid var(--border-color);">Naam</th>
+                        <th style="text-align:center;padding:8px 6px;color:var(--text-muted);font-size:0.68rem;font-weight:700;border-bottom:2px solid var(--border-color);">Valuta</th>
+                        <th style="padding:8px 6px;border-bottom:2px solid var(--border-color);"></th>
+                    </tr></thead>
+                    <tbody id="aandelenDataBody"></tbody>
+                </table>
+            </div>
+        </div>
+        <!-- ETF tabel -->
+        <div class="card" style="margin-top:16px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px;">
+                <h3 style="margin:0;">ETFs</h3>
+                <button class="btn btn-main" onclick="showAddStockData('etf')" style="font-size:0.8rem;">+ Toevoegen</button>
+            </div>
+            <div style="overflow-x:auto;">
+                <table style="width:100%;border-collapse:collapse;font-size:0.85rem;">
+                    <thead><tr>
+                        <th style="text-align:left;padding:8px 6px;color:var(--text-muted);font-size:0.68rem;font-weight:700;border-bottom:2px solid var(--border-color);">Ticker</th>
+                        <th style="text-align:left;padding:8px 6px;color:var(--text-muted);font-size:0.68rem;font-weight:700;border-bottom:2px solid var(--border-color);">Naam</th>
+                        <th style="text-align:center;padding:8px 6px;color:var(--text-muted);font-size:0.68rem;font-weight:700;border-bottom:2px solid var(--border-color);">Valuta</th>
+                        <th style="padding:8px 6px;border-bottom:2px solid var(--border-color);"></th>
+                    </tr></thead>
+                    <tbody id="etfDataBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- CRYPTO TAB -->
+    <div id="crypto-data-tab" class="sub-tab-content">
+        <div class="card" style="margin-top:16px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px;">
+                <h3 style="margin:0;">CRYPTO POSITIES</h3>
+                <button class="btn btn-main" onclick="showAddStockData('crypto')" style="font-size:0.8rem;">+ Toevoegen</button>
+            </div>
+            <div style="overflow-x:auto;">
+                <table style="width:100%;border-collapse:collapse;font-size:0.85rem;">
+                    <thead><tr>
+                        <th style="text-align:left;padding:8px 6px;color:var(--text-muted);font-size:0.68rem;font-weight:700;border-bottom:2px solid var(--border-color);">Ticker</th>
+                        <th style="text-align:left;padding:8px 6px;color:var(--text-muted);font-size:0.68rem;font-weight:700;border-bottom:2px solid var(--border-color);">Naam</th>
+                        <th style="padding:8px 6px;border-bottom:2px solid var(--border-color);"></th>
+                    </tr></thead>
+                    <tbody id="cryptoDataBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add stock/crypto modal for data page -->
+    <div id="addStockDataModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:3000;align-items:center;justify-content:center;">
+        <div class="card" style="width:320px;padding:24px;">
+            <h3 id="addStockDataTitle" style="margin-bottom:16px;">Toevoegen</h3>
+            <input id="addSdTicker" placeholder="Ticker" class="cash-input-field" style="width:100%;border:1px solid var(--border-color);border-radius:8px;padding:10px;font-size:1rem;background:var(--bg-color);color:var(--text-main);margin-bottom:10px;">
+            <input id="addSdName"   placeholder="Naam" class="cash-input-field" style="width:100%;border:1px solid var(--border-color);border-radius:8px;padding:10px;font-size:1rem;background:var(--bg-color);color:var(--text-main);margin-bottom:10px;">
+            <select id="addSdType" style="width:100%;border:1px solid var(--border-color);border-radius:8px;padding:10px;font-size:1rem;background:var(--bg-color);color:var(--text-main);margin-bottom:16px;">
+                <option value="stock">Aandeel</option>
+                <option value="etf">ETF</option>
+                <option value="crypto">Crypto</option>
+            </select>
+            <div style="display:flex;gap:8px;">
+                <button class="btn btn-main" onclick="confirmAddStockData()" style="flex:1;">Toevoegen</button>
+                <button class="btn" onclick="hideAddStockData()" style="flex:1;">Annuleer</button>
+            </div>
+        </div>
+    </div>
+
+</div> <div id="aandelen-page" class="tab-content">
+    <div class="header" style="margin-bottom:16px;">
+        <div class="header-titles"><h1>LIVE</h1></div>
+        <div style="display:flex;align-items:center;gap:10px;">
+            <span id="marktStatus" style="font-size:0.75rem;color:var(--text-muted);display:flex;align-items:center;gap:5px;"></span>
+            <button class="btn" onclick="loadMarktData(true)" style="font-size:0.8rem;padding:8px 14px;">↻ Vernieuwen</button>
+        </div>
+    </div>
+
+    <!-- Rij 1: VIX + Fear & Greed -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:1.5rem;">
+        <div class="card markt-section">
+            <div class="markt-section-header"><h3>VIX — VOLATILITEITSINDEX</h3></div>
+            <div style="display:flex;align-items:center;gap:20px;padding:6px 0;">
+                <div style="flex:1;">
+                    <div id="vixValue" style="font-size:2.2rem;font-weight:800;line-height:1;">–</div>
+                    <div id="vixChange" style="font-size:0.85rem;margin-top:4px;"></div>
+                    <div style="font-size:0.68rem;color:var(--text-muted);margin-top:5px;">CBOE Volatility Index (^VIX)</div>
+                </div>
+                <div id="vixLabelBox" style="text-align:center;padding:8px 14px;border-radius:10px;font-size:0.72rem;font-weight:800;letter-spacing:0.05em;"></div>
+            </div>
+            <div style="margin-top:10px;height:6px;border-radius:3px;background:linear-gradient(to right,#2ecc71,#f1c40f,#e67e22,#e74c3c);position:relative;">
+                <div id="vixNeedle" style="position:absolute;top:-4px;width:3px;height:14px;background:var(--text-main);border-radius:2px;transform:translateX(-50%);transition:left 0.8s ease;left:50%;"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:0.58rem;color:var(--text-muted);margin-top:3px;">
+                <span>Laag (&lt;15)</span><span>Normaal</span><span>Hoog (&gt;25)</span><span>Extreem (&gt;40)</span>
+            </div>
+        </div>
+
+        <div class="card markt-section">
+            <div class="markt-section-header"><h3>FEAR &amp; GREED INDEX</h3></div>
+            <div style="display:flex;gap:16px;padding:6px 0;">
+                <div style="flex:1;border-right:1px solid var(--border-color);padding-right:16px;">
+                    <div style="font-size:0.65rem;font-weight:700;color:var(--text-muted);letter-spacing:0.05em;margin-bottom:4px;">CRYPTO</div>
+                    <div id="fgValue" style="font-size:2rem;font-weight:800;line-height:1;">–</div>
+                    <div id="fgClassification" style="font-size:0.9rem;font-weight:700;margin-top:3px;"></div>
+                    <div id="fgYesterday" style="font-size:0.68rem;color:var(--text-muted);margin-top:4px;"></div>
+                </div>
+                <div style="flex:1;">
+                    <div style="font-size:0.65rem;font-weight:700;color:var(--text-muted);letter-spacing:0.05em;margin-bottom:4px;">AANDELEN</div>
+                    <div id="fgStockValue" style="font-size:2rem;font-weight:800;line-height:1;">–</div>
+                    <div id="fgStockClass" style="font-size:0.9rem;font-weight:700;margin-top:3px;"></div>
+                    <div id="fgStockPrev" style="font-size:0.68rem;color:var(--text-muted);margin-top:4px;"></div>
+                </div>
+            </div>
+            <div style="margin-top:10px;height:6px;border-radius:3px;background:linear-gradient(to right,#e74c3c,#e67e22,#f1c40f,#2ecc71,#27ae60);position:relative;">
+                <div id="fgNeedle" style="position:absolute;top:-4px;width:3px;height:14px;background:var(--text-main);border-radius:2px;transform:translateX(-50%);transition:left 0.8s ease;left:50%;"></div>
+                <div id="fgStockNeedle" style="position:absolute;top:-4px;width:3px;height:14px;background:var(--bolero);border-radius:2px;transform:translateX(-50%);transition:left 0.8s ease;left:50%;opacity:0.7;"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:0.58rem;color:var(--text-muted);margin-top:3px;">
+                <span>Extreme Fear</span><span>Fear</span><span>Neutral</span><span>Greed</span><span>Extreme Greed</span>
+            </div>
+            <div style="font-size:0.62rem;color:var(--text-muted);margin-top:6px;">
+                <span style="display:inline-flex;align-items:center;gap:3px;margin-right:10px;"><span style="width:8px;height:8px;background:var(--text-main);border-radius:2px;display:inline-block;"></span>Crypto</span>
+                <span style="display:inline-flex;align-items:center;gap:3px;"><span style="width:8px;height:8px;background:var(--bolero);border-radius:2px;display:inline-block;opacity:0.7;"></span>Aandelen</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rij 2: Marktdata -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
+        <div class="card markt-section">
+            <div class="markt-section-header"><h3>VALUTA</h3></div>
+            <table class="markt-table"><thead><tr><th>Paar</th><th>Koers</th></tr></thead>
+            <tbody id="mb-fx"></tbody></table>
+        </div>
+        <div class="card markt-section">
+            <div class="markt-section-header"><h3>CORE INDICES</h3></div>
+            <table class="markt-table"><thead><tr><th>Index</th><th>Koers</th><th>Dag △</th><th>Dag %</th></tr></thead>
+            <tbody id="mb-idx"></tbody></table>
+        </div>
+        <div class="card markt-section">
+            <div class="markt-section-header"><h3>COMMODITIES</h3></div>
+            <table class="markt-table"><thead><tr><th>Grondstof</th><th>Koers</th><th>Dag △</th><th>Dag %</th></tr></thead>
+            <tbody id="mb-com"></tbody></table>
+        </div>
+        <div class="card markt-section">
+            <div class="markt-section-header"><h3>ENERGY</h3></div>
+            <table class="markt-table"><thead><tr><th>Instrument</th><th>Koers</th><th>Dag △</th><th>Dag %</th></tr></thead>
+            <tbody id="mb-nrg"></tbody></table>
+        </div>
+        <div class="card markt-section" style="grid-column:span 2;">
+            <div class="markt-section-header"><h3>CRYPTO</h3></div>
+            <table class="markt-table"><thead><tr><th>Coin</th><th>Koers (USD)</th><th>Dag △</th><th>Dag %</th><th>24h High</th><th>24h Low</th></tr></thead>
+            <tbody id="mb-cry"></tbody></table>
+        </div>
+    </div>
+</div>
+
+<!-- HEATMAP PAGINA -->
+<div id="heatmap-page" class="tab-content">
+    <div class="header" style="margin-bottom:16px;">
+        <div class="header-titles"><h1>HEATMAP</h1></div>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+            <button class="btn" onclick="refreshHeatmapPage()" style="font-size:0.8rem;padding:8px 14px;">↻ Vernieuwen</button>
+            <button class="btn" id="hmCompactBtn" onclick="toggleHmCompact()" style="font-size:0.8rem;padding:8px 14px;">⊟ Compact</button>
+        </div>
+    </div>
+
+    <!-- Tabs: Alle / Aandelen / ETFs / Crypto -->
+    <div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;">
+        <button class="hm-tab-btn hm-sort-btn active" onclick="setHmTab('all',this)">Alle</button>
+        <button class="hm-tab-btn hm-sort-btn" onclick="setHmTab('stock',this)">Aandelen</button>
+        <button class="hm-tab-btn hm-sort-btn" onclick="setHmTab('etf',this)">ETFs</button>
+        <button class="hm-tab-btn hm-sort-btn" onclick="setHmTab('crypto',this)">Crypto</button>
+    </div>
+
+    <!-- Sorteer opties -->
+    <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;align-items:center;">
+        <span style="font-size:0.72rem;color:var(--text-muted);font-weight:700;">SORTEER:</span>
+        <button class="hm-sort-btn active" onclick="setHmSort('pct',this)">Dag %</button>
+        <button class="hm-sort-btn" onclick="setHmSort('name',this)">Naam</button>
+        <button class="hm-sort-btn" onclick="setHmSort('value',this)">Koers</button>
+        <span style="font-size:0.72rem;color:var(--text-muted);margin-left:8px;" id="hmLastUpdate"></span>
+    </div>
+
+    <!-- Add stock modal -->
+    <div id="addStockModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:3000;align-items:center;justify-content:center;">
+        <div class="card" style="width:320px;padding:24px;position:relative;">
+            <h3 style="margin-bottom:16px;">Aandeel toevoegen</h3>
+            <input id="addStockTicker" placeholder="Ticker (bijv. AAPL)" class="cash-input-field" style="width:100%;border:1px solid var(--border-color);border-radius:8px;padding:10px;font-size:1rem;background:var(--bg-color);color:var(--text-main);margin-bottom:10px;">
+            <input id="addStockName" placeholder="Naam (bijv. Apple)" class="cash-input-field" style="width:100%;border:1px solid var(--border-color);border-radius:8px;padding:10px;font-size:1rem;background:var(--bg-color);color:var(--text-main);margin-bottom:16px;">
+            <div style="display:flex;gap:8px;">
+                <button class="btn btn-main" onclick="confirmAddStock()" style="flex:1;">Toevoegen</button>
+                <button class="btn" onclick="hideAddStock()" style="flex:1;">Annuleer</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="hmGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;"></div>
+</div>
+
+<!-- KALENDER PAGINA -->
+<div id="kalender-page" class="tab-content">
+    <div style="margin-bottom:8px;">
+        <h1 style="margin:0 0 10px 0;font-weight:800;">KALENDER</h1>
+        <div class="kal-month-picker">
+            <button class="btn" onclick="kalenderPrevMonth()" style="padding:8px 12px;">◀</button>
+            <span id="kalMonthLabel" style="font-weight:800;font-size:1rem;min-width:140px;text-align:center;"></span>
+            <button class="btn" onclick="kalenderNextMonth()" style="padding:8px 12px;">▶</button>
+            <button class="btn" onclick="kalenderToday()" style="font-size:0.78rem;padding:8px 12px;">Vandaag</button>
+            <button class="btn" onclick="refreshKalender()" style="font-size:0.8rem;padding:8px 14px;">↻ Laden</button>
+        </div>
+    </div>
+
+    <!-- Legenda -->
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;align-items:center;">
+        <div class="kal-legend-item" style="--lc:#3498db;">Earnings</div>
+        <div class="kal-legend-item" style="--lc:#e74c3c;">Dividend</div>
+        <div class="kal-legend-item" style="--lc:#8e44ad;">Fed / ECB</div>
+        <div class="kal-legend-item" style="--lc:#e67e22;">Macro</div>
+    </div>
+
+    <!-- Status -->
+    <div id="kalStatus" style="font-size:0.75rem;color:var(--text-muted);margin-bottom:10px;min-height:18px;"></div>
+
+    <!-- Kalender grid -->
+    <div class="card" style="padding:0;overflow:hidden;">
+        <!-- Dag headers -->
+        <div style="display:grid;grid-template-columns:repeat(7,1fr);background:var(--row-hover);">
+            <div class="kal-header-cell">Ma</div>
+            <div class="kal-header-cell">Di</div>
+            <div class="kal-header-cell">Wo</div>
+            <div class="kal-header-cell">Do</div>
+            <div class="kal-header-cell">Vr</div>
+            <div class="kal-header-cell" style="color:var(--text-muted);">Za</div>
+            <div class="kal-header-cell" style="color:var(--text-muted);">Zo</div>
+        </div>
+        <div id="kalGrid" style="display:grid;grid-template-columns:repeat(7,1fr);"></div>
+    </div>
+
+    <!-- Detail panel -->
+    <div id="kalDetail" style="display:none;margin-top:16px;" class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+            <h3 id="kalDetailDate" style="margin:0;"></h3>
+            <button onclick="document.getElementById('kalDetail').style.display='none'" style="background:none;border:none;font-size:1.2rem;cursor:pointer;color:var(--text-muted);">✕</button>
+        </div>
+        <div id="kalDetailBody"></div>
+    </div>
+
+    <!-- Eigen event modal -->
+    
+</div>
+    
+
+
+    <style>
+        /* Verwijder de pijltjes (spinners) voor alle browsers */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+        
+        .cash-input-wrapper {
+            display: flex;
+            align-items: center;
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 10px 15px;
+            margin-top: 15px;
+        }
+        .currency-symbol {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--text-main);
+            margin-right: 5px;
+        }
+        .cash-input-field {
+            width: 100%;
+            background: transparent !important;
+            border: none !important;
+            color: var(--text-main);
+            font-size: 1.5rem;
+            font-weight: bold;
+            outline: none;
+            padding: 0;
+        }
+
+/* De Badge */
+.cagr-badge {
+    padding: 2px 10px;
+    border-radius: 99px; /* Pill vorm */
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    display: inline-flex;
+    align-items: center;
+}
+
+/* Groene badge: zachte achtergrond, donkere tekst */
+.cagr-positive {
+    background: rgba(46, 204, 113, 0.12);
+    color: #2ecc71 !important;
+    border: 1px solid rgba(46, 204, 113, 0.2);
+}
+
+/* Rode badge: zachte achtergrond, donkere tekst */
+.cagr-negative {
+    background: rgba(231, 76, 60, 0.12);
+    color: #e74c3c !important;
+    border: 1px solid rgba(231, 76, 60, 0.2);
+}
+
+/* Informatie label subtieler maken */
+.info-label {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Specifieke optimalisatie voor Wekelijks Rendement op iPhone */
+@media (max-width: 480px) {
+    #weeklyReturnTable th {
+        font-size: 0.65rem !important;
+        padding: 8px 2px !important;
+        letter-spacing: 0;
+    }
+    #weeklyReturnTable td {
+        padding: 8px 2px !important;
+        font-size: 0.75rem !important;
+    }
+    .return-euro {
+        font-size: 0.8rem !important;
+        font-weight: 800;
+        display: block;
+    }
+    .return-perc {
+        font-size: 0.65rem !important;
+        opacity: 0.8;
+        display: block;
+    }
+}
+
+    </style>
+<script>
+
+function getISOWeek(dateString) {
+    const [d, m, y] = dateString.split('/').map(Number);
+    const date = new Date(y, m - 1, d);
+    date.setHours(0, 0, 0, 0);
+    date.setDate(date.getDate() + 3 - (date.getDay() + 6) % 7);
+    const week1 = new Date(date.getFullYear(), 0, 4);
+    return 1 + Math.round(((date.getTime() - week1.getTime()) / 86400000 - 3 + (week1.getDay() + 6) % 7) / 7);
+}
+
+function renderWeeklyReturns() {
+    const tbody = document.getElementById('weeklyReturnBody');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+
+    // 1. Filter: Bewaar per week alleen de LAATSTE bekende dag
+    const weeksMap = {};
+    brokerData.forEach(entry => {
+        const w = getISOWeek(entry.date);
+        const y = entry.date.split('/')[2];
+        const key = `${y}-W${w}`;
+        weeksMap[key] = entry; 
+    });
+
+    const sortedWeekKeys = Object.keys(weeksMap).sort().reverse();
+
+    // 2. Loop door de weken en bereken rendement t.o.v. vorige week
+    sortedWeekKeys.forEach((key, index) => {
+        if (index === sortedWeekKeys.length - 1) return; // Geen vergelijking mogelijk voor oudste week
+
+        const current = weeksMap[key];
+        const previous = weeksMap[sortedWeekKeys[index + 1]];
+        const weekNum = key.split('-W')[1];
+
+        const row = document.createElement('tr');
+        let html = `<td style="font-weight: 800; color: var(--text-muted); font-size: 0.75rem;">W${weekNum}</td>`;
+
+        const columns = [
+            { c: current.degiro + current.bolero + current.saxo, p: previous.degiro + previous.bolero + previous.saxo },
+            { c: current.degiro, p: previous.degiro },
+            { c: current.bolero, p: previous.bolero },
+            { c: current.saxo, p: previous.saxo }
+        ];
+
+        columns.forEach(m => {
+    const diff = m.c - m.p;
+    const perc = m.p !== 0 ? ((diff / m.p) * 100).toFixed(1) : 0;
+    const isPos = diff >= 0;
+
+    // De '+' en '-' zijn hier verwijderd. De kleur bepaalt de status.
+    html += `
+        <td>
+            <span class="return-euro blur-target" style="color: ${isPos ? 'var(--success)' : 'var(--danger)'};">
+                ${Math.round(Math.abs(diff))}
+            </span>
+            <span class="return-perc" style="color: var(--text-muted);">
+                ${Math.abs(perc)}%
+            </span>
+        </td>`;
+});
+
+        row.innerHTML = html;
+        tbody.appendChild(row);
+    });
+}
+
+function renderWeeklyReturns() {
+    const tbody = document.getElementById('weeklyReturnBody');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+
+    // We lopen van achteren naar voren (nieuwste data bovenaan)
+    for (let i = brokerData.length - 1; i > 0; i--) {
+        const current = brokerData[i];
+        const previous = brokerData[i - 1];
+        
+        const row = document.createElement('tr');
+        
+        // Datum kolom
+        let html = `<td style="font-weight: 600; font-size: 0.85rem;">${current.date}</td>`;
+        
+        // Bereken kolommen voor Totaal en de 3 brokers
+        const metrics = [
+            { cur: (current.degiro + current.bolero + current.saxo), prev: (previous.degiro + previous.bolero + previous.saxo) },
+            { cur: current.degiro, prev: previous.degiro },
+            { cur: current.bolero, prev: previous.bolero },
+            { cur: current.saxo, prev: previous.saxo }
+        ];
+
+        metrics.forEach(m => {
+            const diff = m.cur - m.prev;
+            const perc = m.prev !== 0 ? ((diff / m.prev) * 100).toFixed(2) : 0;
+            const color = diff >= 0 ? 'var(--success)' : 'var(--danger)';
+            const indicator = diff >= 0 ? '▲' : '▼';
+            
+            html += `
+                <td>
+                    <div style="color: ${color}; font-weight: 800; font-size: 0.9rem; display: flex; align-items: center; gap: 4px;">
+                        <span>${indicator}</span>
+                        <span class="blur-target">${formatEuro(Math.abs(diff))}</span>
+                    </div>
+                    <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">
+                        ${diff >= 0 ? '+' : ''}${perc}%
+                    </div>
+                </td>`;
+        });
+
+        row.innerHTML = html;
+        tbody.appendChild(row);
+    }
+}
+
+
+// Opent en sluit het menuutje
+function toggleWidgetMenu() {
+    const menu = document.getElementById('widgetMenu');
+    menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+}
+
+// Verbergt of toont de specifieke widget
+function toggleWidget(containerId, isChecked) {
+    const widget = document.getElementById(containerId);
+    if (widget) {
+        widget.style.display = isChecked ? 'block' : 'none';
+    }
+}
+
+
+    function openNav() {
+        document.getElementById("mySidebar").style.width = "250px";
+        document.getElementById("overlay").style.display = "block";
+    }
+    function closeNav() {
+        document.getElementById("mySidebar").style.width = "0";
+        document.getElementById("overlay").style.display = "none";
+    }
+
+    // ── SWIPE NAVIGATIE ──────────────────────────────────────────────────────
+    const TABS = ['dashboard', 'data-page', 'aandelen-page', 'heatmap-page', 'kalender-page', 'cijfer-page'];
+    const TAB_NAV_ITEMS = () => document.querySelectorAll('.nav-item');
+
+    function getActiveTabIndex() {
+        return TABS.findIndex(id => document.getElementById(id)?.classList.contains('active'));
+    }
+
+    function switchToTabIndex(idx) {
+        if (idx < 0 || idx >= TABS.length) return;
+        const tabId = TABS[idx];
+        // Vind het matching nav-item in de sidebar
+        const navItems = document.querySelectorAll('#mySidebar .nav-item');
+        switchTab(tabId, navItems[idx] || navItems[0]);
+    }
+
+    (function initSwipe() {
+        let touchStartX = 0, touchStartY = 0, touchStartTime = 0;
+        const SWIPE_THRESHOLD = 60;   // min px horizontaal
+        const SWIPE_MAX_Y     = 80;   // max px verticaal (voorkomen scroll-conflict)
+        const SWIPE_MAX_TIME  = 400;  // max ms
+
+        document.addEventListener('touchstart', e => {
+            touchStartX    = e.touches[0].clientX;
+            touchStartY    = e.touches[0].clientY;
+            touchStartTime = Date.now();
+        }, { passive: true });
+
+        document.addEventListener('touchend', e => {
+            const dx   = e.changedTouches[0].clientX - touchStartX;
+            const dy   = e.changedTouches[0].clientY - touchStartY;
+            const dt   = Date.now() - touchStartTime;
+            const sidebar = document.getElementById('mySidebar');
+            const isOpen  = parseInt(sidebar.style.width) > 0;
+
+            // Niet triggeren als het een scroll of lange druk was
+            if (Math.abs(dy) > SWIPE_MAX_Y || dt > SWIPE_MAX_TIME) return;
+            if (Math.abs(dx) < SWIPE_THRESHOLD) return;
+
+            if (dx > 0 && touchStartX < 30) {
+                // Swipe rechts vanuit linkerrand → open menu
+                openNav();
+            } else if (dx < 0 && isOpen) {
+                // Swipe links terwijl menu open → sluit menu
+                closeNav();
+            } else if (dx < 0 && !isOpen) {
+                // Swipe links door pagina → volgende tab
+                const cur = getActiveTabIndex();
+                if (cur < TABS.length - 1) switchToTabIndex(cur + 1);
+            } else if (dx > 0 && !isOpen) {
+                // Swipe rechts door pagina → vorige tab
+                const cur = getActiveTabIndex();
+                if (cur > 0) switchToTabIndex(cur - 1);
+            }
+        }, { passive: true });
+    })();
+    function switchDataTab(tabId, btn) {
+        document.querySelectorAll('.sub-tab-content').forEach(content => content.classList.remove('active'));
+        document.querySelectorAll('.data-tab-btn').forEach(button => button.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        btn.classList.add('active');
+        if (tabId === 'aandelen-data-tab') renderAandelenData();
+        if (tabId === 'crypto-data-tab')   renderCryptoData();
+    }
+    Chart.register(ChartDataLabels);
+    
+    function toggleTheme() {
+        const current = document.documentElement.getAttribute('data-theme');
+        const next = current === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', next);
+        localStorage.setItem('v25_theme', next);
+        document.getElementById('themeBtn').innerText = next === 'dark' ? '☀️' : '🌙';
+    }
+
+    let brokerData = JSON.parse(localStorage.getItem('v25_broker')) || [
+        { date: '13/04/2026', degiro: 50850, bolero: 21769, saxo: 31720 },
+        { date: '14/04/2026', degiro: 54090, bolero: 22466, saxo: 33644 },
+        { date: '15/04/2026', degiro: 55400, bolero: 22728, saxo: 34302 },
+        { date: '16/04/2026', degiro: 56000, bolero: 22674, saxo: 34174 },
+        { date: '17/04/2026', degiro: 57170, bolero: 23099, saxo: 35012 },
+        { date: '20/04/2026', degiro: 57544, bolero: 23164, saxo: 34928 },
+        { date: '21/04/2026', degiro: 57093, bolero: 22844, saxo: 33539 },
+        { date: '22/04/2026', degiro: 59130, bolero: 23293, saxo: 35346 },
+        { date: '23/04/2026', degiro: 59420, bolero: 22963, saxo: 35893 },
+        { date: '24/04/2026', degiro: 59205, bolero: 23917, saxo: 35820 },
+
+    ];
+    
+    let cashData = JSON.parse(localStorage.getItem('v25_cash')) || [
+        { date: '07/2023', broker: 'Degiro', type: 'Gestort', amount: 38512 },
+        { date: '01/2021', broker: 'Bolero', type: 'Gestort', amount: 12570 },
+        { date: '12/2024', broker: 'Saxo', type: 'Gestort', amount: 26300 }
+    ];
+
+    // Storting tracker: gedetailleerde transacties per broker met datum
+    let stortingenData = JSON.parse(localStorage.getItem('v25_stortingen')) || [
+        { date: '01/07/2023', broker: 'Degiro', type: 'Storting', amount: 38512 },
+        { date: '01/01/2021', broker: 'Bolero', type: 'Storting', amount: 12570 },
+        { date: '01/12/2024', broker: 'Saxo',   type: 'Storting', amount: 26300 }
+    ];
+
+    let charts = {};
+
+    function switchTab(id, el) {
+        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        if (el) el.classList.add('active');
+        const labels = { 'dashboard':'PORTFOLIO', 'data-page':'DATA', 'aandelen-page':'LIVE', 'heatmap-page':'HEATMAP', 'kalender-page':'KALENDER', 'cijfer-page':'CIJFERS' };
+        const navLabel = document.querySelector('.nav span[style*="font-weight"]');
+        if (navLabel) navLabel.textContent = labels[id] || '';
+        closeNav();
+        if (id === 'aandelen-page') loadMarktData(true);
+        if (id === 'heatmap-page') initHeatmapPage();
+        if (id === 'kalender-page') initKalender();
+        if (id === 'cijfer-page') initCijferPage();
+    }
+
+    function toggleBlur() { 
+        document.querySelectorAll('.blur-target').forEach(e => e.classList.toggle('blur')); 
+        for (let chartName in charts) {
+            if (charts[chartName]) charts[chartName].update();
+        }
+        renderStatsTable();
+        renderMaandoverzicht();
+    }
+    function formatEuro(v) { return "€ " + (v || 0).toLocaleString('nl-NL', {minimumFractionDigits: 2}); }
+    function addRow(type) {
+    if(type === 'broker') {
+        brokerData.push({date: '', degiro: 0, bolero: 0, saxo: 0});
+    } else {
+        // Standaard nieuwe rij in de algemene cashData lijst
+        cashData.push({date: '', broker: 'Degiro', type: 'Gestort', amount: 0});
+    }
+    renderTables();
+    }
+
+    function saveData(silent = false) {
+        localStorage.setItem('v25_broker', JSON.stringify(brokerData));
+        localStorage.setItem('v25_cash', JSON.stringify(cashData));
+        localStorage.setItem('v25_stortingen', JSON.stringify(stortingenData));
+        updateDashboard();
+        if (!silent) alert("Gegevens opgeslagen!");
+    }
+
+    function updateDashboard() {
+
+        calculateAndDisplayCAGR(); // Voeg dit hier toe
+        // Voeg dit toe onderaan de bestaande updateDashboard() functie
+renderWeeklyReturns();
+    // 1. Dwing chronologische volgorde af voor de grafiek
+    brokerData.sort((a, b) => {
+        const dateA = a.date.split('/').reverse().join('');
+        const dateB = b.date.split('/').reverse().join('');
+        return dateA.localeCompare(dateB);
+        });
+        const last = brokerData[brokerData.length-1];
+        const prev = brokerData[brokerData.length-2] || last;
+        const total = last.degiro + last.bolero + last.saxo;
+        const pTotal = prev.degiro + prev.bolero + prev.saxo;
+
+        let cash = { Degiro: 0, Bolero: 0, Saxo: 0, Totaal: 0 };
+        cashData.forEach(c => {
+            const val = c.type === 'Gestort' ? c.amount : -c.amount;
+            cash[c.broker] += val;
+            cash.Totaal += val;
+        });
+
+        const profitTotal = total - cash.Totaal;
+        const percTotal = cash.Totaal !== 0 ? ((profitTotal / cash.Totaal) * 100).toFixed(2) : 0;
+
+        document.getElementById('totalValue').innerText = formatEuro(total);
+        document.getElementById('netInleg').innerText = formatEuro(cash.Totaal);
+        document.getElementById('profitEuro').innerText = formatEuro(profitTotal);
+        document.getElementById('profitPerc').innerText = "(" + percTotal + "%)";
+        document.getElementById('profitEuro').style.color = profitTotal >= 0 ? 'var(--success)' : 'var(--danger)';
+
+        ['Degiro', 'Bolero', 'Saxo'].forEach(b => {
+            const currentVal = last[b.toLowerCase()];
+            const cashVal = cash[b];
+            const pEuro = currentVal - cashVal;
+            const pPerc = cashVal !== 0 ? ((pEuro / cashVal) * 100).toFixed(2) : 0;
+            document.getElementById(`val${b}`).innerText = formatEuro(currentVal);
+            document.getElementById(`cash${b}`).innerText = formatEuro(cashVal);
+            document.getElementById(`prof${b}Euro`).innerText = formatEuro(pEuro);
+            document.getElementById(`prof${b}Perc`).innerText = "(" + pPerc + "%)";
+            document.getElementById(`prof${b}Euro`).style.color = pEuro >= 0 ? 'var(--success)' : 'var(--danger)';
+        });
+
+        const DAGEN = ['zondag','maandag','dinsdag','woensdag','donderdag','vrijdag','zaterdag'];
+        const [ld, lm, ly] = last.date.split('/').map(Number);
+        const dateObj = new Date(ly, lm - 1, ld);
+        const dagNaam = DAGEN[dateObj.getDay()];
+        const luEl = document.getElementById('lastUpdateVal');
+        if (luEl) luEl.innerText = `${dagNaam} ${last.date}`;
+
+        updateChange('totalChange', total, pTotal);
+        updateChange('chgDegiro', last.degiro, prev.degiro);
+        updateChange('chgBolero', last.bolero, prev.bolero);
+        updateChange('chgSaxo', last.saxo, prev.saxo);
+        checkATH();
+        updateCharts();
+        renderTables();
+    }
+
+    function updateChange(id, cur, prev) {
+        const diff = cur - prev, perc = prev !== 0 ? ((diff / prev) * 100).toFixed(2) : 0;
+        const el = document.getElementById(id);
+        el.style.color = diff >= 0 ? 'var(--success)' : 'var(--danger)';
+        el.innerHTML = `<span>${diff >= 0 ? '▲' : '▼'}</span> <span class="blur-target">${formatEuro(Math.abs(diff))}</span> (${perc}%)`;
+    }
+
+    function renderTables() {
+    // 1. BROKER TABEL (Onveranderd)
+    const bt = document.getElementById('brokerTableBody'); 
+    if (bt) {
+        bt.innerHTML = '';
+        brokerData.slice().reverse().forEach((r, reversedIndex) => {
+            const i = brokerData.length - 1 - reversedIndex;
+            bt.innerHTML += `<tr>
+                <td><input type="text" value="${r.date}" onchange="brokerData[${i}].date=this.value"></td>
+                <td><input type="number" value="${r.degiro}" onchange="brokerData[${i}].degiro=parseFloat(this.value)"></td>
+                <td><input type="number" value="${r.bolero}" onchange="brokerData[${i}].bolero=parseFloat(this.value)"></td>
+                <td><input type="number" value="${r.saxo}" onchange="brokerData[${i}].saxo=parseFloat(this.value)"></td>
+                <td><button onclick="brokerData.splice(${i},1);renderTables()">✕</button></td>
+            </tr>`;
+        });
+    }
+
+    // 2. CASH INPUTS (Vult de 3 vakjes in de DATA tab)
+    const getAmount = (b) => {
+        const entry = cashData.find(item => item.broker === b);
+        return entry ? entry.amount : 0;
+    };
+
+    if (document.getElementById('inputCashDegiro')) document.getElementById('inputCashDegiro').value = getAmount('Degiro');
+    if (document.getElementById('inputCashBolero')) document.getElementById('inputCashBolero').value = getAmount('Bolero');
+    if (document.getElementById('inputCashSaxo')) document.getElementById('inputCashSaxo').value = getAmount('Saxo');
+    }
+
+    // updateSingleCash: saves silently so no alert fires on input change
+    function updateSingleCash(broker, value) {
+        const amount = parseFloat(value) || 0;
+        const index = cashData.findIndex(item => item.broker === broker);
+        if (index !== -1) {
+            cashData[index].amount = amount;
+        } else {
+            cashData.push({ date: 'Totaal', broker: broker, type: 'Gestort', amount: amount });
+        }
+        saveData(true); // silent = true, no alert
+    }
+    const brokerStartDates = {
+    'Degiro': '2023-07-01',
+    'Bolero': '2021-01-01',
+    'Saxo': '2024-12-01'
+};
+
+function calculateAndDisplayCAGR() {
+    const lastEntry = brokerData[brokerData.length - 1];
+    if (!lastEntry) return;
+
+    ['Degiro', 'Bolero', 'Saxo'].forEach(broker => {
+        const currentVal = lastEntry[broker.toLowerCase()];
+        const cashObj = cashData.find(c => c.broker === broker);
+        const cashVal = cashObj ? cashObj.amount : 0;
+        
+        const startDate = new Date(brokerStartDates[broker]);
+        const today = new Date();
+        const years = (today - startDate) / (1000 * 60 * 60 * 24 * 365.25);
+
+        const el = document.getElementById(`cagr${broker}`);
+        if (!el) return;
+
+        if (cashVal > 0 && currentVal > 0 && years > 0) {
+            const cagr = (Math.pow((currentVal / cashVal), (1 / years)) - 1) * 100;
+            el.innerText = cagr.toFixed(2) + "%";
+            
+            // Verwijder oude klassen en voeg de nieuwe toe voor de kleur
+            el.classList.remove('cagr-positive', 'cagr-negative');
+            el.classList.add(cagr >= 0 ? 'cagr-positive' : 'cagr-negative');
+        }
+    });
+}
+
+
+    function exportCSV(type) {
+        let csv = '', filename = '';
+        if(type === 'broker') {
+            csv = 'Datum;Degiro;Bolero;Saxo\n' + brokerData.map(r => `${r.date};${r.degiro};${r.bolero};${r.saxo}`).join('\n');
+            filename = 'portfolio_broker_data.csv';
+        } else {
+            csv = 'Datum;Broker;Type;Bedrag\n' + cashData.map(r => `${r.date};${r.broker};${r.type};${r.amount}`).join('\n');
+            filename = 'portfolio_cash_data.csv';
+        }
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.setAttribute("download", filename);
+        link.click();
+    }
+
+    function importCSV(input, type) {
+        const file = input.files[0];
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const lines = e.target.result.split('\n');
+            const result = [];
+            for(let i = 1; i < lines.length; i++) {
+                if(!lines[i]) continue;
+                const cols = lines[i].split(';');
+                if(type === 'broker') result.push({date: cols[0], degiro: parseFloat(cols[1]), bolero: parseFloat(cols[2]), saxo: parseFloat(cols[3])});
+                else result.push({date: cols[0], broker: cols[1], type: cols[2], amount: parseFloat(cols[3])});
+            }
+            if(type === 'broker') brokerData = result; else cashData = result;
+            renderTables();
+            alert('CSV succesvol geïmporteerd!');
+        };
+        reader.readAsText(file);
+    }
+
+    // Exporteer alle data naar een JSON bestand voor iCloud/Backup
+function exportMasterJSON() {
+    const backupData = {
+        broker: brokerData,
+        cash: cashData,
+        version: "2.5",
+        exportDate: new Date().toISOString()
+    };
+
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backupData));
+    const downloadAnchorNode = document.createElement('a');
+    downloadAnchorNode.setAttribute("href", dataStr);
+    downloadAnchorNode.setAttribute("download", "portfolio_backup_" + new Date().toLocaleDateString() + ".json");
+    document.body.appendChild(downloadAnchorNode); 
+    downloadAnchorNode.click();
+    downloadAnchorNode.remove();
+}
+
+// Importeer een eerder gemaakte backup
+function importMasterJSON(input) {
+    const file = input.files[0];
+    const reader = new FileReader();
+    
+    reader.onload = function(e) {
+        try {
+            const importedData = JSON.parse(e.target.result);
+            
+            if (importedData.broker && importedData.cash) {
+                brokerData = importedData.broker;
+                cashData = importedData.cash;
+                
+                saveData(true); // Sla op in LocalStorage
+                renderTables();
+                updateDashboard();
+                
+                alert("Backup succesvol hersteld!");
+            } else {
+                alert("Ongeldig backup bestand.");
+            }
+        } catch (err) {
+            alert("Er is een fout opgetreden bij het lezen van het bestand.");
+        }
+    };
+    reader.readAsText(file);
+}
+
+
+    function updateCharts() {
+        const labels = brokerData.map(d => d.date);
+        charts.main.data.labels = labels;
+        charts.main.data.datasets[0].data = brokerData.map(d => d.degiro + d.bolero + d.saxo);
+        charts.main.update();
+        // Benchmarks heruitlijnen op nieuwe portfolio data
+        const anyBenchActive = BENCHMARKS.some(b => document.getElementById(b.id)?.checked);
+        if (anyBenchActive) {
+            // Cache leegmaken zodat nieuwe datums opnieuw uitlijnen
+            BENCHMARKS.forEach(b => { if (benchCache[b.ticker]) delete benchCache[b.ticker]; });
+            updateBenchmarks();
+        }
+        const last = brokerData[brokerData.length-1];
+        charts.pie.data.datasets[0].data = [last.degiro, last.bolero, last.saxo];
+        charts.pie.update();
+        ['degiro', 'bolero', 'saxo'].forEach(b => {
+            charts[b].data.labels = labels;
+            charts[b].data.datasets[0].data = brokerData.map(d => d[b]);
+            charts[b].update();
+        });
+
+        // Dagrendement: dagelijkse verandering per broker (t.o.v. vorige dag)
+        if (charts.dailyReturn) {
+            const drLabels = brokerData.slice(1).map(d => d.date);
+            const degiroReturns = brokerData.slice(1).map((d, i) => d.degiro - brokerData[i].degiro);
+            const boleroReturns = brokerData.slice(1).map((d, i) => d.bolero - brokerData[i].bolero);
+            const saxoReturns   = brokerData.slice(1).map((d, i) => d.saxo   - brokerData[i].saxo);
+            charts.dailyReturn.data.labels = drLabels;
+            charts.dailyReturn.data.datasets[0].data = degiroReturns;
+            charts.dailyReturn.data.datasets[1].data = boleroReturns;
+            charts.dailyReturn.data.datasets[2].data = saxoReturns;
+            charts.dailyReturn.update();
+        }
+
+        // Gecumuleerd rendement % per broker (t.o.v. eerste datapunt)
+        if (charts.cumulReturn && brokerData.length > 0) {
+            const base = brokerData[0];
+            const crLabels = brokerData.map(d => d.date);
+            const getCumul = (broker) => brokerData.map(d => base[broker] !== 0 ? ((d[broker] - base[broker]) / base[broker]) * 100 : 0);
+            charts.cumulReturn.data.labels = crLabels;
+            charts.cumulReturn.data.datasets[0].data = getCumul('degiro');
+            charts.cumulReturn.data.datasets[1].data = getCumul('bolero');
+            charts.cumulReturn.data.datasets[2].data = getCumul('saxo');
+            charts.cumulReturn.update();
+        }
+
+        renderStatsTable();
+        renderHeatmap();
+        renderMaandoverzicht();
+    }
+
+function renderWeeklyReturns() {
+    const tbody = document.getElementById('weeklyReturnBody');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+
+    // We lopen van achteren naar voren door de data (nieuwste bovenaan)
+    for (let i = brokerData.length - 1; i > 0; i--) {
+        const current = brokerData[i];
+        const previous = brokerData[i - 1];
+        
+        const row = document.createElement('tr');
+        
+        // Datum kolom
+        let html = `<td>${current.date}</td>`;
+        
+        // Bereken kolommen voor Totaal en de 3 brokers
+        const types = [
+            { cur: (current.degiro + current.bolero + current.saxo), prev: (previous.degiro + previous.bolero + previous.saxo) },
+            { cur: current.degiro, prev: previous.degiro },
+            { cur: current.bolero, prev: previous.bolero },
+            { cur: current.saxo, prev: previous.saxo }
+        ];
+
+        types.forEach(data => {
+            const diff = data.cur - data.prev;
+            const perc = data.prev !== 0 ? ((diff / data.prev) * 100).toFixed(2) : 0;
+            const color = diff >= 0 ? 'var(--success)' : 'var(--danger)';
+            const symbol = diff >= 0 ? '+' : '';
+            
+            html += `
+                <td>
+                    <div style="color: ${color}; font-weight: bold;">
+                        <span class="blur-target">${symbol}${formatEuro(diff)}</span>
+                    </div>
+                    <div style="font-size: 0.7rem; color: var(--text-muted);">${symbol}${perc}%</div>
+                </td>`;
+        });
+
+        row.innerHTML = html;
+        tbody.appendChild(row);
+    }
+}
+
+    function initCharts() {
+    // 1. De instellingen voor alle lijngrafieken (inclusief de blur-logica)
+    const lineOpt = { 
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: {
+            mode: 'index',
+            intersect: false,
+        },
+        plugins: { 
+            legend: { display: false }, 
+            datalabels: { display: false },
+            tooltip: {
+    callbacks: {
+        label: function(context) {
+            // We halen de 'label' (brokernaam) hier weg
+            const isBlurred = document.querySelector('.blur-target').classList.contains('blur');
+            
+            if (isBlurred) {
+                return "€ •••••"; // Alleen de bolletjes tonen
+            } else {
+                return formatEuro(context.parsed.y); // Alleen het bedrag tonen
+            }
+        }
+    }
+    }
+        }, 
+    scales: {
+    x: {
+        ticks: {
+            callback: function(val, index) {
+                const total = this.chart.data.labels.length;
+                if (index === 0 || index === total - 1) {
+                    return this.getLabelForValue(val);
+                }
+                return '';
+            },
+            autoSkip: false,
+            maxRotation: 0
+        }
+    },
+    y: { 
+    beginAtZero: false,
+    afterTickToLabelConversion: function(scaleInstance) {
+        // Haal alle berekende ticks op
+        const ticks = scaleInstance.ticks;
+        if (ticks.length > 2) {
+            // Maak alle labels leeg, behalve de eerste (onderste) en de laatste (bovenste)
+            for (let i = 1; i < ticks.length - 1; i++) {
+                ticks[i].label = ""; 
+            }
+        }
+    }
+}
+    }
+    
+    };
+
+    // 2. De Hoofdgrafiek aanmaken (met benchmark datasets)
+    const mainChartOpt = JSON.parse(JSON.stringify(lineOpt));
+    // Override tooltip voor hoofd + benchmarks
+    mainChartOpt.plugins.tooltip = {
+        callbacks: {
+            label: function(context) {
+                const isBlurred = document.querySelector('.blur-target').classList.contains('blur');
+                const dsLabel = context.dataset.label || '';
+                if (context.datasetIndex === 0) {
+                    return isBlurred ? '  € •••••' : '  ' + formatEuro(context.parsed.y);
+                }
+                // Benchmark: ook in €
+                return isBlurred ? `  ${dsLabel}: € •••••` : `  ${dsLabel}: ` + formatEuro(context.parsed.y);
+            },
+            labelColor: function(context) {
+                const colors = ['#6c757d','#e67e22','#8e44ad','#16a085','#c0392b'];
+                return { borderColor: colors[context.datasetIndex] || '#999', backgroundColor: colors[context.datasetIndex] || '#999' };
+            }
+        }
+    };
+    mainChartOpt.plugins.legend = { display: false };
+    charts.main = new Chart(document.getElementById('growthChart'), {
+        type: 'line',
+        data: {
+            labels: [],
+            datasets: [
+                // Dataset 0: portfolio totaal
+                { label: 'Portfolio', data: [], borderColor: '#6c757d', backgroundColor: '#6c757d15', fill: true, tension: 0.4, pointRadius: 4, pointHoverRadius: 6, borderWidth: 3 },
+                // Dataset 1: S&P 500 (% scaled)
+                { label: 'S&P 500',    data: [], borderColor: '#e67e22', backgroundColor: 'transparent', fill: false, tension: 0.4, pointRadius: 0, pointHoverRadius: 5, borderWidth: 2, borderDash: [5,3], hidden: true },
+                // Dataset 2: MSCI World
+                { label: 'MSCI World', data: [], borderColor: '#8e44ad', backgroundColor: 'transparent', fill: false, tension: 0.4, pointRadius: 0, pointHoverRadius: 5, borderWidth: 2, borderDash: [5,3], hidden: true },
+                // Dataset 3: Nasdaq 100
+                { label: 'Nasdaq 100', data: [], borderColor: '#16a085', backgroundColor: 'transparent', fill: false, tension: 0.4, pointRadius: 0, pointHoverRadius: 5, borderWidth: 2, borderDash: [5,3], hidden: true },
+                // Dataset 4: Bitcoin
+                { label: 'Bitcoin',    data: [], borderColor: '#c0392b', backgroundColor: 'transparent', fill: false, tension: 0.4, pointRadius: 0, pointHoverRadius: 5, borderWidth: 2, borderDash: [5,3], hidden: true },
+            ]
+        },
+        options: {
+            ...mainChartOpt,
+            scales: {
+                x: {
+                    ticks: {
+                        callback: function(val, index) {
+                            const total = this.chart.data.labels.length;
+                            return (index === 0 || index === total - 1) ? this.getLabelForValue(val) : '';
+                        },
+                        autoSkip: false,
+                        maxRotation: 0
+                    }
+                },
+                y: {
+                    beginAtZero: false,
+                    position: 'left',
+                    afterTickToLabelConversion: function(s) {
+                        if (s.ticks.length > 2) for (let i = 1; i < s.ticks.length - 1; i++) s.ticks[i].label = '';
+                    }
+                },
+                yBench: {
+                    beginAtZero: false,
+                    position: 'right',
+                    display: false, // Toon rechter-as alleen als benchmark actief is
+                    grid: { drawOnChartArea: false },
+                    ticks: { callback: v => v.toFixed(1) + '%' },
+                    afterTickToLabelConversion: function(s) {
+                        if (s.ticks.length > 2) for (let i = 1; i < s.ticks.length - 1; i++) s.ticks[i].label = '';
+                    }
+                }
+            }
+        }
+    });
+
+    // 3. De Broker-grafieken (Degiro, Bolero, Saxo) aanmaken
+    ['degiro', 'bolero', 'saxo'].forEach(b => {
+        const colors = { degiro: '#f1c40f', bolero: '#3498db', saxo: '#e74c3c' };
+        charts[b] = new Chart(document.getElementById('chart' + b.charAt(0).toUpperCase() + b.slice(1)), { 
+            type: 'line', 
+            data: { labels: [], datasets: [{ label: b.charAt(0).toUpperCase() + b.slice(1), data: [], borderColor: colors[b], backgroundColor: colors[b]+'15', fill: true, tension: 0.4, pointRadius: 4, pointHoverRadius: 6, borderWidth: 3 }] }, 
+            options: lineOpt 
+        });
+    });
+
+    // 5. De Dagrendement-grafiek (alle 3 brokers gecombineerd) aanmaken
+    charts.dailyReturn = new Chart(document.getElementById('chartDailyReturn'), {
+        type: 'line',
+        data: {
+            labels: [],
+            datasets: [
+                { label: 'Degiro', data: [], borderColor: '#f1c40f', backgroundColor: 'transparent', fill: false, tension: 0.4, pointRadius: 4, pointHoverRadius: 6, borderWidth: 2.5 },
+                { label: 'Bolero', data: [], borderColor: '#3498db', backgroundColor: 'transparent', fill: false, tension: 0.4, pointRadius: 4, pointHoverRadius: 6, borderWidth: 2.5 },
+                { label: 'Saxo',   data: [], borderColor: '#e74c3c', backgroundColor: 'transparent', fill: false, tension: 0.4, pointRadius: 4, pointHoverRadius: 6, borderWidth: 2.5 }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: { mode: 'index', intersect: false },
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'right',
+                    labels: { usePointStyle: true, pointStyleWidth: 16, font: { size: 12, weight: '700' }, padding: 20 }
+                },
+                datalabels: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const isBlurred = document.querySelector('.blur-target').classList.contains('blur');
+                            const label = context.dataset.label || '';
+                            if (isBlurred) return label + ": € •••••";
+                            const val = context.parsed.y;
+                            return label + ": " + (val >= 0 ? '+' : '') + formatEuro(val);
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    ticks: {
+                        callback: function(val, index) {
+                            const total = this.chart.data.labels.length;
+                            if (index === 0 || index === total - 1) {
+                                return this.getLabelForValue(val);
+                            }
+                            return '';
+                        },
+                        autoSkip: false,
+                        maxRotation: 0
+                    }
+                },
+                y: {
+                    beginAtZero: false,
+                    grid: {
+                        color: function(context) {
+                            if (context.tick.value === 0) return 'rgba(128,128,128,0.5)';
+                            return 'rgba(128,128,128,0.08)';
+                        },
+                        lineWidth: function(context) {
+                            if (context.tick.value === 0) return 2;
+                            return 1;
+                        }
+                    },
+                    afterTickToLabelConversion: function(scaleInstance) {
+                        const ticks = scaleInstance.ticks;
+                        if (ticks.length > 2) {
+                            for (let i = 1; i < ticks.length - 1; i++) {
+                                if (ticks[i].value !== 0) ticks[i].label = "";
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    // 6. Gecumuleerd rendement % per broker
+    charts.cumulReturn = new Chart(document.getElementById('chartCumulReturn'), {
+        type: 'line',
+        data: {
+            labels: [],
+            datasets: [
+                { label: 'Degiro', data: [], borderColor: '#f1c40f', backgroundColor: 'transparent', fill: false, tension: 0.4, pointRadius: 4, pointHoverRadius: 6, borderWidth: 2.5 },
+                { label: 'Bolero', data: [], borderColor: '#3498db', backgroundColor: 'transparent', fill: false, tension: 0.4, pointRadius: 4, pointHoverRadius: 6, borderWidth: 2.5 },
+                { label: 'Saxo',   data: [], borderColor: '#e74c3c', backgroundColor: 'transparent', fill: false, tension: 0.4, pointRadius: 4, pointHoverRadius: 6, borderWidth: 2.5 }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: { mode: 'index', intersect: false },
+            plugins: {
+                legend: { display: true, position: 'right', labels: { usePointStyle: true, pointStyleWidth: 16, font: { size: 12, weight: '700' }, padding: 20 } },
+                datalabels: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const label = context.dataset.label || '';
+                            const val = context.parsed.y;
+                            return label + ': ' + (val >= 0 ? '+' : '') + val.toFixed(2) + '%';
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    ticks: {
+                        callback: function(val, index) {
+                            const total = this.chart.data.labels.length;
+                            if (index === 0 || index === total - 1) return this.getLabelForValue(val);
+                            return '';
+                        },
+                        autoSkip: false, maxRotation: 0
+                    }
+                },
+                y: {
+                    beginAtZero: false,
+                    ticks: {
+                        callback: function(val) { return val.toFixed(1) + '%'; }
+                    },
+                    afterTickToLabelConversion: function(scaleInstance) {
+                        const ticks = scaleInstance.ticks;
+                        if (ticks.length > 2) {
+                            for (let i = 1; i < ticks.length - 1; i++) ticks[i].label = '';
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    // 4. De Taartdiagram (Distribution) aanmaken
+    charts.pie = new Chart(document.getElementById('pieChart'), { 
+        type: 'doughnut', 
+        data: { labels: ['Degiro', 'Bolero', 'Saxo'], datasets: [{ data: [], backgroundColor: ['#f1c40f', '#3498db', '#e74c3c'], borderWeight: 0 }] }, 
+        options: { 
+            cutout: '70%', 
+            maintainAspectRatio: false, 
+            plugins: { 
+    legend: { 
+        display: true, 
+        position: 'bottom',
+        labels: { usePointStyle: true, font: { size: 12 } }
+    },
+    tooltip: {
+        callbacks: {
+            title: function(context) {
+                // Toon brokernaam als title (buiten het label)
+                return context[0]?.label || '';
+            },
+            label: function(context) {
+                const isBlurred = document.querySelector('.blur-target').classList.contains('blur');
+                if (isBlurred) return '  € •••••';
+                return '  ' + formatEuro(context.parsed);
+            }
+        }
+    },
+    datalabels: { 
+        display: true, 
+        color: '#fff', 
+        font: { weight: 'bold' }, 
+        formatter: (v, c) => { 
+            let s=0; c.chart.data.datasets[0].data.forEach(x=>s+=x); 
+            return (v*100/s).toFixed(0)+"%"; 
+        } 
+    } 
+}
+        } 
+    });
+    }
+
+    // ── STATISTIEKEN TABEL ──────────────────────────────────────────────────
+    function renderStatsTable() {
+        const tbody = document.getElementById('statsTableBody');
+        if (!tbody || brokerData.length < 2) return;
+
+        const brokers = ['degiro', 'bolero', 'saxo'];
+
+        // Bereken dagrendementen per broker
+        const dailyReturns = {};
+        brokers.forEach(b => {
+            dailyReturns[b] = brokerData.slice(1).map((d, i) => d[b] - brokerData[i][b]);
+        });
+
+        const stats = brokers.map(b => {
+            const returns = dailyReturns[b];
+            const best  = Math.max(...returns);
+            const worst = Math.min(...returns);
+            const bestIdx  = returns.indexOf(best);
+            const worstIdx = returns.indexOf(worst);
+            const bestDate  = brokerData[bestIdx + 1].date;
+            const worstDate = brokerData[worstIdx + 1].date;
+            const avg = returns.reduce((a, v) => a + v, 0) / returns.length;
+            const variance = returns.reduce((a, v) => a + Math.pow(v - avg, 2), 0) / returns.length;
+            const stdDev = Math.sqrt(variance);
+
+            // Max drawdown
+            let peak = brokerData[0][b], maxDD = 0;
+            brokerData.forEach(d => {
+                if (d[b] > peak) peak = d[b];
+                const dd = peak > 0 ? ((d[b] - peak) / peak) * 100 : 0;
+                if (dd < maxDD) maxDD = dd;
+            });
+
+            return { best, worst, bestDate, worstDate, avg, stdDev, maxDD };
+        });
+
+        const isBlurred = () => document.querySelector('.blur-target') && document.querySelector('.blur-target').classList.contains('blur');
+
+        const fmt = (v) => isBlurred() ? '€ •••' : (v >= 0 ? '+' : '') + formatEuro(v);
+        const fmtAvg = (v) => isBlurred() ? '€ •••' : (v >= 0 ? '+' : '') + formatEuro(v);
+
+        const rows = [
+            {
+                label: 'Beste dag',
+                vals: stats.map(s => ({
+                    main: fmt(s.best),
+                    sub: s.bestDate,
+                    color: 'var(--success)'
+                }))
+            },
+            {
+                label: 'Slechtste dag',
+                vals: stats.map(s => ({
+                    main: fmt(s.worst),
+                    sub: s.worstDate,
+                    color: 'var(--danger)'
+                }))
+            },
+            {
+                label: 'Gem. dagrendement',
+                vals: stats.map(s => ({
+                    main: fmtAvg(s.avg),
+                    sub: '',
+                    color: s.avg >= 0 ? 'var(--success)' : 'var(--danger)'
+                }))
+            },
+            {
+                label: 'Max drawdown',
+                vals: stats.map(s => ({
+                    main: s.maxDD.toFixed(2) + '%',
+                    sub: '',
+                    color: 'var(--danger)'
+                }))
+            }
+        ];
+
+        tbody.innerHTML = rows.map(row => `
+            <tr style="border-bottom:1px solid var(--border-color);">
+                <td style="padding:7px 2px;color:var(--text-muted);font-size:0.7rem;font-weight:600;">${row.label}</td>
+                ${row.vals.map(v => `
+                    <td style="padding:7px 2px;text-align:right;">
+                        <span style="color:${v.color};font-weight:700;font-size:0.78rem;">${v.main}</span>
+                        ${v.sub ? `<br><span style="color:var(--text-muted);font-size:0.62rem;">${v.sub}</span>` : ''}
+                    </td>`).join('')}
+            </tr>`).join('');
+    }
+
+    // ── HEATMAP KALENDER ────────────────────────────────────────────────────
+    const HEATMAP_BROKERS = ['totaal', 'degiro', 'bolero', 'saxo'];
+    const HEATMAP_LABELS  = { totaal: 'TOTAAL', degiro: 'DEGIRO', bolero: 'BOLERO', saxo: 'SAXO' };
+    let heatmapBrokerIdx = 0;
+    let heatmapYear = new Date().getFullYear();
+
+    function cycleHeatmapBroker() {
+        heatmapBrokerIdx = (heatmapBrokerIdx + 1) % HEATMAP_BROKERS.length;
+        document.getElementById('heatmapBrokerBtn').innerText = HEATMAP_LABELS[HEATMAP_BROKERS[heatmapBrokerIdx]] + ' ▾';
+        renderHeatmap();
+    }
+
+    function renderHeatmap() {
+        const grid = document.getElementById('heatmapGrid');
+        const yearLabel = document.getElementById('heatmapYearLabel');
+        if (!grid || !yearLabel) return;
+        yearLabel.innerText = heatmapYear;
+
+        const broker = HEATMAP_BROKERS[heatmapBrokerIdx];
+
+        const returnMap = {};
+        for (let i = 1; i < brokerData.length; i++) {
+            const cur  = brokerData[i];
+            const prev = brokerData[i - 1];
+            const [d, m, y] = cur.date.split('/');
+            const key = `${y}-${m.padStart(2,'0')}-${d.padStart(2,'0')}`;
+            const val = broker === 'totaal'
+                ? (cur.degiro + cur.bolero + cur.saxo) - (prev.degiro + prev.bolero + prev.saxo)
+                : cur[broker] - prev[broker];
+            returnMap[key] = val;
+        }
+
+        const allVals = Object.values(returnMap).filter(v => isFinite(v));
+        const maxAbs = allVals.length > 0 ? Math.max(...allVals.map(Math.abs)) : 1;
+
+        const MONTH_NL = ['Jan','Feb','Mrt','Apr','Mei','Jun','Jul','Aug','Sep','Okt','Nov','Dec'];
+        const DAY_NL   = ['Ma','Di','Wo','Do','Vr','Za','Zo'];
+
+        let html = `<div style="display:flex;gap:12px;flex-wrap:wrap;">`;
+
+        for (let month = 0; month < 12; month++) {
+            const firstDay = new Date(heatmapYear, month, 1);
+            const daysInMonth = new Date(heatmapYear, month + 1, 0).getDate();
+            let startDow = (firstDay.getDay() + 6) % 7;
+
+            html += `<div style="min-width:130px;">`;
+            html += `<div style="font-size:0.7rem;font-weight:700;color:var(--text-muted);margin-bottom:4px;">${MONTH_NL[month]}</div>`;
+            html += `<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:2px;">`;
+            DAY_NL.forEach(d => {
+                html += `<div style="font-size:0.55rem;color:var(--text-muted);text-align:center;">${d}</div>`;
+            });
+            html += `</div>`;
+            html += `<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;">`;
+
+            for (let e = 0; e < startDow; e++) html += `<div></div>`;
+
+            for (let day = 1; day <= daysInMonth; day++) {
+                const mm = String(month + 1).padStart(2, '0');
+                const dd = String(day).padStart(2, '0');
+                const key = `${heatmapYear}-${mm}-${dd}`;
+                const val = returnMap[key];
+
+                let bg = 'var(--border-color)';
+                let dataTooltip = `${dd}/${mm}/${heatmapYear}: geen data`;
+
+                if (val !== undefined) {
+                    const intensity = maxAbs > 0 ? Math.min(Math.abs(val) / maxAbs, 1) : 0;
+                    const alpha = Math.round(55 + intensity * 200);
+                    const alphaHex = alpha.toString(16).padStart(2, '0');
+                    bg = val >= 0 ? `#2ecc71${alphaHex}` : `#e74c3c${alphaHex}`;
+                    const sign = val >= 0 ? '+' : '';
+                    const isBlurred = document.querySelector('.blur-target') && document.querySelector('.blur-target').classList.contains('blur');
+                    const displayVal = isBlurred ? '€ •••' : `${sign}€${Math.round(val).toLocaleString('nl-NL')}`;
+                    dataTooltip = `${dd}/${mm}/${heatmapYear}  ${displayVal}`;
+                }
+
+                html += `<div data-tip="${dataTooltip}" class="heatmap-cell" style="aspect-ratio:1;border-radius:2px;background:${bg};cursor:default;position:relative;"></div>`;
+            }
+
+            html += `</div></div>`;
+        }
+
+        html += `</div>`;
+        grid.innerHTML = html;
+
+        // Bind tooltip events op alle cellen
+        grid.querySelectorAll('.heatmap-cell').forEach(cell => {
+            cell.addEventListener('mouseenter', showHeatTip);
+            cell.addEventListener('mousemove', moveHeatTip);
+            cell.addEventListener('mouseleave', hideHeatTip);
+            cell.addEventListener('touchstart', showHeatTipTouch, { passive: true });
+        });
+    }
+
+    // Heatmap tooltip handlers
+    function getOrCreateTip() {
+        let tip = document.getElementById('heatTip');
+        if (!tip) {
+            tip = document.createElement('div');
+            tip.id = 'heatTip';
+            tip.style.cssText = 'position:fixed;pointer-events:none;background:var(--card-bg);color:var(--text-main);border:1px solid var(--border-color);border-radius:8px;padding:6px 12px;font-size:0.78rem;font-weight:600;box-shadow:0 4px 12px rgba(0,0,0,0.15);z-index:9999;display:none;white-space:nowrap;';
+            document.body.appendChild(tip);
+        }
+        return tip;
+    }
+    function showHeatTip(e) {
+        const tip = getOrCreateTip();
+        tip.innerText = e.currentTarget.dataset.tip;
+        tip.style.display = 'block';
+        positionTip(tip, e.clientX, e.clientY);
+    }
+    function moveHeatTip(e) {
+        const tip = getOrCreateTip();
+        positionTip(tip, e.clientX, e.clientY);
+    }
+    function hideHeatTip() {
+        const tip = getOrCreateTip();
+        tip.style.display = 'none';
+    }
+    function showHeatTipTouch(e) {
+        const tip = getOrCreateTip();
+        tip.innerText = e.currentTarget.dataset.tip;
+        tip.style.display = 'block';
+        const t = e.touches[0];
+        positionTip(tip, t.clientX, t.clientY);
+        setTimeout(() => { tip.style.display = 'none'; }, 2500);
+    }
+    function positionTip(tip, x, y) {
+        const offset = 14;
+        let left = x + offset;
+        let top  = y + offset;
+        if (left + 180 > window.innerWidth)  left = x - 180 - offset;
+        if (top  + 50  > window.innerHeight) top  = y - 50  - offset;
+        tip.style.left = left + 'px';
+        tip.style.top  = top  + 'px';
+    }
+
+    // ── ATH RECORD INDICATOR ────────────────────────────────────────────────
+    function checkATH() {
+        if (brokerData.length < 2) return;
+        const last = brokerData[brokerData.length - 1];
+        const lastTotal = last.degiro + last.bolero + last.saxo;
+
+        // Check per broker + totaal of huidige waarde het maximum is van alle vorige datapunten
+        const allButLast = brokerData.slice(0, -1);
+        const maxTotal  = Math.max(...allButLast.map(d => d.degiro + d.bolero + d.saxo));
+        const maxDegiro = Math.max(...allButLast.map(d => d.degiro));
+        const maxBolero = Math.max(...allButLast.map(d => d.bolero));
+        const maxSaxo   = Math.max(...allButLast.map(d => d.saxo));
+
+        const show = (id, isATH) => {
+            const el = document.getElementById(id);
+            if (el) el.classList.toggle('visible', isATH);
+        };
+
+        show('athTotal',  lastTotal    > maxTotal);
+        show('athDegiro', last.degiro  > maxDegiro);
+        show('athBolero', last.bolero  > maxBolero);
+        show('athSaxo',   last.saxo    > maxSaxo);
+    }
+
+    // ── MAANDOVERZICHT TABEL ────────────────────────────────────────────────
+    const MAAND_BROKERS = ['totaal', 'degiro', 'bolero', 'saxo'];
+    const MAAND_LABELS  = { totaal: 'TOTAAL', degiro: 'DEGIRO', bolero: 'BOLERO', saxo: 'SAXO' };
+    const MAAND_NL = ['Jan','Feb','Mrt','Apr','Mei','Jun','Jul','Aug','Sep','Okt','Nov','Dec'];
+    let maandBrokerIdx = 0;
+    let maandYear = new Date().getFullYear();
+
+    function cycleMaandBroker() {
+        maandBrokerIdx = (maandBrokerIdx + 1) % MAAND_BROKERS.length;
+        document.getElementById('maandBrokerBtn').innerText = MAAND_LABELS[MAAND_BROKERS[maandBrokerIdx]] + ' ▾';
+        renderMaandoverzicht();
+    }
+
+    function renderMaandoverzicht() {
+        const head = document.getElementById('maandTableHead');
+        const body = document.getElementById('maandTableBody');
+        const yearLbl = document.getElementById('maandYearLabel');
+        if (!head || !body || !yearLbl) return;
+        yearLbl.innerText = maandYear;
+
+        const broker = MAAND_BROKERS[maandBrokerIdx];
+        const isBlurred = document.querySelector('.blur-target') && document.querySelector('.blur-target').classList.contains('blur');
+
+        // Bouw per maand: eerste en laatste datapunt in die maand
+        const getVal = (entry) => broker === 'totaal'
+            ? entry.degiro + entry.bolero + entry.saxo
+            : entry[broker];
+
+        // Groepeer data per jaar-maand
+        const byMonth = {};
+        brokerData.forEach(entry => {
+            const parts = entry.date.split('/');
+            if (parts.length < 3) return;
+            const key = `${parts[2]}-${parts[1].padStart(2,'0')}`; // YYYY-MM
+            if (!byMonth[key]) byMonth[key] = [];
+            byMonth[key].push(entry);
+        });
+
+        // Bouw rijen per maand van het geselecteerde jaar
+        const months = [];
+        for (let m = 1; m <= 12; m++) {
+            const key = `${maandYear}-${String(m).padStart(2,'0')}`;
+            const entries = byMonth[key];
+            if (!entries || entries.length === 0) {
+                months.push({ month: m, start: null, end: null, diff: null, perc: null });
+                continue;
+            }
+            // Vorige maand: pak het laatste datapunt
+            const prevM = m === 1 ? 12 : m - 1;
+            const prevY = m === 1 ? maandYear - 1 : maandYear;
+            const prevKey = `${prevY}-${String(prevM).padStart(2,'0')}`;
+            const prevEntries = byMonth[prevKey];
+
+            const endVal = getVal(entries[entries.length - 1]);
+            let startVal = null;
+            if (prevEntries && prevEntries.length > 0) {
+                startVal = getVal(prevEntries[prevEntries.length - 1]);
+            } else {
+                // Als geen vorige maand: neem eerste entry van deze maand als startpunt
+                startVal = entries.length > 1 ? getVal(entries[0]) : null;
+            }
+
+            const diff = startVal !== null ? endVal - startVal : null;
+            const perc = startVal !== null && startVal !== 0 ? ((endVal - startVal) / startVal) * 100 : null;
+            months.push({ month: m, end: endVal, diff, perc });
+        }
+
+        // Jaarstotaal
+        const validMonths = months.filter(m => m.diff !== null);
+        const jaarDiff = validMonths.reduce((s, m) => s + m.diff, 0);
+        const firstValidEnd = validMonths.length > 0 ? validMonths[0].end - validMonths[0].diff : null;
+        const jaarPerc = firstValidEnd && firstValidEnd !== 0 ? (jaarDiff / firstValidEnd) * 100 : null;
+
+        // Header
+        head.innerHTML = `<tr>
+            <th>Maand</th>
+            <th>Rendement €</th>
+            <th>Rendement %</th>
+            <th>Eindwaarde</th>
+        </tr>`;
+
+        // Rijen
+        body.innerHTML = months.map(m => {
+            if (m.diff === null) {
+                return `<tr>
+                    <td>${MAAND_NL[m.month - 1]}</td>
+                    <td colspan="3" style="color:var(--text-muted);font-size:0.75rem;">geen data</td>
+                </tr>`;
+            }
+            const color = m.diff >= 0 ? 'var(--success)' : 'var(--danger)';
+            const sign  = m.diff >= 0 ? '+' : '';
+            const euroStr  = isBlurred ? '€ •••' : `${sign}${formatEuro(m.diff)}`;
+            const percStr  = m.perc !== null ? `${sign}${m.perc.toFixed(2)}%` : '–';
+            const eindStr  = isBlurred ? '€ •••' : formatEuro(m.end);
+            return `<tr>
+                <td>${MAAND_NL[m.month - 1]}</td>
+                <td style="color:${color};font-weight:700;" class="maand-euro-cell">${euroStr}</td>
+                <td style="color:${color};font-weight:700;">${percStr}</td>
+                <td class="maand-euro-cell">${eindStr}</td>
+            </tr>`;
+        }).join('');
+
+        // Totaalrij
+        if (validMonths.length > 0) {
+            const color = jaarDiff >= 0 ? 'var(--success)' : 'var(--danger)';
+            const sign  = jaarDiff >= 0 ? '+' : '';
+            body.innerHTML += `<tr class="maand-totaal">
+                <td>Jaar ${maandYear}</td>
+                <td style="color:${color};" class="maand-euro-cell">${isBlurred ? '€ •••' : sign + formatEuro(jaarDiff)}</td>
+                <td style="color:${color};">${jaarPerc !== null ? sign + jaarPerc.toFixed(2) + '%' : '–'}</td>
+                <td></td>
+            </tr>`;
+        }
+    }
+
+    // ── MARKT: LIVE DATA ────────────────────────────────────────────────────
+    const FINNHUB_KEY = 'd4g9371r01qm5b34gb90d4g9371r01qm5b34gb9g';
+
+    // Finnhub — werkt voor crypto (Binance feed)
+    async function fhQuote(symbol) {
+        try {
+            const r = await fetch(`https://finnhub.io/api/v1/quote?symbol=${encodeURIComponent(symbol)}&token=${FINNHUB_KEY}`);
+            if (!r.ok) throw new Error(r.status);
+            const d = await r.json();
+            if (!d.c || d.c === 0) return null;
+            const change = d.c - d.pc;
+            const pct    = d.pc ? (change / d.pc) * 100 : 0;
+            return { price: d.c, change, pct, high: d.h, low: d.l, prevClose: d.pc, time: d.t ? new Date(d.t * 1000) : new Date() };
+        } catch { return null; }
+    }
+
+    // Yahoo Finance via corsproxy.io — voor futures & commodities
+    async function yhQuote(ticker) {
+        const url = `https://corsproxy.io/?url=${encodeURIComponent('https://query2.finance.yahoo.com/v8/finance/chart/' + ticker + '?interval=1d&range=2d')}`;
+        try {
+            const r = await fetch(url);
+            if (!r.ok) throw new Error(r.status);
+            const data = await r.json();
+            const meta = data?.chart?.result?.[0]?.meta;
+            if (!meta || !meta.regularMarketPrice) return null;
+            const price     = meta.regularMarketPrice;
+            const prevClose = meta.chartPreviousClose ?? meta.previousClose ?? price;
+            const change    = price - prevClose;
+            const pct       = prevClose ? (change / prevClose) * 100 : 0;
+            return { price, change, pct, high: meta.regularMarketDayHigh, low: meta.regularMarketDayLow, time: meta.regularMarketTime ? new Date(meta.regularMarketTime * 1000) : new Date() };
+        } catch { return null; }
+    }
+
+    // open.er-api.com — voor wisselkoersen (gratis, CORS ok, geen key)
+    let _fxCache = null, _fxCacheTime = 0;
+    async function fxRate(from, to) {
+        try {
+            if (_fxCache && _fxCache.base === from && Date.now() - _fxCacheTime < 300000) {
+                const rate = _fxCache.rates[to];
+                return rate ? { price: rate, pct: 0, prevRate: null, time: new Date(_fxCacheTime) } : null;
+            }
+            const r = await fetch(`https://open.er-api.com/v6/latest/${from}`);
+            if (!r.ok) throw new Error(r.status);
+            const data = await r.json();
+            _fxCache = data; _fxCacheTime = Date.now();
+            const rate = data.rates[to];
+            if (!rate) return null;
+            let pct = 0, prevRate = null;
+            try {
+                const prev = new Date(); prev.setDate(prev.getDate() - 1);
+                while (prev.getDay() === 0 || prev.getDay() === 6) prev.setDate(prev.getDate() - 1);
+                const prevStr = prev.toISOString().split('T')[0];
+                const r2 = await fetch(`https://api.frankfurter.app/${prevStr}?from=${from}&to=${to}`);
+                const d2 = await r2.json();
+                prevRate = d2.rates?.[to] ?? null;
+                if (prevRate) pct = ((rate - prevRate) / prevRate) * 100;
+            } catch {}
+            return { price: rate, pct, prevRate, time: new Date() };
+        } catch { return null; }
+    }
+
+    // Binance public REST API — geen key nodig, CORS open
+    async function binanceQuote(symbol) {
+        try {
+            const [ticker24, bookTicker] = await Promise.all([
+                fetch(`https://api.binance.com/api/v3/ticker/24hr?symbol=${symbol}`).then(r => r.json()),
+                fetch(`https://api.binance.com/api/v3/ticker/price?symbol=${symbol}`).then(r => r.json()),
+            ]);
+            if (!ticker24.lastPrice) return null;
+            const price  = parseFloat(ticker24.lastPrice);
+            const change = parseFloat(ticker24.priceChange);
+            const pct    = parseFloat(ticker24.priceChangePercent);
+            const high   = parseFloat(ticker24.highPrice);
+            const low    = parseFloat(ticker24.lowPrice);
+            return { price, change, pct, high, low, time: new Date() };
+        } catch { return null; }
+    }
+
+    // Slim: probeer eerst Finnhub, dan Binance direct
+    async function cryptoQuote(fhSym, binanceSym) {
+        const fh = await fhQuote(fhSym);
+        if (fh && fh.price > 0) return fh;
+        return binanceQuote(binanceSym);
+    }
+    function fmtTime(date) {
+        if (!date || isNaN(date)) return '–';
+        return date.toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' });
+    }
+    function fmtNum(v, dec = 2) {
+        if (v == null || isNaN(v)) return '–';
+        return v.toLocaleString('nl-NL', { minimumFractionDigits: dec, maximumFractionDigits: dec });
+    }
+    function pctSpan(pct) {
+        if (pct == null || isNaN(pct)) return '<span class="markt-neu">–</span>';
+        const s = pct >= 0 ? '+' : '';
+        const c = Math.abs(pct) < 0.005 ? 'markt-neu' : pct > 0 ? 'markt-pos' : 'markt-neg';
+        return `<span class="${c}">${s}${fmtNum(pct)}%</span>`;
+    }
+    function chgSpan(chg, dec = 2) {
+        if (chg == null || isNaN(chg)) return '<span class="markt-neu">–</span>';
+        const s = chg >= 0 ? '+' : '';
+        const c = chg === 0 ? 'markt-neu' : chg > 0 ? 'markt-pos' : 'markt-neg';
+        return `<span class="${c}">${s}${fmtNum(chg, dec)}</span>`;
+    }
+    function errRow(label, sub, cols) {
+        return `<tr><td><strong>${label}</strong><span class="markt-name-sub">${sub}</span></td><td colspan="${cols}" class="markt-err">Niet beschikbaar</td></tr>`;
+    }
+    function rowFx(label, sub, d) {
+        if (!d) return errRow(label, sub, 2);
+        return `<tr>
+            <td><strong>${label}</strong><span class="markt-name-sub">${sub}</span></td>
+            <td><strong>${fmtNum(d.price, 4)}</strong></td>
+        </tr>`;
+    }
+    function rowQuote(label, sub, d, unit = '') {
+        if (!d) return errRow(label, sub, 3);
+        const u = unit ? `<span class="col-hide" style="color:var(--text-muted);font-size:0.7rem;"> ${unit}</span>` : '';
+        return `<tr>
+            <td><strong>${label}</strong><span class="markt-name-sub">${sub}</span></td>
+            <td><strong>${fmtNum(d.price)}</strong>${u}</td>
+            <td>${chgSpan(d.change)}</td>
+            <td>${pctSpan(d.pct)}</td>
+        </tr>`;
+    }
+    function rowCrypto(label, sub, d) {
+        if (!d) return errRow(label, sub, 5);
+        const dec = d.price < 1 ? 4 : d.price < 100 ? 3 : 2;
+        return `<tr>
+            <td><strong>${label}</strong><span class="markt-name-sub">${sub}</span></td>
+            <td><strong>$${fmtNum(d.price, dec)}</strong></td>
+            <td>${chgSpan(d.change, dec)}</td>
+            <td>${pctSpan(d.pct)}</td>
+            <td style="color:var(--success);font-size:0.8rem;">$${fmtNum(d.high ?? 0, dec)}</td>
+            <td style="color:var(--danger);font-size:0.8rem;">$${fmtNum(d.low ?? 0, dec)}</td>
+        </tr>`;
+    }
+    function setLoading(id, cols) {
+        const el = document.getElementById(id);
+        if (el) el.innerHTML = `<tr><td colspan="${cols}" class="markt-loading">⏳ Laden…</td></tr>`;
+    }
+
+    let marktRefreshTimer = null;
+
+    async function loadMarktData(manual = false) {
+        if (manual) {
+            document.getElementById('marktStatus').innerHTML =
+                `<span class="markt-dot markt-dot-loading"></span> Ophalen…`;
+        }
+        setLoading('mb-fx', 4); setLoading('mb-idx', 4);
+        setLoading('mb-com', 4); setLoading('mb-nrg', 4);
+        setLoading('mb-cry', 6);
+
+        // ── VIX + Fear & Greed (parallel) ────────────────────────────────────
+        const [vixData, fgRaw, fgStockRaw] = await Promise.all([
+            yhQuote('%5EVIX'),
+            fetch('https://api.alternative.me/fng/?limit=2').then(r=>r.json()).catch(()=>null),
+            // CNN Fear & Greed via corsproxy (public scrape)
+            fetch(`https://corsproxy.io/?url=${encodeURIComponent('https://production.dataviz.cnn.io/index/fearandgreed/graphdata')}`)
+                .then(r=>r.json()).catch(()=>null)
+        ]);
+        if (vixData) {
+            const v = vixData.price;
+            document.getElementById('vixValue').textContent = v.toFixed(2);
+            const sign = vixData.change >= 0 ? '+' : '';
+            document.getElementById('vixChange').innerHTML =
+                `<span style="color:${vixData.change>=0?'var(--danger)':'var(--success)'}">${sign}${vixData.change.toFixed(2)} (${sign}${vixData.pct.toFixed(2)}%)</span>`;
+            let label='NORMAAL', bg='#f1c40f22', col='#f1c40f', needle=30;
+            if (v < 15)      { label='LAAG';     bg='#2ecc7122'; col='#2ecc71'; needle=10; }
+            else if (v < 20) { label='NORMAAL';  bg='#f1c40f22'; col='#f1c40f'; needle=33; }
+            else if (v < 30) { label='VERHOOGD'; bg='#e67e2222'; col='#e67e22'; needle=56; }
+            else if (v < 40) { label='HOOG';     bg='#e74c3c22'; col='#e74c3c'; needle=76; }
+            else             { label='EXTREEM';  bg='#c0392b33'; col='#c0392b'; needle=93; }
+            const lb = document.getElementById('vixLabelBox');
+            if (lb) { lb.textContent=label; lb.style.background=bg; lb.style.color=col; lb.style.border=`1px solid ${col}55`; }
+            const n = document.getElementById('vixNeedle');
+            if (n) n.style.left = needle + '%';
+        }
+        if (fgRaw?.data?.[0]) {
+            const fg = fgRaw.data[0];
+            const val = parseInt(fg.value);
+            const col = val<=25?'#e74c3c':val<=45?'#e67e22':val<=55?'#f1c40f':val<=75?'#2ecc71':'#27ae60';
+            const fgV=document.getElementById('fgValue'); if(fgV){fgV.textContent=val;fgV.style.color=col;}
+            const fgC=document.getElementById('fgClassification'); if(fgC){fgC.textContent=fg.value_classification;fgC.style.color=col;}
+            const fgN=document.getElementById('fgNeedle'); if(fgN) fgN.style.left=val+'%';
+            if (fgRaw.data[1]) {
+                const prev=parseInt(fgRaw.data[1].value), diff=val-prev;
+                const fgY=document.getElementById('fgYesterday');
+                if(fgY) fgY.textContent=`Gisteren: ${prev} (${diff>=0?'+':''}${diff})`;
+            }
+        }
+
+        // CNN Stock Fear & Greed
+        if (fgStockRaw?.fear_and_greed) {
+            const fg = fgStockRaw.fear_and_greed;
+            const val = Math.round(fg.score);
+            const col = val<=25?'#e74c3c':val<=45?'#e67e22':val<=55?'#f1c40f':val<=75?'#2ecc71':'#27ae60';
+            const cls = val<=25?'Extreme Fear':val<=45?'Fear':val<=55?'Neutral':val<=75?'Greed':'Extreme Greed';
+            const fgSV=document.getElementById('fgStockValue'); if(fgSV){fgSV.textContent=val;fgSV.style.color=col;}
+            const fgSC=document.getElementById('fgStockClass'); if(fgSC){fgSC.textContent=cls;fgSC.style.color=col;}
+            const fgSN=document.getElementById('fgStockNeedle'); if(fgSN) fgSN.style.left=val+'%';
+            if (fg.previous_close) {
+                const prev=Math.round(fg.previous_close), diff=val-prev;
+                const fgSP=document.getElementById('fgStockPrev');
+                if(fgSP) fgSP.textContent=`Gisteren: ${prev} (${diff>=0?'+':''}${diff})`;
+            }
+        }
+
+        // ── VALUTA ───────────────────────────────────────────────────────────
+        const [eurusd, usdeur] = await Promise.all([fxRate('EUR','USD'), fxRate('USD','EUR')]);
+        document.getElementById('mb-fx').innerHTML = [
+            rowFx('EUR/USD', 'Euro → US Dollar', eurusd),
+            rowFx('USD/EUR', 'US Dollar → Euro', usdeur),
+        ].join('');
+
+        // ── CORE INDICES ─────────────────────────────────────────────────────
+        const [sp, nq, rut] = await Promise.all([yhQuote('ES=F'), yhQuote('NQ=F'), yhQuote('RTY=F')]);
+        document.getElementById('mb-idx').innerHTML = [
+            rowQuote('S&P 500',      'US Large Cap 500',  sp,  'USD'),
+            rowQuote('Nasdaq 100',   'US Tech 100',       nq,  'USD'),
+            rowQuote('Russell 2000', 'US Small Cap 2000', rut, 'USD'),
+        ].join('');
+
+        // ── COMMODITIES ──────────────────────────────────────────────────────
+        const [gold, silver, copper, plat, pall] = await Promise.all([
+            yhQuote('GC=F'), yhQuote('SI=F'), yhQuote('HG=F'), yhQuote('PL=F'), yhQuote('PA=F')
+        ]);
+        document.getElementById('mb-com').innerHTML = [
+            rowQuote('Goud',      'Gold (GC=F)',      gold,   'USD/oz'),
+            rowQuote('Zilver',    'Silver (SI=F)',    silver, 'USD/oz'),
+            rowQuote('Koper',     'Copper (HG=F)',    copper, 'USD/lb'),
+            rowQuote('Platinum',  'Platinum (PL=F)',  plat,   'USD/oz'),
+            rowQuote('Palladium', 'Palladium (PA=F)', pall,   'USD/oz'),
+        ].join('');
+
+        // ── ENERGY ───────────────────────────────────────────────────────────
+        const [brent, wti, gas, ttf] = await Promise.all([
+            yhQuote('BZ=F'), yhQuote('CL=F'), yhQuote('NG=F'), yhQuote('TTF=F')
+        ]);
+        document.getElementById('mb-nrg').innerHTML = [
+            rowQuote('Brent Oil', 'Brent Crude (BZ=F)', brent, 'USD/bbl'),
+            rowQuote('Crude Oil', 'WTI Crude (CL=F)',   wti,   'USD/bbl'),
+            rowQuote('Nat. Gas',  'Henry Hub (NG=F)',   gas,   'USD/MMBtu'),
+            rowQuote('TTF Gas',   'EU Gas (TTF=F)',     ttf,   'EUR/MWh'),
+        ].join('');
+
+        // ── CRYPTO ───────────────────────────────────────────────────────────
+        async function hypeQuote() {
+            try {
+                const [mids, meta] = await Promise.all([
+                    fetch('https://api.hyperliquid.xyz/info',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({type:'allMids'})}).then(r=>r.json()),
+                    fetch('https://api.hyperliquid.xyz/info',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({type:'metaAndAssetCtxs'})}).then(r=>r.json())
+                ]);
+                const price = parseFloat(mids['HYPE']); if (!price) return null;
+                const assets = meta[0]?.universe??[], ctxs = meta[1]??[];
+                const idx = assets.findIndex(a=>a.name==='HYPE');
+                if (idx>=0 && ctxs[idx]) {
+                    const ctx=ctxs[idx], prev=parseFloat(ctx.prevDayPx), change=price-prev, pct=prev?(change/prev)*100:0;
+                    return {price,change,pct,high:parseFloat(ctx.dayHigh??price),low:parseFloat(ctx.dayLow??price),time:new Date()};
+                }
+                return {price,change:0,pct:0,high:price,low:price,time:new Date()};
+            } catch { return null; }
+        }
+
+        const cryptos = [
+            { label:'Bitcoin',    sub:'BTC',  fh:'BINANCE:BTCUSDT',    bn:'BTCUSDT'    },
+            { label:'Ethereum',   sub:'ETH',  fh:'BINANCE:ETHUSDT',    bn:'ETHUSDT'    },
+            { label:'Solana',     sub:'SOL',  fh:'BINANCE:SOLUSDT',    bn:'SOLUSDT'    },
+            { label:'Avalanche',  sub:'AVAX', fh:'BINANCE:AVAXUSDT',   bn:'AVAXUSDT'   },
+            { label:'Aave',       sub:'AAVE', fh:'BINANCE:AAVEUSDT',   bn:'AAVEUSDT'   },
+            { label:'Render',     sub:'RNDR', fh:'BINANCE:RENDERUSDT', bn:'RENDERUSDT' },
+            { label:'Bittensor',  sub:'TAO',  fh:'BINANCE:TAOUSDT',    bn:'TAOUSDT'    },
+            { label:'Hyperliquid',sub:'HYPE', hl:true },
+        ];
+        const cryptoResults = await Promise.all(cryptos.map(c => c.hl ? hypeQuote() : cryptoQuote(c.fh, c.bn)));
+        document.getElementById('mb-cry').innerHTML = cryptos.map((c,i) => rowCrypto(c.label,c.sub,cryptoResults[i])).join('');
+
+        const now = new Date().toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit'});
+        const anyFailed = [sp,nq,gold,brent,eurusd].some(x=>x===null);
+        document.getElementById('marktStatus').innerHTML =
+            `<span class="markt-dot ${anyFailed?'markt-dot-stale':'markt-dot-live'}"></span> ${anyFailed?'Gedeeltelijk':'Live'} · ${now} · auto-refresh 30s`;
+        if (marktRefreshTimer) clearTimeout(marktRefreshTimer);
+        marktRefreshTimer = setTimeout(()=>{
+            const tab=document.getElementById('aandelen-page');
+            if(tab&&tab.classList.contains('active')) loadMarktData();
+        }, 30000);
+    }
+
+    // ── BENCHMARK LIJNEN ────────────────────────────────────────────────────
+    const BENCHMARKS = [
+        { id: 'benchSP',     ticker: 'SPY',  label: 'S&P 500',    dsIdx: 1 },
+        { id: 'benchMSCI',   ticker: 'URTH', label: 'MSCI World',  dsIdx: 2 },
+        { id: 'benchNASDAQ', ticker: 'QQQ',  label: 'Nasdaq 100',  dsIdx: 3 },
+        { id: 'benchBTC',    ticker: 'BTC-USD', label: 'Bitcoin',  dsIdx: 4 },
+    ];
+
+    const benchCache = {}; // ticker → array van sluitingskoersen
+
+    // Haal dagelijkse sluitingskoersen op via Yahoo Finance (corsproxy)
+    async function fetchBenchmarkHistory(ticker, fromDate) {
+        if (benchCache[ticker]) return benchCache[ticker];
+        try {
+            // from als Unix timestamp
+            const from = Math.floor(new Date(fromDate).getTime() / 1000) - 86400 * 5;
+            const to   = Math.floor(Date.now() / 1000);
+            const url  = `https://corsproxy.io/?url=${encodeURIComponent(
+                `https://query2.finance.yahoo.com/v8/finance/chart/${ticker}?interval=1d&period1=${from}&period2=${to}`
+            )}`;
+            const r = await fetch(url);
+            if (!r.ok) throw new Error(r.status);
+            const data = await r.json();
+            const result = data?.chart?.result?.[0];
+            if (!result) return null;
+            const timestamps = result.timestamps ?? result.timestamp ?? [];
+            const closes     = result.indicators?.quote?.[0]?.close ?? [];
+            // Bouw datum→koers map
+            const map = {};
+            timestamps.forEach((ts, i) => {
+                if (closes[i] == null) return;
+                const d = new Date(ts * 1000);
+                const key = `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
+                map[key] = closes[i];
+            });
+            benchCache[ticker] = map;
+            return map;
+        } catch { return null; }
+    }
+
+    // Zet historische koersen om naar € t.o.v. portfolio startwaarde
+    function alignBenchmark(priceMap, portfolioDates, portfolioValues) {
+        if (!priceMap || portfolioDates.length === 0) return null;
+        // Zoek de startprijs van de benchmark op de eerste portfoliodatum
+        let basePrice = null;
+        const basePortfolio = portfolioValues[0];
+        const result = [];
+        for (let i = 0; i < portfolioDates.length; i++) {
+            const date = portfolioDates[i];
+            let price = priceMap[date];
+            if (price == null) {
+                const [d, m, y] = date.split('/').map(Number);
+                for (let offset = -3; offset <= 3; offset++) {
+                    const try_ = new Date(y, m-1, d+offset);
+                    const k = `${String(try_.getDate()).padStart(2,'0')}/${String(try_.getMonth()+1).padStart(2,'0')}/${try_.getFullYear()}`;
+                    if (priceMap[k]) { price = priceMap[k]; break; }
+                }
+            }
+            if (price == null) { result.push(null); continue; }
+            if (basePrice === null) basePrice = price;
+            // Schaal: als benchmark X% groeit, wat zou portfolio dan waard zijn?
+            const benchPct = basePrice > 0 ? (price - basePrice) / basePrice : 0;
+            result.push(basePortfolio * (1 + benchPct));
+        }
+        return basePrice !== null ? result : null;
+    }
+
+    async function updateBenchmarks() {
+        if (!charts.main || brokerData.length === 0) return;
+        const portfolioDates  = brokerData.map(d => d.date);
+        const portfolioValues = brokerData.map(d => d.degiro + d.bolero + d.saxo);
+        const [fd, fm, fy] = portfolioDates[0].split('/').map(Number);
+        const fromDate = `${fy}-${String(fm).padStart(2,'0')}-${String(fd).padStart(2,'0')}`;
+
+        let anyActive = false;
+        for (const bench of BENCHMARKS) {
+            const cb = document.getElementById(bench.id);
+            const ds = charts.main.data.datasets[bench.dsIdx];
+            if (!cb || !ds) continue;
+            if (cb.checked) {
+                anyActive = true;
+                ds.hidden = false;
+                const map = await fetchBenchmarkHistory(bench.ticker, fromDate);
+                ds.data = alignBenchmark(map, portfolioDates, portfolioValues) ?? [];
+            } else {
+                ds.hidden = true;
+                ds.data = [];
+            }
+        }
+        // Rechter y-as verbergen (alles nu in €, zelfde schaal)
+        charts.main.options.scales.yBench.display = false;
+        charts.main.update();
+    }
+
+    // ── DATA PAGINA: AANDELEN & CRYPTO TABS ─────────────────────────────────
+    function renderAandelenData() {
+        const stockBody = document.getElementById('aandelenDataBody');
+        const etfBody   = document.getElementById('etfDataBody');
+
+        const stocks = hmStocks.filter(s => s.type === 'stock').sort((a,b)=>a.ticker.localeCompare(b.ticker));
+        const etfs   = hmStocks.filter(s => s.type === 'etf').sort((a,b)=>a.ticker.localeCompare(b.ticker));
+
+        const makeRows = (items) => items.map(s => `<tr style="border-bottom:1px solid var(--border-color);">
+            <td style="padding:8px 6px;font-weight:700;font-family:monospace;">${s.ticker}</td>
+            <td style="padding:8px 6px;">${s.name}</td>
+            <td style="padding:8px 6px;text-align:center;">
+                <select onchange="updateHmCurrency('${s.ticker}',this.value)" style="border:1px solid var(--border-color);border-radius:6px;padding:3px 6px;font-size:0.78rem;background:var(--bg-color);color:var(--text-main);">
+                    <option value="USD" ${(s.currency||'USD')==='USD'?'selected':''}>USD</option>
+                    <option value="EUR" ${(s.currency||'USD')==='EUR'?'selected':''}>EUR</option>
+                </select>
+            </td>
+            <td style="padding:8px 6px;text-align:right;">
+                <button onclick="removeHmStockData('${s.ticker}')" style="background:none;border:none;color:var(--danger);cursor:pointer;font-size:0.85rem;font-weight:700;">✕</button>
+            </td>
+        </tr>`).join('');
+
+        const emptyRow = (msg) => `<tr><td colspan="4" style="padding:16px;color:var(--text-muted);text-align:center;">${msg}</td></tr>`;
+
+        if (stockBody) stockBody.innerHTML = stocks.length ? makeRows(stocks) : emptyRow('Geen aandelen. Voeg er toe via + Toevoegen.');
+        if (etfBody)   etfBody.innerHTML   = etfs.length   ? makeRows(etfs)   : emptyRow('Geen ETFs. Voeg er toe via + Toevoegen.');
+    }
+
+    function updateHmCurrency(ticker, currency) {
+        const s = hmStocks.find(x => x.ticker === ticker);
+        if (s) { s.currency = currency; saveHmStocks(); }
+    }
+
+    function renderCryptoData() {
+        const body = document.getElementById('cryptoDataBody');
+        if (!body) return;
+        const cryptos = hmStocks.filter(s => s.type === 'crypto');
+        body.innerHTML = cryptos.length === 0
+            ? `<tr><td colspan="3" style="padding:16px;color:var(--text-muted);text-align:center;">Geen crypto. Voeg toe via + Toevoegen.</td></tr>`
+            : cryptos.map(s => `<tr style="border-bottom:1px solid var(--border-color);">
+                <td style="padding:8px 6px;font-weight:700;">${s.ticker}</td>
+                <td style="padding:8px 6px;">${s.name}</td>
+                <td style="padding:8px 6px;text-align:right;">
+                    <button onclick="removeHmStockData('${s.ticker}')" style="background:none;border:none;color:var(--danger);cursor:pointer;font-size:0.85rem;font-weight:700;">✕</button>
+                </td>
+            </tr>`).join('');
+    }
+
+    let _addSdMode = 'stock';
+    function showAddStockData(mode) {
+        _addSdMode = mode;
+        document.getElementById('addStockDataTitle').textContent = mode === 'crypto' ? 'Crypto toevoegen' : 'Aandeel / ETF toevoegen';
+        document.getElementById('addSdType').value = mode;
+        document.getElementById('addSdTicker').value = '';
+        document.getElementById('addSdName').value = '';
+        document.getElementById('addStockDataModal').style.display = 'flex';
+        document.getElementById('addSdTicker').focus();
+    }
+    function hideAddStockData() {
+        document.getElementById('addStockDataModal').style.display = 'none';
+    }
+    async function confirmAddStockData() {
+        const ticker = document.getElementById('addSdTicker').value.trim().toUpperCase();
+        const name   = document.getElementById('addSdName').value.trim() || ticker;
+        const type   = document.getElementById('addSdType').value;
+        if (!ticker) return;
+        if (hmStocks.find(s => s.ticker === ticker)) { alert(`${ticker} staat al in de lijst.`); return; }
+        hmStocks.push({ ticker, name, type });
+        saveHmStocks();
+        hideAddStockData();
+        renderAandelenData();
+        renderCryptoData();
+        renderHmGrid();
+        // Fetch quote
+        const d = await yhQuote(ticker);
+        if (d) { hmData[ticker] = d; renderHmGrid(); }
+    }
+    function removeHmStockData(ticker) {
+        if (!confirm(`${ticker} verwijderen?`)) return;
+        hmStocks = hmStocks.filter(s => s.ticker !== ticker);
+        delete hmData[ticker];
+        saveHmStocks();
+        renderAandelenData();
+        renderCryptoData();
+        renderHmGrid();
+    }
+
+    // ── HEATMAP PAGINA ──────────────────────────────────────────────────────
+    const DEFAULT_STOCKS = [
+        // AANDELEN
+        {ticker:'ABAT',   name:'Am. Battery',        type:'stock', currency:'USD'},
+        {ticker:'ABCL',   name:'AbCellera',          type:'stock', currency:'USD'},
+        {ticker:'ACHR',   name:'Archer Aviation',    type:'stock', currency:'USD'},
+        {ticker:'AMD',    name:'AMD',                type:'stock', currency:'USD'},
+        {ticker:'AMZN',   name:'Amazon',             type:'stock', currency:'USD'},
+        {ticker:'APLD',   name:'Applied Digital',    type:'stock', currency:'USD'},
+        {ticker:'BKKT',   name:'Bakkt',              type:'stock', currency:'USD'},
+        {ticker:'BMNR',   name:'Bitmine',            type:'stock', currency:'USD'},
+        {ticker:'CIFR',   name:'Cipher Digital',     type:'stock', currency:'USD'},
+        {ticker:'CLSK',   name:'CleanSpark',         type:'stock', currency:'USD'},
+        {ticker:'CRCL',   name:'Circle',             type:'stock', currency:'USD'},
+        {ticker:'CRM',    name:'Salesforce',         type:'stock', currency:'USD'},
+        {ticker:'CRDO',   name:'Credo',              type:'stock', currency:'USD'},
+        {ticker:'CRWV',   name:'CoreWeave',          type:'stock', currency:'USD'},
+        {ticker:'GOOGL',  name:'Alphabet',           type:'stock', currency:'USD'},
+        {ticker:'IONQ',   name:'IonQ',               type:'stock', currency:'USD'},
+        {ticker:'IREN',   name:'IREN',               type:'stock', currency:'USD'},
+        {ticker:'JD',     name:'JD.com',             type:'stock', currency:'USD'},
+        {ticker:'KEEL',   name:'Keel',               type:'stock', currency:'USD'},
+        {ticker:'LMND',   name:'Lemonade',           type:'stock', currency:'USD'},
+        {ticker:'MIGI',   name:'Mawson',             type:'stock', currency:'USD'},
+        {ticker:'MRLN',   name:'Merlin',             type:'stock', currency:'USD'},
+        {ticker:'MSFT',   name:'Microsoft',          type:'stock', currency:'USD'},
+        {ticker:'NVDA',   name:'NVIDIA',             type:'stock', currency:'USD'},
+        {ticker:'OUST',   name:'Ouster',             type:'stock', currency:'USD'},
+        {ticker:'PYPL',   name:'PayPal',             type:'stock', currency:'USD'},
+        {ticker:'QBTS',   name:'D-Wave',             type:'stock', currency:'USD'},
+        {ticker:'RR',     name:'Richtech',           type:'stock', currency:'USD'},
+        {ticker:'RXRX',   name:'Recursion',          type:'stock', currency:'USD'},
+        {ticker:'SBET',   name:'SharpLink',          type:'stock', currency:'USD'},
+        {ticker:'SOI.PA', name:'Soitec',             type:'stock', currency:'EUR'},
+        {ticker:'SOFI',   name:'SoFi',               type:'stock', currency:'USD'},
+        {ticker:'SYM',    name:'Symbotic',           type:'stock', currency:'USD'},
+        {ticker:'TOYO',   name:'Toyo',               type:'stock', currency:'USD'},
+        {ticker:'UBER',   name:'Uber',               type:'stock', currency:'USD'},
+        {ticker:'UAMY',   name:'US Antimony',        type:'stock', currency:'USD'},
+        {ticker:'XPEV',   name:'XPeng',              type:'stock', currency:'USD'},
+        {ticker:'ZENA',   name:'Zenatech',           type:'stock', currency:'USD'},
+        // ETFs
+        {ticker:'2B76.DE', name:'iSh. Automation',   type:'etf',   currency:'EUR'},
+        {ticker:'DAPP.MI',   name:'VanEck Crypto',      type:'etf',   currency:'EUR'},
+        {ticker:'REMX.MI',   name:'VanEck Rare Earth',  type:'etf',   currency:'EUR'},
+        {ticker:'SMH.MI',    name:'VanEck Semi',        type:'etf',   currency:'EUR'},
+        {ticker:'3HCL.L', name:'WT Copper 3x',          type:'etf',   currency:'USD'},
+        {ticker:'SGLD.MI',   name:'Inv. Gold',          type:'etf',   currency:'EUR'},
+        // CRYPTO
+        {ticker:'BTC-USD', name:'Bitcoin',           type:'crypto', currency:'USD'},
+        {ticker:'ETH-USD', name:'Ethereum',          type:'crypto', currency:'USD'},
+        {ticker:'SOL-USD', name:'Solana',            type:'crypto', currency:'USD'},
+        {ticker:'AVAX-USD',name:'Avalanche',         type:'crypto', currency:'USD'},
+        {ticker:'AAVE-USD',name:'Aave',              type:'crypto', currency:'USD'},
+        {ticker:'RNDR-USD',name:'Render',            type:'crypto', currency:'USD'},
+        {ticker:'TAO-USD', name:'Bittensor',         type:'crypto', currency:'USD'},
+        {ticker:'HYPE',    name:'Hyperliquid',       type:'crypto', currency:'USD'},
+    ];
+
+    let hmStocks = JSON.parse(localStorage.getItem('hm_stocks') || 'null') || DEFAULT_STOCKS;
+    // Zorg dat bestaande entries altijd een type hebben
+    hmStocks = hmStocks.map(s => ({ type: 'stock', ...s }));
+    let hmSortMode  = 'pct';
+    let hmTabMode   = 'all';   // 'all' | 'stock' | 'etf'
+    let hmCompact   = false;
+    let hmData = {};
+    let hmInitialized = false;
+
+    function saveHmStocks() { localStorage.setItem('hm_stocks', JSON.stringify(hmStocks)); }
+
+    function setHmSort(mode, btn) {
+        hmSortMode = mode;
+        document.querySelectorAll('.hm-sort-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderHmGrid();
+    }
+
+    function pctColor(pct) {
+        if (pct === null || isNaN(pct)) return { bg: 'var(--row-hover)', text: 'var(--text-muted)' };
+        const abs = Math.min(Math.abs(pct), 8);
+        const intensity = abs / 8;
+        if (pct > 0) {
+            const g = Math.round(120 + intensity * 80);
+            return { bg: `rgba(46,${g},113,0.85)`, text: '#fff' };
+        } else {
+            const r = Math.round(160 + intensity * 75);
+            return { bg: `rgba(${r},60,60,0.85)`, text: '#fff' };
+        }
+    }
+
+    function renderHmGrid() {
+        const grid = document.getElementById('hmGrid');
+        if (!grid) return;
+
+        // Filter op tab
+        let stocks = hmStocks.filter(s => {
+            if (hmTabMode === 'all')    return true;
+            if (hmTabMode === 'crypto') return s.type === 'crypto';
+            if (hmTabMode === 'etf')    return s.type === 'etf';
+            return s.type === 'stock' || !s.type;
+        });
+
+        // Sorteer
+        if (hmSortMode === 'pct') {
+            stocks.sort((a, b) => {
+                const pa = hmData[a.ticker]?.pct ?? -999;
+                const pb = hmData[b.ticker]?.pct ?? -999;
+                return pb - pa;
+            });
+        } else if (hmSortMode === 'name') {
+            stocks.sort((a, b) => a.name.localeCompare(b.name));
+        } else if (hmSortMode === 'value') {
+            stocks.sort((a, b) => {
+                const va = hmData[a.ticker]?.price ?? 0;
+                const vb = hmData[b.ticker]?.price ?? 0;
+                return vb - va;
+            });
+        }
+
+        if (hmCompact) {
+            // Compact view: kleine vakjes met alleen ticker
+            grid.style.gridTemplateColumns = 'repeat(auto-fill,minmax(62px,1fr))';
+            grid.innerHTML = stocks.map(s => {
+                const d = hmData[s.ticker];
+                const pct = d?.pct ?? null;
+                const { bg, text } = pctColor(pct);
+                const sign = pct !== null && pct >= 0 ? '+' : '';
+                const pctStr = pct !== null ? `${sign}${pct.toFixed(1)}%` : '–';
+                const isLoading = !d;
+                return `<div class="hm-cell-compact ${isLoading?'loading':''}" style="background:${isLoading?'var(--row-hover)':bg};color:${isLoading?'var(--text-muted)':text};" title="${s.name}: ${pctStr}" onclick="void(0)">
+                    <div style="font-size:0.62rem;font-weight:800;letter-spacing:0.02em;">${s.ticker}</div>
+                    <div style="font-size:0.65rem;font-weight:700;margin-top:1px;">${pctStr}</div>
+                </div>`;
+            }).join('');
+        } else {
+            // Normale view
+            grid.style.gridTemplateColumns = 'repeat(auto-fill,minmax(120px,1fr))';
+            grid.innerHTML = stocks.map(s => {
+                const d = hmData[s.ticker];
+                const isLoading = !d;
+                const pct = d?.pct ?? null;
+                const { bg, text } = pctColor(pct);
+                const sign = pct !== null && pct >= 0 ? '+' : '';
+                const pctStr = pct !== null ? `${sign}${pct.toFixed(2)}%` : '–';
+                const currSymbol = (s.currency || 'USD') === 'EUR' ? '€' : '$';
+                const priceStr = d?.price != null ? `${currSymbol}${d.price.toLocaleString('nl-NL', {minimumFractionDigits:2,maximumFractionDigits:2})}` : '';
+                // Gebruik var(--row-hover) voor loading zodat het nooit transparant/kleurloos is
+                const cellBg   = isLoading ? 'var(--row-hover)' : bg;
+                const cellText = isLoading ? 'var(--text-muted)' : text;
+                return `<div class="hm-cell ${isLoading?'loading':''}" style="background:${cellBg};color:${cellText};" data-ticker="${s.ticker}">
+                    <span class="hm-del" onclick="removeHmStock('${s.ticker}',event)">✕</span>
+                    <div>
+                        <div class="hm-ticker">${s.ticker}</div>
+                        <div class="hm-name" style="color:${cellText};">${s.name}</div>
+                    </div>
+                    <div>
+                        <div class="hm-pct">${pctStr}</div>
+                        <div class="hm-price" style="color:${cellText};">${priceStr}</div>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        const lu = document.getElementById('hmLastUpdate');
+        if (lu && Object.keys(hmData).length > 0) {
+            lu.textContent = 'Bijgewerkt: ' + new Date().toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit'});
+        }
+    }
+
+    function setHmTab(mode, btn) {
+        hmTabMode = mode;
+        document.querySelectorAll('.hm-tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderHmGrid();
+    }
+
+    function toggleHmCompact() {
+        hmCompact = !hmCompact;
+        const btn = document.getElementById('hmCompactBtn');
+        if (btn) btn.textContent = hmCompact ? '⊞ Normaal' : '⊟ Compact';
+        renderHmGrid();
+    }
+
+    async function fetchHmQuotes() {
+        const tickers = hmStocks.map(s => s.ticker);
+        const chunks = [];
+        for (let i = 0; i < tickers.length; i += 6) chunks.push(tickers.slice(i, i+6));
+
+        for (const chunk of chunks) {
+            await Promise.all(chunk.map(async ticker => {
+                if (ticker === 'HYPE') {
+                    // Hyperliquid API
+                    try {
+                        const [mids, meta] = await Promise.all([
+                            fetch('https://api.hyperliquid.xyz/info',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({type:'allMids'})}).then(r=>r.json()),
+                            fetch('https://api.hyperliquid.xyz/info',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({type:'metaAndAssetCtxs'})}).then(r=>r.json())
+                        ]);
+                        const price = parseFloat(mids['HYPE']);
+                        if (price) {
+                            const assets = meta[0]?.universe??[], ctxs = meta[1]??[];
+                            const idx = assets.findIndex(a=>a.name==='HYPE');
+                            if (idx>=0 && ctxs[idx]) {
+                                const ctx=ctxs[idx], prev=parseFloat(ctx.prevDayPx), change=price-prev, pct=prev?(change/prev)*100:0;
+                                hmData['HYPE'] = {price, change, pct, high:parseFloat(ctx.dayHigh??price), low:parseFloat(ctx.dayLow??price)};
+                            } else {
+                                hmData['HYPE'] = {price, change:0, pct:0};
+                            }
+                        }
+                    } catch {}
+                } else {
+                    const d = await yhQuote(ticker);
+                    if (d) hmData[ticker] = d;
+                }
+            }));
+            renderHmGrid();
+        }
+    }
+
+    async function initHeatmapPage() {
+        if (!hmInitialized) {
+            hmInitialized = true;
+            renderHmGrid(); // Toon loading state
+        }
+        await fetchHmQuotes();
+    }
+
+    async function refreshHeatmapPage() {
+        hmData = {};
+        renderHmGrid();
+        await fetchHmQuotes();
+    }
+
+    function removeHmStock(ticker, event) {
+        event.stopPropagation();
+        if (!confirm(`${ticker} verwijderen uit de heatmap?`)) return;
+        hmStocks = hmStocks.filter(s => s.ticker !== ticker);
+        delete hmData[ticker];
+        saveHmStocks();
+        renderHmGrid();
+    }
+
+    function showAddStock() {
+        const modal = document.getElementById('addStockModal');
+        if (modal) { modal.style.display = 'flex'; document.getElementById('addStockTicker').focus(); }
+    }
+    function hideAddStock() {
+        const modal = document.getElementById('addStockModal');
+        if (modal) modal.style.display = 'none';
+    }
+    async function confirmAddStock() {
+        const ticker = document.getElementById('addStockTicker').value.trim().toUpperCase();
+        const name   = document.getElementById('addStockName').value.trim() || ticker;
+        if (!ticker) return;
+        if (hmStocks.find(s => s.ticker === ticker)) { alert(`${ticker} staat al in de lijst.`); return; }
+        hmStocks.push({ ticker, name });
+        saveHmStocks();
+        hideAddStock();
+        document.getElementById('addStockTicker').value = '';
+        document.getElementById('addStockName').value = '';
+        renderHmGrid();
+        const d = await yhQuote(ticker);
+        if (d) hmData[ticker] = d;
+        renderHmGrid();
+    }
+
+    // ── KALENDER ─────────────────────────────────────────────────────────────
+    const MAANDEN_NL = ['Januari','Februari','Maart','April','Mei','Juni','Juli','Augustus','September','Oktober','November','December'];
+    const EVENT_COLORS = { earnings:'#3498db', dividend:'#e74c3c', fed:'#8e44ad', macro:'#e67e22', custom:'#27ae60' };
+    const EVENT_LABELS = { earnings:'Earnings', dividend:'Dividend', fed:'Fed/ECB', macro:'Macro' };
+
+    let kalYear  = new Date().getFullYear();
+    let kalMonth = new Date().getMonth(); // 0-based
+    let kalEvents = JSON.parse(localStorage.getItem('kal_events') || '{}'); // key: 'YYYY-MM-DD' → [{type,title,ticker?,eps?,epsEst?,rev?}]
+    let kalInitialized = false;
+
+    // Vaste Fed/ECB en macro events 2025-2026
+    const FIXED_EVENTS = {
+        '2025-01-29': [{type:'fed',    title:'Fed rentebeslist (FOMC)'}],
+        '2025-03-19': [{type:'fed',    title:'Fed rentebeslist (FOMC)'}],
+        '2025-05-07': [{type:'fed',    title:'Fed rentebeslist (FOMC)'}],
+        '2025-06-18': [{type:'fed',    title:'Fed rentebeslist (FOMC)'}],
+        '2025-07-30': [{type:'fed',    title:'Fed rentebeslist (FOMC)'}],
+        '2025-09-17': [{type:'fed',    title:'Fed rentebeslist (FOMC)'}],
+        '2025-10-29': [{type:'fed',    title:'Fed rentebeslist (FOMC)'}],
+        '2025-12-10': [{type:'fed',    title:'Fed rentebeslist (FOMC)'}],
+        '2026-01-28': [{type:'fed',    title:'Fed rentebeslist (FOMC)'}],
+        '2026-03-18': [{type:'fed',    title:'Fed rentebeslist (FOMC)'}],
+        '2026-04-29': [{type:'fed',    title:'Fed rentebeslist (FOMC)'}],
+        '2026-06-17': [{type:'fed',    title:'Fed rentebeslist (FOMC)'}],
+        '2026-07-29': [{type:'fed',    title:'Fed rentebeslist (FOMC)'}],
+        '2026-09-16': [{type:'fed',    title:'Fed rentebeslist (FOMC)'}],
+        '2026-10-28': [{type:'fed',    title:'Fed rentebeslist (FOMC)'}],
+        '2026-12-09': [{type:'fed',    title:'Fed rentebeslist (FOMC)'}],
+        '2025-01-17': [{type:'macro',  title:'CPI VS (dec 2024)'}],
+        '2025-02-12': [{type:'macro',  title:'CPI VS (jan 2025)'}],
+        '2025-04-10': [{type:'macro',  title:'CPI VS (mrt 2025)'}],
+        '2025-05-13': [{type:'macro',  title:'CPI VS (apr 2025)'}],
+        '2025-06-11': [{type:'macro',  title:'CPI VS (mei 2025)'}],
+        '2026-01-14': [{type:'macro',  title:'CPI VS (dec 2025)'}],
+        '2026-02-11': [{type:'macro',  title:'CPI VS (jan 2026)'}],
+        '2026-03-11': [{type:'macro',  title:'CPI VS (feb 2026)'}],
+        '2026-04-10': [{type:'macro',  title:'CPI VS (mrt 2026)'}],
+        '2026-05-13': [{type:'macro',  title:'CPI VS (apr 2026)'}],
+    };
+
+    function kalKey(y, m, d) {
+        return `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    }
+
+    function saveKalEvents() { localStorage.setItem('kal_events', JSON.stringify(kalEvents)); }
+
+    function getAllEventsForKey(key) {
+        const fixed   = FIXED_EVENTS[key] || [];
+        const custom  = kalEvents[key]    || [];
+        return [...fixed, ...custom];
+    }
+
+    // Haal earnings op via Finnhub voor alle heatmap tickers in de huidige maand
+    async function fetchEarningsForMonth(year, month) {
+        const from = `${year}-${String(month+1).padStart(2,'0')}-01`;
+        const lastDay = new Date(year, month+1, 0).getDate();
+        const to   = `${year}-${String(month+1).padStart(2,'0')}-${lastDay}`;
+        try {
+            const r = await fetch(`https://finnhub.io/api/v1/calendar/earnings?from=${from}&to=${to}&token=${FINNHUB_KEY}`);
+            if (!r.ok) throw new Error(r.status);
+            const data = await r.json();
+            const myTickers = new Set(hmStocks.map(s => s.ticker.toUpperCase()));
+            const result = {};
+            (data.earningsCalendar || []).forEach(e => {
+                const ticker = (e.symbol || '').toUpperCase();
+                if (!myTickers.has(ticker)) return;
+                const key = e.date;
+                if (!result[key]) result[key] = [];
+                const name = hmStocks.find(s => s.ticker.toUpperCase() === ticker)?.name || ticker;
+                result[key].push({
+                    type:   'earnings',
+                    title:  name,
+                    ticker: ticker,
+                    eps:    e.epsActual != null ? e.epsActual : null,
+                    epsEst: e.epsEstimate != null ? e.epsEstimate : null,
+                    hour:   e.hour || '',
+                });
+            });
+            return result;
+        } catch { return {}; }
+    }
+
+    // Haal dividend op via Finnhub
+    async function fetchDividendForMonth(year, month) {
+        const myTickers = hmStocks.map(s => s.ticker.toUpperCase());
+        const from = `${year}-${String(month+1).padStart(2,'0')}-01`;
+        const lastDay = new Date(year, month+1, 0).getDate();
+        const to   = `${year}-${String(month+1).padStart(2,'0')}-${lastDay}`;
+        const result = {};
+        // Dividenden per ticker ophalen (parallel, max 8)
+        const chunks = [];
+        for (let i = 0; i < myTickers.length; i += 8) chunks.push(myTickers.slice(i, i+8));
+        for (const chunk of chunks) {
+            await Promise.all(chunk.map(async ticker => {
+                try {
+                    const r = await fetch(`https://finnhub.io/api/v1/stock/dividend2?symbol=${ticker}&from=${from}&to=${to}&token=${FINNHUB_KEY}`);
+                    const data = await r.json();
+                    (data.data || []).forEach(d => {
+                        const key = d.exDate || d.payDate;
+                        if (!key) return;
+                        if (!result[key]) result[key] = [];
+                        const name = hmStocks.find(s => s.ticker.toUpperCase() === ticker)?.name || ticker;
+                        result[key].push({
+                            type:   'dividend',
+                            title:  name,
+                            ticker: ticker,
+                            amount: d.amount,
+                            currency: d.currency || 'USD',
+                        });
+                    });
+                } catch {}
+            }));
+        }
+        return result;
+    }
+
+    let kalEarningsCache = {}; // 'YYYY-MM' -> events object
+    let kalDivCache      = {};
+
+    async function refreshKalender() {
+        const monthKey = `${kalYear}-${String(kalMonth+1).padStart(2,'0')}`;
+        document.getElementById('kalStatus').textContent = '⏳ Earnings en dividenden ophalen…';
+        const [earnings, dividends] = await Promise.all([
+            fetchEarningsForMonth(kalYear, kalMonth),
+            fetchDividendForMonth(kalYear, kalMonth),
+        ]);
+        kalEarningsCache[monthKey] = earnings;
+        kalDivCache[monthKey]      = dividends;
+        renderKalender();
+        document.getElementById('kalStatus').textContent =
+            `✓ Bijgewerkt · ${Object.values(earnings).flat().length} earnings · ${Object.values(dividends).flat().length} dividenden gevonden`;
+    }
+
+    async function initKalender() {
+        if (kalInitialized) { renderKalender(); return; }
+        kalInitialized = true;
+        renderKalender();
+        await refreshKalender();
+    }
+
+    function getMonthEvents() {
+        const monthKey = `${kalYear}-${String(kalMonth+1).padStart(2,'0')}`;
+        const earns = kalEarningsCache[monthKey] || {};
+        const divs  = kalDivCache[monthKey]      || {};
+        // Merge alles per dag
+        const merged = {};
+        const addAll = (obj) => Object.entries(obj).forEach(([k, evs]) => {
+            if (!merged[k]) merged[k] = [];
+            merged[k].push(...evs);
+        });
+        addAll(FIXED_EVENTS);
+        addAll(earns);
+        addAll(divs);
+        addAll(kalEvents); // gebruikersevents
+        return merged;
+    }
+
+    function renderKalender() {
+        const label = document.getElementById('kalMonthLabel');
+        if (label) label.textContent = `${MAANDEN_NL[kalMonth]} ${kalYear}`;
+        const grid = document.getElementById('kalGrid');
+        if (!grid) return;
+
+        const allEvents = getMonthEvents();
+        const today = new Date();
+        const firstDay = new Date(kalYear, kalMonth, 1);
+        const daysInMonth = new Date(kalYear, kalMonth+1, 0).getDate();
+        const daysInPrevMonth = new Date(kalYear, kalMonth, 0).getDate();
+        let startDow = (firstDay.getDay() + 6) % 7; // Ma=0
+
+        let html = '';
+
+        // Vorige maand opvulling
+        for (let i = 0; i < startDow; i++) {
+            const day = daysInPrevMonth - startDow + 1 + i;
+            html += `<div class="kal-day other-month"><div class="kal-daynum">${day}</div></div>`;
+        }
+
+        // Huidige maand
+        for (let d = 1; d <= daysInMonth; d++) {
+            const key = kalKey(kalYear, kalMonth, d);
+            const events = allEvents[key] || [];
+            const dow = (new Date(kalYear, kalMonth, d).getDay() + 6) % 7;
+            const isWeekend = dow >= 5;
+            const isToday = d === today.getDate() && kalMonth === today.getMonth() && kalYear === today.getFullYear();
+
+            let classes = 'kal-day';
+            if (isWeekend) classes += ' weekend';
+            if (isToday)   classes += ' today';
+            if (events.length > 0) classes += ' has-events';
+
+            const MAX_SHOW = 3;
+            const shown = events.slice(0, MAX_SHOW);
+            const more  = events.length - MAX_SHOW;
+
+            const evHtml = shown.map(ev =>
+                `<div class="kal-event ${ev.type}" onclick="event.stopPropagation();showKalDetail('${key}')">${ev.title}</div>`
+            ).join('');
+
+            html += `<div class="${classes}" onclick="showKalDetail('${key}')">
+                <div class="kal-daynum">${d}</div>
+                ${evHtml}
+                ${more > 0 ? `<div class="kal-more">+${more} meer</div>` : ''}
+            </div>`;
+        }
+
+        // Volgende maand opvulling
+        const totalCells = startDow + daysInMonth;
+        const remainder  = totalCells % 7 === 0 ? 0 : 7 - (totalCells % 7);
+        for (let i = 1; i <= remainder; i++) {
+            html += `<div class="kal-day other-month"><div class="kal-daynum">${i}</div></div>`;
+        }
+
+        grid.innerHTML = html;
+    }
+
+    function showKalDetail(key) {
+        const allEvents = getMonthEvents();
+        const events = allEvents[key] || [];
+        const [y, m, d] = key.split('-').map(Number);
+        const DAGEN = ['zondag','maandag','dinsdag','woensdag','donderdag','vrijdag','zaterdag'];
+        const dateObj = new Date(y, m-1, d);
+        document.getElementById('kalDetailDate').textContent =
+            `${DAGEN[dateObj.getDay()]} ${d} ${MAANDEN_NL[m-1]} ${y}`;
+
+        const panel = document.getElementById('kalDetail');
+        const body  = document.getElementById('kalDetailBody');
+
+        if (events.length === 0) {
+            body.innerHTML = `<p style="color:var(--text-muted);font-size:0.85rem;">Geen events op deze dag.</p>`;
+        } else {
+            body.innerHTML = events.map(ev => {
+                const col = EVENT_COLORS[ev.type] || '#999';
+                let extra = '';
+                if (ev.type === 'earnings') {
+                    const timing = ev.hour === 'bmo' ? 'Voor opening' : ev.hour === 'amc' ? 'Na sluiting' : ev.hour ? ev.hour : '';
+                    let epsHtml = '';
+                    if (ev.epsEst != null) {
+                        epsHtml = `EPS est: <strong>${ev.epsEst}</strong>`;
+                        if (ev.eps != null) epsHtml += ` · Actual: <strong style="color:${ev.eps >= ev.epsEst ? 'var(--success)' : 'var(--danger)'};">${ev.eps}</strong>`;
+                    }
+                    extra = `<div style="display:flex;justify-content:space-between;align-items:center;margin-top:3px;">
+                        <span style="font-size:0.75rem;color:var(--text-muted);">${epsHtml}</span>
+                        ${timing ? `<span style="font-size:0.72rem;font-weight:700;color:${col};background:${col}18;padding:2px 7px;border-radius:10px;">${timing}</span>` : ''}
+                    </div>`;
+                }
+                if (ev.type === 'dividend') {
+                    if (ev.amount) extra = `<div style="margin-top:3px;"><span style="font-size:0.75rem;color:var(--text-muted);">Dividend: <strong>${ev.amount} ${ev.currency||''}</strong> per aandeel</span></div>`;
+                }
+                return `<div class="kal-detail-event">
+                    <div class="kal-detail-dot" style="background:${col};flex-shrink:0;"></div>
+                    <div style="flex:1;min-width:0;">
+                        <div style="font-weight:700;font-size:0.88rem;">${EVENT_LABELS[ev.type] || ev.type} — ${ev.title}</div>
+                        ${extra}
+                    </div>
+                    ${ev.type === 'custom' ? `<button onclick="deleteKalEvent('${key}','${ev.title.replace(/'/g,"\\'")}')" style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:0.85rem;flex-shrink:0;">✕</button>` : ''}
+                </div>`;
+            }).join('');
+        }
+
+        panel.style.display = 'block';
+        panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function kalenderPrevMonth() {
+        kalMonth--;
+        if (kalMonth < 0) { kalMonth = 11; kalYear--; }
+        renderKalender();
+        // Lazy load events als nog niet gecached
+        const mk = `${kalYear}-${String(kalMonth+1).padStart(2,'0')}`;
+        if (!kalEarningsCache[mk]) refreshKalender();
+    }
+    function kalenderNextMonth() {
+        kalMonth++;
+        if (kalMonth > 11) { kalMonth = 0; kalYear++; }
+        renderKalender();
+        const mk = `${kalYear}-${String(kalMonth+1).padStart(2,'0')}`;
+        if (!kalEarningsCache[mk]) refreshKalender();
+    }
+    function kalenderToday() {
+        kalYear  = new Date().getFullYear();
+        kalMonth = new Date().getMonth();
+        renderKalender();
+        const mk = `${kalYear}-${String(kalMonth+1).padStart(2,'0')}`;
+        if (!kalEarningsCache[mk]) refreshKalender();
+    }
+
+    function showAddKalEvent() {
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('kalEvDate').value  = today;
+        document.getElementById('kalEvTitle').value = '';
+        document.getElementById('addKalModal').style.display = 'flex';
+    }
+    function hideAddKalEvent() {
+        document.getElementById('addKalModal').style.display = 'none';
+    }
+    function confirmAddKalEvent() {
+        const date  = document.getElementById('kalEvDate').value;
+        const title = document.getElementById('kalEvTitle').value.trim();
+        const type  = document.getElementById('kalEvType').value;
+        if (!date || !title) return;
+        if (!kalEvents[date]) kalEvents[date] = [];
+        kalEvents[date].push({ type, title });
+        saveKalEvents();
+        hideAddKalEvent();
+        renderKalender();
+    }
+    function deleteKalEvent(key, title) {
+        if (!kalEvents[key]) return;
+        kalEvents[key] = kalEvents[key].filter(e => e.title !== title);
+        if (kalEvents[key].length === 0) delete kalEvents[key];
+        saveKalEvents();
+        renderKalender();
+        showKalDetail(key);
+    }
+
+    window.onload = () => {
+        const savedTheme = localStorage.getItem('v25_theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        document.getElementById('themeBtn').innerText = savedTheme === 'dark' ? '☀️' : '🌙';
+        initCharts(); 
+        updateDashboard(); 
+    };
+
+
+</script>
+
+<div id="cijfer-page" class="tab-content">
+    <div style="margin-bottom:20px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
+            <h1 style="margin:0;font-weight:800;">CIJFERS</h1>
+            <div style="display:flex;align-items:center;gap:10px;">
+                <span id="cijferStatus" style="font-size:0.75rem;color:var(--text-muted);"></span>
+                <button class="btn" onclick="loadCijferData(true)" style="font-size:0.8rem;padding:8px 14px;">↻ Vernieuwen</button>
+            </div>
+        </div>
+        <p style="color:var(--text-muted);font-size:0.82rem;margin:6px 0 0 0;">Recente en aankomende earnings van uw aandelen, opgehaald via Finnhub.</p>
+    </div>
+
+    <!-- Filters -->
+    <div style="display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap;">
+        <button class="cijfer-filter-btn active" onclick="setCijferFilter('all',this)">Alle</button>
+        <button class="cijfer-filter-btn" onclick="setCijferFilter('reported',this)">Gerapporteerd</button>
+        <button class="cijfer-filter-btn" onclick="setCijferFilter('upcoming',this)">Aankomend</button>
+    </div>
+
+    <div id="cijferGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;">
+        <div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text-muted);font-size:0.9rem;">
+            ⏳ Cijfers laden…
+        </div>
+    </div>
+</div>
+
+<style>
+.cijfer-filter-btn {
+    background: var(--row-hover);
+    color: var(--text-muted);
+    border: 1px solid var(--border-color);
+    padding: 7px 16px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.15s;
+}
+.cijfer-filter-btn.active {
+    background: var(--text-main);
+    color: var(--bg-color);
+    border-color: var(--text-main);
+}
+.cijfer-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: 18px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+    position: relative;
+    overflow: hidden;
+}
+.cijfer-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+    border-radius: 4px 0 0 4px;
+}
+.cijfer-card.reported::before { background: var(--success); }
+.cijfer-card.upcoming::before  { background: var(--bolero); }
+.cijfer-card.no-data::before   { background: var(--border-color); }
+.cijfer-ticker {
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    font-family: monospace;
+}
+.cijfer-name {
+    font-size: 1rem;
+    font-weight: 800;
+    margin: 2px 0 8px;
+    color: var(--text-main);
+}
+.cijfer-date-row {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.cijfer-badge {
+    font-size: 0.65rem;
+    font-weight: 800;
+    padding: 2px 8px;
+    border-radius: 99px;
+    letter-spacing: 0.04em;
+}
+.cijfer-badge.bmo { background: rgba(52,152,219,0.15); color: var(--bolero); }
+.cijfer-badge.amc { background: rgba(142,68,173,0.15); color: #8e44ad; }
+.cijfer-metrics {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 8px;
+    border-top: 1px solid var(--border-color);
+    padding-top: 12px;
+}
+.cijfer-metric-block {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+.cijfer-metric-label {
+    font-size: 0.62rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+}
+.cijfer-metric-value {
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--text-main);
+}
+.cijfer-metric-sub {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+.cijfer-surprise {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.72rem;
+    font-weight: 800;
+    padding: 2px 8px;
+    border-radius: 99px;
+    margin-top: 4px;
+}
+.cijfer-surprise.beat { background: rgba(46,204,113,0.15); color: var(--success); }
+.cijfer-surprise.miss { background: rgba(231,76,60,0.15);  color: var(--danger); }
+@media (max-width: 480px) {
+    #cijferGrid { grid-template-columns: 1fr; }
+}
+</style>
+
+<script>
+let cijferData = [];
+let cijferFilter = 'all';
+let cijferInitialized = false;
+
+function setCijferFilter(mode, btn) {
+    cijferFilter = mode;
+    document.querySelectorAll('.cijfer-filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderCijferGrid();
+}
+
+async function initCijferPage() {
+    if (cijferInitialized) { renderCijferGrid(); return; }
+    cijferInitialized = true;
+    await loadCijferData(false);
+}
+
+async function loadCijferData(manual = false) {
+    const grid = document.getElementById('cijferGrid');
+    const status = document.getElementById('cijferStatus');
+    if (status) status.textContent = '⏳ Ophalen…';
+    if (grid) grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text-muted);">⏳ Cijfers laden…</div>`;
+
+    // Haal earnings op voor de afgelopen 90 dagen en komende 60 dagen
+    const today = new Date();
+    const fromD = new Date(today); fromD.setDate(fromD.getDate() - 90);
+    const toD   = new Date(today); toD.setDate(toD.getDate() + 60);
+    const fmt   = d => d.toISOString().split('T')[0];
+
+    const stockTickers = hmStocks
+        .filter(s => s.type === 'stock')
+        .map(s => s.ticker.toUpperCase());
+
+    if (stockTickers.length === 0) {
+        if (grid) grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text-muted);">Geen aandelen in uw lijst.</div>`;
+        return;
+    }
+
+    try {
+        const r = await fetch(`https://finnhub.io/api/v1/calendar/earnings?from=${fmt(fromD)}&to=${fmt(toD)}&token=${FINNHUB_KEY}`);
+        if (!r.ok) throw new Error(r.status);
+        const data = await r.json();
+        const mySet = new Set(stockTickers);
+
+        // Filter op jouw aandelen
+        const entries = (data.earningsCalendar || [])
+            .filter(e => mySet.has((e.symbol||'').toUpperCase()))
+            .sort((a, b) => b.date.localeCompare(a.date)); // nieuwste eerst
+
+        // Groepeer per ticker, bewaar meest recente entry
+        const byTicker = {};
+        entries.forEach(e => {
+            const t = e.symbol.toUpperCase();
+            if (!byTicker[t]) byTicker[t] = [];
+            byTicker[t].push(e);
+        });
+
+        // Bouw resultatenlijst
+        cijferData = stockTickers.map(ticker => {
+            const stock = hmStocks.find(s => s.ticker.toUpperCase() === ticker);
+            const earns = byTicker[ticker] || [];
+            const reported = earns.filter(e => e.epsActual != null).sort((a,b)=>b.date.localeCompare(a.date));
+            const upcoming = earns.filter(e => e.epsActual == null).sort((a,b)=>a.date.localeCompare(b.date));
+            const latest  = reported[0] || null;
+            const next    = upcoming[0] || null;
+            return { ticker, name: stock?.name || ticker, latest, next };
+        }).sort((a,b) => {
+            // Sorteer: eerst recent gerapporteerd (meest recent bovenaan), dan upcoming
+            const aDate = a.latest?.date || a.next?.date || '0000';
+            const bDate = b.latest?.date || b.next?.date || '0000';
+            return bDate.localeCompare(aDate);
+        });
+
+        if (status) {
+            const now = new Date().toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit'});
+            status.textContent = `✓ Bijgewerkt · ${now}`;
+        }
+    } catch(e) {
+        if (status) status.textContent = '⚠️ Fout bij ophalen';
+        if (grid) grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--danger);">Kon cijfers niet ophalen. Probeer opnieuw.</div>`;
+        return;
+    }
+
+    renderCijferGrid();
+}
+
+function renderCijferGrid() {
+    const grid = document.getElementById('cijferGrid');
+    if (!grid) return;
+
+    let items = cijferData;
+    if (cijferFilter === 'reported') items = items.filter(d => d.latest);
+    if (cijferFilter === 'upcoming') items = items.filter(d => d.next);
+
+    if (items.length === 0) {
+        grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text-muted);">Geen cijfers gevonden voor dit filter.</div>`;
+        return;
+    }
+
+    grid.innerHTML = items.map(d => {
+        const today = new Date().toISOString().split('T')[0];
+        const e = d.latest || d.next;
+        const isReported = !!d.latest;
+        const isUpcoming = !d.latest && !!d.next;
+        const cardClass  = isReported ? 'reported' : isUpcoming ? 'upcoming' : 'no-data';
+
+        // Status badge
+        const statusBadge = isReported
+            ? `<span style="font-size:0.65rem;font-weight:800;padding:2px 8px;border-radius:99px;background:rgba(46,204,113,0.15);color:var(--success);">✓ Gerapporteerd</span>`
+            : isUpcoming
+            ? `<span style="font-size:0.65rem;font-weight:800;padding:2px 8px;border-radius:99px;background:rgba(52,152,219,0.15);color:var(--bolero);">📅 Aankomend</span>`
+            : `<span style="font-size:0.65rem;font-weight:800;padding:2px 8px;border-radius:99px;background:var(--row-hover);color:var(--text-muted);">Geen data</span>`;
+
+        // Datum
+        const dateStr = e ? formatEarningsDate(e.date) : '–';
+
+        // Timing badge
+        const timingBadge = e?.hour === 'bmo'
+            ? `<span class="cijfer-badge bmo">Voor Opening</span>`
+            : e?.hour === 'amc'
+            ? `<span class="cijfer-badge amc">Na Sluiting</span>`
+            : '';
+
+        if (!e) {
+            return `<div class="cijfer-card no-data">
+                <div class="cijfer-ticker">${d.ticker}</div>
+                <div class="cijfer-name">${d.name}</div>
+                <div style="color:var(--text-muted);font-size:0.8rem;margin-top:8px;">Geen earnings data beschikbaar in het geselecteerde bereik.</div>
+            </div>`;
+        }
+
+        // EPS metrics
+        const epsActual  = e.epsActual  != null ? e.epsActual  : null;
+        const epsEst     = e.epsEstimate != null ? e.epsEstimate : null;
+        const revActual  = e.revenueActual  != null ? e.revenueActual  : null;
+        const revEst     = e.revenueEstimate != null ? e.revenueEstimate : null;
+
+        const fmtEps = v => v != null ? (v >= 0 ? '' : '') + v.toFixed(2) : '–';
+        const fmtRev = v => {
+            if (v == null) return '–';
+            if (v >= 1e9) return '$' + (v/1e9).toFixed(2) + 'B';
+            if (v >= 1e6) return '$' + (v/1e6).toFixed(1) + 'M';
+            return '$' + v.toLocaleString();
+        };
+
+        // EPS surprise
+        let surpriseHtml = '';
+        if (isReported && epsActual != null && epsEst != null) {
+            const diff = epsActual - epsEst;
+            const pct  = epsEst !== 0 ? Math.abs(diff / epsEst * 100).toFixed(1) : null;
+            const isBeat = diff >= 0;
+            surpriseHtml = `<div class="cijfer-surprise ${isBeat?'beat':'miss'}">
+                ${isBeat ? '▲' : '▼'} ${isBeat ? 'Beat' : 'Miss'} ${pct ? `(${pct}%)` : ''}
+            </div>`;
+        }
+
+        // Revenue surprise
+        let revSurpriseHtml = '';
+        if (isReported && revActual != null && revEst != null) {
+            const diff   = revActual - revEst;
+            const isBeat = diff >= 0;
+            const pct    = revEst !== 0 ? Math.abs(diff / revEst * 100).toFixed(1) : null;
+            revSurpriseHtml = `<div class="cijfer-surprise ${isBeat?'beat':'miss'}" style="font-size:0.68rem;padding:1px 6px;">
+                ${isBeat ? '▲' : '▼'} Rev ${isBeat ? 'Beat' : 'Miss'} ${pct ? `(${pct}%)` : ''}
+            </div>`;
+        }
+
+        // Next earnings (als er ook een upcoming is naast het gerapporteerde)
+        let nextHtml = '';
+        if (isReported && d.next) {
+            nextHtml = `<div style="margin-top:12px;padding-top:10px;border-top:1px dashed var(--border-color);font-size:0.75rem;color:var(--text-muted);">
+                📅 Volgend: <strong style="color:var(--bolero);">${formatEarningsDate(d.next.date)}</strong>
+                ${d.next.epsEstimate != null ? `· EPS est: <strong>${d.next.epsEstimate.toFixed(2)}</strong>` : ''}
+            </div>`;
+        }
+
+        return `<div class="cijfer-card ${cardClass}">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px;">
+                <div>
+                    <div class="cijfer-ticker">${d.ticker}</div>
+                    <div class="cijfer-name">${d.name}</div>
+                </div>
+                ${statusBadge}
+            </div>
+            <div class="cijfer-date-row">
+                📆 ${dateStr}
+                ${timingBadge}
+            </div>
+            <div class="cijfer-metrics">
+                <div class="cijfer-metric-block">
+                    <div class="cijfer-metric-label">EPS Actueel</div>
+                    <div class="cijfer-metric-value" style="color:${epsActual!=null?(epsActual>=0?'var(--success)':'var(--danger)'):'var(--text-main)'}">
+                        ${isReported ? fmtEps(epsActual) : '–'}
+                    </div>
+                    ${surpriseHtml}
+                </div>
+                <div class="cijfer-metric-block">
+                    <div class="cijfer-metric-label">EPS Verwacht</div>
+                    <div class="cijfer-metric-value">${fmtEps(epsEst)}</div>
+                    <div class="cijfer-metric-sub">${epsEst != null ? 'consensus' : ''}</div>
+                </div>
+                <div class="cijfer-metric-block">
+                    <div class="cijfer-metric-label">Omzet Actueel</div>
+                    <div class="cijfer-metric-value">${isReported ? fmtRev(revActual) : '–'}</div>
+                    ${revSurpriseHtml}
+                </div>
+                <div class="cijfer-metric-block">
+                    <div class="cijfer-metric-label">Omzet Verwacht</div>
+                    <div class="cijfer-metric-value">${fmtRev(revEst)}</div>
+                </div>
+            </div>
+            ${nextHtml}
+        </div>`;
+    }).join('');
+}
+
+function formatEarningsDate(dateStr) {
+    if (!dateStr) return '–';
+    const [y, m, d] = dateStr.split('-').map(Number);
+    const maanden = ['jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec'];
+    return `${d} ${maanden[m-1]} ${y}`;
+}
+</script>
+
+<div id="widgetMenu" class="card" style="display:none; position:fixed; top:70px; right:20px; z-index:1001; width:220px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); padding: 20px;">
+    <h3 style="margin-bottom:15px; font-size: 0.9rem;">DASHBOARD LAYOUT</h3>
+    
+    <div class="widget-option">
+        <input type="checkbox" id="checkGrowth" checked onchange="toggleWidget('growthChartContainer', this.checked)">
+        <label for="checkGrowth">TOTAAL</label>
+    </div>
+
+    <div class="widget-option">
+        <input type="checkbox" id="checkPie" checked onchange="toggleWidget('pieChartContainer', this.checked)">
+        <label for="checkPie">VERDELING</label>
+    </div>
+
+    <div class="widget-option">
+        <input type="checkbox" id="checkStatsBlock" checked onchange="toggleWidget('statsBlockContainer', this.checked)">
+        <label for="checkStatsBlock">STATISTIEKEN</label>
+    </div>
+
+    <div class="widget-option">
+        <input type="checkbox" id="checkDegiro" checked onchange="toggleWidget('degiroChartContainer', this.checked)">
+        <label for="checkDegiro">DEGIRO</label>
+    </div>
+
+    <div class="widget-option">
+        <input type="checkbox" id="checkBolero" checked onchange="toggleWidget('boleroChartContainer', this.checked)">
+        <label for="checkBolero">BOLERO</label>
+    </div>
+
+    <div class="widget-option">
+        <input type="checkbox" id="checkSaxo" checked onchange="toggleWidget('saxoChartContainer', this.checked)">
+        <label for="checkSaxo">SAXO</label>
+    </div>
+
+    <div class="widget-option">
+        <input type="checkbox" id="checkDailyReturn" checked onchange="toggleWidget('dailyReturnChartContainer', this.checked)">
+        <label for="checkDailyReturn">DAGRENDEMENT</label>
+    </div>
+
+    <div class="widget-option">
+        <input type="checkbox" id="checkCumulReturn" checked onchange="toggleWidget('cumulReturnChartContainer', this.checked)">
+        <label for="checkCumulReturn">GECUMULEERD %</label>
+    </div>
+
+    <div class="widget-option">
+        <input type="checkbox" id="checkHeatmap" checked onchange="toggleWidget('heatmapContainer', this.checked)">
+        <label for="checkHeatmap">KALENDER</label>
+    </div>
+
+    <div class="widget-option">
+        <input type="checkbox" id="checkMaand" checked onchange="toggleWidget('maandoverzichtContainer', this.checked)">
+        <label for="checkMaand">MAANDOVERZICHT</label>
+    </div>
+
+    <button class="btn btn-main" style="width:100%; margin-top:15px; justify-content: center;" onclick="toggleWidgetMenu()">Klaar</button>
+</div>
+</body>
+</html>            cursor: pointer;
             font-weight: 600;
             color: var(--text-muted);
             padding: 8px 12px;
