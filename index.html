@@ -990,8 +990,8 @@
     <div id="addStockDataModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:3000;align-items:center;justify-content:center;">
         <div class="card" style="width:320px;padding:24px;">
             <h3 id="addStockDataTitle" style="margin-bottom:16px;">Toevoegen</h3>
-            <input id="addSdTicker" placeholder="Ticker (bijv. AAPL)" class="cash-input-field" style="width:100%;border:1px solid var(--border-color);border-radius:8px;padding:10px;font-size:1rem;background:var(--bg-color);color:var(--text-main);margin-bottom:10px;">
-            <input id="addSdName"   placeholder="Naam (bijv. Apple)" class="cash-input-field" style="width:100%;border:1px solid var(--border-color);border-radius:8px;padding:10px;font-size:1rem;background:var(--bg-color);color:var(--text-main);margin-bottom:10px;">
+            <input id="addSdTicker" placeholder="Ticker" class="cash-input-field" style="width:100%;border:1px solid var(--border-color);border-radius:8px;padding:10px;font-size:1rem;background:var(--bg-color);color:var(--text-main);margin-bottom:10px;">
+            <input id="addSdName"   placeholder="Naam" class="cash-input-field" style="width:100%;border:1px solid var(--border-color);border-radius:8px;padding:10px;font-size:1rem;background:var(--bg-color);color:var(--text-main);margin-bottom:10px;">
             <select id="addSdType" style="width:100%;border:1px solid var(--border-color);border-radius:8px;padding:10px;font-size:1rem;background:var(--bg-color);color:var(--text-main);margin-bottom:16px;">
                 <option value="stock">Aandeel</option>
                 <option value="etf">ETF</option>
@@ -1067,7 +1067,7 @@
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
         <div class="card markt-section">
             <div class="markt-section-header"><h3>VALUTA</h3></div>
-            <table class="markt-table"><thead><tr><th>Paar</th><th>Koers</th><th>Dag %</th><th class="col-hide">Vorige dag</th></tr></thead>
+            <table class="markt-table"><thead><tr><th>Paar</th><th>Koers</th></tr></thead>
             <tbody id="mb-fx"></tbody></table>
         </div>
         <div class="card markt-section">
