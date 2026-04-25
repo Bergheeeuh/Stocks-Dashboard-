@@ -425,7 +425,6 @@
             flex-wrap: wrap;
         }
         @media (max-width: 500px) {
-            #kalender-page .header { flex-direction: column; align-items: flex-start; gap: 10px; }
             .kal-month-picker { width: 100%; }
         }
 
@@ -698,6 +697,7 @@
     <div class="nav-item" onclick="switchTab('aandelen-page', this); closeNav()">LIVE</div>
     <div class="nav-item" onclick="switchTab('heatmap-page', this); closeNav()">HEATMAP</div>
     <div class="nav-item" onclick="switchTab('kalender-page', this); closeNav()">KALENDER</div>
+    <div class="nav-item" onclick="switchTab('cijfer-page', this); closeNav()">CIJFERS</div>
 
 </div>
 <div id="overlay" class="overlay" onclick="closeNav()"></div>
@@ -948,9 +948,10 @@
 
     <!-- AANDELEN TAB -->
     <div id="aandelen-data-tab" class="sub-tab-content">
+        <!-- Aandelen tabel -->
         <div class="card" style="margin-top:16px;">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px;">
-                <h3 style="margin:0;">AANDELEN &amp; ETFs</h3>
+                <h3 style="margin:0;">AANDELEN</h3>
                 <button class="btn btn-main" onclick="showAddStockData('stock')" style="font-size:0.8rem;">+ Toevoegen</button>
             </div>
             <div style="overflow-x:auto;">
@@ -962,6 +963,24 @@
                         <th style="padding:8px 6px;border-bottom:2px solid var(--border-color);"></th>
                     </tr></thead>
                     <tbody id="aandelenDataBody"></tbody>
+                </table>
+            </div>
+        </div>
+        <!-- ETF tabel -->
+        <div class="card" style="margin-top:16px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px;">
+                <h3 style="margin:0;">ETFs</h3>
+                <button class="btn btn-main" onclick="showAddStockData('etf')" style="font-size:0.8rem;">+ Toevoegen</button>
+            </div>
+            <div style="overflow-x:auto;">
+                <table style="width:100%;border-collapse:collapse;font-size:0.85rem;">
+                    <thead><tr>
+                        <th style="text-align:left;padding:8px 6px;color:var(--text-muted);font-size:0.68rem;font-weight:700;border-bottom:2px solid var(--border-color);">Ticker</th>
+                        <th style="text-align:left;padding:8px 6px;color:var(--text-muted);font-size:0.68rem;font-weight:700;border-bottom:2px solid var(--border-color);">Naam</th>
+                        <th style="text-align:center;padding:8px 6px;color:var(--text-muted);font-size:0.68rem;font-weight:700;border-bottom:2px solid var(--border-color);">Valuta</th>
+                        <th style="padding:8px 6px;border-bottom:2px solid var(--border-color);"></th>
+                    </tr></thead>
+                    <tbody id="etfDataBody"></tbody>
                 </table>
             </div>
         </div>
@@ -1139,8 +1158,8 @@
 
 <!-- KALENDER PAGINA -->
 <div id="kalender-page" class="tab-content">
-    <div class="header" style="margin-bottom:8px;">
-        <div class="header-titles"><h1>KALENDER</h1></div>
+    <div style="margin-bottom:8px;">
+        <h1 style="margin:0 0 10px 0;font-weight:800;">KALENDER</h1>
         <div class="kal-month-picker">
             <button class="btn" onclick="kalenderPrevMonth()" style="padding:8px 12px;">◀</button>
             <span id="kalMonthLabel" style="font-weight:800;font-size:1rem;min-width:140px;text-align:center;"></span>
@@ -1423,7 +1442,7 @@ function toggleWidget(containerId, isChecked) {
     }
 
     // ── SWIPE NAVIGATIE ──────────────────────────────────────────────────────
-    const TABS = ['dashboard', 'data-page', 'aandelen-page', 'heatmap-page', 'kalender-page'];
+    const TABS = ['dashboard', 'data-page', 'aandelen-page', 'heatmap-page', 'kalender-page', 'cijfer-page'];
     const TAB_NAV_ITEMS = () => document.querySelectorAll('.nav-item');
 
     function getActiveTabIndex() {
@@ -1530,13 +1549,14 @@ function toggleWidget(containerId, isChecked) {
         document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
         document.getElementById(id).classList.add('active');
         if (el) el.classList.add('active');
-        const labels = { 'dashboard':'PORTFOLIO', 'data-page':'DATA', 'aandelen-page':'LIVE', 'heatmap-page':'HEATMAP', 'kalender-page':'KALENDER' };
+        const labels = { 'dashboard':'PORTFOLIO', 'data-page':'DATA', 'aandelen-page':'LIVE', 'heatmap-page':'HEATMAP', 'kalender-page':'KALENDER', 'cijfer-page':'CIJFERS' };
         const navLabel = document.querySelector('.nav span[style*="font-weight"]');
         if (navLabel) navLabel.textContent = labels[id] || '';
         closeNav();
         if (id === 'aandelen-page') loadMarktData(true);
         if (id === 'heatmap-page') initHeatmapPage();
         if (id === 'kalender-page') initKalender();
+        if (id === 'cijfer-page') initCijferPage();
     }
 
     function toggleBlur() { 
@@ -2661,13 +2681,10 @@ function renderWeeklyReturns() {
         return `<tr><td><strong>${label}</strong><span class="markt-name-sub">${sub}</span></td><td colspan="${cols}" class="markt-err">Niet beschikbaar</td></tr>`;
     }
     function rowFx(label, sub, d) {
-        if (!d) return errRow(label, sub, 3);
-        const prevStr = d.prevRate != null ? fmtNum(d.prevRate, 4) : '–';
+        if (!d) return errRow(label, sub, 2);
         return `<tr>
             <td><strong>${label}</strong><span class="markt-name-sub">${sub}</span></td>
             <td><strong>${fmtNum(d.price, 4)}</strong></td>
-            <td>${pctSpan(d.pct)}</td>
-            <td class="col-hide" style="color:var(--text-muted);font-size:0.82rem;">${prevStr}</td>
         </tr>`;
     }
     function rowQuote(label, sub, d, unit = '') {
@@ -2939,8 +2956,9 @@ function renderWeeklyReturns() {
 
     // ── DATA PAGINA: AANDELEN & CRYPTO TABS ─────────────────────────────────
     function renderAandelenData() {
-        const body = document.getElementById('aandelenDataBody');
-        if (!body) return;
+        const stockBody = document.getElementById('aandelenDataBody');
+        const etfBody   = document.getElementById('etfDataBody');
+
         const stocks = hmStocks.filter(s => s.type === 'stock').sort((a,b)=>a.ticker.localeCompare(b.ticker));
         const etfs   = hmStocks.filter(s => s.type === 'etf').sort((a,b)=>a.ticker.localeCompare(b.ticker));
 
@@ -2958,13 +2976,10 @@ function renderWeeklyReturns() {
             </td>
         </tr>`).join('');
 
-        const sectionHeader = (label) => `<tr><td colspan="4" style="padding:10px 6px 4px;font-size:0.65rem;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);border-bottom:2px solid var(--border-color);">${label}</td></tr>`;
+        const emptyRow = (msg) => `<tr><td colspan="4" style="padding:16px;color:var(--text-muted);text-align:center;">${msg}</td></tr>`;
 
-        body.innerHTML = [
-            stocks.length ? sectionHeader('Aandelen') + makeRows(stocks) : '',
-            etfs.length   ? sectionHeader('ETFs')     + makeRows(etfs)   : '',
-            (!stocks.length && !etfs.length) ? `<tr><td colspan="4" style="padding:16px;color:var(--text-muted);text-align:center;">Geen aandelen. Voeg er toe via + Toevoegen.</td></tr>` : '',
-        ].join('');
+        if (stockBody) stockBody.innerHTML = stocks.length ? makeRows(stocks) : emptyRow('Geen aandelen. Voeg er toe via + Toevoegen.');
+        if (etfBody)   etfBody.innerHTML   = etfs.length   ? makeRows(etfs)   : emptyRow('Geen ETFs. Voeg er toe via + Toevoegen.');
     }
 
     function updateHmCurrency(ticker, currency) {
@@ -3170,7 +3185,8 @@ function renderWeeklyReturns() {
                 const { bg, text } = pctColor(pct);
                 const sign = pct !== null && pct >= 0 ? '+' : '';
                 const pctStr = pct !== null ? `${sign}${pct.toFixed(2)}%` : '–';
-                const priceStr = d?.price != null ? `$${d.price.toLocaleString('nl-NL', {minimumFractionDigits:2,maximumFractionDigits:2})}` : '';
+                const currSymbol = (s.currency || 'USD') === 'EUR' ? '€' : '$';
+                const priceStr = d?.price != null ? `${currSymbol}${d.price.toLocaleString('nl-NL', {minimumFractionDigits:2,maximumFractionDigits:2})}` : '';
                 // Gebruik var(--row-hover) voor loading zodat het nooit transparant/kleurloos is
                 const cellBg   = isLoading ? 'var(--row-hover)' : bg;
                 const cellText = isLoading ? 'var(--text-muted)' : text;
@@ -3615,6 +3631,371 @@ function renderWeeklyReturns() {
     };
 
 
+</script>
+
+<div id="cijfer-page" class="tab-content">
+    <div style="margin-bottom:20px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
+            <h1 style="margin:0;font-weight:800;">CIJFERS</h1>
+            <div style="display:flex;align-items:center;gap:10px;">
+                <span id="cijferStatus" style="font-size:0.75rem;color:var(--text-muted);"></span>
+                <button class="btn" onclick="loadCijferData(true)" style="font-size:0.8rem;padding:8px 14px;">↻ Vernieuwen</button>
+            </div>
+        </div>
+        <p style="color:var(--text-muted);font-size:0.82rem;margin:6px 0 0 0;">Recente en aankomende earnings van uw aandelen, opgehaald via Finnhub.</p>
+    </div>
+
+    <!-- Filters -->
+    <div style="display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap;">
+        <button class="cijfer-filter-btn active" onclick="setCijferFilter('all',this)">Alle</button>
+        <button class="cijfer-filter-btn" onclick="setCijferFilter('reported',this)">Gerapporteerd</button>
+        <button class="cijfer-filter-btn" onclick="setCijferFilter('upcoming',this)">Aankomend</button>
+    </div>
+
+    <div id="cijferGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;">
+        <div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text-muted);font-size:0.9rem;">
+            ⏳ Cijfers laden…
+        </div>
+    </div>
+</div>
+
+<style>
+.cijfer-filter-btn {
+    background: var(--row-hover);
+    color: var(--text-muted);
+    border: 1px solid var(--border-color);
+    padding: 7px 16px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.15s;
+}
+.cijfer-filter-btn.active {
+    background: var(--text-main);
+    color: var(--bg-color);
+    border-color: var(--text-main);
+}
+.cijfer-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: 18px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+    position: relative;
+    overflow: hidden;
+}
+.cijfer-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+    border-radius: 4px 0 0 4px;
+}
+.cijfer-card.reported::before { background: var(--success); }
+.cijfer-card.upcoming::before  { background: var(--bolero); }
+.cijfer-card.no-data::before   { background: var(--border-color); }
+.cijfer-ticker {
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    font-family: monospace;
+}
+.cijfer-name {
+    font-size: 1rem;
+    font-weight: 800;
+    margin: 2px 0 8px;
+    color: var(--text-main);
+}
+.cijfer-date-row {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.cijfer-badge {
+    font-size: 0.65rem;
+    font-weight: 800;
+    padding: 2px 8px;
+    border-radius: 99px;
+    letter-spacing: 0.04em;
+}
+.cijfer-badge.bmo { background: rgba(52,152,219,0.15); color: var(--bolero); }
+.cijfer-badge.amc { background: rgba(142,68,173,0.15); color: #8e44ad; }
+.cijfer-metrics {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 8px;
+    border-top: 1px solid var(--border-color);
+    padding-top: 12px;
+}
+.cijfer-metric-block {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+.cijfer-metric-label {
+    font-size: 0.62rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+}
+.cijfer-metric-value {
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--text-main);
+}
+.cijfer-metric-sub {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+.cijfer-surprise {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.72rem;
+    font-weight: 800;
+    padding: 2px 8px;
+    border-radius: 99px;
+    margin-top: 4px;
+}
+.cijfer-surprise.beat { background: rgba(46,204,113,0.15); color: var(--success); }
+.cijfer-surprise.miss { background: rgba(231,76,60,0.15);  color: var(--danger); }
+@media (max-width: 480px) {
+    #cijferGrid { grid-template-columns: 1fr; }
+}
+</style>
+
+<script>
+let cijferData = [];
+let cijferFilter = 'all';
+let cijferInitialized = false;
+
+function setCijferFilter(mode, btn) {
+    cijferFilter = mode;
+    document.querySelectorAll('.cijfer-filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderCijferGrid();
+}
+
+async function initCijferPage() {
+    if (cijferInitialized) { renderCijferGrid(); return; }
+    cijferInitialized = true;
+    await loadCijferData(false);
+}
+
+async function loadCijferData(manual = false) {
+    const grid = document.getElementById('cijferGrid');
+    const status = document.getElementById('cijferStatus');
+    if (status) status.textContent = '⏳ Ophalen…';
+    if (grid) grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text-muted);">⏳ Cijfers laden…</div>`;
+
+    // Haal earnings op voor de afgelopen 90 dagen en komende 60 dagen
+    const today = new Date();
+    const fromD = new Date(today); fromD.setDate(fromD.getDate() - 90);
+    const toD   = new Date(today); toD.setDate(toD.getDate() + 60);
+    const fmt   = d => d.toISOString().split('T')[0];
+
+    const stockTickers = hmStocks
+        .filter(s => s.type === 'stock')
+        .map(s => s.ticker.toUpperCase());
+
+    if (stockTickers.length === 0) {
+        if (grid) grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text-muted);">Geen aandelen in uw lijst.</div>`;
+        return;
+    }
+
+    try {
+        const r = await fetch(`https://finnhub.io/api/v1/calendar/earnings?from=${fmt(fromD)}&to=${fmt(toD)}&token=${FINNHUB_KEY}`);
+        if (!r.ok) throw new Error(r.status);
+        const data = await r.json();
+        const mySet = new Set(stockTickers);
+
+        // Filter op jouw aandelen
+        const entries = (data.earningsCalendar || [])
+            .filter(e => mySet.has((e.symbol||'').toUpperCase()))
+            .sort((a, b) => b.date.localeCompare(a.date)); // nieuwste eerst
+
+        // Groepeer per ticker, bewaar meest recente entry
+        const byTicker = {};
+        entries.forEach(e => {
+            const t = e.symbol.toUpperCase();
+            if (!byTicker[t]) byTicker[t] = [];
+            byTicker[t].push(e);
+        });
+
+        // Bouw resultatenlijst
+        cijferData = stockTickers.map(ticker => {
+            const stock = hmStocks.find(s => s.ticker.toUpperCase() === ticker);
+            const earns = byTicker[ticker] || [];
+            const reported = earns.filter(e => e.epsActual != null).sort((a,b)=>b.date.localeCompare(a.date));
+            const upcoming = earns.filter(e => e.epsActual == null).sort((a,b)=>a.date.localeCompare(b.date));
+            const latest  = reported[0] || null;
+            const next    = upcoming[0] || null;
+            return { ticker, name: stock?.name || ticker, latest, next };
+        }).sort((a,b) => {
+            // Sorteer: eerst recent gerapporteerd (meest recent bovenaan), dan upcoming
+            const aDate = a.latest?.date || a.next?.date || '0000';
+            const bDate = b.latest?.date || b.next?.date || '0000';
+            return bDate.localeCompare(aDate);
+        });
+
+        if (status) {
+            const now = new Date().toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit'});
+            status.textContent = `✓ Bijgewerkt · ${now}`;
+        }
+    } catch(e) {
+        if (status) status.textContent = '⚠️ Fout bij ophalen';
+        if (grid) grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--danger);">Kon cijfers niet ophalen. Probeer opnieuw.</div>`;
+        return;
+    }
+
+    renderCijferGrid();
+}
+
+function renderCijferGrid() {
+    const grid = document.getElementById('cijferGrid');
+    if (!grid) return;
+
+    let items = cijferData;
+    if (cijferFilter === 'reported') items = items.filter(d => d.latest);
+    if (cijferFilter === 'upcoming') items = items.filter(d => d.next);
+
+    if (items.length === 0) {
+        grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text-muted);">Geen cijfers gevonden voor dit filter.</div>`;
+        return;
+    }
+
+    grid.innerHTML = items.map(d => {
+        const today = new Date().toISOString().split('T')[0];
+        const e = d.latest || d.next;
+        const isReported = !!d.latest;
+        const isUpcoming = !d.latest && !!d.next;
+        const cardClass  = isReported ? 'reported' : isUpcoming ? 'upcoming' : 'no-data';
+
+        // Status badge
+        const statusBadge = isReported
+            ? `<span style="font-size:0.65rem;font-weight:800;padding:2px 8px;border-radius:99px;background:rgba(46,204,113,0.15);color:var(--success);">✓ Gerapporteerd</span>`
+            : isUpcoming
+            ? `<span style="font-size:0.65rem;font-weight:800;padding:2px 8px;border-radius:99px;background:rgba(52,152,219,0.15);color:var(--bolero);">📅 Aankomend</span>`
+            : `<span style="font-size:0.65rem;font-weight:800;padding:2px 8px;border-radius:99px;background:var(--row-hover);color:var(--text-muted);">Geen data</span>`;
+
+        // Datum
+        const dateStr = e ? formatEarningsDate(e.date) : '–';
+
+        // Timing badge
+        const timingBadge = e?.hour === 'bmo'
+            ? `<span class="cijfer-badge bmo">Voor Opening</span>`
+            : e?.hour === 'amc'
+            ? `<span class="cijfer-badge amc">Na Sluiting</span>`
+            : '';
+
+        if (!e) {
+            return `<div class="cijfer-card no-data">
+                <div class="cijfer-ticker">${d.ticker}</div>
+                <div class="cijfer-name">${d.name}</div>
+                <div style="color:var(--text-muted);font-size:0.8rem;margin-top:8px;">Geen earnings data beschikbaar in het geselecteerde bereik.</div>
+            </div>`;
+        }
+
+        // EPS metrics
+        const epsActual  = e.epsActual  != null ? e.epsActual  : null;
+        const epsEst     = e.epsEstimate != null ? e.epsEstimate : null;
+        const revActual  = e.revenueActual  != null ? e.revenueActual  : null;
+        const revEst     = e.revenueEstimate != null ? e.revenueEstimate : null;
+
+        const fmtEps = v => v != null ? (v >= 0 ? '' : '') + v.toFixed(2) : '–';
+        const fmtRev = v => {
+            if (v == null) return '–';
+            if (v >= 1e9) return '$' + (v/1e9).toFixed(2) + 'B';
+            if (v >= 1e6) return '$' + (v/1e6).toFixed(1) + 'M';
+            return '$' + v.toLocaleString();
+        };
+
+        // EPS surprise
+        let surpriseHtml = '';
+        if (isReported && epsActual != null && epsEst != null) {
+            const diff = epsActual - epsEst;
+            const pct  = epsEst !== 0 ? Math.abs(diff / epsEst * 100).toFixed(1) : null;
+            const isBeat = diff >= 0;
+            surpriseHtml = `<div class="cijfer-surprise ${isBeat?'beat':'miss'}">
+                ${isBeat ? '▲' : '▼'} ${isBeat ? 'Beat' : 'Miss'} ${pct ? `(${pct}%)` : ''}
+            </div>`;
+        }
+
+        // Revenue surprise
+        let revSurpriseHtml = '';
+        if (isReported && revActual != null && revEst != null) {
+            const diff   = revActual - revEst;
+            const isBeat = diff >= 0;
+            const pct    = revEst !== 0 ? Math.abs(diff / revEst * 100).toFixed(1) : null;
+            revSurpriseHtml = `<div class="cijfer-surprise ${isBeat?'beat':'miss'}" style="font-size:0.68rem;padding:1px 6px;">
+                ${isBeat ? '▲' : '▼'} Rev ${isBeat ? 'Beat' : 'Miss'} ${pct ? `(${pct}%)` : ''}
+            </div>`;
+        }
+
+        // Next earnings (als er ook een upcoming is naast het gerapporteerde)
+        let nextHtml = '';
+        if (isReported && d.next) {
+            nextHtml = `<div style="margin-top:12px;padding-top:10px;border-top:1px dashed var(--border-color);font-size:0.75rem;color:var(--text-muted);">
+                📅 Volgend: <strong style="color:var(--bolero);">${formatEarningsDate(d.next.date)}</strong>
+                ${d.next.epsEstimate != null ? `· EPS est: <strong>${d.next.epsEstimate.toFixed(2)}</strong>` : ''}
+            </div>`;
+        }
+
+        return `<div class="cijfer-card ${cardClass}">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px;">
+                <div>
+                    <div class="cijfer-ticker">${d.ticker}</div>
+                    <div class="cijfer-name">${d.name}</div>
+                </div>
+                ${statusBadge}
+            </div>
+            <div class="cijfer-date-row">
+                📆 ${dateStr}
+                ${timingBadge}
+            </div>
+            <div class="cijfer-metrics">
+                <div class="cijfer-metric-block">
+                    <div class="cijfer-metric-label">EPS Actueel</div>
+                    <div class="cijfer-metric-value" style="color:${epsActual!=null?(epsActual>=0?'var(--success)':'var(--danger)'):'var(--text-main)'}">
+                        ${isReported ? fmtEps(epsActual) : '–'}
+                    </div>
+                    ${surpriseHtml}
+                </div>
+                <div class="cijfer-metric-block">
+                    <div class="cijfer-metric-label">EPS Verwacht</div>
+                    <div class="cijfer-metric-value">${fmtEps(epsEst)}</div>
+                    <div class="cijfer-metric-sub">${epsEst != null ? 'consensus' : ''}</div>
+                </div>
+                <div class="cijfer-metric-block">
+                    <div class="cijfer-metric-label">Omzet Actueel</div>
+                    <div class="cijfer-metric-value">${isReported ? fmtRev(revActual) : '–'}</div>
+                    ${revSurpriseHtml}
+                </div>
+                <div class="cijfer-metric-block">
+                    <div class="cijfer-metric-label">Omzet Verwacht</div>
+                    <div class="cijfer-metric-value">${fmtRev(revEst)}</div>
+                </div>
+            </div>
+            ${nextHtml}
+        </div>`;
+    }).join('');
+}
+
+function formatEarningsDate(dateStr) {
+    if (!dateStr) return '–';
+    const [y, m, d] = dateStr.split('-').map(Number);
+    const maanden = ['jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec'];
+    return `${d} ${maanden[m-1]} ${y}`;
+}
 </script>
 
 <div id="widgetMenu" class="card" style="display:none; position:fixed; top:70px; right:20px; z-index:1001; width:220px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); padding: 20px;">
