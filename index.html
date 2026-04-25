@@ -1100,7 +1100,6 @@
         <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
             <button class="btn" onclick="refreshHeatmapPage()" style="font-size:0.8rem;padding:8px 14px;">↻ Vernieuwen</button>
             <button class="btn" id="hmCompactBtn" onclick="toggleHmCompact()" style="font-size:0.8rem;padding:8px 14px;">⊟ Compact</button>
-            <button class="btn" onclick="showAddStock()" style="font-size:0.8rem;padding:8px 14px;">+ Aandeel</button>
         </div>
     </div>
 
@@ -1152,12 +1151,10 @@
 
     <!-- Legenda -->
     <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;align-items:center;">
-        <div class="kal-legend-item" style="--lc:#3498db;">📊 Earnings</div>
-        <div class="kal-legend-item" style="--lc:#e74c3c;">💵 Dividend</div>
-        <div class="kal-legend-item" style="--lc:#8e44ad;">🏛️ Fed / ECB</div>
-        <div class="kal-legend-item" style="--lc:#e67e22;">📰 Macro</div>
-        <div class="kal-legend-item" style="--lc:#27ae60;">➕ Eigen event</div>
-        <button class="btn" onclick="showAddKalEvent()" style="margin-left:auto;font-size:0.75rem;padding:6px 12px;">+ Eigen event</button>
+        <div class="kal-legend-item" style="--lc:#3498db;">Earnings</div>
+        <div class="kal-legend-item" style="--lc:#e74c3c;">Dividend</div>
+        <div class="kal-legend-item" style="--lc:#8e44ad;">Fed / ECB</div>
+        <div class="kal-legend-item" style="--lc:#e67e22;">Macro</div>
     </div>
 
     <!-- Status -->
@@ -1188,24 +1185,7 @@
     </div>
 
     <!-- Eigen event modal -->
-    <div id="addKalModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:3000;align-items:center;justify-content:center;">
-        <div class="card" style="width:340px;padding:24px;">
-            <h3 style="margin-bottom:16px;">Eigen event toevoegen</h3>
-            <input id="kalEvDate"  type="date" class="cash-input-field" style="width:100%;border:1px solid var(--border-color);border-radius:8px;padding:10px;font-size:1rem;background:var(--bg-color);color:var(--text-main);margin-bottom:10px;">
-            <input id="kalEvTitle" placeholder="Titel (bijv. NVDA lock-up expiry)" class="cash-input-field" style="width:100%;border:1px solid var(--border-color);border-radius:8px;padding:10px;font-size:1rem;background:var(--bg-color);color:var(--text-main);margin-bottom:10px;">
-            <select id="kalEvType" style="width:100%;border:1px solid var(--border-color);border-radius:8px;padding:10px;font-size:1rem;background:var(--bg-color);color:var(--text-main);margin-bottom:16px;">
-                <option value="custom">➕ Eigen event</option>
-                <option value="earnings">📊 Earnings</option>
-                <option value="dividend">💵 Dividend</option>
-                <option value="fed">🏛️ Fed / ECB</option>
-                <option value="macro">📰 Macro</option>
-            </select>
-            <div style="display:flex;gap:8px;">
-                <button class="btn btn-main" onclick="confirmAddKalEvent()" style="flex:1;">Toevoegen</button>
-                <button class="btn" onclick="hideAddKalEvent()" style="flex:1;">Annuleer</button>
-            </div>
-        </div>
-    </div>
+    
 </div>
     
 
@@ -1523,9 +1503,9 @@ function toggleWidget(containerId, isChecked) {
         { date: '17/04/2026', degiro: 57170, bolero: 23099, saxo: 35012 },
         { date: '20/04/2026', degiro: 57544, bolero: 23164, saxo: 34928 },
         { date: '21/04/2026', degiro: 57093, bolero: 22844, saxo: 33539 },
-        { date: '22/04/2026', degiro: 59130, bolero: 23300, saxo: 35327 },
-        { date: '23/04/2026', degiro: 59420, bolero: 23009, saxo: 36065 },
-        { date: '24/04/2026', degiro: 59205, bolero: 23844, saxo: 35864 },
+        { date: '22/04/2026', degiro: 59130, bolero: 23293, saxo: 35346 },
+        { date: '23/04/2026', degiro: 59420, bolero: 22963, saxo: 35893 },
+        { date: '24/04/2026', degiro: 59205, bolero: 23917, saxo: 35820 },
 
     ];
     
@@ -3087,12 +3067,12 @@ function renderWeeklyReturns() {
         {ticker:'XPEV',   name:'XPeng',              type:'stock', currency:'USD'},
         {ticker:'ZENA',   name:'Zenatech',           type:'stock', currency:'USD'},
         // ETFs
-        {ticker:'2B76.L', name:'iSh. Automation',   type:'etf',   currency:'EUR'},
-        {ticker:'DAPP',   name:'VanEck Crypto',      type:'etf',   currency:'EUR'},
-        {ticker:'REMX',   name:'VanEck Rare Earth',  type:'etf',   currency:'EUR'},
-        {ticker:'SMH',    name:'VanEck Semi',        type:'etf',   currency:'EUR'},
-        {ticker:'3HCL.L', name:'WT Copper',          type:'etf',   currency:'EUR'},
-        {ticker:'SGLD',   name:'Inv. Gold',          type:'etf',   currency:'EUR'},
+        {ticker:'2B76.D', name:'iSh. Automation',   type:'etf',   currency:'EUR'},
+        {ticker:'DAPP.MI',   name:'VanEck Crypto',      type:'etf',   currency:'EUR'},
+        {ticker:'REMX.MI',   name:'VanEck Rare Earth',  type:'etf',   currency:'EUR'},
+        {ticker:'SMH.MI',    name:'VanEck Semi',        type:'etf',   currency:'EUR'},
+        {ticker:'3HCL.L', name:'WT Copper 3x',          type:'etf',   currency:'USD'},
+        {ticker:'SGLD.MI',   name:'Inv. Gold',          type:'etf',   currency:'EUR'},
         // CRYPTO
         {ticker:'BTC-USD', name:'Bitcoin',           type:'crypto', currency:'USD'},
         {ticker:'ETH-USD', name:'Ethereum',          type:'crypto', currency:'USD'},
@@ -3312,7 +3292,7 @@ function renderWeeklyReturns() {
     // ── KALENDER ─────────────────────────────────────────────────────────────
     const MAANDEN_NL = ['Januari','Februari','Maart','April','Mei','Juni','Juli','Augustus','September','Oktober','November','December'];
     const EVENT_COLORS = { earnings:'#3498db', dividend:'#e74c3c', fed:'#8e44ad', macro:'#e67e22', custom:'#27ae60' };
-    const EVENT_LABELS = { earnings:'📊 Earnings', dividend:'💵 Dividend', fed:'🏛️ Fed/ECB', macro:'📰 Macro', custom:'➕ Eigen' };
+    const EVENT_LABELS = { earnings:'Earnings', dividend:'Dividend', fed:'Fed/ECB', macro:'Macro' };
 
     let kalYear  = new Date().getFullYear();
     let kalMonth = new Date().getMonth(); // 0-based
