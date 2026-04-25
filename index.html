@@ -1587,7 +1587,7 @@ function toggleWidget(containerId, isChecked) {
         renderMaandoverzicht();
         renderWeekoverzicht();
     }
-    function formatEuro(v) { return "€ " + (v || 0).toLocaleString('nl-NL', {minimumFractionDigits: 2}); }
+    function formatEuro(v) { return "€ " + (v || 0).toLocaleString('nl-NL', {minimumFractionDigits: 0}); }
     function addRow(type) {
     if(type === 'broker') {
         brokerData.push({date: '', degiro: 0, bolero: 0, saxo: 0});
@@ -1630,7 +1630,7 @@ renderWeeklyReturns();
         });
 
         const profitTotal = total - cash.Totaal;
-        const percTotal = cash.Totaal !== 0 ? ((profitTotal / cash.Totaal) * 100).toFixed(2) : 0;
+        const percTotal = cash.Totaal !== 0 ? ((profitTotal / cash.Totaal) * 100).toFixed(0) : 0;
 
         document.getElementById('totalValue').innerText = formatEuro(total);
         document.getElementById('netInleg').innerText = formatEuro(cash.Totaal);
@@ -1905,7 +1905,7 @@ function renderWeeklyReturns() {
 
         types.forEach(data => {
             const diff = data.cur - data.prev;
-            const perc = data.prev !== 0 ? ((diff / data.prev) * 100).toFixed(2) : 0;
+            const perc = data.prev !== 0 ? ((diff / data.prev) * 100).toFixed(0) : 0;
             const color = diff >= 0 ? 'var(--success)' : 'var(--danger)';
             const symbol = diff >= 0 ? '+' : '';
             
@@ -2913,7 +2913,7 @@ function renderWeeklyReturns() {
         ]);
         if (vixData) {
             const v = vixData.price;
-            document.getElementById('vixValue').textContent = v.toFixed(2);
+            document.getElementById('vixValue').textContent = v.toFixed(0);
             const sign = vixData.change >= 0 ? '+' : '';
             document.getElementById('vixChange').innerHTML =
                 `<span style="color:${vixData.change>=0?'var(--danger)':'var(--success)'}">${sign}${vixData.change.toFixed(2)} (${sign}${vixData.pct.toFixed(2)}%)</span>`;
