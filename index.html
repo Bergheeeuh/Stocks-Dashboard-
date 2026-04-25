@@ -538,6 +538,27 @@
             }
         }
 
+@media (max-width: 768px) {
+    /* Bestaande mobiele styles... */
+
+    .heatmap-header {
+        flex-direction: column; /* Zet titel en kiezer onder elkaar */
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    #heatmapContainer {
+        display: flex;
+        flex-direction: column; /* Forceert de inhoud in een kolom */
+    }
+
+    /* Zorgt dat de maandkiezer de volledige breedte pakt op mobiel */
+    #monthSelector {
+        width: 100%;
+        margin-top: 10px;
+    }
+}
+
         /* Heatmap pagina */
         .hm-sort-btn {
             background: var(--row-hover); border: 1px solid var(--border-color);
