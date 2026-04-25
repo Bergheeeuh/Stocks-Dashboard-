@@ -350,11 +350,12 @@
         .widget-drag-item.drag-over { border-color: var(--bolero); background: var(--row-hover); }
         .widget-drag-item.dragging { opacity: 0.4; }
         .drag-handle { color: var(--text-muted); font-size: 0.9rem; cursor: grab; flex-shrink: 0; }
-        .widget-arrow-btns { display: flex; flex-direction: column; gap: 1px; margin-left: auto; }
+        .widget-arrow-btns { display: flex; flex-direction: row; gap: 4px; margin-left: auto; }
         .widget-arrow-btn {
-            background: none; border: none; color: var(--text-muted);
-            cursor: pointer; font-size: 0.7rem; padding: 1px 4px;
-            border-radius: 4px; line-height: 1;
+            background: var(--row-hover); border: 1px solid var(--border-color); color: var(--text-muted);
+            cursor: pointer; font-size: 0.8rem; padding: 4px 8px;
+            border-radius: 6px; line-height: 1; min-width: 30px; min-height: 30px;
+            display: flex; align-items: center; justify-content: center;
         }
         .widget-arrow-btn:hover { background: var(--row-hover); color: var(--text-main); }
         #statsTable tr:hover td { background: var(--row-hover); }
@@ -1585,9 +1586,9 @@ function renderWidgetSortList() {
         item.dataset.idx = idx;
         item.innerHTML = `
             <span class="drag-handle">☰</span>
-            <input type="checkbox" ${visible ? 'checked' : ''} style="width:16px;height:16px;cursor:pointer;accent-color:var(--success);" data-id="${id}">
-            <span style="font-size:0.85rem;font-weight:600;flex:1;">${def.label}</span>
-            <div class="widget-arrow-btns">
+            <input type="checkbox" ${visible ? 'checked' : ''} style="width:16px;height:16px;cursor:pointer;accent-color:var(--success);flex-shrink:0;" data-id="${id}">
+            <span style="font-size:0.82rem;font-weight:600;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;">${def.label}</span>
+            <div class="widget-arrow-btns" style="flex-shrink:0;">
                 <button class="widget-arrow-btn" data-move="-1" data-idx="${idx}" title="Omhoog">▲</button>
                 <button class="widget-arrow-btn" data-move="1"  data-idx="${idx}" title="Omlaag">▼</button>
             </div>`;
@@ -3297,7 +3298,7 @@ function renderWeeklyReturns() {
         { id: 'benchMSCI',   ticker: 'URTH',    label: 'MSCI World',  dsIdx: 2 },
         { id: 'benchNASDAQ', ticker: 'QQQ',     label: 'Nasdaq 100',  dsIdx: 3 },
         { id: 'benchBTC',    ticker: 'BTC-USD', label: 'Bitcoin',     dsIdx: 4 },
-        { id: 'benchBEL20',  ticker: 'BEL20.BR',label: 'BEL 20',      dsIdx: 5 },
+        { id: 'benchBEL20',  ticker: '^BFX',     label: 'BEL 20',      dsIdx: 5 },
     ];
 
     const benchCache = {}; // ticker → array van sluitingskoersen
@@ -3683,6 +3684,10 @@ function renderWeeklyReturns() {
                             }
                         }
                     } catch {}
+                } else if (ticker === 'TAO-USD') {
+                    // TAO via Binance (Yahoo Finance geeft $0 terug)
+                    const d = await binanceQuote('TAOUSDT');
+                    if (d) hmData[ticker] = d;
                 } else {
                     const d = await yhQuote(ticker);
                     if (d) hmData[ticker] = d;
@@ -3821,32 +3826,41 @@ function renderWeeklyReturns() {
         } catch { return {}; }
     }
 
-    // Haal dividend op via Finnhub
+    // Haal dividend op via Yahoo Finance (gratis, werkt voor alle aandelen)
     async function fetchDividendForMonth(year, month) {
-        const myTickers = hmStocks.map(s => s.ticker.toUpperCase());
-        const from = `${year}-${String(month+1).padStart(2,'0')}-01`;
-        const lastDay = new Date(year, month+1, 0).getDate();
-        const to   = `${year}-${String(month+1).padStart(2,'0')}-${lastDay}`;
+        const myStocks = hmStocks.filter(s => s.type === 'stock' || s.type === 'etf');
+        const from = new Date(year, month, 1);
+        const to   = new Date(year, month + 1, 0);
+        const fromTs = Math.floor(from.getTime() / 1000) - 86400;
+        const toTs   = Math.floor(to.getTime()   / 1000) + 86400;
         const result = {};
-        // Dividenden per ticker ophalen (parallel, max 8)
+
         const chunks = [];
-        for (let i = 0; i < myTickers.length; i += 8) chunks.push(myTickers.slice(i, i+8));
+        for (let i = 0; i < myStocks.length; i += 5) chunks.push(myStocks.slice(i, i + 5));
+
         for (const chunk of chunks) {
-            await Promise.all(chunk.map(async ticker => {
+            await Promise.all(chunk.map(async stock => {
                 try {
-                    const r = await fetch(`https://finnhub.io/api/v1/stock/dividend2?symbol=${ticker}&from=${from}&to=${to}&token=${FINNHUB_KEY}`);
+                    const url = `https://corsproxy.io/?url=${encodeURIComponent(
+                        `https://query2.finance.yahoo.com/v8/finance/chart/${stock.ticker}?interval=1d&period1=${fromTs}&period2=${toTs}&events=dividends`
+                    )}`;
+                    const r = await fetch(url);
+                    if (!r.ok) return;
                     const data = await r.json();
-                    (data.data || []).forEach(d => {
-                        const key = d.exDate || d.payDate;
-                        if (!key) return;
+                    const divs = data?.chart?.result?.[0]?.events?.dividends;
+                    if (!divs) return;
+                    Object.values(divs).forEach(d => {
+                        const date = new Date(d.date * 1000);
+                        // Alleen dividenden in de gevraagde maand
+                        if (date.getMonth() !== month || date.getFullYear() !== year) return;
+                        const key = `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`;
                         if (!result[key]) result[key] = [];
-                        const name = hmStocks.find(s => s.ticker.toUpperCase() === ticker)?.name || ticker;
                         result[key].push({
-                            type:   'dividend',
-                            title:  name,
-                            ticker: ticker,
-                            amount: d.amount,
-                            currency: d.currency || 'USD',
+                            type:     'dividend',
+                            title:    stock.name,
+                            ticker:   stock.ticker.toUpperCase(),
+                            amount:   d.amount,
+                            currency: stock.currency || 'USD',
                         });
                     });
                 } catch {}
