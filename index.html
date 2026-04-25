@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio v18</title>
+    <title>Portfolio v19</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
     <style>
@@ -957,7 +957,7 @@
                     <thead><tr>
                         <th style="text-align:left;padding:8px 6px;color:var(--text-muted);font-size:0.68rem;font-weight:700;border-bottom:2px solid var(--border-color);">Ticker</th>
                         <th style="text-align:left;padding:8px 6px;color:var(--text-muted);font-size:0.68rem;font-weight:700;border-bottom:2px solid var(--border-color);">Naam</th>
-                        <th style="text-align:right;padding:8px 6px;color:var(--text-muted);font-size:0.68rem;font-weight:700;border-bottom:2px solid var(--border-color);">Type</th>
+                        <th style="text-align:center;padding:8px 6px;color:var(--text-muted);font-size:0.68rem;font-weight:700;border-bottom:2px solid var(--border-color);">Valuta</th>
                         <th style="padding:8px 6px;border-bottom:2px solid var(--border-color);"></th>
                     </tr></thead>
                     <tbody id="aandelenDataBody"></tbody>
@@ -1043,7 +1043,7 @@
                     <div id="fgYesterday" style="font-size:0.68rem;color:var(--text-muted);margin-top:4px;"></div>
                 </div>
                 <div style="flex:1;">
-                    <div style="font-size:0.65rem;font-weight:700;color:var(--text-muted);letter-spacing:0.05em;margin-bottom:4px;">AANDELEN (CNN)</div>
+                    <div style="font-size:0.65rem;font-weight:700;color:var(--text-muted);letter-spacing:0.05em;margin-bottom:4px;">AANDELEN <span style="opacity:0.6;font-weight:500;">CNN</span></div>
                     <div id="fgStockValue" style="font-size:2rem;font-weight:800;line-height:1;">–</div>
                     <div id="fgStockClass" style="font-size:0.9rem;font-weight:700;margin-top:3px;"></div>
                     <div id="fgStockPrev" style="font-size:0.68rem;color:var(--text-muted);margin-top:4px;"></div>
@@ -1104,11 +1104,12 @@
         </div>
     </div>
 
-    <!-- Tabs: Alle / Aandelen & ETFs / Crypto -->
+    <!-- Tabs: Alle / Aandelen / ETFs / Crypto -->
     <div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;">
         <button class="hm-tab-btn hm-sort-btn active" onclick="setHmTab('all',this)">Alle</button>
         <button class="hm-tab-btn hm-sort-btn" onclick="setHmTab('stock',this)">Aandelen</button>
         <button class="hm-tab-btn hm-sort-btn" onclick="setHmTab('etf',this)">ETFs</button>
+        <button class="hm-tab-btn hm-sort-btn" onclick="setHmTab('crypto',this)">Crypto</button>
     </div>
 
     <!-- Sorteer opties -->
@@ -2959,17 +2960,35 @@ function renderWeeklyReturns() {
     function renderAandelenData() {
         const body = document.getElementById('aandelenDataBody');
         if (!body) return;
-        const stocks = hmStocks.filter(s => s.type !== 'crypto');
-        body.innerHTML = stocks.length === 0
-            ? `<tr><td colspan="4" style="padding:16px;color:var(--text-muted);text-align:center;">Geen aandelen. Voeg er toe via + Toevoegen.</td></tr>`
-            : stocks.map(s => `<tr style="border-bottom:1px solid var(--border-color);">
-                <td style="padding:8px 6px;font-weight:700;">${s.ticker}</td>
-                <td style="padding:8px 6px;">${s.name}</td>
-                <td style="padding:8px 6px;text-align:right;color:var(--text-muted);font-size:0.8rem;">${s.type?.toUpperCase()||'STOCK'}</td>
-                <td style="padding:8px 6px;text-align:right;">
-                    <button onclick="removeHmStockData('${s.ticker}')" style="background:none;border:none;color:var(--danger);cursor:pointer;font-size:0.85rem;font-weight:700;">✕</button>
-                </td>
-            </tr>`).join('');
+        const stocks = hmStocks.filter(s => s.type === 'stock').sort((a,b)=>a.ticker.localeCompare(b.ticker));
+        const etfs   = hmStocks.filter(s => s.type === 'etf').sort((a,b)=>a.ticker.localeCompare(b.ticker));
+
+        const makeRows = (items) => items.map(s => `<tr style="border-bottom:1px solid var(--border-color);">
+            <td style="padding:8px 6px;font-weight:700;font-family:monospace;">${s.ticker}</td>
+            <td style="padding:8px 6px;">${s.name}</td>
+            <td style="padding:8px 6px;text-align:center;">
+                <select onchange="updateHmCurrency('${s.ticker}',this.value)" style="border:1px solid var(--border-color);border-radius:6px;padding:3px 6px;font-size:0.78rem;background:var(--bg-color);color:var(--text-main);">
+                    <option value="USD" ${(s.currency||'USD')==='USD'?'selected':''}>USD</option>
+                    <option value="EUR" ${(s.currency||'USD')==='EUR'?'selected':''}>EUR</option>
+                </select>
+            </td>
+            <td style="padding:8px 6px;text-align:right;">
+                <button onclick="removeHmStockData('${s.ticker}')" style="background:none;border:none;color:var(--danger);cursor:pointer;font-size:0.85rem;font-weight:700;">✕</button>
+            </td>
+        </tr>`).join('');
+
+        const sectionHeader = (label) => `<tr><td colspan="4" style="padding:10px 6px 4px;font-size:0.65rem;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);border-bottom:2px solid var(--border-color);">${label}</td></tr>`;
+
+        body.innerHTML = [
+            stocks.length ? sectionHeader('Aandelen') + makeRows(stocks) : '',
+            etfs.length   ? sectionHeader('ETFs')     + makeRows(etfs)   : '',
+            (!stocks.length && !etfs.length) ? `<tr><td colspan="4" style="padding:16px;color:var(--text-muted);text-align:center;">Geen aandelen. Voeg er toe via + Toevoegen.</td></tr>` : '',
+        ].join('');
+    }
+
+    function updateHmCurrency(ticker, currency) {
+        const s = hmStocks.find(x => x.ticker === ticker);
+        if (s) { s.currency = currency; saveHmStocks(); }
     }
 
     function renderCryptoData() {
@@ -3028,48 +3047,61 @@ function renderWeeklyReturns() {
 
     // ── HEATMAP PAGINA ──────────────────────────────────────────────────────
     const DEFAULT_STOCKS = [
-        {ticker:'NVDA',   name:'NVIDIA',            type:'stock'},
-        {ticker:'PYPL',   name:'PayPal',             type:'stock'},
-        {ticker:'BMNR',   name:'Bitmine',            type:'stock'},
-        {ticker:'ABCL',   name:'AbCellera',          type:'stock'},
-        {ticker:'AMZN',   name:'Amazon',             type:'stock'},
-        {ticker:'APLD',   name:'Applied Digital',    type:'stock'},
-        {ticker:'ACHR',   name:'Archer Aviation',    type:'stock'},
-        {ticker:'CRCL',   name:'Circle',             type:'stock'},
-        {ticker:'CRWV',   name:'CoreWeave',          type:'stock'},
-        {ticker:'CRDO',   name:'Credo',              type:'stock'},
-        {ticker:'IONQ',   name:'IonQ',               type:'stock'},
-        {ticker:'KEEL',   name:'Keel',               type:'stock'},
-        {ticker:'LMND',   name:'Lemonade',           type:'stock'},
-        {ticker:'MRLN',   name:'Merlin',             type:'stock'},
-        {ticker:'MSFT',   name:'Microsoft',          type:'stock'},
-        {ticker:'OUST',   name:'Ouster',             type:'stock'},
-        {ticker:'RR',     name:'Richtech',           type:'stock'},
-        {ticker:'SBET',   name:'SharpLink',          type:'stock'},
-        {ticker:'SOI.PA', name:'Soitec',             type:'stock'},
-        {ticker:'TOYO',   name:'Toyo',               type:'stock'},
-        {ticker:'UBER',   name:'Uber',               type:'stock'},
-        {ticker:'UAMY',   name:'US Antimony',        type:'stock'},
-        {ticker:'2B76', name:'iSh. Automation',   type:'etf'},
-        {ticker:'DAPP.MI',   name:'VanEck Crypto',      type:'etf'},
-        {ticker:'REMX.MI',   name:'VanEck Rare Earth',  type:'etf'},
-        {ticker:'SMH.MI',    name:'VanEck Semi',        type:'etf'},
-        {ticker:'3HCL',   name:'WT Copper',          type:'etf'},
-        {ticker:'SGLD.MI',   name:'Inv. Gold',          type:'etf'},
-        {ticker:'QBTS',   name:'D-Wave',             type:'stock'},
-        {ticker:'IREN',   name:'IREN',               type:'stock'},
-        {ticker:'JD',     name:'JD.com',             type:'stock'},
-        {ticker:'CIFR',   name:'Cipher Digital',     type:'stock'},
-        {ticker:'CLSK',   name:'CleanSpark',         type:'stock'},
-        {ticker:'BKKT',   name:'Bakkt',              type:'stock'},
-        {ticker:'SOFI',   name:'SoFi',               type:'stock'},
-        {ticker:'GOOGL',  name:'Alphabet',           type:'stock'},
-        {ticker:'SYM',    name:'Symbotic',           type:'stock'},
-        {ticker:'RXRX',   name:'Recursion',          type:'stock'},
-        {ticker:'ABAT',   name:'Am. Battery',        type:'stock'},
-        {ticker:'XPEV',   name:'XPeng',              type:'stock'},
-        {ticker:'CRM',    name:'Salesforce',         type:'stock'},
-        {ticker:'ZENA',   name:'Zenatech',           type:'stock'},
+        // AANDELEN
+        {ticker:'ABAT',   name:'Am. Battery',        type:'stock', currency:'USD'},
+        {ticker:'ABCL',   name:'AbCellera',          type:'stock', currency:'USD'},
+        {ticker:'ACHR',   name:'Archer Aviation',    type:'stock', currency:'USD'},
+        {ticker:'AMD',    name:'AMD',                type:'stock', currency:'USD'},
+        {ticker:'AMZN',   name:'Amazon',             type:'stock', currency:'USD'},
+        {ticker:'APLD',   name:'Applied Digital',    type:'stock', currency:'USD'},
+        {ticker:'BKKT',   name:'Bakkt',              type:'stock', currency:'USD'},
+        {ticker:'BMNR',   name:'Bitmine',            type:'stock', currency:'USD'},
+        {ticker:'CIFR',   name:'Cipher Digital',     type:'stock', currency:'USD'},
+        {ticker:'CLSK',   name:'CleanSpark',         type:'stock', currency:'USD'},
+        {ticker:'CRCL',   name:'Circle',             type:'stock', currency:'USD'},
+        {ticker:'CRM',    name:'Salesforce',         type:'stock', currency:'USD'},
+        {ticker:'CRDO',   name:'Credo',              type:'stock', currency:'USD'},
+        {ticker:'CRWV',   name:'CoreWeave',          type:'stock', currency:'USD'},
+        {ticker:'GOOGL',  name:'Alphabet',           type:'stock', currency:'USD'},
+        {ticker:'IONQ',   name:'IonQ',               type:'stock', currency:'USD'},
+        {ticker:'IREN',   name:'IREN',               type:'stock', currency:'USD'},
+        {ticker:'JD',     name:'JD.com',             type:'stock', currency:'USD'},
+        {ticker:'KEEL',   name:'Keel',               type:'stock', currency:'USD'},
+        {ticker:'LMND',   name:'Lemonade',           type:'stock', currency:'USD'},
+        {ticker:'MIGI',   name:'Mawson',             type:'stock', currency:'USD'},
+        {ticker:'MRLN',   name:'Merlin',             type:'stock', currency:'USD'},
+        {ticker:'MSFT',   name:'Microsoft',          type:'stock', currency:'USD'},
+        {ticker:'NVDA',   name:'NVIDIA',             type:'stock', currency:'USD'},
+        {ticker:'OUST',   name:'Ouster',             type:'stock', currency:'USD'},
+        {ticker:'PYPL',   name:'PayPal',             type:'stock', currency:'USD'},
+        {ticker:'QBTS',   name:'D-Wave',             type:'stock', currency:'USD'},
+        {ticker:'RR',     name:'Richtech',           type:'stock', currency:'USD'},
+        {ticker:'RXRX',   name:'Recursion',          type:'stock', currency:'USD'},
+        {ticker:'SBET',   name:'SharpLink',          type:'stock', currency:'USD'},
+        {ticker:'SOI.PA', name:'Soitec',             type:'stock', currency:'EUR'},
+        {ticker:'SOFI',   name:'SoFi',               type:'stock', currency:'USD'},
+        {ticker:'SYM',    name:'Symbotic',           type:'stock', currency:'USD'},
+        {ticker:'TOYO',   name:'Toyo',               type:'stock', currency:'USD'},
+        {ticker:'UBER',   name:'Uber',               type:'stock', currency:'USD'},
+        {ticker:'UAMY',   name:'US Antimony',        type:'stock', currency:'USD'},
+        {ticker:'XPEV',   name:'XPeng',              type:'stock', currency:'USD'},
+        {ticker:'ZENA',   name:'Zenatech',           type:'stock', currency:'USD'},
+        // ETFs
+        {ticker:'2B76.L', name:'iSh. Automation',   type:'etf',   currency:'EUR'},
+        {ticker:'DAPP',   name:'VanEck Crypto',      type:'etf',   currency:'EUR'},
+        {ticker:'REMX',   name:'VanEck Rare Earth',  type:'etf',   currency:'EUR'},
+        {ticker:'SMH',    name:'VanEck Semi',        type:'etf',   currency:'EUR'},
+        {ticker:'3HCL.L', name:'WT Copper',          type:'etf',   currency:'EUR'},
+        {ticker:'SGLD',   name:'Inv. Gold',          type:'etf',   currency:'EUR'},
+        // CRYPTO
+        {ticker:'BTC-USD', name:'Bitcoin',           type:'crypto', currency:'USD'},
+        {ticker:'ETH-USD', name:'Ethereum',          type:'crypto', currency:'USD'},
+        {ticker:'SOL-USD', name:'Solana',            type:'crypto', currency:'USD'},
+        {ticker:'AVAX-USD',name:'Avalanche',         type:'crypto', currency:'USD'},
+        {ticker:'AAVE-USD',name:'Aave',              type:'crypto', currency:'USD'},
+        {ticker:'RNDR-USD',name:'Render',            type:'crypto', currency:'USD'},
+        {ticker:'TAO-USD', name:'Bittensor',         type:'crypto', currency:'USD'},
+        {ticker:'HYPE',    name:'Hyperliquid',       type:'crypto', currency:'USD'},
     ];
 
     let hmStocks = JSON.parse(localStorage.getItem('hm_stocks') || 'null') || DEFAULT_STOCKS;
@@ -3109,8 +3141,9 @@ function renderWeeklyReturns() {
 
         // Filter op tab
         let stocks = hmStocks.filter(s => {
-            if (hmTabMode === 'all') return true;
-            if (hmTabMode === 'etf') return s.type === 'etf';
+            if (hmTabMode === 'all')    return true;
+            if (hmTabMode === 'crypto') return s.type === 'crypto';
+            if (hmTabMode === 'etf')    return s.type === 'etf';
             return s.type === 'stock' || !s.type;
         });
 
@@ -3195,17 +3228,37 @@ function renderWeeklyReturns() {
     }
 
     async function fetchHmQuotes() {
-        // Haal alle tickers op via Yahoo (corsproxy), 4 tegelijk om rate limit te vermijden
         const tickers = hmStocks.map(s => s.ticker);
         const chunks = [];
         for (let i = 0; i < tickers.length; i += 6) chunks.push(tickers.slice(i, i+6));
 
         for (const chunk of chunks) {
             await Promise.all(chunk.map(async ticker => {
-                const d = await yhQuote(ticker);
-                if (d) hmData[ticker] = d;
+                if (ticker === 'HYPE') {
+                    // Hyperliquid API
+                    try {
+                        const [mids, meta] = await Promise.all([
+                            fetch('https://api.hyperliquid.xyz/info',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({type:'allMids'})}).then(r=>r.json()),
+                            fetch('https://api.hyperliquid.xyz/info',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({type:'metaAndAssetCtxs'})}).then(r=>r.json())
+                        ]);
+                        const price = parseFloat(mids['HYPE']);
+                        if (price) {
+                            const assets = meta[0]?.universe??[], ctxs = meta[1]??[];
+                            const idx = assets.findIndex(a=>a.name==='HYPE');
+                            if (idx>=0 && ctxs[idx]) {
+                                const ctx=ctxs[idx], prev=parseFloat(ctx.prevDayPx), change=price-prev, pct=prev?(change/prev)*100:0;
+                                hmData['HYPE'] = {price, change, pct, high:parseFloat(ctx.dayHigh??price), low:parseFloat(ctx.dayLow??price)};
+                            } else {
+                                hmData['HYPE'] = {price, change:0, pct:0};
+                            }
+                        }
+                    } catch {}
+                } else {
+                    const d = await yhQuote(ticker);
+                    if (d) hmData[ticker] = d;
+                }
             }));
-            renderHmGrid(); // Update grid na elk chunk
+            renderHmGrid();
         }
     }
 
@@ -3491,21 +3544,27 @@ function renderWeeklyReturns() {
                 const col = EVENT_COLORS[ev.type] || '#999';
                 let extra = '';
                 if (ev.type === 'earnings') {
-                    if (ev.epsEst != null) extra += `<span style="font-size:0.75rem;color:var(--text-muted);">EPS est: <strong>${ev.epsEst}</strong>`;
-                    if (ev.eps   != null) extra += `  ·  Actual: <strong style="color:${ev.eps >= ev.epsEst ? 'var(--success)' : 'var(--danger)'};">${ev.eps}</strong>`;
-                    if (ev.epsEst != null) extra += `</span>`;
-                    if (ev.hour)  extra += `<span style="font-size:0.72rem;color:var(--text-muted);margin-left:8px;">${ev.hour === 'bmo' ? '🌅 Voor opening' : ev.hour === 'amc' ? '🌆 Na sluiting' : ''}</span>`;
+                    const timing = ev.hour === 'bmo' ? 'Voor opening' : ev.hour === 'amc' ? 'Na sluiting' : ev.hour ? ev.hour : '';
+                    let epsHtml = '';
+                    if (ev.epsEst != null) {
+                        epsHtml = `EPS est: <strong>${ev.epsEst}</strong>`;
+                        if (ev.eps != null) epsHtml += ` · Actual: <strong style="color:${ev.eps >= ev.epsEst ? 'var(--success)' : 'var(--danger)'};">${ev.eps}</strong>`;
+                    }
+                    extra = `<div style="display:flex;justify-content:space-between;align-items:center;margin-top:3px;">
+                        <span style="font-size:0.75rem;color:var(--text-muted);">${epsHtml}</span>
+                        ${timing ? `<span style="font-size:0.72rem;font-weight:700;color:${col};background:${col}18;padding:2px 7px;border-radius:10px;">${timing}</span>` : ''}
+                    </div>`;
                 }
                 if (ev.type === 'dividend') {
-                    if (ev.amount) extra = `<span style="font-size:0.75rem;color:var(--text-muted);">Dividend: <strong>${ev.amount} ${ev.currency||''}</strong> per aandeel</span>`;
+                    if (ev.amount) extra = `<div style="margin-top:3px;"><span style="font-size:0.75rem;color:var(--text-muted);">Dividend: <strong>${ev.amount} ${ev.currency||''}</strong> per aandeel</span></div>`;
                 }
                 return `<div class="kal-detail-event">
-                    <div class="kal-detail-dot" style="background:${col};"></div>
-                    <div style="flex:1;">
+                    <div class="kal-detail-dot" style="background:${col};flex-shrink:0;"></div>
+                    <div style="flex:1;min-width:0;">
                         <div style="font-weight:700;font-size:0.88rem;">${EVENT_LABELS[ev.type] || ev.type} — ${ev.title}</div>
-                        ${extra ? `<div style="margin-top:3px;">${extra}</div>` : ''}
+                        ${extra}
                     </div>
-                    ${ev.type === 'custom' ? `<button onclick="deleteKalEvent('${key}','${ev.title.replace(/'/g,"\\'")}')" style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:0.85rem;">✕</button>` : ''}
+                    ${ev.type === 'custom' ? `<button onclick="deleteKalEvent('${key}','${ev.title.replace(/'/g,"\\'")}')" style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:0.85rem;flex-shrink:0;">✕</button>` : ''}
                 </div>`;
             }).join('');
         }
