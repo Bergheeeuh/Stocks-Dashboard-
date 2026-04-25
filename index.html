@@ -2843,10 +2843,10 @@ function renderWeeklyReturns() {
             { label:'Avalanche',  sub:'AVAX', fh:'BINANCE:AVAXUSDT',   bn:'AVAXUSDT'   },
             { label:'Aave',       sub:'AAVE', fh:'BINANCE:AAVEUSDT',   bn:'AAVEUSDT'   },
             { label:'Render',     sub:'RNDR', fh:'BINANCE:RENDERUSDT', bn:'RENDERUSDT' },
-            { label:'Bittensor',  sub:'TAO',  fh:'BINANCE:TAOUSDT',    bn:'TAOUSDT'    },
+            { label:'Bittensor',  sub:'TAO',  bnOnly:true,             bn:'TAOUSDT'    },
             { label:'Hyperliquid',sub:'HYPE', hl:true },
         ];
-        const cryptoResults = await Promise.all(cryptos.map(c => c.hl ? hypeQuote() : cryptoQuote(c.fh, c.bn)));
+        const cryptoResults = await Promise.all(cryptos.map(c => c.hl ? hypeQuote() : c.bnOnly ? binanceQuote(c.bn) : cryptoQuote(c.fh, c.bn)));
         document.getElementById('mb-cry').innerHTML = cryptos.map((c,i) => rowCrypto(c.label,c.sub,cryptoResults[i])).join('');
 
         const now = new Date().toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit'});
