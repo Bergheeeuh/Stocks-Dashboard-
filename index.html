@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio v30</title>
+    <title>Portfolio v34</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
     <style>
@@ -38,6 +38,215 @@
     margin-bottom: 20px;
     font-weight: 700;
 }
+
+/* ── AANDELEN PORTFOLIO PAGINA ───────────────────────────────────────── */
+#aandelen-portfolio-page { --ap-accent: var(--total-gray); }
+#aandelen-portfolio-page[data-broker="Bolero"] { --ap-accent: var(--bolero); }
+#aandelen-portfolio-page[data-broker="Degiro"] { --ap-accent: var(--degiro); }
+#aandelen-portfolio-page[data-broker="Saxo"]   { --ap-accent: var(--saxo); }
+
+.ap-broker-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    background: var(--card-bg);
+    padding: 6px;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+}
+.ap-broker-tab {
+    flex: 1;
+    min-width: 90px;
+    background: transparent;
+    border: none;
+    padding: 10px 14px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    cursor: pointer;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.18s ease;
+}
+.ap-broker-tab:hover { background: var(--row-hover); color: var(--text-main); }
+.ap-broker-tab.active {
+    background: var(--ap-accent);
+    color: #fff;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+}
+.ap-broker-tab.active .ap-tab-dot { background: #fff !important; }
+.ap-tab-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    display: inline-block;
+}
+
+.ap-card {
+    padding: 18px;
+    position: relative;
+    overflow: hidden;
+    border-top: 3px solid var(--border-color);
+}
+.ap-card.ap-card-accent {
+    border-top: 3px solid var(--ap-accent);
+}
+.ap-card.ap-card-accent::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 60px;
+    background: linear-gradient(180deg, var(--ap-accent), transparent);
+    opacity: 0.08;
+    pointer-events: none;
+}
+.ap-card-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+.ap-card-value {
+    font-size: 1.6rem;
+    font-weight: 800;
+    margin-top: 6px;
+    color: var(--ap-accent);
+    line-height: 1.1;
+}
+.ap-card-sub {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-top: 4px;
+}
+
+/* Sortbare kolomheaders */
+.ap-sort-th {
+    cursor: pointer;
+    user-select: none;
+    transition: color 0.15s;
+}
+.ap-sort-th:hover { color: var(--ap-accent) !important; }
+.ap-sort-th.active { color: var(--ap-accent) !important; }
+.ap-sort-arrow { font-size: 0.55rem; margin-left: 3px; opacity: 0.6; }
+
+/* Vaste rij-grids voor stat cards */
+.ap-stats-row {
+    display: grid;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+.ap-stats-row-4 { grid-template-columns: repeat(4, 1fr); }
+.ap-stats-row-3 { grid-template-columns: repeat(3, 1fr); margin-bottom: 1.5rem; }
+
+@media (max-width: 1100px) {
+    .ap-stats-row-4 { grid-template-columns: repeat(2, 1fr); }
+    .ap-stats-row-3 { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 640px) {
+    .ap-stats-row-4, .ap-stats-row-3 { grid-template-columns: 1fr; }
+}
+
+/* CASH editor in CASH card */
+.ap-card-cash .ap-card-value { font-size: 1.4rem; }
+.ap-cash-editor { margin-top: 8px; display: flex; flex-direction: column; gap: 4px; }
+.ap-cash-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.72rem;
+}
+.ap-cash-row .ap-cash-broker {
+    flex-shrink: 0;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+}
+.ap-cash-row .ap-cash-label {
+    flex: 1;
+    color: var(--text-muted);
+    font-weight: 600;
+}
+.ap-cash-input {
+    width: 90px;
+    padding: 4px 6px;
+    font-size: 0.78rem;
+    text-align: right;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background: var(--bg-color);
+    color: var(--text-main);
+    font-weight: 600;
+}
+.ap-cash-input:focus {
+    outline: none;
+    border-color: var(--ap-accent);
+}
+.ap-cash-input-big {
+    width: 100%;
+    padding: 8px 10px;
+    font-size: 1rem;
+    text-align: right;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--bg-color);
+    color: var(--text-main);
+    font-weight: 700;
+    margin-top: 6px;
+}
+.ap-cash-input-big:focus {
+    outline: none;
+    border-color: var(--ap-accent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--ap-accent) 25%, transparent);
+}
+
+/* Pie chart layout */
+.ap-pie-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    flex-wrap: wrap;
+}
+.ap-pie-chart-wrap {
+    width: 260px;
+    height: 260px;
+    flex-shrink: 0;
+    position: relative;
+}
+.ap-pie-legend {
+    flex: 1;
+    min-width: 240px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.ap-pie-legend-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.85rem;
+}
+.ap-pie-legend-row .ap-pie-dot {
+    width: 12px; height: 12px;
+    border-radius: 3px;
+    flex-shrink: 0;
+}
+.ap-pie-legend-row .ap-pie-name {
+    flex: 1;
+    font-weight: 600;
+}
+.ap-pie-legend-row .ap-pie-val {
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    margin-right: 8px;
+}
+.ap-pie-legend-row .ap-pie-pct {
+    font-weight: 800;
+    min-width: 48px;
+    text-align: right;
+}
+
         body {
             font-family: 'Inter', -apple-system, sans-serif;
             background-color: var(--bg-color);
@@ -736,6 +945,8 @@
     <div class="nav-item active" onclick="switchTab('dashboard', this); closeNav()">PORTFOLIO</div>
     <div class="nav-item" onclick="switchTab('data-page', this); closeNav()">DATA</div>
     <div class="nav-item" onclick="switchTab('aandelen-page', this); closeNav()">LIVE</div>
+    <div class="nav-item" onclick="switchTab('aandelen-portfolio-page', this); closeNav()">AANDELEN</div>
+    <div class="nav-item" onclick="switchTab('crypto-portfolio-page', this); closeNav()">CRYPTO</div>
     <div class="nav-item" onclick="switchTab('heatmap-page', this); closeNav()">HEATMAP</div>
     <div class="nav-item" onclick="switchTab('kalender-page', this); closeNav()">KALENDER</div>
     <div class="nav-item" onclick="switchTab('cijfer-page', this); closeNav()">CIJFERS</div>
@@ -1036,11 +1247,17 @@
         <div id="prestatiesBody" style="display:flex;flex-direction:column;gap:10px;flex:1;">
             <div class="info-line"><span class="info-label">Winst €</span><span id="prest-euro" class="blur-target" style="font-weight:800;font-size:1rem;">–</span></div>
             <div class="info-line"><span class="info-label">Winst %</span><span id="prest-perc" style="font-weight:800;font-size:1rem;">–</span></div>
+            <div class="info-line"><span class="info-label">Streak</span><span id="prest-streak" style="font-weight:700;font-size:0.85rem;">–</span></div>
+            <div class="info-line"><span class="info-label">Momentum</span><span id="prest-momentum" style="font-weight:700;font-size:0.85rem;">–</span></div>
             <div style="height:1px;background:var(--border-color);margin:4px 0;"></div>
             <div style="font-size:0.65rem;font-weight:700;text-transform:uppercase;color:var(--text-muted);letter-spacing:0.05em;margin-bottom:2px;">vs. Benchmark</div>
             <div class="info-line"><span class="info-label" style="--c:#e67e22;">S&amp;P 500</span><span id="prest-sp" style="font-weight:700;font-size:0.85rem;">–</span></div>
             <div class="info-line"><span class="info-label" style="--c:#8e44ad;">MSCI World</span><span id="prest-msci" style="font-weight:700;font-size:0.85rem;">–</span></div>
             <div class="info-line"><span class="info-label" style="--c:#c0392b;">Bitcoin</span><span id="prest-btc" style="font-weight:700;font-size:0.85rem;">–</span></div>
+            <div style="height:1px;background:var(--border-color);margin:4px 0;"></div>
+            <div style="font-size:0.65rem;font-weight:700;text-transform:uppercase;color:var(--text-muted);letter-spacing:0.05em;margin-bottom:2px;">Volatiliteit</div>
+            <div class="info-line"><span class="info-label">Dagelijks</span><span id="prest-vol" style="font-weight:700;font-size:0.85rem;">–</span></div>
+            <div class="info-line"><span class="info-label">Gem. schommeling</span><span id="prest-schommeling" class="blur-target" style="font-weight:700;font-size:0.85rem;">–</span></div>
             <div style="height:1px;background:var(--border-color);margin:4px 0;"></div>
             <div class="info-line"><span class="info-label">Beste dag</span><span id="prest-bestdag" style="font-weight:700;font-size:0.82rem;color:var(--success);">–</span></div>
             <div class="info-line"><span class="info-label">Slechtste dag</span><span id="prest-slechtdag" style="font-weight:700;font-size:0.82rem;color:var(--danger);">–</span></div>
@@ -1144,7 +1361,10 @@
                     <thead><tr>
                         <th style="text-align:left;padding:8px 6px;color:var(--text-muted);font-size:0.68rem;font-weight:700;border-bottom:2px solid var(--border-color);">Ticker</th>
                         <th style="text-align:left;padding:8px 6px;color:var(--text-muted);font-size:0.68rem;font-weight:700;border-bottom:2px solid var(--border-color);">Naam</th>
+                        <th style="text-align:center;padding:8px 6px;color:var(--text-muted);font-size:0.68rem;font-weight:700;border-bottom:2px solid var(--border-color);">Broker</th>
                         <th style="text-align:center;padding:8px 6px;color:var(--text-muted);font-size:0.68rem;font-weight:700;border-bottom:2px solid var(--border-color);">Valuta</th>
+                        <th style="text-align:right;padding:8px 6px;color:var(--text-muted);font-size:0.68rem;font-weight:700;border-bottom:2px solid var(--border-color);">GAK</th>
+                        <th style="text-align:right;padding:8px 6px;color:var(--text-muted);font-size:0.68rem;font-weight:700;border-bottom:2px solid var(--border-color);">Aantal</th>
                         <th style="padding:8px 6px;border-bottom:2px solid var(--border-color);"></th>
                     </tr></thead>
                     <tbody id="aandelenDataBody"></tbody>
@@ -1162,7 +1382,10 @@
                     <thead><tr>
                         <th style="text-align:left;padding:8px 6px;color:var(--text-muted);font-size:0.68rem;font-weight:700;border-bottom:2px solid var(--border-color);">Ticker</th>
                         <th style="text-align:left;padding:8px 6px;color:var(--text-muted);font-size:0.68rem;font-weight:700;border-bottom:2px solid var(--border-color);">Naam</th>
+                        <th style="text-align:center;padding:8px 6px;color:var(--text-muted);font-size:0.68rem;font-weight:700;border-bottom:2px solid var(--border-color);">Broker</th>
                         <th style="text-align:center;padding:8px 6px;color:var(--text-muted);font-size:0.68rem;font-weight:700;border-bottom:2px solid var(--border-color);">Valuta</th>
+                        <th style="text-align:right;padding:8px 6px;color:var(--text-muted);font-size:0.68rem;font-weight:700;border-bottom:2px solid var(--border-color);">GAK</th>
+                        <th style="text-align:right;padding:8px 6px;color:var(--text-muted);font-size:0.68rem;font-weight:700;border-bottom:2px solid var(--border-color);">Aantal</th>
                         <th style="padding:8px 6px;border-bottom:2px solid var(--border-color);"></th>
                     </tr></thead>
                     <tbody id="etfDataBody"></tbody>
@@ -1183,6 +1406,7 @@
                     <thead><tr>
                         <th style="text-align:left;padding:8px 6px;color:var(--text-muted);font-size:0.68rem;font-weight:700;border-bottom:2px solid var(--border-color);">Ticker</th>
                         <th style="text-align:left;padding:8px 6px;color:var(--text-muted);font-size:0.68rem;font-weight:700;border-bottom:2px solid var(--border-color);">Naam</th>
+                        <th style="text-align:right;padding:8px 6px;color:var(--text-muted);font-size:0.68rem;font-weight:700;border-bottom:2px solid var(--border-color);">Aantal</th>
                         <th style="padding:8px 6px;border-bottom:2px solid var(--border-color);"></th>
                     </tr></thead>
                     <tbody id="cryptoDataBody"></tbody>
@@ -1295,6 +1519,160 @@
             <table class="markt-table"><thead><tr><th>Coin</th><th>Koers (USD)</th><th>Dag △</th><th>Dag %</th><th>24h High</th><th>24h Low</th></tr></thead>
             <tbody id="mb-cry"></tbody></table>
         </div>
+    </div>
+</div>
+
+<!-- ============================================ -->
+<!-- AANDELEN PORTFOLIO PAGINA                   -->
+<!-- ============================================ -->
+<div id="aandelen-portfolio-page" class="tab-content">
+    <div class="header" style="margin-bottom:16px;">
+        <div class="header-titles"><h1>AANDELEN</h1></div>
+        <div style="display:flex;align-items:center;gap:10px;">
+            <span id="aandelenPfStatus" style="font-size:0.75rem;color:var(--text-muted);"></span>
+            <button class="btn" onclick="initAandelenPortfolio(true)" style="font-size:0.8rem;padding:8px 14px;">↻ Vernieuwen</button>
+        </div>
+    </div>
+
+    <!-- Broker filter tabs (gekleurd per broker) -->
+    <div class="ap-broker-tabs">
+        <button class="ap-broker-tab active" data-broker="all"    onclick="setApBroker('all', this)">
+            <span class="ap-tab-dot" style="background:var(--total-gray);"></span> TOTAAL
+        </button>
+        <button class="ap-broker-tab" data-broker="Bolero" onclick="setApBroker('Bolero', this)">
+            <span class="ap-tab-dot" style="background:var(--bolero);"></span> BOLERO
+        </button>
+        <button class="ap-broker-tab" data-broker="Degiro" onclick="setApBroker('Degiro', this)">
+            <span class="ap-tab-dot" style="background:var(--degiro);"></span> DEGIRO
+        </button>
+        <button class="ap-broker-tab" data-broker="Saxo"   onclick="setApBroker('Saxo', this)">
+            <span class="ap-tab-dot" style="background:var(--saxo);"></span> SAXO
+        </button>
+    </div>
+
+    <!-- Rij 1: 4 hoofdmetrics — vaste 4-kolom grid op desktop -->
+    <div class="ap-stats-row ap-stats-row-4">
+        <div class="card ap-card ap-card-accent">
+            <div class="ap-card-label">TOTALE WAARDE</div>
+            <div id="ap-totalValue" class="blur-target ap-card-value">€ –</div>
+            <div id="ap-totalCost" class="blur-target ap-card-sub">Kost: € –</div>
+        </div>
+        <div class="card ap-card ap-card-cash">
+            <div class="ap-card-label">CASH</div>
+            <div id="ap-cash" class="blur-target ap-card-value">€ –</div>
+            <div id="ap-cashEditor" class="ap-cash-editor"></div>
+        </div>
+        <div class="card ap-card">
+            <div class="ap-card-label">TOTALE P/L</div>
+            <div id="ap-totalPL" class="blur-target ap-card-value">€ –</div>
+            <div id="ap-totalPLPct" class="ap-card-sub" style="font-size:0.85rem;font-weight:700;">–</div>
+        </div>
+        <div class="card ap-card">
+            <div class="ap-card-label">DAG P/L</div>
+            <div id="ap-dayPL" class="blur-target ap-card-value">€ –</div>
+            <div id="ap-dayPLPct" class="ap-card-sub" style="font-size:0.85rem;font-weight:700;">–</div>
+        </div>
+    </div>
+
+    <!-- Rij 2: 3 secundaire metrics — vaste 3-kolom grid op desktop -->
+    <div class="ap-stats-row ap-stats-row-3">
+        <div class="card ap-card">
+            <div class="ap-card-label">POSITIES</div>
+            <div id="ap-positions" class="ap-card-value" style="color:var(--text-main);">–</div>
+            <div id="ap-positionsBreakdown" class="ap-card-sub">–</div>
+        </div>
+        <div class="card ap-card">
+            <div class="ap-card-label">BESTE POSITIE</div>
+            <div id="ap-best" style="font-size:1.05rem;font-weight:800;margin-top:6px;color:var(--success);">–</div>
+            <div id="ap-bestPct" class="ap-card-sub">–</div>
+        </div>
+        <div class="card ap-card">
+            <div class="ap-card-label">SLECHTSTE POSITIE</div>
+            <div id="ap-worst" style="font-size:1.05rem;font-weight:800;margin-top:6px;color:var(--danger);">–</div>
+            <div id="ap-worstPct" class="ap-card-sub">–</div>
+        </div>
+    </div>
+
+    <!-- Sector verdeling: pie + legenda -->
+    <div class="card" style="margin-bottom:1.5rem;">
+        <h3 style="margin:0 0 14px 0;">SECTORVERDELING</h3>
+        <div class="ap-pie-wrapper">
+            <div class="ap-pie-chart-wrap">
+                <canvas id="ap-sectorPie"></canvas>
+            </div>
+            <div id="ap-sectorLegend" class="ap-pie-legend"></div>
+        </div>
+    </div>
+
+    <!-- Posities per sector -->
+    <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px;">
+            <h3 style="margin:0;">POSITIES PER SECTOR</h3>
+            <div style="font-size:0.7rem;color:var(--text-muted);">Klik kolomtitels om te sorteren</div>
+        </div>
+        <div id="ap-bySector"></div>
+    </div>
+</div>
+
+<!-- ============================================ -->
+<!-- CRYPTO PORTFOLIO PAGINA                     -->
+<!-- ============================================ -->
+<div id="crypto-portfolio-page" class="tab-content">
+    <div class="header" style="margin-bottom:16px;">
+        <div class="header-titles"><h1>CRYPTO</h1></div>
+        <div style="display:flex;align-items:center;gap:10px;">
+            <span id="cryptoPfStatus" style="font-size:0.75rem;color:var(--text-muted);"></span>
+            <button class="btn" onclick="initCryptoPortfolio(true)" style="font-size:0.8rem;padding:8px 14px;">↻ Vernieuwen</button>
+        </div>
+    </div>
+
+    <!-- Statistiek kaarten -->
+    <div class="stats-grid" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin-bottom:1.5rem;">
+        <div class="card" style="padding:18px;">
+            <div style="font-size:0.7rem;font-weight:700;color:var(--text-muted);letter-spacing:0.05em;">TOTALE WAARDE</div>
+            <div id="cp-totalValue" class="blur-target" style="font-size:1.6rem;font-weight:800;margin-top:6px;">€ –</div>
+            <div id="cp-totalCost" class="blur-target" style="font-size:0.78rem;color:var(--text-muted);margin-top:2px;">Kost: € –</div>
+        </div>
+        <div class="card" style="padding:18px;">
+            <div style="font-size:0.7rem;font-weight:700;color:var(--text-muted);letter-spacing:0.05em;">TOTALE P/L</div>
+            <div id="cp-totalPL" class="blur-target" style="font-size:1.6rem;font-weight:800;margin-top:6px;">€ –</div>
+            <div id="cp-totalPLPct" style="font-size:0.85rem;font-weight:700;margin-top:2px;">–</div>
+        </div>
+        <div class="card" style="padding:18px;">
+            <div style="font-size:0.7rem;font-weight:700;color:var(--text-muted);letter-spacing:0.05em;">24H P/L</div>
+            <div id="cp-dayPL" class="blur-target" style="font-size:1.6rem;font-weight:800;margin-top:6px;">€ –</div>
+            <div id="cp-dayPLPct" style="font-size:0.85rem;font-weight:700;margin-top:2px;">–</div>
+        </div>
+        <div class="card" style="padding:18px;">
+            <div style="font-size:0.7rem;font-weight:700;color:var(--text-muted);letter-spacing:0.05em;">POSITIES</div>
+            <div id="cp-positions" style="font-size:1.6rem;font-weight:800;margin-top:6px;">–</div>
+            <div id="cp-positionsBreakdown" style="font-size:0.78rem;color:var(--text-muted);margin-top:2px;">Coins</div>
+        </div>
+        <div class="card" style="padding:18px;">
+            <div style="font-size:0.7rem;font-weight:700;color:var(--text-muted);letter-spacing:0.05em;">BESTE COIN</div>
+            <div id="cp-best" style="font-size:1.05rem;font-weight:800;margin-top:6px;color:var(--success);">–</div>
+            <div id="cp-bestPct" style="font-size:0.78rem;color:var(--text-muted);margin-top:2px;">–</div>
+        </div>
+        <div class="card" style="padding:18px;">
+            <div style="font-size:0.7rem;font-weight:700;color:var(--text-muted);letter-spacing:0.05em;">SLECHTSTE COIN</div>
+            <div id="cp-worst" style="font-size:1.05rem;font-weight:800;margin-top:6px;color:var(--danger);">–</div>
+            <div id="cp-worstPct" style="font-size:0.78rem;color:var(--text-muted);margin-top:2px;">–</div>
+        </div>
+    </div>
+
+    <!-- Sector verdeling -->
+    <div class="card" style="margin-bottom:1.5rem;">
+        <h3 style="margin:0 0 14px 0;">CATEGORIE-VERDELING</h3>
+        <div id="cp-sectorBars"></div>
+    </div>
+
+    <!-- Posities per categorie -->
+    <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px;">
+            <h3 style="margin:0;">POSITIES PER CATEGORIE</h3>
+            <div style="font-size:0.7rem;color:var(--text-muted);">Layer 1 / DeFi / AI / Infra / Andere</div>
+        </div>
+        <div id="cp-bySector"></div>
     </div>
 </div>
 
@@ -1822,7 +2200,7 @@ function applyTimeFilter(chartKey) {
     }
 
     // ── SWIPE NAVIGATIE ──────────────────────────────────────────────────────
-    const TABS = ['dashboard', 'data-page', 'aandelen-page', 'heatmap-page', 'kalender-page', 'cijfer-page'];
+    const TABS = ['dashboard', 'data-page', 'aandelen-page', 'aandelen-portfolio-page', 'crypto-portfolio-page', 'heatmap-page', 'kalender-page', 'cijfer-page'];
     const TAB_NAV_ITEMS = () => document.querySelectorAll('.nav-item');
 
     function getActiveTabIndex() {
@@ -1932,11 +2310,13 @@ function applyTimeFilter(chartKey) {
         document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
         document.getElementById(id).classList.add('active');
         if (el) el.classList.add('active');
-        const labels = { 'dashboard':'PORTFOLIO', 'data-page':'DATA', 'aandelen-page':'LIVE', 'heatmap-page':'HEATMAP', 'kalender-page':'KALENDER', 'cijfer-page':'CIJFERS' };
+        const labels = { 'dashboard':'PORTFOLIO', 'data-page':'DATA', 'aandelen-page':'LIVE', 'aandelen-portfolio-page':'AANDELEN', 'crypto-portfolio-page':'CRYPTO', 'heatmap-page':'HEATMAP', 'kalender-page':'KALENDER', 'cijfer-page':'CIJFERS' };
         const navLabel = document.querySelector('.nav span[style*="font-weight"]');
         if (navLabel) navLabel.textContent = labels[id] || '';
         closeNav();
         if (id === 'aandelen-page') loadMarktData(true);
+        if (id === 'aandelen-portfolio-page') initAandelenPortfolio();
+        if (id === 'crypto-portfolio-page') initCryptoPortfolio();
         if (id === 'heatmap-page') initHeatmapPage();
         if (id === 'kalender-page') initKalender();
         if (id === 'cijfer-page') initCijferPage();
@@ -2274,6 +2654,85 @@ function renderPrestaties() {
     setEl('prest-euro', isBlurred ? '€ •••' : `${sign}${formatEuro(winstEuro)}`, `color:${color};`);
     setEl('prest-perc', `${sign}${winstPerc.toFixed(2)}%`, `color:${color};`);
 
+    // ── STREAK: opeenvolgende dagen omhoog of omlaag ───────────────────────
+    const startIdxStreak = brokerData.indexOf(startEntry);
+    let streakDirection = 0; // 1 = omhoog, -1 = omlaag
+    let streakDagen = 0;
+    for (let i = brokerData.length - 1; i > Math.max(startIdxStreak, 0); i--) {
+        const cur  = brokerData[i].degiro + brokerData[i].bolero + brokerData[i].saxo;
+        const prev = brokerData[i-1].degiro + brokerData[i-1].bolero + brokerData[i-1].saxo;
+        const dir  = cur > prev ? 1 : cur < prev ? -1 : 0;
+        if (dir === 0) break;
+        if (streakDirection === 0) streakDirection = dir;
+        if (dir !== streakDirection) break;
+        streakDagen++;
+    }
+    const streakEl = document.getElementById('prest-streak');
+    if (streakEl) {
+        if (streakDagen === 0) {
+            streakEl.textContent = '–';
+            streakEl.style.color = 'var(--text-muted)';
+        } else {
+            const arrow = streakDirection > 0 ? '↑' : '↓';
+            const col   = streakDirection > 0 ? 'var(--success)' : 'var(--danger)';
+            streakEl.innerHTML = `<span style="color:${col};font-weight:800;">${streakDagen} dag${streakDagen === 1 ? '' : 'en'} ${arrow}</span>`;
+        }
+    }
+
+    // ── MOMENTUM: % verandering laatste 3 dagen ───────────────────────────
+    const momEl = document.getElementById('prest-momentum');
+    if (momEl) {
+        if (brokerData.length >= 4) {
+            const lastIdx = brokerData.length - 1;
+            const refIdx  = Math.max(0, lastIdx - 3);
+            const valNow  = brokerData[lastIdx].degiro + brokerData[lastIdx].bolero + brokerData[lastIdx].saxo;
+            const valRef  = brokerData[refIdx].degiro  + brokerData[refIdx].bolero  + brokerData[refIdx].saxo;
+            const momPct  = valRef !== 0 ? ((valNow - valRef) / valRef) * 100 : 0;
+            const mSign   = momPct >= 0 ? '+' : '';
+            const mCol    = momPct >= 0 ? 'var(--success)' : 'var(--danger)';
+            momEl.innerHTML = `<span style="color:${mCol};font-weight:800;">${mSign}${momPct.toFixed(2)}%</span> <span style="color:var(--text-muted);font-size:0.72rem;">(3d)</span>`;
+        } else {
+            momEl.textContent = '–';
+            momEl.style.color = 'var(--text-muted)';
+        }
+    }
+
+    // ── VOLATILITEIT: standaarddeviatie van dagelijkse % returns ──────────
+    const volReturns = [];
+    const dagSchommelingen = [];
+    for (let i = Math.max(brokerData.indexOf(startEntry), 1); i < brokerData.length; i++) {
+        const cur  = brokerData[i].degiro + brokerData[i].bolero + brokerData[i].saxo;
+        const prev = brokerData[i-1].degiro + brokerData[i-1].bolero + brokerData[i-1].saxo;
+        if (prev !== 0) {
+            volReturns.push(((cur - prev) / prev) * 100);
+            dagSchommelingen.push(Math.abs(cur - prev));
+        }
+    }
+    const volEl  = document.getElementById('prest-vol');
+    const schEl  = document.getElementById('prest-schommeling');
+    if (volEl) {
+        if (volReturns.length >= 2) {
+            const mean   = volReturns.reduce((a,b) => a+b, 0) / volReturns.length;
+            const sqSum  = volReturns.reduce((a,b) => a + Math.pow(b - mean, 2), 0);
+            const stdDev = Math.sqrt(sqSum / volReturns.length);
+            volEl.textContent = `${stdDev.toFixed(2)}%`;
+            volEl.style.color = 'var(--text-main)';
+        } else {
+            volEl.textContent = '–';
+            volEl.style.color = 'var(--text-muted)';
+        }
+    }
+    if (schEl) {
+        if (dagSchommelingen.length > 0) {
+            const avgSch = dagSchommelingen.reduce((a,b) => a+b, 0) / dagSchommelingen.length;
+            schEl.textContent = isBlurred ? '€ •••' : formatEuro(avgSch);
+            schEl.style.color = 'var(--text-main)';
+        } else {
+            schEl.textContent = '–';
+            schEl.style.color = 'var(--text-muted)';
+        }
+    }
+
     // Benchmark vergelijking: ophalen via Yahoo Finance vanaf PRESTATIES_START_DATE
     const benchDefs = [
         { id: 'prest-sp',   ticker: '%5EGSPC' },
@@ -2309,9 +2768,11 @@ function renderPrestaties() {
             if (!bStart || !bEnd || bStart === 0) throw new Error('ongeldige waarden');
             const bPerc = ((bEnd - bStart) / Math.abs(bStart)) * 100;
             const diff  = winstPerc - bPerc;
-            const dSign = diff >= 0 ? '+' : '';
-            const dCol  = diff >= 0 ? 'var(--success)' : 'var(--danger)';
-            el.innerHTML = `<span style="color:${dCol};font-weight:800;">${dSign}${diff.toFixed(2)}%</span> <span style="color:var(--text-muted);font-size:0.72rem;">(bench: ${bPerc.toFixed(2)}%)</span>`;
+            const bSign = bPerc  >= 0 ? '+' : '';
+            const dSign = diff   >= 0 ? '+' : '';
+            const dCol  = diff   >= 0 ? 'var(--success)' : 'var(--danger)';
+            const dBullet = diff >= 0 ? '🟢' : '🔴';
+            el.innerHTML = `<span style="font-weight:800;">${bSign}${bPerc.toFixed(2)}%</span> &nbsp;${dBullet}&nbsp;<span style="color:${dCol};font-weight:800;">${dSign}${diff.toFixed(2)}%</span> <span style="color:var(--text-muted);font-size:0.7rem;">vs bench</span>`;
         } catch {
             el.textContent = '– (geen data)';
             el.style.color = 'var(--text-muted)';
@@ -3676,9 +4137,18 @@ function renderWeeklyReturns() {
         const stocks = hmStocks.filter(s => s.type === 'stock').sort((a,b)=>a.ticker.localeCompare(b.ticker));
         const etfs   = hmStocks.filter(s => s.type === 'etf').sort((a,b)=>a.ticker.localeCompare(b.ticker));
 
+        const inputStyle = 'width:80px;border:1px solid var(--border-color);border-radius:6px;padding:4px 6px;font-size:0.78rem;background:var(--bg-color);color:var(--text-main);text-align:right;';
+
         const makeRows = (items) => items.map(s => `<tr style="border-bottom:1px solid var(--border-color);">
             <td style="padding:8px 6px;font-weight:700;font-family:monospace;">${s.ticker}</td>
             <td style="padding:8px 6px;">${s.name}</td>
+            <td style="padding:8px 6px;text-align:center;">
+                <select onchange="updateHmBroker('${s.ticker}',this.value)" style="border:1px solid var(--border-color);border-radius:6px;padding:3px 6px;font-size:0.78rem;background:var(--bg-color);color:var(--text-main);">
+                    <option value="Degiro" ${(s.broker||'Degiro')==='Degiro'?'selected':''}>Degiro</option>
+                    <option value="Bolero" ${(s.broker||'Degiro')==='Bolero'?'selected':''}>Bolero</option>
+                    <option value="Saxo"   ${(s.broker||'Degiro')==='Saxo'?'selected':''}>Saxo</option>
+                </select>
+            </td>
             <td style="padding:8px 6px;text-align:center;">
                 <select onchange="updateHmCurrency('${s.ticker}',this.value)" style="border:1px solid var(--border-color);border-radius:6px;padding:3px 6px;font-size:0.78rem;background:var(--bg-color);color:var(--text-main);">
                     <option value="USD" ${(s.currency||'USD')==='USD'?'selected':''}>USD</option>
@@ -3686,11 +4156,17 @@ function renderWeeklyReturns() {
                 </select>
             </td>
             <td style="padding:8px 6px;text-align:right;">
+                <input type="number" step="0.0001" min="0" value="${s.gak ?? 0}" onchange="updateHmGak('${s.ticker}', this.value)" style="${inputStyle}">
+            </td>
+            <td style="padding:8px 6px;text-align:right;">
+                <input type="number" step="0.0001" min="0" value="${s.aantal ?? 0}" onchange="updateHmAantal('${s.ticker}', this.value)" style="${inputStyle}">
+            </td>
+            <td style="padding:8px 6px;text-align:right;">
                 <button onclick="removeHmStockData('${s.ticker}')" style="background:none;border:none;color:var(--danger);cursor:pointer;font-size:0.85rem;font-weight:700;">✕</button>
             </td>
         </tr>`).join('');
 
-        const emptyRow = (msg) => `<tr><td colspan="4" style="padding:16px;color:var(--text-muted);text-align:center;">${msg}</td></tr>`;
+        const emptyRow = (msg) => `<tr><td colspan="7" style="padding:16px;color:var(--text-muted);text-align:center;">${msg}</td></tr>`;
 
         if (stockBody) stockBody.innerHTML = stocks.length ? makeRows(stocks) : emptyRow('Geen aandelen. Voeg er toe via + Toevoegen.');
         if (etfBody)   etfBody.innerHTML   = etfs.length   ? makeRows(etfs)   : emptyRow('Geen ETFs. Voeg er toe via + Toevoegen.');
@@ -3701,15 +4177,34 @@ function renderWeeklyReturns() {
         if (s) { s.currency = currency; saveHmStocks(); }
     }
 
+    function updateHmBroker(ticker, broker) {
+        const s = hmStocks.find(x => x.ticker === ticker);
+        if (s) { s.broker = broker; saveHmStocks(); }
+    }
+
+    function updateHmGak(ticker, val) {
+        const s = hmStocks.find(x => x.ticker === ticker);
+        if (s) { s.gak = parseFloat(val) || 0; saveHmStocks(); }
+    }
+
+    function updateHmAantal(ticker, val) {
+        const s = hmStocks.find(x => x.ticker === ticker);
+        if (s) { s.aantal = parseFloat(val) || 0; saveHmStocks(); }
+    }
+
     function renderCryptoData() {
         const body = document.getElementById('cryptoDataBody');
         if (!body) return;
         const cryptos = hmStocks.filter(s => s.type === 'crypto');
+        const inputStyle = 'width:100px;border:1px solid var(--border-color);border-radius:6px;padding:4px 6px;font-size:0.78rem;background:var(--bg-color);color:var(--text-main);text-align:right;';
         body.innerHTML = cryptos.length === 0
-            ? `<tr><td colspan="3" style="padding:16px;color:var(--text-muted);text-align:center;">Geen crypto. Voeg toe via + Toevoegen.</td></tr>`
+            ? `<tr><td colspan="4" style="padding:16px;color:var(--text-muted);text-align:center;">Geen crypto. Voeg toe via + Toevoegen.</td></tr>`
             : cryptos.map(s => `<tr style="border-bottom:1px solid var(--border-color);">
                 <td style="padding:8px 6px;font-weight:700;">${s.ticker}</td>
                 <td style="padding:8px 6px;">${s.name}</td>
+                <td style="padding:8px 6px;text-align:right;">
+                    <input type="number" step="0.00000001" min="0" value="${s.aantal ?? 0}" onchange="updateHmAantal('${s.ticker}', this.value)" style="${inputStyle}">
+                </td>
                 <td style="padding:8px 6px;text-align:right;">
                     <button onclick="removeHmStockData('${s.ticker}')" style="background:none;border:none;color:var(--danger);cursor:pointer;font-size:0.85rem;font-weight:700;">✕</button>
                 </td>
@@ -3735,7 +4230,7 @@ function renderWeeklyReturns() {
         const type   = document.getElementById('addSdType').value;
         if (!ticker) return;
         if (hmStocks.find(s => s.ticker === ticker)) { alert(`${ticker} staat al in de lijst.`); return; }
-        hmStocks.push({ ticker, name, type });
+        hmStocks.push({ ticker, name, type, gak: 0, aantal: 0, broker: 'Degiro', currency: 'USD' });
         saveHmStocks();
         hideAddStockData();
         renderAandelenData();
@@ -3756,72 +4251,88 @@ function renderWeeklyReturns() {
     }
 
     // ── HEATMAP PAGINA ──────────────────────────────────────────────────────
+    // Echte posities pre-loaded: Bolero (3) + Degiro (24) + Saxo (17) = 44 posities
+    // CleanSpark Call Jan'27 optie is overgeslagen (geen ticker te volgen via Yahoo)
     const DEFAULT_STOCKS = [
-        // AANDELEN
-        {ticker:'ABAT',   name:'Am. Battery',        type:'stock', currency:'USD'},
-        {ticker:'ABCL',   name:'AbCellera',          type:'stock', currency:'USD'},
-        {ticker:'ACHR',   name:'Archer Aviation',    type:'stock', currency:'USD'},
-        {ticker:'AMZN',   name:'Amazon',             type:'stock', currency:'USD'},
-        {ticker:'APLD',   name:'Applied Digital',    type:'stock', currency:'USD'},
-        {ticker:'BKKT',   name:'Bakkt',              type:'stock', currency:'USD'},
-        {ticker:'BMNR',   name:'Bitmine',            type:'stock', currency:'USD'},
-        {ticker:'CIFR',   name:'Cipher Digital',     type:'stock', currency:'USD'},
-        {ticker:'CLSK',   name:'CleanSpark',         type:'stock', currency:'USD'},
-        {ticker:'CRCL',   name:'Circle',             type:'stock', currency:'USD'},
-        {ticker:'CRM',    name:'Salesforce',         type:'stock', currency:'USD'},
-        {ticker:'CRDO',   name:'Credo',              type:'stock', currency:'USD'},
-        {ticker:'CRWV',   name:'CoreWeave',          type:'stock', currency:'USD'},
-        {ticker:'GOOGL',  name:'Alphabet',           type:'stock', currency:'USD'},
-        {ticker:'IONQ',   name:'IonQ',               type:'stock', currency:'USD'},
-        {ticker:'IREN',   name:'IREN',               type:'stock', currency:'USD'},
-        {ticker:'JD',     name:'JD.com',             type:'stock', currency:'USD'},
-        {ticker:'KEEL',   name:'Keel',               type:'stock', currency:'USD'},
-        {ticker:'LMND',   name:'Lemonade',           type:'stock', currency:'USD'},
-        {ticker:'MRLN',   name:'Merlin',             type:'stock', currency:'USD'},
-        {ticker:'MSFT',   name:'Microsoft',          type:'stock', currency:'USD'},
-        {ticker:'NVDA',   name:'NVIDIA',             type:'stock', currency:'USD'},
-        {ticker:'OUST',   name:'Ouster',             type:'stock', currency:'USD'},
-        {ticker:'PYPL',   name:'PayPal',             type:'stock', currency:'USD'},
-        {ticker:'QBTS',   name:'D-Wave',             type:'stock', currency:'USD'},
-        {ticker:'RR',     name:'Richtech',           type:'stock', currency:'USD'},
-        {ticker:'RXRX',   name:'Recursion',          type:'stock', currency:'USD'},
-        {ticker:'SBET',   name:'SharpLink',          type:'stock', currency:'USD'},
-        {ticker:'SOI.PA', name:'Soitec',             type:'stock', currency:'EUR'},
-        {ticker:'SOFI',   name:'SoFi',               type:'stock', currency:'USD'},
-        {ticker:'SYM',    name:'Symbotic',           type:'stock', currency:'USD'},
-        {ticker:'TOYO',   name:'Toyo',               type:'stock', currency:'USD'},
-        {ticker:'UBER',   name:'Uber',               type:'stock', currency:'USD'},
-        {ticker:'UAMY',   name:'US Antimony',        type:'stock', currency:'USD'},
-        {ticker:'XPEV',   name:'XPeng',              type:'stock', currency:'USD'},
-        {ticker:'ZENA',   name:'Zenatech',           type:'stock', currency:'USD'},
-        // ETFs
-        {ticker:'2B76.DE', name:'iSh. Automation',   type:'etf',   currency:'EUR'},
-        {ticker:'DAPP.MI',   name:'VanEck Crypto',      type:'etf',   currency:'EUR'},
-        {ticker:'REMX.MI',   name:'VanEck Rare Earth',  type:'etf',   currency:'EUR'},
-        {ticker:'SMH.MI',    name:'VanEck Semi',        type:'etf',   currency:'EUR'},
-        {ticker:'3HCL.L', name:'WT Copper 3x',          type:'etf',   currency:'USD'},
-        {ticker:'SGLD.MI',   name:'Inv. Gold',          type:'etf',   currency:'EUR'},
-        // CRYPTO
-        {ticker:'BTC-USD', name:'Bitcoin',           type:'crypto', currency:'USD'},
-        {ticker:'ETH-USD', name:'Ethereum',          type:'crypto', currency:'USD'},
-        {ticker:'SOL-USD', name:'Solana',            type:'crypto', currency:'USD'},
-        {ticker:'AVAX-USD',name:'Avalanche',         type:'crypto', currency:'USD'},
-        {ticker:'AAVE-USD',name:'Aave',              type:'crypto', currency:'USD'},
-        {ticker:'RNDR-USD',name:'Render',            type:'crypto', currency:'USD'},
-        {ticker:'TAO-USD', name:'Bittensor',         type:'crypto', currency:'USD'},
-        {ticker:'HYPE',    name:'Hyperliquid',       type:'crypto', currency:'USD'},
+        // ── BOLERO ──────────────────────────────────────────────────────────
+        {ticker:'NVDA',    name:'NVIDIA',           type:'stock', currency:'USD', broker:'Bolero', gak:14.67,  aantal:120},
+        {ticker:'PYPL',    name:'PayPal',           type:'stock', currency:'USD', broker:'Bolero', gak:73.26,  aantal:29},
+        {ticker:'BMNR',    name:'Bitmine',          type:'stock', currency:'USD', broker:'Bolero', gak:54.92,  aantal:66},
+
+        // ── DEGIRO — aandelen ───────────────────────────────────────────────
+        {ticker:'ABCL',    name:'AbCellera',        type:'stock', currency:'USD', broker:'Degiro', gak:3.59,   aantal:886},
+        {ticker:'AMZN',    name:'Amazon',           type:'stock', currency:'USD', broker:'Degiro', gak:219.77, aantal:11},
+        {ticker:'APLD',    name:'Applied Digital',  type:'stock', currency:'USD', broker:'Degiro', gak:4.19,   aantal:184},
+        {ticker:'ACHR',    name:'Archer Aviation',  type:'stock', currency:'USD', broker:'Degiro', gak:9.50,   aantal:60},
+        {ticker:'CRCL',    name:'Circle',           type:'stock', currency:'USD', broker:'Degiro', gak:105.47, aantal:16},
+        {ticker:'CRWV',    name:'CoreWeave',        type:'stock', currency:'USD', broker:'Degiro', gak:88.17,  aantal:31},
+        {ticker:'CRDO',    name:'Credo',            type:'stock', currency:'USD', broker:'Degiro', gak:118.16, aantal:21},
+        {ticker:'IONQ',    name:'IonQ',             type:'stock', currency:'USD', broker:'Degiro', gak:27.43,  aantal:42},
+        {ticker:'KEEL',    name:'Keel',             type:'stock', currency:'USD', broker:'Degiro', gak:1.98,   aantal:1730},
+        {ticker:'LMND',    name:'Lemonade',         type:'stock', currency:'USD', broker:'Degiro', gak:32.50,  aantal:7},
+        {ticker:'MRLN',    name:'Merlin',           type:'stock', currency:'USD', broker:'Degiro', gak:7.16,   aantal:162},
+        {ticker:'MSFT',    name:'Microsoft',        type:'stock', currency:'USD', broker:'Degiro', gak:395.47, aantal:12},
+        {ticker:'OUST',    name:'Ouster',           type:'stock', currency:'USD', broker:'Degiro', gak:24.60,  aantal:24},
+        {ticker:'RR',      name:'Richtech',         type:'stock', currency:'USD', broker:'Degiro', gak:3.60,   aantal:162},
+        {ticker:'SBET',    name:'SharpLink',        type:'stock', currency:'USD', broker:'Degiro', gak:21.26,  aantal:55},
+        {ticker:'SOI.PA',  name:'Soitec',           type:'stock', currency:'EUR', broker:'Degiro', gak:64.16,  aantal:32},
+        {ticker:'TOYO',    name:'Toyo',             type:'stock', currency:'USD', broker:'Degiro', gak:9.00,   aantal:66},
+        {ticker:'UBER',    name:'Uber',             type:'stock', currency:'USD', broker:'Degiro', gak:79.32,  aantal:21},
+        {ticker:'UAMY',    name:'US Antimony',      type:'stock', currency:'USD', broker:'Degiro', gak:11.23,  aantal:85},
+        // ── DEGIRO — ETFs ───────────────────────────────────────────────────
+        {ticker:'2B76.DE', name:'iSh. Automation',  type:'etf',   currency:'EUR', broker:'Degiro', gak:14.14,  aantal:71},
+        {ticker:'DAPP.MI', name:'VanEck Crypto',    type:'etf',   currency:'EUR', broker:'Degiro', gak:9.70,   aantal:492},
+        {ticker:'REMX.MI', name:'VanEck Rare Earth',type:'etf',   currency:'EUR', broker:'Degiro', gak:8.11,   aantal:115},
+        {ticker:'SMH.MI',  name:'VanEck Semi',      type:'etf',   currency:'EUR', broker:'Degiro', gak:28.42,  aantal:35},
+        {ticker:'3HCL.L',  name:'WT Copper 3x',     type:'etf',   currency:'USD', broker:'Degiro', gak:16.50,  aantal:140},
+
+        // ── SAXO — aandelen ─────────────────────────────────────────────────
+        {ticker:'MIGI',    name:'Mawson',           type:'stock', currency:'USD', broker:'Saxo',   gak:4.83,   aantal:24},
+        {ticker:'QBTS',    name:'D-Wave',           type:'stock', currency:'USD', broker:'Saxo',   gak:15.07,  aantal:50},
+        {ticker:'IREN',    name:'IREN',             type:'stock', currency:'USD', broker:'Saxo',   gak:39.28,  aantal:301},
+        {ticker:'JD',      name:'JD.com',           type:'stock', currency:'USD', broker:'Saxo',   gak:33.82,  aantal:29},
+        {ticker:'CIFR',    name:'Cipher Digital',   type:'stock', currency:'USD', broker:'Saxo',   gak:14.66,  aantal:245},
+        {ticker:'CLSK',    name:'CleanSpark',       type:'stock', currency:'USD', broker:'Saxo',   gak:13.17,  aantal:165},
+        {ticker:'BKKT',    name:'Bakkt',            type:'stock', currency:'USD', broker:'Saxo',   gak:13.32,  aantal:169},
+        {ticker:'SOFI',    name:'SoFi',             type:'stock', currency:'USD', broker:'Saxo',   gak:27.50,  aantal:19},
+        {ticker:'GOOGL',   name:'Alphabet',         type:'stock', currency:'USD', broker:'Saxo',   gak:163.20, aantal:28},
+        {ticker:'AMD',     name:'AMD',              type:'stock', currency:'USD', broker:'Saxo',   gak:159.79, aantal:8},
+        {ticker:'SYM',     name:'Symbotic',         type:'stock', currency:'USD', broker:'Saxo',   gak:45.25,  aantal:9},
+        {ticker:'RXRX',    name:'Recursion',        type:'stock', currency:'USD', broker:'Saxo',   gak:5.73,   aantal:87},
+        {ticker:'ABAT',    name:'Am. Battery',      type:'stock', currency:'USD', broker:'Saxo',   gak:5.85,   aantal:113},
+        {ticker:'XPEV',    name:'XPeng',            type:'stock', currency:'USD', broker:'Saxo',   gak:22.94,  aantal:36},
+        {ticker:'CRM',     name:'Salesforce',       type:'stock', currency:'USD', broker:'Saxo',   gak:250.38, aantal:2},
+        {ticker:'ZENA',    name:'Zenatech',         type:'stock', currency:'USD', broker:'Saxo',   gak:2.68,   aantal:115},
+        // ── SAXO — ETFs ─────────────────────────────────────────────────────
+        {ticker:'SGLD.MI', name:'Inv. Gold',        type:'etf',   currency:'EUR', broker:'Saxo',   gak:295.07, aantal:3},
+
+        // ── CRYPTO (placeholders — vul aantal aan via DATA → CRYPTO) ────────
+        {ticker:'BTC-USD', name:'Bitcoin',          type:'crypto', currency:'USD', gak:0, aantal:0},
+        {ticker:'ETH-USD', name:'Ethereum',         type:'crypto', currency:'USD', gak:0, aantal:0},
+        {ticker:'SOL-USD', name:'Solana',           type:'crypto', currency:'USD', gak:0, aantal:0},
+        {ticker:'AVAX-USD',name:'Avalanche',        type:'crypto', currency:'USD', gak:0, aantal:0},
+        {ticker:'AAVE-USD',name:'Aave',             type:'crypto', currency:'USD', gak:0, aantal:0},
+        {ticker:'RNDR-USD',name:'Render',           type:'crypto', currency:'USD', gak:0, aantal:0},
+        {ticker:'TAO-USD', name:'Bittensor',        type:'crypto', currency:'USD', gak:0, aantal:0},
+        {ticker:'HYPE',    name:'Hyperliquid',      type:'crypto', currency:'USD', gak:0, aantal:0},
     ];
 
-    let hmStocks = JSON.parse(localStorage.getItem('hm_stocks') || 'null') || DEFAULT_STOCKS;
-    // Zorg dat bestaande entries altijd een type hebben
-    hmStocks = hmStocks.map(s => ({ type: 'stock', ...s }));
+    // localStorage key v2: bevat broker/gak/aantal velden + echte posities
+    let hmStocks = JSON.parse(localStorage.getItem('hm_stocks_v2') || 'null') || DEFAULT_STOCKS;
+    // Zorg dat bestaande entries altijd een type, gak, aantal en broker hebben (default 0 / Degiro)
+    hmStocks = hmStocks.map(s => ({ type: 'stock', gak: 0, aantal: 0, broker: 'Degiro', ...s }));
+    hmStocks.forEach(s => {
+        if (s.gak === undefined || s.gak === null) s.gak = 0;
+        if (s.aantal === undefined || s.aantal === null) s.aantal = 0;
+        if (!s.broker) s.broker = 'Degiro';
+    });
     let hmSortMode  = 'pct';
     let hmTabMode   = 'all';   // 'all' | 'stock' | 'etf'
     let hmCompact   = false;
     let hmData = {};
     let hmInitialized = false;
 
-    function saveHmStocks() { localStorage.setItem('hm_stocks', JSON.stringify(hmStocks)); }
+    function saveHmStocks() { localStorage.setItem('hm_stocks_v2', JSON.stringify(hmStocks)); }
 
     function setHmSort(mode, btn) {
         hmSortMode = mode;
@@ -4994,6 +5505,625 @@ function formatEarningsDate(dateStr) {
     const [y, m, d] = dateStr.split('-').map(Number);
     const maanden = ['jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec'];
     return `${d} ${maanden[m-1]} ${y}`;
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// AANDELEN & CRYPTO PORTFOLIO PAGINA'S
+// ════════════════════════════════════════════════════════════════════════════
+
+// Cache voor sectoren (Finnhub fallback) — v2 key, oude 'Onbekend' cache wordt genegeerd
+let _sectorCache = JSON.parse(localStorage.getItem('hm_sector_cache_v2') || '{}');
+function saveSectorCache() { localStorage.setItem('hm_sector_cache_v2', JSON.stringify(_sectorCache)); }
+
+// Vooraf gedefinieerde categorieën voor crypto's
+const CRYPTO_CATEGORIES = {
+    'BTC': 'Layer 1', 'BTC-USD': 'Layer 1',
+    'ETH': 'Layer 1', 'ETH-USD': 'Layer 1',
+    'SOL': 'Layer 1', 'SOL-USD': 'Layer 1',
+    'AVAX': 'Layer 1', 'AVAX-USD': 'Layer 1',
+    'BNB': 'Layer 1', 'BNB-USD': 'Layer 1',
+    'ADA': 'Layer 1', 'ADA-USD': 'Layer 1',
+    'AAVE': 'DeFi', 'AAVE-USD': 'DeFi',
+    'UNI': 'DeFi', 'UNI-USD': 'DeFi',
+    'HYPE': 'DeFi', 'HYPE-USD': 'DeFi',
+    'RNDR': 'AI', 'RNDR-USD': 'AI',
+    'TAO': 'AI', 'TAO-USD': 'AI',
+    'FET': 'AI', 'FET-USD': 'AI',
+    'LINK': 'Infrastructuur', 'LINK-USD': 'Infrastructuur',
+    'DOT': 'Infrastructuur', 'DOT-USD': 'Infrastructuur',
+};
+
+function getCryptoCategory(ticker) {
+    const t = (ticker || '').toUpperCase();
+    return CRYPTO_CATEGORIES[t] || 'Andere';
+}
+
+// ── HARDCODED SECTOR MAP voor de portfolio tickers ─────────────────────────
+// Gebaseerd op Yahoo Finance / GICS classificatie
+const SECTOR_MAP = {
+    // Technology
+    'NVDA':'Technology','MSFT':'Technology','GOOGL':'Communicatie','AMD':'Technology',
+    'CRM':'Technology','CRDO':'Technology','SOI.PA':'Technology','OUST':'Technology',
+    'IONQ':'Technology','QBTS':'Technology','APLD':'Technology','CRWV':'Technology',
+    'IREN':'Technology',
+    // Crypto / Mining
+    'BMNR':'Crypto / Mining','SBET':'Crypto / Mining','MIGI':'Crypto / Mining',
+    'CIFR':'Crypto / Mining','CLSK':'Crypto / Mining','BKKT':'Crypto / Mining',
+    'CRCL':'Crypto / Mining',
+    // Financials / FinTech
+    'PYPL':'FinTech','SOFI':'FinTech','LMND':'FinTech',
+    // Healthcare / Biotech
+    'ABCL':'Healthcare','MRLN':'Healthcare','RXRX':'Healthcare',
+    // Consumer / Mobility
+    'AMZN':'Consumer','UBER':'Consumer','JD':'Consumer','XPEV':'Consumer',
+    // Industrials / Robotics
+    'ACHR':'Industrials','SYM':'Industrials','RR':'Industrials','ZENA':'Industrials',
+    // Energy / Materials
+    'KEEL':'Energy / Materials','TOYO':'Energy / Materials',
+    'UAMY':'Energy / Materials','ABAT':'Energy / Materials',
+    // ETFs
+    '2B76.DE':'ETF — Thema','DAPP.MI':'ETF — Thema','REMX.MI':'ETF — Thema',
+    'SMH.MI':'ETF — Thema','3HCL.L':'ETF — Grondstof','SGLD.MI':'ETF — Grondstof',
+};
+
+// Sector ophalen: hardcoded map → cache → Finnhub fallback → 'Onbekend'
+async function fetchSector(ticker) {
+    const t = (ticker || '').toUpperCase();
+    if (SECTOR_MAP[t]) return SECTOR_MAP[t];
+    if (_sectorCache[t] && _sectorCache[t] !== 'Onbekend') return _sectorCache[t];
+    // Finnhub /stock/profile2 — werkt vooral voor US tickers
+    try {
+        const r = await fetch(`https://finnhub.io/api/v1/stock/profile2?symbol=${encodeURIComponent(t)}&token=${FINNHUB_KEY}`);
+        if (r.ok) {
+            const d = await r.json();
+            const sec = d?.finnhubIndustry || d?.gsubind || null;
+            if (sec) {
+                _sectorCache[t] = sec;
+                saveSectorCache();
+                return sec;
+            }
+        }
+    } catch {}
+    _sectorCache[t] = 'Onbekend';
+    saveSectorCache();
+    return 'Onbekend';
+}
+
+// EUR/USD wisselkoers cache (5 min)
+let _usdEurCache = null, _usdEurTime = 0;
+async function getUsdEurRate() {
+    if (_usdEurCache && Date.now() - _usdEurTime < 300000) return _usdEurCache;
+    try {
+        const r = await fetch('https://open.er-api.com/v6/latest/USD');
+        const data = await r.json();
+        const rate = data?.rates?.EUR;
+        if (rate) {
+            _usdEurCache = rate;
+            _usdEurTime = Date.now();
+            return rate;
+        }
+    } catch {}
+    return _usdEurCache || 0.92;
+}
+
+// Algemene quote loader: gebruikt yhQuote (al beschikbaar in script)
+async function loadQuoteForPosition(s) {
+    if (s.type === 'crypto') {
+        // Probeer Binance, dan Yahoo
+        const sym = s.ticker.toUpperCase().replace(/-USD$/, '') + 'USDT';
+        let q = await binanceQuote(sym).catch(() => null);
+        if (!q) q = await yhQuote(s.ticker);
+        return q;
+    }
+    return await yhQuote(s.ticker);
+}
+
+function fmtEuroAlt(v, dec = 2) {
+    if (v == null || isNaN(v)) return '–';
+    return '€ ' + v.toLocaleString('nl-NL', { minimumFractionDigits: dec, maximumFractionDigits: dec });
+}
+
+function plChip(pct, txt) {
+    const c = pct == null || isNaN(pct) ? 'var(--text-muted)' : pct >= 0 ? 'var(--success)' : 'var(--danger)';
+    const s = pct >= 0 ? '+' : '';
+    return `<span style="color:${c};font-weight:800;">${s}${(txt ?? pct.toFixed(2) + '%')}</span>`;
+}
+
+function sectorColor(idx) {
+    const palette = ['#3498db','#e67e22','#2ecc71','#9b59b6','#f1c40f','#e74c3c','#1abc9c','#34495e','#d35400','#16a085'];
+    return palette[idx % palette.length];
+}
+
+// ── AANDELEN PORTFOLIO ──────────────────────────────────────────────────────
+let _apBrokerFilter = 'all'; // 'all' | 'Bolero' | 'Degiro' | 'Saxo'
+
+function setApBroker(broker, btn) {
+    _apBrokerFilter = broker;
+    document.querySelectorAll('#aandelen-portfolio-page .ap-broker-tab').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+    // Update accent kleur attribuut op de pagina
+    const pg = document.getElementById('aandelen-portfolio-page');
+    if (pg) {
+        if (broker === 'all') pg.removeAttribute('data-broker');
+        else pg.setAttribute('data-broker', broker);
+    }
+    initAandelenPortfolio();
+}
+
+// Cash per broker — eigen state op AANDELEN pagina (los van DATA → CASH pagina)
+let _apCash = JSON.parse(localStorage.getItem('ap_cash_v1') || 'null') || { Bolero: 0, Degiro: 0, Saxo: 0 };
+function saveApCash() { localStorage.setItem('ap_cash_v1', JSON.stringify(_apCash)); }
+
+function getCashForBroker(broker) {
+    if (broker === 'all') {
+        return (_apCash.Bolero || 0) + (_apCash.Degiro || 0) + (_apCash.Saxo || 0);
+    }
+    return _apCash[broker] || 0;
+}
+
+function setApCashFor(broker, val) {
+    _apCash[broker] = parseFloat(val) || 0;
+    saveApCash();
+    initAandelenPortfolio();
+}
+
+function brokerColorVar(broker) {
+    if (broker === 'Bolero') return 'var(--bolero)';
+    if (broker === 'Degiro') return 'var(--degiro)';
+    if (broker === 'Saxo')   return 'var(--saxo)';
+    return 'var(--total-gray)';
+}
+
+// Render cash editor in CASH card
+function renderCashEditor() {
+    const editor = document.getElementById('ap-cashEditor');
+    if (!editor) return;
+    if (_apBrokerFilter === 'all') {
+        // 3 mini rijen
+        editor.innerHTML = ['Bolero', 'Degiro', 'Saxo'].map(b => `
+            <div class="ap-cash-row">
+                <span class="ap-cash-broker" style="background:${brokerColorVar(b)};"></span>
+                <span class="ap-cash-label">${b}</span>
+                <input class="ap-cash-input" type="number" step="0.01" min="0" value="${_apCash[b] || 0}" onchange="setApCashFor('${b}', this.value)">
+            </div>
+        `).join('');
+    } else {
+        // 1 grote input
+        editor.innerHTML = `
+            <input class="ap-cash-input-big" type="number" step="0.01" min="0" value="${_apCash[_apBrokerFilter] || 0}" onchange="setApCashFor('${_apBrokerFilter}', this.value)" placeholder="Cash bij ${_apBrokerFilter}">
+        `;
+    }
+}
+
+// State voor sortbare kolommen
+let _apSortKey = 'valueEur';
+let _apSortDir = 'desc'; // 'asc' | 'desc'
+
+function setApSort(key) {
+    if (_apSortKey === key) {
+        _apSortDir = _apSortDir === 'asc' ? 'desc' : 'asc';
+    } else {
+        _apSortKey = key;
+        _apSortDir = 'desc';
+    }
+    // Re-render zonder opnieuw quotes te halen
+    if (_apLastEnriched && _apLastTotalValue != null) {
+        renderBySector('ap-bySector', _apLastEnriched, _apLastTotalValue, false);
+    }
+}
+
+let _apLastEnriched = null;
+let _apLastTotalValue = null;
+
+async function initAandelenPortfolio(force = false) {
+    const status = document.getElementById('aandelenPfStatus');
+    if (status) status.textContent = '⏳ Laden…';
+
+    // Sync active state van broker tabs + accent attribuut
+    document.querySelectorAll('#aandelen-portfolio-page .ap-broker-tab').forEach(b => {
+        b.classList.toggle('active', b.dataset.broker === _apBrokerFilter);
+    });
+    const pg = document.getElementById('aandelen-portfolio-page');
+    if (pg) {
+        if (_apBrokerFilter === 'all') pg.removeAttribute('data-broker');
+        else pg.setAttribute('data-broker', _apBrokerFilter);
+    }
+
+    // Posities = stock + etf (alleen die met aantal > 0), gefilterd op gekozen broker
+    let positions = hmStocks.filter(s => (s.type === 'stock' || s.type === 'etf') && (s.aantal || 0) > 0);
+    if (_apBrokerFilter !== 'all') {
+        positions = positions.filter(s => (s.broker || 'Degiro') === _apBrokerFilter);
+    }
+
+    // Cash van de gekozen broker (of totaal) + render editor
+    const cashEur = getCashForBroker(_apBrokerFilter);
+    const cashEl  = document.getElementById('ap-cash');
+    if (cashEl) cashEl.textContent = fmtEuroAlt(cashEur);
+    renderCashEditor();
+
+    if (positions.length === 0) {
+        const totalCard = document.getElementById('ap-totalValue');
+        if (totalCard) totalCard.textContent = fmtEuroAlt(cashEur);
+        document.getElementById('ap-totalCost').textContent = 'Kost: € 0,00';
+        ['ap-totalPL','ap-totalPLPct','ap-dayPL','ap-dayPLPct','ap-positions','ap-positionsBreakdown','ap-best','ap-bestPct','ap-worst','ap-worstPct']
+            .forEach(id => { const e = document.getElementById(id); if (e) e.textContent = '–'; });
+        const emptyMsg = _apBrokerFilter === 'all'
+            ? 'Geen posities. Voeg eerst aandelen + aantal toe in DATA → AANDELEN.'
+            : `Geen posities bij ${_apBrokerFilter}. Wijzig broker via DATA → AANDELEN.`;
+        if (_apSectorChart) { _apSectorChart.destroy(); _apSectorChart = null; }
+        const lg = document.getElementById('ap-sectorLegend'); if (lg) lg.innerHTML = `<div style="color:var(--text-muted);font-size:0.85rem;">${emptyMsg}</div>`;
+        const bs = document.getElementById('ap-bySector');     if (bs) bs.innerHTML = '';
+        if (status) status.textContent = '';
+        return;
+    }
+
+    // Quotes parallel laden
+    const usdEur = await getUsdEurRate();
+    const enriched = await Promise.all(positions.map(async s => {
+        const q = await loadQuoteForPosition(s);
+        const sector = await fetchSector(s.ticker);
+        const cur = (s.currency || 'USD').toUpperCase();
+        const fx = cur === 'EUR' ? 1 : usdEur;
+        const price     = q?.price ?? 0;
+        const dayChange = q?.change ?? 0;
+        const aantal    = s.aantal || 0;
+        const gak       = s.gak || 0;
+        const valueEur  = price * aantal * fx;
+        const costEur   = gak   * aantal * fx;
+        const plEur     = valueEur - costEur;
+        const plPct     = costEur > 0 ? (plEur / costEur) * 100 : null;
+        const dayPLEur  = dayChange * aantal * fx;
+        const dayPLPct  = q?.pct ?? null;
+        return { ...s, q, sector, price, valueEur, costEur, plEur, plPct, dayPLEur, dayPLPct };
+    }));
+
+    // Posities totalen + cash
+    const positionsValue = enriched.reduce((a,x) => a + x.valueEur, 0);
+    const totalCost      = enriched.reduce((a,x) => a + x.costEur,  0);
+    const totalValue     = positionsValue + cashEur;
+    const totalPL        = positionsValue - totalCost;
+    const totalPLPct     = totalCost > 0 ? (totalPL / totalCost) * 100 : 0;
+    const dayPL          = enriched.reduce((a,x) => a + x.dayPLEur, 0);
+    const dayPLPct       = positionsValue > 0 ? (dayPL / (positionsValue - dayPL)) * 100 : 0;
+
+    document.getElementById('ap-totalValue').textContent = fmtEuroAlt(totalValue);
+    const cashLine = cashEur > 0 ? ` &nbsp;·&nbsp; Cash: ${fmtEuroAlt(cashEur)}` : '';
+    document.getElementById('ap-totalCost').innerHTML  = 'Kost: ' + fmtEuroAlt(totalCost) + cashLine;
+
+    const tplEl = document.getElementById('ap-totalPL');
+    tplEl.textContent = (totalPL >= 0 ? '+' : '') + fmtEuroAlt(totalPL);
+    tplEl.style.color = totalPL >= 0 ? 'var(--success)' : 'var(--danger)';
+    document.getElementById('ap-totalPLPct').innerHTML = plChip(totalPLPct);
+
+    const dplEl = document.getElementById('ap-dayPL');
+    dplEl.textContent = (dayPL >= 0 ? '+' : '') + fmtEuroAlt(dayPL);
+    dplEl.style.color = dayPL >= 0 ? 'var(--success)' : 'var(--danger)';
+    document.getElementById('ap-dayPLPct').innerHTML = plChip(dayPLPct);
+
+    const stockCnt = enriched.filter(x => x.type === 'stock').length;
+    const etfCnt   = enriched.filter(x => x.type === 'etf').length;
+    document.getElementById('ap-positions').textContent = `${enriched.length}`;
+    const brokerLabel = _apBrokerFilter === 'all' ? '' : ` · ${_apBrokerFilter}`;
+    document.getElementById('ap-positionsBreakdown').textContent = `${stockCnt} aandelen · ${etfCnt} ETFs${brokerLabel}`;
+
+    // Beste / slechtste op P/L %
+    const sortedByPct = [...enriched].filter(x => x.plPct != null).sort((a,b) => b.plPct - a.plPct);
+    const best = sortedByPct[0];
+    const worst = sortedByPct[sortedByPct.length - 1];
+    if (best) {
+        document.getElementById('ap-best').textContent = `${best.ticker} · ${best.name}`;
+        document.getElementById('ap-bestPct').innerHTML = plChip(best.plPct) + ` &nbsp;<span style="color:var(--text-muted);">(${(best.plEur >= 0 ? '+' : '') + fmtEuroAlt(best.plEur)})</span>`;
+    }
+    if (worst && worst !== best) {
+        document.getElementById('ap-worst').textContent = `${worst.ticker} · ${worst.name}`;
+        document.getElementById('ap-worstPct').innerHTML = plChip(worst.plPct) + ` &nbsp;<span style="color:var(--text-muted);">(${(worst.plEur >= 0 ? '+' : '') + fmtEuroAlt(worst.plEur)})</span>`;
+    }
+
+    // Bewaar voor herrendering bij sortering
+    _apLastEnriched = enriched;
+    _apLastTotalValue = positionsValue;
+
+    // Sectorverdeling — pie chart, gebruikt positionsValue (cash niet als sector)
+    renderSectorPie(enriched, positionsValue);
+    renderBySector('ap-bySector', enriched, positionsValue, false);
+
+    if (status) status.textContent = `✓ Bijgewerkt · ${new Date().toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit'})}`;
+}
+
+// ── CRYPTO PORTFOLIO ────────────────────────────────────────────────────────
+async function initCryptoPortfolio(force = false) {
+    const status = document.getElementById('cryptoPfStatus');
+    if (status) status.textContent = '⏳ Laden…';
+
+    const positions = hmStocks.filter(s => s.type === 'crypto' && (s.aantal || 0) > 0);
+
+    if (positions.length === 0) {
+        const totalCard = document.getElementById('cp-totalValue');
+        if (totalCard) totalCard.textContent = '€ 0,00';
+        ['cp-totalCost','cp-totalPL','cp-totalPLPct','cp-dayPL','cp-dayPLPct','cp-positions','cp-positionsBreakdown','cp-best','cp-bestPct','cp-worst','cp-worstPct']
+            .forEach(id => { const e = document.getElementById(id); if (e) e.textContent = '–'; });
+        const sb = document.getElementById('cp-sectorBars'); if (sb) sb.innerHTML = '<div style="color:var(--text-muted);font-size:0.85rem;">Geen crypto posities. Voeg eerst crypto + aantal toe in DATA → CRYPTO.</div>';
+        const bs = document.getElementById('cp-bySector');   if (bs) bs.innerHTML = '';
+        if (status) status.textContent = '';
+        return;
+    }
+
+    const usdEur = await getUsdEurRate();
+    const enriched = await Promise.all(positions.map(async s => {
+        const q = await loadQuoteForPosition(s);
+        const sector = getCryptoCategory(s.ticker);
+        const fx = (s.currency || 'USD').toUpperCase() === 'EUR' ? 1 : usdEur;
+        const price     = q?.price ?? 0;
+        const dayChange = q?.change ?? 0;
+        const aantal    = s.aantal || 0;
+        const gak       = s.gak || 0;
+        const valueEur  = price * aantal * fx;
+        const costEur   = gak   * aantal * fx;
+        const plEur     = valueEur - costEur;
+        const plPct     = costEur > 0 ? (plEur / costEur) * 100 : null;
+        const dayPLEur  = dayChange * aantal * fx;
+        const dayPLPct  = q?.pct ?? null;
+        return { ...s, q, sector, price, valueEur, costEur, plEur, plPct, dayPLEur, dayPLPct };
+    }));
+
+    const totalValue = enriched.reduce((a,x) => a + x.valueEur, 0);
+    const totalCost  = enriched.reduce((a,x) => a + x.costEur,  0);
+    const totalPL    = totalValue - totalCost;
+    const totalPLPct = totalCost > 0 ? (totalPL / totalCost) * 100 : 0;
+    const dayPL      = enriched.reduce((a,x) => a + x.dayPLEur, 0);
+    const dayPLPct   = totalValue > 0 ? (dayPL / (totalValue - dayPL)) * 100 : 0;
+
+    document.getElementById('cp-totalValue').textContent = fmtEuroAlt(totalValue);
+    document.getElementById('cp-totalCost').textContent  = 'Kost: ' + fmtEuroAlt(totalCost);
+
+    const tplEl = document.getElementById('cp-totalPL');
+    tplEl.textContent = (totalPL >= 0 ? '+' : '') + fmtEuroAlt(totalPL);
+    tplEl.style.color = totalPL >= 0 ? 'var(--success)' : 'var(--danger)';
+    document.getElementById('cp-totalPLPct').innerHTML = plChip(totalPLPct);
+
+    const dplEl = document.getElementById('cp-dayPL');
+    dplEl.textContent = (dayPL >= 0 ? '+' : '') + fmtEuroAlt(dayPL);
+    dplEl.style.color = dayPL >= 0 ? 'var(--success)' : 'var(--danger)';
+    document.getElementById('cp-dayPLPct').innerHTML = plChip(dayPLPct);
+
+    document.getElementById('cp-positions').textContent = `${enriched.length}`;
+    document.getElementById('cp-positionsBreakdown').textContent = `${enriched.length === 1 ? 'Coin' : 'Coins'}`;
+
+    const sortedByPct = [...enriched].filter(x => x.plPct != null).sort((a,b) => b.plPct - a.plPct);
+    const best = sortedByPct[0];
+    const worst = sortedByPct[sortedByPct.length - 1];
+    if (best) {
+        document.getElementById('cp-best').textContent = `${best.ticker.replace(/-USD$/,'')} · ${best.name}`;
+        document.getElementById('cp-bestPct').innerHTML = plChip(best.plPct) + ` &nbsp;<span style="color:var(--text-muted);">(${(best.plEur >= 0 ? '+' : '') + fmtEuroAlt(best.plEur)})</span>`;
+    }
+    if (worst && worst !== best) {
+        document.getElementById('cp-worst').textContent = `${worst.ticker.replace(/-USD$/,'')} · ${worst.name}`;
+        document.getElementById('cp-worstPct').innerHTML = plChip(worst.plPct) + ` &nbsp;<span style="color:var(--text-muted);">(${(worst.plEur >= 0 ? '+' : '') + fmtEuroAlt(worst.plEur)})</span>`;
+    }
+
+    renderSectorBars('cp-sectorBars', enriched, totalValue);
+    renderBySector('cp-bySector', enriched, totalValue, true);
+
+    if (status) status.textContent = `✓ Bijgewerkt · ${new Date().toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit'})}`;
+}
+
+// ── Render hulpfuncties ────────────────────────────────────────────────────
+let _apSectorChart = null;
+
+// Pie/doughnut chart voor sectorverdeling op AANDELEN pagina
+function renderSectorPie(positions, totalValue) {
+    const canvas = document.getElementById('ap-sectorPie');
+    const legendEl = document.getElementById('ap-sectorLegend');
+    if (!canvas || !legendEl) return;
+
+    const bySector = {};
+    positions.forEach(p => {
+        if (!bySector[p.sector]) bySector[p.sector] = 0;
+        bySector[p.sector] += p.valueEur;
+    });
+    const entries = Object.entries(bySector).sort((a,b) => b[1] - a[1]);
+
+    if (entries.length === 0 || totalValue === 0) {
+        if (_apSectorChart) { _apSectorChart.destroy(); _apSectorChart = null; }
+        legendEl.innerHTML = '<div style="color:var(--text-muted);font-size:0.85rem;">Geen data</div>';
+        return;
+    }
+
+    const labels = entries.map(([sec]) => sec);
+    const values = entries.map(([, v]) => v);
+    const colors = entries.map((_, i) => sectorColor(i));
+
+    if (_apSectorChart) _apSectorChart.destroy();
+    // Resolve CSS var to actual color (Chart.js needs hex/rgb)
+    const cardBg = getComputedStyle(document.documentElement).getPropertyValue('--card-bg').trim() || '#fff';
+    _apSectorChart = new Chart(canvas.getContext('2d'), {
+        type: 'doughnut',
+        data: {
+            labels,
+            datasets: [{
+                data: values,
+                backgroundColor: colors,
+                borderColor: cardBg,
+                borderWidth: 2,
+                hoverOffset: 8,
+            }],
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '62%',
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: (ctx) => {
+                            const v = ctx.parsed;
+                            const pct = (v / totalValue) * 100;
+                            return `${ctx.label}: ${fmtEuroAlt(v)} (${pct.toFixed(1)}%)`;
+                        }
+                    }
+                },
+                datalabels: {
+                    display: (ctx) => {
+                        const v = ctx.dataset.data[ctx.dataIndex];
+                        return (v / totalValue) >= 0.05; // alleen ≥5%
+                    },
+                    color: '#fff',
+                    font: { weight: 800, size: 11 },
+                    formatter: (v) => ((v / totalValue) * 100).toFixed(0) + '%',
+                }
+            }
+        }
+    });
+
+    // Legenda naast de chart
+    legendEl.innerHTML = entries.map(([sec, val], i) => {
+        const pct = (val / totalValue) * 100;
+        return `<div class="ap-pie-legend-row">
+            <span class="ap-pie-dot" style="background:${colors[i]};"></span>
+            <span class="ap-pie-name">${sec}</span>
+            <span class="ap-pie-val blur-target">${fmtEuroAlt(val, 0)}</span>
+            <span class="ap-pie-pct">${pct.toFixed(1)}%</span>
+        </div>`;
+    }).join('');
+}
+
+// Oude stacked bar variant — wordt nog gebruikt door CRYPTO pagina
+function renderSectorBars(containerId, positions, totalValue) {
+    const el = document.getElementById(containerId);
+    if (!el) return;
+    const bySector = {};
+    positions.forEach(p => {
+        if (!bySector[p.sector]) bySector[p.sector] = 0;
+        bySector[p.sector] += p.valueEur;
+    });
+    const entries = Object.entries(bySector).sort((a,b) => b[1] - a[1]);
+    if (entries.length === 0 || totalValue === 0) {
+        el.innerHTML = '<div style="color:var(--text-muted);font-size:0.85rem;">Geen data</div>';
+        return;
+    }
+    // Stacked bar
+    let bar = '<div style="display:flex;width:100%;height:18px;border-radius:8px;overflow:hidden;background:var(--row-hover);margin-bottom:14px;">';
+    entries.forEach(([sec, val], i) => {
+        const pct = (val / totalValue) * 100;
+        bar += `<div style="width:${pct}%;background:${sectorColor(i)};" title="${sec}: ${pct.toFixed(1)}%"></div>`;
+    });
+    bar += '</div>';
+
+    let legend = '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px;">';
+    entries.forEach(([sec, val], i) => {
+        const pct = (val / totalValue) * 100;
+        legend += `<div style="display:flex;align-items:center;gap:8px;font-size:0.8rem;">
+            <span style="width:10px;height:10px;background:${sectorColor(i)};border-radius:2px;flex-shrink:0;"></span>
+            <span style="font-weight:600;flex:1;">${sec}</span>
+            <span class="blur-target" style="color:var(--text-muted);font-size:0.75rem;">${fmtEuroAlt(val, 0)}</span>
+            <span style="font-weight:700;min-width:40px;text-align:right;">${pct.toFixed(1)}%</span>
+        </div>`;
+    });
+    legend += '</div>';
+    el.innerHTML = bar + legend;
+}
+
+function renderBySector(containerId, positions, totalValue, isCrypto) {
+    const el = document.getElementById(containerId);
+    if (!el) return;
+    const bySector = {};
+    positions.forEach(p => {
+        if (!bySector[p.sector]) bySector[p.sector] = [];
+        bySector[p.sector].push(p);
+    });
+    const sectors = Object.entries(bySector).sort((a,b) => {
+        const sa = a[1].reduce((x,y) => x + y.valueEur, 0);
+        const sb = b[1].reduce((x,y) => x + y.valueEur, 0);
+        return sb - sa;
+    });
+
+    let html = '';
+    sectors.forEach(([sec, pos], idx) => {
+        const sectorVal = pos.reduce((a,p) => a + p.valueEur, 0);
+        const sectorCost = pos.reduce((a,p) => a + p.costEur, 0);
+        const sectorPL  = sectorVal - sectorCost;
+        const sectorPct = sectorCost > 0 ? (sectorPL / sectorCost) * 100 : 0;
+        const sectorShare = totalValue > 0 ? (sectorVal / totalValue) * 100 : 0;
+        const plCol = sectorPL >= 0 ? 'var(--success)' : 'var(--danger)';
+        const plSign = sectorPL >= 0 ? '+' : '';
+
+        // Sortable kolomheaders (alleen voor aandelen, niet crypto)
+        const sortKey = isCrypto ? null : _apSortKey;
+        const sortDir = isCrypto ? null : _apSortDir;
+        const arrow = (k) => sortKey === k ? `<span class="ap-sort-arrow">${sortDir === 'asc' ? '▲' : '▼'}</span>` : '';
+        const thBase = 'padding:4px 6px;border-bottom:1px solid var(--border-color);';
+        const mkTh = (key, label, align) => {
+            if (isCrypto) {
+                return `<th style="${thBase}${align ? 'text-align:'+align+';' : ''}">${label}</th>`;
+            }
+            const cls = `ap-sort-th${sortKey === key ? ' active' : ''}`;
+            return `<th class="${cls}" onclick="setApSort('${key}')" style="${thBase}${align ? 'text-align:'+align+';' : ''}">${label}${arrow(key)}</th>`;
+        };
+
+        // Sorteer posities binnen sector
+        if (!isCrypto && sortKey) {
+            pos.sort((a, b) => {
+                let av = a[sortKey], bv = b[sortKey];
+                if (sortKey === 'ticker' || sortKey === 'name') {
+                    av = (av || '').toString().toLowerCase();
+                    bv = (bv || '').toString().toLowerCase();
+                    return sortDir === 'asc' ? av.localeCompare(bv) : bv.localeCompare(av);
+                }
+                if (av == null) av = -Infinity;
+                if (bv == null) bv = -Infinity;
+                return sortDir === 'asc' ? av - bv : bv - av;
+            });
+        } else {
+            pos.sort((a,b) => b.valueEur - a.valueEur);
+        }
+
+        html += `<div style="margin-bottom:18px;border-left:3px solid ${sectorColor(idx)};padding-left:12px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:6px;">
+                <div>
+                    <div style="font-size:0.95rem;font-weight:800;">${sec}</div>
+                    <div style="font-size:0.7rem;color:var(--text-muted);">${pos.length} ${pos.length === 1 ? 'positie' : 'posities'} · ${sectorShare.toFixed(1)}% van portfolio</div>
+                </div>
+                <div style="text-align:right;">
+                    <div class="blur-target" style="font-weight:800;">${fmtEuroAlt(sectorVal)}</div>
+                    <div style="font-size:0.78rem;font-weight:700;color:${plCol};">${plSign}${fmtEuroAlt(sectorPL)} (${plSign}${sectorPct.toFixed(2)}%)</div>
+                </div>
+            </div>
+            <div style="overflow-x:auto;">
+                <table style="width:100%;border-collapse:collapse;font-size:0.8rem;">
+                    <thead><tr style="text-align:left;color:var(--text-muted);font-size:0.65rem;">
+                        ${mkTh('ticker', 'TICKER', 'left')}
+                        ${mkTh('name', 'NAAM', 'left')}
+                        ${mkTh('aantal', 'AANTAL', 'right')}
+                        ${mkTh('gak', 'GAK', 'right')}
+                        ${mkTh('price', 'PRIJS', 'right')}
+                        ${mkTh('valueEur', 'WAARDE €', 'right')}
+                        ${mkTh('plEur', 'P/L €', 'right')}
+                        ${mkTh('plPct', 'P/L %', 'right')}
+                        ${mkTh('dayPLPct', 'DAG %', 'right')}
+                    </tr></thead>
+                    <tbody>`;
+        pos.forEach(p => {
+            const plCol = p.plEur >= 0 ? 'var(--success)' : 'var(--danger)';
+            const dpCol = p.dayPLPct == null ? 'var(--text-muted)' : p.dayPLPct >= 0 ? 'var(--success)' : 'var(--danger)';
+            const cur = (p.currency || 'USD').toUpperCase();
+            const displayTicker = isCrypto ? p.ticker.replace(/-USD$/,'') : p.ticker;
+            const dec = p.price < 1 ? 4 : 2;
+            html += `<tr style="border-bottom:1px solid var(--border-color);">
+                <td style="padding:6px;font-weight:700;font-family:monospace;">${displayTicker}</td>
+                <td style="padding:6px;">${p.name}</td>
+                <td style="padding:6px;text-align:right;">${(p.aantal || 0).toLocaleString('nl-NL', { maximumFractionDigits: 8 })}</td>
+                <td style="padding:6px;text-align:right;color:var(--text-muted);">${cur === 'EUR' ? '€' : '$'}${(p.gak || 0).toLocaleString('nl-NL', { minimumFractionDigits: 2, maximumFractionDigits: dec })}</td>
+                <td style="padding:6px;text-align:right;">${cur === 'EUR' ? '€' : '$'}${(p.price || 0).toLocaleString('nl-NL', { minimumFractionDigits: 2, maximumFractionDigits: dec })}</td>
+                <td class="blur-target" style="padding:6px;text-align:right;font-weight:700;">${fmtEuroAlt(p.valueEur)}</td>
+                <td class="blur-target" style="padding:6px;text-align:right;color:${plCol};font-weight:700;">${p.plEur >= 0 ? '+' : ''}${fmtEuroAlt(p.plEur)}</td>
+                <td style="padding:6px;text-align:right;color:${plCol};font-weight:800;">${p.plPct == null ? '–' : (p.plPct >= 0 ? '+' : '') + p.plPct.toFixed(2) + '%'}</td>
+                <td style="padding:6px;text-align:right;color:${dpCol};font-weight:700;">${p.dayPLPct == null ? '–' : (p.dayPLPct >= 0 ? '+' : '') + p.dayPLPct.toFixed(2) + '%'}</td>
+            </tr>`;
+        });
+        html += `</tbody></table></div></div>`;
+    });
+    el.innerHTML = html;
 }
 </script>
 
