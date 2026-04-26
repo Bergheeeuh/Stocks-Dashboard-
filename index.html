@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio v34</title>
+    <title>Portfolio v43</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
     <style>
@@ -86,10 +86,16 @@
 }
 
 .ap-card {
-    padding: 18px;
+    padding: 20px 18px;
     position: relative;
     overflow: hidden;
     border-top: 3px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: 130px;
 }
 .ap-card.ap-card-accent {
     border-top: 3px solid var(--ap-accent);
@@ -108,6 +114,7 @@
     color: var(--text-muted);
     letter-spacing: 0.05em;
     text-transform: uppercase;
+    text-align: center;
 }
 .ap-card-value {
     font-size: 1.6rem;
@@ -115,11 +122,67 @@
     margin-top: 6px;
     color: var(--ap-accent);
     line-height: 1.1;
+    text-align: center;
 }
 .ap-card-sub {
     font-size: 0.78rem;
     color: var(--text-muted);
     margin-top: 4px;
+    text-align: center;
+}
+
+/* Top 3 lists in beste/slechtste cards */
+.ap-card-toplist { padding: 16px 14px; align-items: stretch; }
+.ap-card-toplist .ap-card-label { margin-bottom: 8px; }
+.ap-toplist {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 100%;
+}
+.ap-toplist-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.82rem;
+    padding: 4px 6px;
+    border-radius: 6px;
+    background: var(--row-hover);
+}
+.ap-toplist-rank {
+    font-size: 0.65rem;
+    font-weight: 800;
+    color: var(--text-muted);
+    width: 16px;
+    text-align: center;
+    flex-shrink: 0;
+}
+.ap-toplist-ticker {
+    font-weight: 800;
+    font-family: monospace;
+    flex-shrink: 0;
+    min-width: 56px;
+}
+.ap-toplist-eur {
+    flex: 1;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.ap-toplist-pct {
+    font-weight: 800;
+    text-align: right;
+    flex-shrink: 0;
+}
+.ap-toplist-empty {
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    text-align: center;
+    padding: 6px;
 }
 
 /* Sortbare kolomheaders */
@@ -140,18 +203,99 @@
 }
 .ap-stats-row-4 { grid-template-columns: repeat(4, 1fr); }
 .ap-stats-row-3 { grid-template-columns: repeat(3, 1fr); margin-bottom: 1.5rem; }
+.ap-stats-row-2 { grid-template-columns: repeat(2, 1fr); margin-bottom: 1.5rem; }
 
 @media (max-width: 1100px) {
     .ap-stats-row-4 { grid-template-columns: repeat(2, 1fr); }
     .ap-stats-row-3 { grid-template-columns: repeat(3, 1fr); }
 }
 @media (max-width: 640px) {
-    .ap-stats-row-4, .ap-stats-row-3 { grid-template-columns: 1fr; }
+    .ap-stats-row-4, .ap-stats-row-3, .ap-stats-row-2 { grid-template-columns: 1fr; }
+}
+
+/* Hero card: alle hoofdmetrics samengevoegd */
+.ap-hero-card {
+    margin-bottom: 1.5rem;
+    padding: 24px 24px 20px;
+    position: relative;
+    overflow: hidden;
+    border-top: 4px solid var(--ap-accent);
+    text-align: center;
+}
+.ap-hero-card.ap-card-accent::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 80px;
+    background: linear-gradient(180deg, var(--ap-accent), transparent);
+    opacity: 0.10;
+    pointer-events: none;
+}
+.ap-hero-top {
+    text-align: center;
+    padding: 8px 0 4px;
+}
+.ap-hero-value {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--ap-accent);
+    line-height: 1.05;
+    margin-top: 6px;
+    letter-spacing: -0.02em;
+}
+.ap-hero-sub {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    margin-top: 6px;
+}
+.ap-hero-divider {
+    height: 1px;
+    background: var(--border-color);
+    margin: 18px 0 16px;
+}
+.ap-hero-metrics {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+.ap-hero-metric {
+    text-align: center;
+    padding: 4px;
+}
+.ap-hero-metric-value {
+    font-size: 1.3rem;
+    font-weight: 800;
+    margin-top: 6px;
+    line-height: 1.1;
+}
+.ap-hero-metric-sub {
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-top: 3px;
+    color: var(--text-muted);
+}
+.ap-hero-cash {
+    text-align: center;
+}
+.ap-hero-cash-value {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--ap-accent);
+    line-height: 1.1;
+    margin-bottom: 8px;
+}
+.ap-hero-cash .ap-cash-editor {
+    max-width: 380px;
+    margin: 0 auto;
+}
+
+@media (max-width: 640px) {
+    .ap-hero-metrics { grid-template-columns: 1fr; }
+    .ap-hero-value { font-size: 1.8rem; }
 }
 
 /* CASH editor in CASH card */
 .ap-card-cash .ap-card-value { font-size: 1.4rem; }
-.ap-cash-editor { margin-top: 8px; display: flex; flex-direction: column; gap: 4px; }
+.ap-cash-editor { margin-top: 10px; display: flex; flex-direction: column; gap: 4px; width: 100%; }
 .ap-cash-row {
     display: flex;
     align-items: center;
@@ -167,9 +311,10 @@
     flex: 1;
     color: var(--text-muted);
     font-weight: 600;
+    text-align: left;
 }
 .ap-cash-input {
-    width: 90px;
+    width: 95px;
     padding: 4px 6px;
     font-size: 0.78rem;
     text-align: right;
@@ -178,26 +323,56 @@
     background: var(--bg-color);
     color: var(--text-main);
     font-weight: 600;
+    -moz-appearance: textfield;
 }
+.ap-cash-readonly {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--text-main);
+    text-align: right;
+    min-width: 95px;
+}
+.ap-cash-input::-webkit-inner-spin-button,
+.ap-cash-input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
 .ap-cash-input:focus {
     outline: none;
     border-color: var(--ap-accent);
 }
-.ap-cash-input-big {
-    width: 100%;
-    padding: 8px 10px;
-    font-size: 1rem;
-    text-align: right;
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    background: var(--bg-color);
-    color: var(--text-main);
-    font-weight: 700;
+/* Grote inline input (single broker view) — looks like the big € value */
+.ap-cash-big-wrap {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 6px;
     margin-top: 6px;
 }
+.ap-cash-big-wrap .ap-cash-prefix {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--ap-accent);
+    line-height: 1;
+}
+.ap-cash-input-big {
+    width: 180px;
+    padding: 4px 8px;
+    font-size: 1.6rem;
+    line-height: 1;
+    text-align: center;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--ap-accent);
+    font-weight: 800;
+    -moz-appearance: textfield;
+    transition: background 0.15s, border-color 0.15s;
+}
+.ap-cash-input-big::-webkit-inner-spin-button,
+.ap-cash-input-big::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+.ap-cash-input-big:hover { background: var(--row-hover); }
 .ap-cash-input-big:focus {
     outline: none;
     border-color: var(--ap-accent);
+    background: var(--bg-color);
     box-shadow: 0 0 0 3px color-mix(in srgb, var(--ap-accent) 25%, transparent);
 }
 
@@ -205,46 +380,56 @@
 .ap-pie-wrapper {
     display: flex;
     align-items: center;
-    gap: 32px;
+    justify-content: center;
+    gap: 28px;
     flex-wrap: wrap;
 }
 .ap-pie-chart-wrap {
-    width: 260px;
-    height: 260px;
+    width: 240px;
+    height: 240px;
     flex-shrink: 0;
     position: relative;
 }
 .ap-pie-legend {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 6px 18px;
+    align-content: center;
+    max-width: 720px;
     flex: 1;
-    min-width: 240px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+    min-width: 260px;
 }
 .ap-pie-legend-row {
     display: flex;
     align-items: center;
     gap: 10px;
-    font-size: 0.85rem;
+    font-size: 0.82rem;
+    padding: 2px 0;
+    min-width: 0;
 }
 .ap-pie-legend-row .ap-pie-dot {
-    width: 12px; height: 12px;
+    width: 11px; height: 11px;
     border-radius: 3px;
     flex-shrink: 0;
 }
 .ap-pie-legend-row .ap-pie-name {
     flex: 1;
     font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
 }
 .ap-pie-legend-row .ap-pie-val {
     color: var(--text-muted);
-    font-size: 0.78rem;
-    margin-right: 8px;
+    font-size: 0.76rem;
+    flex-shrink: 0;
 }
 .ap-pie-legend-row .ap-pie-pct {
     font-weight: 800;
     min-width: 48px;
     text-align: right;
+    flex-shrink: 0;
 }
 
         body {
@@ -1304,7 +1489,7 @@
 
     <div class="data-tabs">
         <button class="data-tab-btn active" onclick="switchDataTab('broker-tab', this)">BROKER</button>
-        <button class="data-tab-btn" onclick="switchDataTab('cash-tab', this)">CASH</button>
+        <button class="data-tab-btn" onclick="switchDataTab('cash-tab', this)">STORTING</button>
         <button class="data-tab-btn" onclick="switchDataTab('aandelen-data-tab', this)">AANDELEN</button>
         <button class="data-tab-btn" onclick="switchDataTab('crypto-data-tab', this)">CRYPTO</button>
     </div>
@@ -1325,21 +1510,21 @@
     <div id="cash-tab" class="sub-tab-content">
         <div class="stats-grid" style="margin-top: 20px; margin-bottom: 20px;">
             <div class="card card-degiro">
-                <h3>Totaal Cash Degiro</h3>
+                <h3>Totaal Storting Degiro</h3>
                 <div class="cash-input-wrapper">
                     <span class="currency-symbol">€</span>
                     <input type="number" id="inputCashDegiro" class="cash-input-field" onchange="updateSingleCash('Degiro', this.value)">
                 </div>
             </div>
             <div class="card card-bolero">
-                <h3>Totaal Cash Bolero</h3>
+                <h3>Totaal Storting Bolero</h3>
                 <div class="cash-input-wrapper">
                     <span class="currency-symbol">€</span>
                     <input type="number" id="inputCashBolero" class="cash-input-field" onchange="updateSingleCash('Bolero', this.value)">
                 </div>
             </div>
             <div class="card card-saxo">
-                <h3>Totaal Cash Saxo</h3>
+                <h3>Totaal Storting Saxo</h3>
                 <div class="cash-input-wrapper">
                     <span class="currency-symbol">€</span>
                     <input type="number" id="inputCashSaxo" class="cash-input-field" onchange="updateSingleCash('Saxo', this.value)">
@@ -1392,6 +1577,29 @@
                 </table>
             </div>
         </div>
+        <!-- Opties tabel -->
+        <div class="card" style="margin-top:16px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px;">
+                <h3 style="margin:0;">OPTIES</h3>
+                <button class="btn btn-main" onclick="showAddStockData('option')" style="font-size:0.8rem;">+ Toevoegen</button>
+            </div>
+            <div style="overflow-x:auto;">
+                <table style="width:100%;border-collapse:collapse;font-size:0.85rem;min-width:780px;">
+                    <thead><tr>
+                        <th style="text-align:left;padding:8px 6px;color:var(--text-muted);font-size:0.68rem;font-weight:700;border-bottom:2px solid var(--border-color);">Ticker</th>
+                        <th style="text-align:left;padding:8px 6px;color:var(--text-muted);font-size:0.68rem;font-weight:700;border-bottom:2px solid var(--border-color);">Naam</th>
+                        <th style="text-align:center;padding:8px 6px;color:var(--text-muted);font-size:0.68rem;font-weight:700;border-bottom:2px solid var(--border-color);">Broker</th>
+                        <th style="text-align:center;padding:8px 6px;color:var(--text-muted);font-size:0.68rem;font-weight:700;border-bottom:2px solid var(--border-color);">Valuta</th>
+                        <th style="text-align:right;padding:8px 6px;color:var(--text-muted);font-size:0.68rem;font-weight:700;border-bottom:2px solid var(--border-color);">GAK</th>
+                        <th style="text-align:right;padding:8px 6px;color:var(--text-muted);font-size:0.68rem;font-weight:700;border-bottom:2px solid var(--border-color);">Aantal</th>
+                        <th style="text-align:right;padding:8px 6px;color:var(--text-muted);font-size:0.68rem;font-weight:700;border-bottom:2px solid var(--border-color);">Prijs</th>
+                        <th style="padding:8px 6px;border-bottom:2px solid var(--border-color);"></th>
+                    </tr></thead>
+                    <tbody id="optionDataBody"></tbody>
+                </table>
+            </div>
+            <div style="font-size:0.7rem;color:var(--text-muted);margin-top:6px;">Opties hebben geen Yahoo ticker — vul de huidige prijs handmatig in.</div>
+        </div>
     </div>
 
     <!-- CRYPTO TAB -->
@@ -1424,6 +1632,7 @@
             <select id="addSdType" style="width:100%;border:1px solid var(--border-color);border-radius:8px;padding:10px;font-size:1rem;background:var(--bg-color);color:var(--text-main);margin-bottom:16px;">
                 <option value="stock">Aandeel</option>
                 <option value="etf">ETF</option>
+                <option value="option">Optie</option>
                 <option value="crypto">Crypto</option>
             </select>
             <div style="display:flex;gap:8px;">
@@ -1550,46 +1759,55 @@
         </button>
     </div>
 
-    <!-- Rij 1: 4 hoofdmetrics — vaste 4-kolom grid op desktop -->
-    <div class="ap-stats-row ap-stats-row-4">
-        <div class="card ap-card ap-card-accent">
+    <!-- Hero card: alle hoofdmetrics samen -->
+    <div class="card ap-hero-card ap-card-accent">
+        <!-- Top: Totale waarde + sub -->
+        <div class="ap-hero-top">
             <div class="ap-card-label">TOTALE WAARDE</div>
-            <div id="ap-totalValue" class="blur-target ap-card-value">€ –</div>
-            <div id="ap-totalCost" class="blur-target ap-card-sub">Kost: € –</div>
+            <div id="ap-totalValue" class="blur-target ap-hero-value">€ –</div>
+            <div id="ap-totalCost" class="blur-target ap-hero-sub">Gestort: € – &nbsp;·&nbsp; Cash: € –</div>
         </div>
-        <div class="card ap-card ap-card-cash">
-            <div class="ap-card-label">CASH</div>
-            <div id="ap-cash" class="blur-target ap-card-value">€ –</div>
+
+        <div class="ap-hero-divider"></div>
+
+        <!-- Middle: 3 metrics in een rij -->
+        <div class="ap-hero-metrics">
+            <div class="ap-hero-metric">
+                <div class="ap-card-label">TOTALE P/L</div>
+                <div id="ap-totalPL" class="blur-target ap-hero-metric-value">€ –</div>
+                <div id="ap-totalPLPct" class="ap-hero-metric-sub">–</div>
+            </div>
+            <div class="ap-hero-metric">
+                <div class="ap-card-label">DAG P/L</div>
+                <div id="ap-dayPL" class="blur-target ap-hero-metric-value">€ –</div>
+                <div id="ap-dayPLPct" class="ap-hero-metric-sub">–</div>
+            </div>
+            <div class="ap-hero-metric">
+                <div class="ap-card-label">POSITIES</div>
+                <div id="ap-positions" class="ap-hero-metric-value" style="color:var(--text-main);">–</div>
+                <div id="ap-positionsBreakdown" class="ap-hero-metric-sub">–</div>
+            </div>
+        </div>
+
+        <div class="ap-hero-divider"></div>
+
+        <!-- Bottom: Cash editor -->
+        <div class="ap-hero-cash">
+            <div class="ap-card-label" style="margin-bottom:8px;">CASH</div>
+            <div id="ap-cash" class="blur-target ap-hero-cash-value">€ –</div>
             <div id="ap-cashEditor" class="ap-cash-editor"></div>
-        </div>
-        <div class="card ap-card">
-            <div class="ap-card-label">TOTALE P/L</div>
-            <div id="ap-totalPL" class="blur-target ap-card-value">€ –</div>
-            <div id="ap-totalPLPct" class="ap-card-sub" style="font-size:0.85rem;font-weight:700;">–</div>
-        </div>
-        <div class="card ap-card">
-            <div class="ap-card-label">DAG P/L</div>
-            <div id="ap-dayPL" class="blur-target ap-card-value">€ –</div>
-            <div id="ap-dayPLPct" class="ap-card-sub" style="font-size:0.85rem;font-weight:700;">–</div>
         </div>
     </div>
 
-    <!-- Rij 2: 3 secundaire metrics — vaste 3-kolom grid op desktop -->
-    <div class="ap-stats-row ap-stats-row-3">
-        <div class="card ap-card">
-            <div class="ap-card-label">POSITIES</div>
-            <div id="ap-positions" class="ap-card-value" style="color:var(--text-main);">–</div>
-            <div id="ap-positionsBreakdown" class="ap-card-sub">–</div>
+    <!-- Rij 2: Top 3 lists -->
+    <div class="ap-stats-row ap-stats-row-2">
+        <div class="card ap-card ap-card-toplist">
+            <div class="ap-card-label">TOP 3 BESTE</div>
+            <div id="ap-bestList" class="ap-toplist">–</div>
         </div>
-        <div class="card ap-card">
-            <div class="ap-card-label">BESTE POSITIE</div>
-            <div id="ap-best" style="font-size:1.05rem;font-weight:800;margin-top:6px;color:var(--success);">–</div>
-            <div id="ap-bestPct" class="ap-card-sub">–</div>
-        </div>
-        <div class="card ap-card">
-            <div class="ap-card-label">SLECHTSTE POSITIE</div>
-            <div id="ap-worst" style="font-size:1.05rem;font-weight:800;margin-top:6px;color:var(--danger);">–</div>
-            <div id="ap-worstPct" class="ap-card-sub">–</div>
+        <div class="card ap-card ap-card-toplist">
+            <div class="ap-card-label">TOP 3 SLECHTSTE</div>
+            <div id="ap-worstList" class="ap-toplist">–</div>
         </div>
     </div>
 
@@ -1608,7 +1826,6 @@
     <div class="card">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px;">
             <h3 style="margin:0;">POSITIES PER SECTOR</h3>
-            <div style="font-size:0.7rem;color:var(--text-muted);">Klik kolomtitels om te sorteren</div>
         </div>
         <div id="ap-bySector"></div>
     </div>
@@ -1631,7 +1848,7 @@
         <div class="card" style="padding:18px;">
             <div style="font-size:0.7rem;font-weight:700;color:var(--text-muted);letter-spacing:0.05em;">TOTALE WAARDE</div>
             <div id="cp-totalValue" class="blur-target" style="font-size:1.6rem;font-weight:800;margin-top:6px;">€ –</div>
-            <div id="cp-totalCost" class="blur-target" style="font-size:0.78rem;color:var(--text-muted);margin-top:2px;">Kost: € –</div>
+            <div id="cp-totalCost" class="blur-target" style="font-size:0.78rem;color:var(--text-muted);margin-top:2px;">Gestort: € –</div>
         </div>
         <div class="card" style="padding:18px;">
             <div style="font-size:0.7rem;font-weight:700;color:var(--text-muted);letter-spacing:0.05em;">TOTALE P/L</div>
@@ -4131,11 +4348,13 @@ function renderWeeklyReturns() {
 
     // ── DATA PAGINA: AANDELEN & CRYPTO TABS ─────────────────────────────────
     function renderAandelenData() {
-        const stockBody = document.getElementById('aandelenDataBody');
-        const etfBody   = document.getElementById('etfDataBody');
+        const stockBody  = document.getElementById('aandelenDataBody');
+        const etfBody    = document.getElementById('etfDataBody');
+        const optionBody = document.getElementById('optionDataBody');
 
-        const stocks = hmStocks.filter(s => s.type === 'stock').sort((a,b)=>a.ticker.localeCompare(b.ticker));
-        const etfs   = hmStocks.filter(s => s.type === 'etf').sort((a,b)=>a.ticker.localeCompare(b.ticker));
+        const stocks  = hmStocks.filter(s => s.type === 'stock').sort((a,b)=>a.ticker.localeCompare(b.ticker));
+        const etfs    = hmStocks.filter(s => s.type === 'etf').sort((a,b)=>a.ticker.localeCompare(b.ticker));
+        const options = hmStocks.filter(s => s.type === 'option').sort((a,b)=>a.ticker.localeCompare(b.ticker));
 
         const inputStyle = 'width:80px;border:1px solid var(--border-color);border-radius:6px;padding:4px 6px;font-size:0.78rem;background:var(--bg-color);color:var(--text-main);text-align:right;';
 
@@ -4166,10 +4385,42 @@ function renderWeeklyReturns() {
             </td>
         </tr>`).join('');
 
-        const emptyRow = (msg) => `<tr><td colspan="7" style="padding:16px;color:var(--text-muted);text-align:center;">${msg}</td></tr>`;
+        // Optie rij: identiek aan stocks/ETFs maar met extra "Prijs" invulveld (manualPrice)
+        const makeOptionRows = (items) => items.map(s => `<tr style="border-bottom:1px solid var(--border-color);">
+            <td style="padding:8px 6px;font-weight:700;font-family:monospace;">${s.ticker}</td>
+            <td style="padding:8px 6px;">${s.name}</td>
+            <td style="padding:8px 6px;text-align:center;">
+                <select onchange="updateHmBroker('${s.ticker}',this.value)" style="border:1px solid var(--border-color);border-radius:6px;padding:3px 6px;font-size:0.78rem;background:var(--bg-color);color:var(--text-main);">
+                    <option value="Degiro" ${(s.broker||'Degiro')==='Degiro'?'selected':''}>Degiro</option>
+                    <option value="Bolero" ${(s.broker||'Degiro')==='Bolero'?'selected':''}>Bolero</option>
+                    <option value="Saxo"   ${(s.broker||'Degiro')==='Saxo'?'selected':''}>Saxo</option>
+                </select>
+            </td>
+            <td style="padding:8px 6px;text-align:center;">
+                <select onchange="updateHmCurrency('${s.ticker}',this.value)" style="border:1px solid var(--border-color);border-radius:6px;padding:3px 6px;font-size:0.78rem;background:var(--bg-color);color:var(--text-main);">
+                    <option value="USD" ${(s.currency||'EUR')==='USD'?'selected':''}>USD</option>
+                    <option value="EUR" ${(s.currency||'EUR')==='EUR'?'selected':''}>EUR</option>
+                </select>
+            </td>
+            <td style="padding:8px 6px;text-align:right;">
+                <input type="number" step="0.01" min="0" value="${s.gak ?? 0}" onchange="updateHmGak('${s.ticker}', this.value)" style="${inputStyle}">
+            </td>
+            <td style="padding:8px 6px;text-align:right;">
+                <input type="number" step="0.01" min="0" value="${s.aantal ?? 0}" onchange="updateHmAantal('${s.ticker}', this.value)" style="${inputStyle}">
+            </td>
+            <td style="padding:8px 6px;text-align:right;">
+                <input type="number" step="0.01" min="0" value="${s.manualPrice ?? 0}" onchange="updateHmManualPrice('${s.ticker}', this.value)" style="${inputStyle}">
+            </td>
+            <td style="padding:8px 6px;text-align:right;">
+                <button onclick="removeHmStockData('${s.ticker}')" style="background:none;border:none;color:var(--danger);cursor:pointer;font-size:0.85rem;font-weight:700;">✕</button>
+            </td>
+        </tr>`).join('');
 
-        if (stockBody) stockBody.innerHTML = stocks.length ? makeRows(stocks) : emptyRow('Geen aandelen. Voeg er toe via + Toevoegen.');
-        if (etfBody)   etfBody.innerHTML   = etfs.length   ? makeRows(etfs)   : emptyRow('Geen ETFs. Voeg er toe via + Toevoegen.');
+        const emptyRow    = (msg, cols=7) => `<tr><td colspan="${cols}" style="padding:16px;color:var(--text-muted);text-align:center;">${msg}</td></tr>`;
+
+        if (stockBody)  stockBody.innerHTML  = stocks.length  ? makeRows(stocks)         : emptyRow('Geen aandelen. Voeg er toe via + Toevoegen.');
+        if (etfBody)    etfBody.innerHTML    = etfs.length    ? makeRows(etfs)           : emptyRow('Geen ETFs. Voeg er toe via + Toevoegen.');
+        if (optionBody) optionBody.innerHTML = options.length ? makeOptionRows(options)  : emptyRow('Geen opties. Voeg er toe via + Toevoegen.', 8);
     }
 
     function updateHmCurrency(ticker, currency) {
@@ -4190,6 +4441,11 @@ function renderWeeklyReturns() {
     function updateHmAantal(ticker, val) {
         const s = hmStocks.find(x => x.ticker === ticker);
         if (s) { s.aantal = parseFloat(val) || 0; saveHmStocks(); }
+    }
+
+    function updateHmManualPrice(ticker, val) {
+        const s = hmStocks.find(x => x.ticker === ticker);
+        if (s) { s.manualPrice = parseFloat(val) || 0; saveHmStocks(); }
     }
 
     function renderCryptoData() {
@@ -4214,7 +4470,10 @@ function renderWeeklyReturns() {
     let _addSdMode = 'stock';
     function showAddStockData(mode) {
         _addSdMode = mode;
-        document.getElementById('addStockDataTitle').textContent = mode === 'crypto' ? 'Crypto toevoegen' : 'Aandeel / ETF toevoegen';
+        const title = mode === 'crypto' ? 'Crypto toevoegen'
+                    : mode === 'option' ? 'Optie toevoegen'
+                    : 'Aandeel / ETF toevoegen';
+        document.getElementById('addStockDataTitle').textContent = title;
         document.getElementById('addSdType').value = mode;
         document.getElementById('addSdTicker').value = '';
         document.getElementById('addSdName').value = '';
@@ -4230,15 +4489,19 @@ function renderWeeklyReturns() {
         const type   = document.getElementById('addSdType').value;
         if (!ticker) return;
         if (hmStocks.find(s => s.ticker === ticker)) { alert(`${ticker} staat al in de lijst.`); return; }
-        hmStocks.push({ ticker, name, type, gak: 0, aantal: 0, broker: 'Degiro', currency: 'USD' });
+        const newEntry = { ticker, name, type, gak: 0, aantal: 0, broker: 'Degiro', currency: type === 'option' ? 'EUR' : 'USD' };
+        if (type === 'option') newEntry.manualPrice = 0;
+        hmStocks.push(newEntry);
         saveHmStocks();
         hideAddStockData();
         renderAandelenData();
         renderCryptoData();
         renderHmGrid();
-        // Fetch quote
-        const d = await yhQuote(ticker);
-        if (d) { hmData[ticker] = d; renderHmGrid(); }
+        // Fetch quote — niet voor opties (geen Yahoo ticker)
+        if (type !== 'option') {
+            const d = await yhQuote(ticker);
+            if (d) { hmData[ticker] = d; renderHmGrid(); }
+        }
     }
     function removeHmStockData(ticker) {
         if (!confirm(`${ticker} verwijderen?`)) return;
@@ -4251,7 +4514,7 @@ function renderWeeklyReturns() {
     }
 
     // ── HEATMAP PAGINA ──────────────────────────────────────────────────────
-    // Echte posities pre-loaded: Bolero (3) + Degiro (24) + Saxo (17) = 44 posities
+    // Echte posities pre-loaded: Bolero (3) + Degiro (24) + Saxo (15) = 42 posities
     // CleanSpark Call Jan'27 optie is overgeslagen (geen ticker te volgen via Yahoo)
     const DEFAULT_STOCKS = [
         // ── BOLERO ──────────────────────────────────────────────────────────
@@ -4287,7 +4550,6 @@ function renderWeeklyReturns() {
         {ticker:'3HCL.L',  name:'WT Copper 3x',     type:'etf',   currency:'USD', broker:'Degiro', gak:16.50,  aantal:140},
 
         // ── SAXO — aandelen ─────────────────────────────────────────────────
-        {ticker:'MIGI',    name:'Mawson',           type:'stock', currency:'USD', broker:'Saxo',   gak:4.83,   aantal:24},
         {ticker:'QBTS',    name:'D-Wave',           type:'stock', currency:'USD', broker:'Saxo',   gak:15.07,  aantal:50},
         {ticker:'IREN',    name:'IREN',             type:'stock', currency:'USD', broker:'Saxo',   gak:39.28,  aantal:301},
         {ticker:'JD',      name:'JD.com',           type:'stock', currency:'USD', broker:'Saxo',   gak:33.82,  aantal:29},
@@ -4296,7 +4558,6 @@ function renderWeeklyReturns() {
         {ticker:'BKKT',    name:'Bakkt',            type:'stock', currency:'USD', broker:'Saxo',   gak:13.32,  aantal:169},
         {ticker:'SOFI',    name:'SoFi',             type:'stock', currency:'USD', broker:'Saxo',   gak:27.50,  aantal:19},
         {ticker:'GOOGL',   name:'Alphabet',         type:'stock', currency:'USD', broker:'Saxo',   gak:163.20, aantal:28},
-        {ticker:'AMD',     name:'AMD',              type:'stock', currency:'USD', broker:'Saxo',   gak:159.79, aantal:8},
         {ticker:'SYM',     name:'Symbotic',         type:'stock', currency:'USD', broker:'Saxo',   gak:45.25,  aantal:9},
         {ticker:'RXRX',    name:'Recursion',        type:'stock', currency:'USD', broker:'Saxo',   gak:5.73,   aantal:87},
         {ticker:'ABAT',    name:'Am. Battery',      type:'stock', currency:'USD', broker:'Saxo',   gak:5.85,   aantal:113},
@@ -4306,15 +4567,18 @@ function renderWeeklyReturns() {
         // ── SAXO — ETFs ─────────────────────────────────────────────────────
         {ticker:'SGLD.MI', name:'Inv. Gold',        type:'etf',   currency:'EUR', broker:'Saxo',   gak:295.07, aantal:3},
 
+        // ── SAXO — opties (handmatige prijs, geen Yahoo ticker) ─────────────
+        {ticker:'CLSK-2027C25', name:'CleanSpark Jan2027 25C', type:'option', currency:'EUR', broker:'Saxo', gak:482.15, aantal:1, manualPrice:120.58},
+
         // ── CRYPTO (placeholders — vul aantal aan via DATA → CRYPTO) ────────
         {ticker:'BTC-USD', name:'Bitcoin',          type:'crypto', currency:'USD', gak:0, aantal:0},
-        {ticker:'ETH-USD', name:'Ethereum',         type:'crypto', currency:'USD', gak:0, aantal:0},
-        {ticker:'SOL-USD', name:'Solana',           type:'crypto', currency:'USD', gak:0, aantal:0},
-        {ticker:'AVAX-USD',name:'Avalanche',        type:'crypto', currency:'USD', gak:0, aantal:0},
-        {ticker:'AAVE-USD',name:'Aave',             type:'crypto', currency:'USD', gak:0, aantal:0},
-        {ticker:'RNDR-USD',name:'Render',           type:'crypto', currency:'USD', gak:0, aantal:0},
-        {ticker:'TAO-USD', name:'Bittensor',        type:'crypto', currency:'USD', gak:0, aantal:0},
-        {ticker:'HYPE',    name:'Hyperliquid',      type:'crypto', currency:'USD', gak:0, aantal:0},
+        {ticker:'ETH-USD', name:'Ethereum',         type:'crypto', currency:'USD', gak:0, aantal:0.42356231},
+        {ticker:'SOL-USD', name:'Solana',           type:'crypto', currency:'USD', gak:0, aantal:0.00040417},
+        {ticker:'AVAX-USD',name:'Avalanche',        type:'crypto', currency:'USD', gak:0, aantal:5.28471},
+        {ticker:'AAVE-USD',name:'Aave',             type:'crypto', currency:'USD', gak:0, aantal:4.6809144},
+        {ticker:'RNDR-USD',name:'Render',           type:'crypto', currency:'USD', gak:0, aantal:552.64445653},
+        {ticker:'TAO-USD', name:'Bittensor',        type:'crypto', currency:'USD', gak:0, aantal:11.97492815},
+        {ticker:'HYPE',    name:'Hyperliquid',      type:'crypto', currency:'USD', gak:0, aantal:59.32749854},
     ];
 
     // localStorage key v2: bevat broker/gak/aantal velden + echte posities
@@ -4326,6 +4590,15 @@ function renderWeeklyReturns() {
         if (s.aantal === undefined || s.aantal === null) s.aantal = 0;
         if (!s.broker) s.broker = 'Degiro';
     });
+    // Eenmalige migratie: verwijder MIGI en AMD uit bestaande localStorage data
+    if (!localStorage.getItem('hm_stocks_migration_v40')) {
+        const beforeCount = hmStocks.length;
+        hmStocks = hmStocks.filter(s => s.ticker !== 'MIGI' && s.ticker !== 'AMD');
+        if (hmStocks.length !== beforeCount) {
+            localStorage.setItem('hm_stocks_v2', JSON.stringify(hmStocks));
+        }
+        localStorage.setItem('hm_stocks_migration_v40', '1');
+    }
     let hmSortMode  = 'pct';
     let hmTabMode   = 'all';   // 'all' | 'stock' | 'etf'
     let hmCompact   = false;
@@ -4358,8 +4631,9 @@ function renderWeeklyReturns() {
         const grid = document.getElementById('hmGrid');
         if (!grid) return;
 
-        // Filter op tab
+        // Filter op tab — opties uitsluiten (geen Yahoo ticker)
         let stocks = hmStocks.filter(s => {
+            if (s.type === 'option') return false;
             if (hmTabMode === 'all')    return true;
             if (hmTabMode === 'crypto') return s.type === 'crypto';
             if (hmTabMode === 'etf')    return s.type === 'etf';
@@ -5542,12 +5816,12 @@ function getCryptoCategory(ticker) {
 // Gebaseerd op Yahoo Finance / GICS classificatie
 const SECTOR_MAP = {
     // Technology
-    'NVDA':'Technology','MSFT':'Technology','GOOGL':'Communicatie','AMD':'Technology',
+    'NVDA':'Technology','MSFT':'Technology','GOOGL':'Communicatie',
     'CRM':'Technology','CRDO':'Technology','SOI.PA':'Technology','OUST':'Technology',
     'IONQ':'Technology','QBTS':'Technology','APLD':'Technology','CRWV':'Technology',
     'IREN':'Technology',
     // Crypto / Mining
-    'BMNR':'Crypto / Mining','SBET':'Crypto / Mining','MIGI':'Crypto / Mining',
+    'BMNR':'Crypto / Mining','SBET':'Crypto / Mining',
     'CIFR':'Crypto / Mining','CLSK':'Crypto / Mining','BKKT':'Crypto / Mining',
     'CRCL':'Crypto / Mining',
     // Financials / FinTech
@@ -5567,7 +5841,8 @@ const SECTOR_MAP = {
 };
 
 // Sector ophalen: hardcoded map → cache → Finnhub fallback → 'Onbekend'
-async function fetchSector(ticker) {
+async function fetchSector(ticker, type) {
+    if (type === 'option') return 'Opties';
     const t = (ticker || '').toUpperCase();
     if (SECTOR_MAP[t]) return SECTOR_MAP[t];
     if (_sectorCache[t] && _sectorCache[t] !== 'Onbekend') return _sectorCache[t];
@@ -5608,6 +5883,11 @@ async function getUsdEurRate() {
 
 // Algemene quote loader: gebruikt yhQuote (al beschikbaar in script)
 async function loadQuoteForPosition(s) {
+    if (s.type === 'option') {
+        // Geen Yahoo ticker — gebruik handmatige prijs
+        const price = parseFloat(s.manualPrice) || 0;
+        return { price, change: 0, pct: null, prevClose: price, time: new Date() };
+    }
     if (s.type === 'crypto') {
         // Probeer Binance, dan Yahoo
         const sym = s.ticker.toUpperCase().replace(/-USD$/, '') + 'USDT';
@@ -5651,8 +5931,9 @@ function setApBroker(broker, btn) {
 }
 
 // Cash per broker — eigen state op AANDELEN pagina (los van DATA → CASH pagina)
-let _apCash = JSON.parse(localStorage.getItem('ap_cash_v1') || 'null') || { Bolero: 0, Degiro: 0, Saxo: 0 };
-function saveApCash() { localStorage.setItem('ap_cash_v1', JSON.stringify(_apCash)); }
+// Default voorgevulde waarden (v2 key zodat oude lege state overschreven wordt)
+let _apCash = JSON.parse(localStorage.getItem('ap_cash_v2') || 'null') || { Bolero: 21.12, Degiro: 6210.85, Saxo: 2519.80 };
+function saveApCash() { localStorage.setItem('ap_cash_v2', JSON.stringify(_apCash)); }
 
 function getCashForBroker(broker) {
     if (broker === 'all') {
@@ -5667,6 +5948,16 @@ function setApCashFor(broker, val) {
     initAandelenPortfolio();
 }
 
+// Storting per broker — leest uit cashData (DATA → STORTING pagina)
+function getStortingForBroker(broker) {
+    if (typeof cashData === 'undefined' || !Array.isArray(cashData)) return 0;
+    if (broker === 'all') {
+        return cashData.reduce((a, c) => a + (c.amount || 0), 0);
+    }
+    const entry = cashData.find(c => c.broker === broker);
+    return entry ? (entry.amount || 0) : 0;
+}
+
 function brokerColorVar(broker) {
     if (broker === 'Bolero') return 'var(--bolero)';
     if (broker === 'Degiro') return 'var(--degiro)';
@@ -5677,20 +5968,27 @@ function brokerColorVar(broker) {
 // Render cash editor in CASH card
 function renderCashEditor() {
     const editor = document.getElementById('ap-cashEditor');
+    const cashEl = document.getElementById('ap-cash');
     if (!editor) return;
     if (_apBrokerFilter === 'all') {
-        // 3 mini rijen
+        // Show sum + 3 read-only broker rows (bewerken via broker tabs)
+        if (cashEl) cashEl.style.display = '';
         editor.innerHTML = ['Bolero', 'Degiro', 'Saxo'].map(b => `
             <div class="ap-cash-row">
                 <span class="ap-cash-broker" style="background:${brokerColorVar(b)};"></span>
                 <span class="ap-cash-label">${b}</span>
-                <input class="ap-cash-input" type="number" step="0.01" min="0" value="${_apCash[b] || 0}" onchange="setApCashFor('${b}', this.value)">
+                <span class="ap-cash-readonly blur-target">${fmtEuroAlt(_apCash[b] || 0)}</span>
             </div>
         `).join('');
     } else {
-        // 1 grote input
+        // Hide static value, show inline editable big input as the prominent figure
+        if (cashEl) cashEl.style.display = 'none';
         editor.innerHTML = `
-            <input class="ap-cash-input-big" type="number" step="0.01" min="0" value="${_apCash[_apBrokerFilter] || 0}" onchange="setApCashFor('${_apBrokerFilter}', this.value)" placeholder="Cash bij ${_apBrokerFilter}">
+            <div class="ap-cash-big-wrap">
+                <span class="ap-cash-prefix">€</span>
+                <input class="ap-cash-input-big blur-target" type="number" step="0.01" min="0" value="${_apCash[_apBrokerFilter] || 0}" onchange="setApCashFor('${_apBrokerFilter}', this.value)" placeholder="0,00">
+            </div>
+            <div class="ap-card-sub" style="margin-top:4px;">${_apBrokerFilter}</div>
         `;
     }
 }
@@ -5730,7 +6028,7 @@ async function initAandelenPortfolio(force = false) {
     }
 
     // Posities = stock + etf (alleen die met aantal > 0), gefilterd op gekozen broker
-    let positions = hmStocks.filter(s => (s.type === 'stock' || s.type === 'etf') && (s.aantal || 0) > 0);
+    let positions = hmStocks.filter(s => (s.type === 'stock' || s.type === 'etf' || s.type === 'option') && (s.aantal || 0) > 0);
     if (_apBrokerFilter !== 'all') {
         positions = positions.filter(s => (s.broker || 'Degiro') === _apBrokerFilter);
     }
@@ -5744,9 +6042,12 @@ async function initAandelenPortfolio(force = false) {
     if (positions.length === 0) {
         const totalCard = document.getElementById('ap-totalValue');
         if (totalCard) totalCard.textContent = fmtEuroAlt(cashEur);
-        document.getElementById('ap-totalCost').textContent = 'Kost: € 0,00';
-        ['ap-totalPL','ap-totalPLPct','ap-dayPL','ap-dayPLPct','ap-positions','ap-positionsBreakdown','ap-best','ap-bestPct','ap-worst','ap-worstPct']
+        document.getElementById('ap-totalCost').textContent = 'Gestort: ' + fmtEuroAlt(getStortingForBroker(_apBrokerFilter));
+        ['ap-totalPL','ap-totalPLPct','ap-dayPL','ap-dayPLPct','ap-positions','ap-positionsBreakdown']
             .forEach(id => { const e = document.getElementById(id); if (e) e.textContent = '–'; });
+        const emptyList = '<div class="ap-toplist-empty">Geen posities</div>';
+        const bl = document.getElementById('ap-bestList');  if (bl) bl.innerHTML = emptyList;
+        const wl = document.getElementById('ap-worstList'); if (wl) wl.innerHTML = emptyList;
         const emptyMsg = _apBrokerFilter === 'all'
             ? 'Geen posities. Voeg eerst aandelen + aantal toe in DATA → AANDELEN.'
             : `Geen posities bij ${_apBrokerFilter}. Wijzig broker via DATA → AANDELEN.`;
@@ -5761,7 +6062,7 @@ async function initAandelenPortfolio(force = false) {
     const usdEur = await getUsdEurRate();
     const enriched = await Promise.all(positions.map(async s => {
         const q = await loadQuoteForPosition(s);
-        const sector = await fetchSector(s.ticker);
+        const sector = await fetchSector(s.ticker, s.type);
         const cur = (s.currency || 'USD').toUpperCase();
         const fx = cur === 'EUR' ? 1 : usdEur;
         const price     = q?.price ?? 0;
@@ -5787,8 +6088,9 @@ async function initAandelenPortfolio(force = false) {
     const dayPLPct       = positionsValue > 0 ? (dayPL / (positionsValue - dayPL)) * 100 : 0;
 
     document.getElementById('ap-totalValue').textContent = fmtEuroAlt(totalValue);
+    const stortingEur = getStortingForBroker(_apBrokerFilter);
     const cashLine = cashEur > 0 ? ` &nbsp;·&nbsp; Cash: ${fmtEuroAlt(cashEur)}` : '';
-    document.getElementById('ap-totalCost').innerHTML  = 'Kost: ' + fmtEuroAlt(totalCost) + cashLine;
+    document.getElementById('ap-totalCost').innerHTML  = 'Gestort: ' + fmtEuroAlt(stortingEur) + cashLine;
 
     const tplEl = document.getElementById('ap-totalPL');
     tplEl.textContent = (totalPL >= 0 ? '+' : '') + fmtEuroAlt(totalPL);
@@ -5800,24 +6102,41 @@ async function initAandelenPortfolio(force = false) {
     dplEl.style.color = dayPL >= 0 ? 'var(--success)' : 'var(--danger)';
     document.getElementById('ap-dayPLPct').innerHTML = plChip(dayPLPct);
 
-    const stockCnt = enriched.filter(x => x.type === 'stock').length;
-    const etfCnt   = enriched.filter(x => x.type === 'etf').length;
+    const stockCnt  = enriched.filter(x => x.type === 'stock').length;
+    const etfCnt    = enriched.filter(x => x.type === 'etf').length;
+    const optionCnt = enriched.filter(x => x.type === 'option').length;
     document.getElementById('ap-positions').textContent = `${enriched.length}`;
-    const brokerLabel = _apBrokerFilter === 'all' ? '' : ` · ${_apBrokerFilter}`;
-    document.getElementById('ap-positionsBreakdown').textContent = `${stockCnt} aandelen · ${etfCnt} ETFs${brokerLabel}`;
+    const breakdown = [
+        `${stockCnt} aandelen`,
+        `${etfCnt} ETFs`,
+        ...(optionCnt > 0 ? [`${optionCnt} opties`] : []),
+    ].join(' · ');
+    document.getElementById('ap-positionsBreakdown').textContent = breakdown;
 
-    // Beste / slechtste op P/L %
+    // Top 3 beste (alleen winnaars) / slechtste (alleen verliezers)
     const sortedByPct = [...enriched].filter(x => x.plPct != null).sort((a,b) => b.plPct - a.plPct);
-    const best = sortedByPct[0];
-    const worst = sortedByPct[sortedByPct.length - 1];
-    if (best) {
-        document.getElementById('ap-best').textContent = `${best.ticker} · ${best.name}`;
-        document.getElementById('ap-bestPct').innerHTML = plChip(best.plPct) + ` &nbsp;<span style="color:var(--text-muted);">(${(best.plEur >= 0 ? '+' : '') + fmtEuroAlt(best.plEur)})</span>`;
-    }
-    if (worst && worst !== best) {
-        document.getElementById('ap-worst').textContent = `${worst.ticker} · ${worst.name}`;
-        document.getElementById('ap-worstPct').innerHTML = plChip(worst.plPct) + ` &nbsp;<span style="color:var(--text-muted);">(${(worst.plEur >= 0 ? '+' : '') + fmtEuroAlt(worst.plEur)})</span>`;
-    }
+    const top3Best  = sortedByPct.filter(x => x.plPct > 0).slice(0, 3);
+    const top3Worst = sortedByPct.filter(x => x.plPct < 0).slice(-3).reverse();
+
+    const renderTopList = (items, isBest) => {
+        if (items.length === 0) return '<div class="ap-toplist-empty">Geen data</div>';
+        return items.map((p, i) => {
+            const col = isBest ? 'var(--success)' : 'var(--danger)';
+            const sign = p.plPct >= 0 ? '+' : '';
+            const eurSign = p.plEur >= 0 ? '+' : '';
+            return `<div class="ap-toplist-row" title="${p.name}">
+                <span class="ap-toplist-rank">${i+1}.</span>
+                <span class="ap-toplist-ticker">${p.ticker}</span>
+                <span class="ap-toplist-eur blur-target">${eurSign}${fmtEuroAlt(p.plEur, 0)}</span>
+                <span class="ap-toplist-pct" style="color:${col};">${sign}${p.plPct.toFixed(2)}%</span>
+            </div>`;
+        }).join('');
+    };
+
+    const bestEl  = document.getElementById('ap-bestList');
+    const worstEl = document.getElementById('ap-worstList');
+    if (bestEl)  bestEl.innerHTML  = renderTopList(top3Best,  true);
+    if (worstEl) worstEl.innerHTML = renderTopList(top3Worst, false);
 
     // Bewaar voor herrendering bij sortering
     _apLastEnriched = enriched;
@@ -5874,7 +6193,7 @@ async function initCryptoPortfolio(force = false) {
     const dayPLPct   = totalValue > 0 ? (dayPL / (totalValue - dayPL)) * 100 : 0;
 
     document.getElementById('cp-totalValue').textContent = fmtEuroAlt(totalValue);
-    document.getElementById('cp-totalCost').textContent  = 'Kost: ' + fmtEuroAlt(totalCost);
+    document.getElementById('cp-totalCost').textContent  = 'Gestort: ' + fmtEuroAlt(totalCost);
 
     const tplEl = document.getElementById('cp-totalPL');
     tplEl.textContent = (totalPL >= 0 ? '+' : '') + fmtEuroAlt(totalPL);
@@ -5959,27 +6278,19 @@ function renderSectorPie(positions, totalValue) {
                         label: (ctx) => {
                             const v = ctx.parsed;
                             const pct = (v / totalValue) * 100;
-                            return `${ctx.label}: ${fmtEuroAlt(v)} (${pct.toFixed(1)}%)`;
+                            return `${fmtEuroAlt(v)} (${pct.toFixed(1)}%)`;
                         }
                     }
                 },
-                datalabels: {
-                    display: (ctx) => {
-                        const v = ctx.dataset.data[ctx.dataIndex];
-                        return (v / totalValue) >= 0.05; // alleen ≥5%
-                    },
-                    color: '#fff',
-                    font: { weight: 800, size: 11 },
-                    formatter: (v) => ((v / totalValue) * 100).toFixed(0) + '%',
-                }
+                datalabels: { display: false }
             }
         }
     });
 
-    // Legenda naast de chart
+    // Legenda: dot + naam + €waarde + %
     legendEl.innerHTML = entries.map(([sec, val], i) => {
         const pct = (val / totalValue) * 100;
-        return `<div class="ap-pie-legend-row">
+        return `<div class="ap-pie-legend-row" title="${sec}">
             <span class="ap-pie-dot" style="background:${colors[i]};"></span>
             <span class="ap-pie-name">${sec}</span>
             <span class="ap-pie-val blur-target">${fmtEuroAlt(val, 0)}</span>
@@ -6078,19 +6389,31 @@ function renderBySector(containerId, positions, totalValue, isCrypto) {
             pos.sort((a,b) => b.valueEur - a.valueEur);
         }
 
-        html += `<div style="margin-bottom:18px;border-left:3px solid ${sectorColor(idx)};padding-left:12px;">
+        const secCol = sectorColor(idx);
+        html += `<div style="margin-bottom:18px;border-left:4px solid ${secCol};padding:8px 0 8px 14px;background:linear-gradient(90deg, ${secCol}11, transparent 35%);border-radius:0 8px 8px 0;">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:6px;">
                 <div>
-                    <div style="font-size:0.95rem;font-weight:800;">${sec}</div>
+                    <div style="font-size:1.1rem;font-weight:800;color:${secCol};letter-spacing:-0.01em;">${sec}</div>
                     <div style="font-size:0.7rem;color:var(--text-muted);">${pos.length} ${pos.length === 1 ? 'positie' : 'posities'} · ${sectorShare.toFixed(1)}% van portfolio</div>
                 </div>
-                <div style="text-align:right;">
-                    <div class="blur-target" style="font-weight:800;">${fmtEuroAlt(sectorVal)}</div>
-                    <div style="font-size:0.78rem;font-weight:700;color:${plCol};">${plSign}${fmtEuroAlt(sectorPL)} (${plSign}${sectorPct.toFixed(2)}%)</div>
+                <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;justify-content:flex-end;">
+                    <span class="blur-target" style="font-weight:800;font-size:0.95rem;">${fmtEuroAlt(sectorVal)}</span>
+                    <span style="font-size:0.78rem;font-weight:700;color:${plCol};">${plSign}${fmtEuroAlt(sectorPL)} (${plSign}${sectorPct.toFixed(2)}%)</span>
                 </div>
             </div>
-            <div style="overflow-x:auto;">
-                <table style="width:100%;border-collapse:collapse;font-size:0.8rem;">
+            <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">
+                <table class="ap-positions-table" style="width:100%;min-width:880px;border-collapse:collapse;font-size:0.8rem;table-layout:fixed;">
+                    <colgroup>
+                        <col style="width:78px;">
+                        <col style="min-width:140px;">
+                        <col style="width:80px;">
+                        <col style="width:90px;">
+                        <col style="width:90px;">
+                        <col style="width:115px;">
+                        <col style="width:115px;">
+                        <col style="width:90px;">
+                        <col style="width:80px;">
+                    </colgroup>
                     <thead><tr style="text-align:left;color:var(--text-muted);font-size:0.65rem;">
                         ${mkTh('ticker', 'TICKER', 'left')}
                         ${mkTh('name', 'NAAM', 'left')}
@@ -6109,16 +6432,17 @@ function renderBySector(containerId, positions, totalValue, isCrypto) {
             const cur = (p.currency || 'USD').toUpperCase();
             const displayTicker = isCrypto ? p.ticker.replace(/-USD$/,'') : p.ticker;
             const dec = p.price < 1 ? 4 : 2;
+            const cellBase = 'padding:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;';
             html += `<tr style="border-bottom:1px solid var(--border-color);">
-                <td style="padding:6px;font-weight:700;font-family:monospace;">${displayTicker}</td>
-                <td style="padding:6px;">${p.name}</td>
-                <td style="padding:6px;text-align:right;">${(p.aantal || 0).toLocaleString('nl-NL', { maximumFractionDigits: 8 })}</td>
-                <td style="padding:6px;text-align:right;color:var(--text-muted);">${cur === 'EUR' ? '€' : '$'}${(p.gak || 0).toLocaleString('nl-NL', { minimumFractionDigits: 2, maximumFractionDigits: dec })}</td>
-                <td style="padding:6px;text-align:right;">${cur === 'EUR' ? '€' : '$'}${(p.price || 0).toLocaleString('nl-NL', { minimumFractionDigits: 2, maximumFractionDigits: dec })}</td>
-                <td class="blur-target" style="padding:6px;text-align:right;font-weight:700;">${fmtEuroAlt(p.valueEur)}</td>
-                <td class="blur-target" style="padding:6px;text-align:right;color:${plCol};font-weight:700;">${p.plEur >= 0 ? '+' : ''}${fmtEuroAlt(p.plEur)}</td>
-                <td style="padding:6px;text-align:right;color:${plCol};font-weight:800;">${p.plPct == null ? '–' : (p.plPct >= 0 ? '+' : '') + p.plPct.toFixed(2) + '%'}</td>
-                <td style="padding:6px;text-align:right;color:${dpCol};font-weight:700;">${p.dayPLPct == null ? '–' : (p.dayPLPct >= 0 ? '+' : '') + p.dayPLPct.toFixed(2) + '%'}</td>
+                <td style="${cellBase}font-weight:700;font-family:monospace;">${displayTicker}</td>
+                <td style="${cellBase}" title="${p.name}">${p.name}</td>
+                <td style="${cellBase}text-align:right;">${(p.aantal || 0).toLocaleString('nl-NL', { maximumFractionDigits: 8 })}</td>
+                <td style="${cellBase}text-align:right;color:var(--text-muted);">${cur === 'EUR' ? '€' : '$'}${(p.gak || 0).toLocaleString('nl-NL', { minimumFractionDigits: 2, maximumFractionDigits: dec })}</td>
+                <td style="${cellBase}text-align:right;">${cur === 'EUR' ? '€' : '$'}${(p.price || 0).toLocaleString('nl-NL', { minimumFractionDigits: 2, maximumFractionDigits: dec })}</td>
+                <td class="blur-target" style="${cellBase}text-align:right;font-weight:700;">${fmtEuroAlt(p.valueEur)}</td>
+                <td class="blur-target" style="${cellBase}text-align:right;color:${plCol};font-weight:700;">${p.plEur >= 0 ? '+' : ''}${fmtEuroAlt(p.plEur)}</td>
+                <td style="${cellBase}text-align:right;color:${plCol};font-weight:800;">${p.plPct == null ? '–' : (p.plPct >= 0 ? '+' : '') + p.plPct.toFixed(2) + '%'}</td>
+                <td style="${cellBase}text-align:right;color:${dpCol};font-weight:700;">${p.dayPLPct == null ? '–' : (p.dayPLPct >= 0 ? '+' : '') + p.dayPLPct.toFixed(2) + '%'}</td>
             </tr>`;
         });
         html += `</tbody></table></div></div>`;
