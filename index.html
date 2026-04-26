@@ -2344,7 +2344,7 @@ function saveDoelDataLS(data) { localStorage.setItem('doel_data', JSON.stringify
 
 function renderDoel() {
     const doel = getDoelData();
-    const target   = doel.target || null;
+    const target   = doel.target || 1000000;
     const deadline = doel.deadline || null;
     if (!brokerData || brokerData.length === 0) return;
     const latestEntry = brokerData[brokerData.length - 1];
