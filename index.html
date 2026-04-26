@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="nl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio v26</title>
+    <title>Portfolio v30</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
     <style>
@@ -830,38 +829,36 @@
         <div class="charts-master-grid">
     <!-- Rij 1: TOTAAL grafiek, volle breedte -->
     <div id="growthChartContainer" class="card chart-box span-3">
-        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:4px;">
-            <h3>TOTAAL</h3>
-            <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
-                <div class="time-filter-btns" data-chart="main">
-                    <button class="btn time-btn" onclick="setTimeFilter('main','1w',this)">1W</button>
-                    <button class="btn time-btn" onclick="setTimeFilter('main','1m',this)">1M</button>
-                    <button class="btn time-btn" onclick="setTimeFilter('main','ytd',this)">YTD</button>
-                    <button class="btn time-btn active-time" onclick="setTimeFilter('main','all',this)">Alles</button>
-                </div>
-                <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;" id="benchmarkToggles">
-                    <label class="bench-toggle" style="--c:#e67e22;">
-                        <input type="checkbox" id="benchSP" onchange="updateBenchmarks()">
-                        <span class="bench-dot"></span> S&amp;P 500
-                    </label>
-                    <label class="bench-toggle" style="--c:#8e44ad;">
-                        <input type="checkbox" id="benchMSCI" onchange="updateBenchmarks()">
-                        <span class="bench-dot"></span> MSCI World
-                    </label>
-                    <label class="bench-toggle" style="--c:#16a085;">
-                        <input type="checkbox" id="benchNASDAQ" onchange="updateBenchmarks()">
-                        <span class="bench-dot"></span> Nasdaq 100
-                    </label>
-                    <label class="bench-toggle" style="--c:#c0392b;">
-                        <input type="checkbox" id="benchBTC" onchange="updateBenchmarks()">
-                        <span class="bench-dot"></span> Bitcoin
-                    </label>
-                    <label class="bench-toggle" style="--c:#2980b9;">
-                        <input type="checkbox" id="benchBEL20" onchange="updateBenchmarks()">
-                        <span class="bench-dot"></span> BEL 20
-                    </label>
-                </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:4px;flex-wrap:nowrap;">
+            <h3 style="margin:0;white-space:nowrap;">TOTAAL</h3>
+            <div class="time-filter-btns" data-chart="main" style="display:flex;gap:4px;margin-left:auto;">
+                <button class="btn time-btn" onclick="setTimeFilter('main','1w',this)">1W</button>
+                <button class="btn time-btn" onclick="setTimeFilter('main','1m',this)">1M</button>
+                <button class="btn time-btn" onclick="setTimeFilter('main','ytd',this)">YTD</button>
+                <button class="btn time-btn active-time" onclick="setTimeFilter('main','all',this)">Alles</button>
             </div>
+        </div>
+        <div id="benchmarkToggles" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:6px;margin-top:4px;">
+            <label class="bench-toggle" style="--c:#e67e22;">
+                <input type="checkbox" id="benchSP" onchange="updateBenchmarks()">
+                <span class="bench-dot"></span> S&amp;P 500
+            </label>
+            <label class="bench-toggle" style="--c:#8e44ad;">
+                <input type="checkbox" id="benchMSCI" onchange="updateBenchmarks()">
+                <span class="bench-dot"></span> MSCI World
+            </label>
+            <label class="bench-toggle" style="--c:#16a085;">
+                <input type="checkbox" id="benchNASDAQ" onchange="updateBenchmarks()">
+                <span class="bench-dot"></span> Nasdaq 100
+            </label>
+            <label class="bench-toggle" style="--c:#c0392b;">
+                <input type="checkbox" id="benchBTC" onchange="updateBenchmarks()">
+                <span class="bench-dot"></span> Bitcoin
+            </label>
+            <label class="bench-toggle" style="--c:#2980b9;">
+                <input type="checkbox" id="benchBEL20" onchange="updateBenchmarks()">
+                <span class="bench-dot"></span> BEL 20
+            </label>
         </div>
         <div class="chart-wrapper"><canvas id="growthChart"></canvas></div>
     </div>
@@ -881,6 +878,49 @@
             </thead>
             <tbody id="statsTableBody"></tbody>
         </table>
+    </div>
+
+
+
+    <div id="doelBlockContainer" class="card" style="display:flex;flex-direction:column;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+            <h3 style="margin:0;">DOEL</h3>
+            <button onclick="openDoelModal()" style="background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:0.9rem;padding:4px;" title="Doel aanpassen">✏️</button>
+        </div>
+        <div id="doelBody" style="display:flex;flex-direction:column;gap:10px;flex:1;">
+            <div class="info-line"><span class="info-label">Doel</span><span id="doel-target" class="blur-target" style="font-weight:800;font-size:1rem;">–</span></div>
+            <div class="info-line"><span class="info-label">Huidig</span><span id="doel-current" class="blur-target" style="font-weight:800;font-size:1rem;">–</span></div>
+            <div class="info-line"><span class="info-label">Nog nodig</span><span id="doel-resterend" class="blur-target" style="font-weight:700;font-size:0.9rem;">–</span></div>
+            <div style="margin:6px 0 4px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+                    <span style="font-size:0.65rem;font-weight:700;text-transform:uppercase;color:var(--text-muted);">Voortgang</span>
+                    <span id="doel-pct-label" style="font-size:0.75rem;font-weight:800;">0%</span>
+                </div>
+                <div style="height:8px;border-radius:99px;background:var(--border-color);overflow:hidden;">
+                    <div id="doel-progress-bar" style="height:100%;border-radius:99px;background:linear-gradient(90deg,var(--bolero),var(--success));width:0%;transition:width 0.6s ease;"></div>
+                </div>
+            </div>
+            <div class="info-line"><span class="info-label">ETA</span><span id="doel-eta" style="font-weight:700;font-size:0.82rem;">–</span></div>
+            <div class="info-line"><span class="info-label">Dagelijks nodig</span><span id="doel-dagnodig" class="blur-target" style="font-weight:700;font-size:0.82rem;">–</span></div>
+        </div>
+    </div>
+
+    <!-- Doel modal -->
+    <div id="doelModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:3000;align-items:center;justify-content:center;">
+        <div class="card" style="width:320px;padding:24px;">
+            <h3 style="margin-bottom:16px;">Doel instellen</h3>
+            <label style="font-size:0.75rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.04em;">Doelbedrag (€)</label>
+            <div style="display:flex;align-items:center;border:1px solid var(--border-color);border-radius:8px;padding:10px 14px;margin:6px 0 14px;background:var(--bg-color);">
+                <span style="font-size:1.1rem;font-weight:700;color:var(--text-muted);margin-right:6px;">€</span>
+                <input type="number" id="doelInput" placeholder="100000" style="border:none;background:transparent;color:var(--text-main);font-size:1.1rem;font-weight:700;outline:none;width:100%;padding:0;">
+            </div>
+            <label style="font-size:0.75rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.04em;">Streefdatum</label>
+            <input type="date" id="doelDatumInput" style="width:100%;border:1px solid var(--border-color);border-radius:8px;padding:10px;font-size:1rem;background:var(--bg-color);color:var(--text-main);margin:6px 0 18px;box-sizing:border-box;">
+            <div style="display:flex;gap:8px;">
+                <button class="btn btn-main" onclick="saveDoelModal()" style="flex:1;">Opslaan</button>
+                <button class="btn" onclick="closeDoelModal()" style="flex:1;">Annuleer</button>
+            </div>
+        </div>
     </div>
 
     <!-- Rij 3: Individuele broker grafieken (nu ook full width) -->
@@ -923,35 +963,31 @@
 
     <!-- Rij 4: Dagrendement, volle breedte -->
     <div id="dailyReturnChartContainer" class="card chart-box span-3">
-        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:4px;">
-            <h3 style="margin:0;">DAGRENDEMENT</h3>
-            <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
-                <div class="time-filter-btns" data-chart="daily">
-                    <button class="btn time-btn" onclick="setTimeFilter('daily','1w',this)">1W</button>
-                    <button class="btn time-btn" onclick="setTimeFilter('daily','1m',this)">1M</button>
-                    <button class="btn time-btn" onclick="setTimeFilter('daily','ytd',this)">YTD</button>
-                    <button class="btn time-btn active-time" onclick="setTimeFilter('daily','all',this)">Alles</button>
-                </div>
-                <div id="dailyReturnLegend" style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;"></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:4px;flex-wrap:nowrap;">
+            <h3 style="margin:0;white-space:nowrap;">DAGRENDEMENT</h3>
+            <div class="time-filter-btns" data-chart="daily" style="display:flex;gap:4px;margin-left:auto;">
+                <button class="btn time-btn" onclick="setTimeFilter('daily','1w',this)">1W</button>
+                <button class="btn time-btn" onclick="setTimeFilter('daily','1m',this)">1M</button>
+                <button class="btn time-btn" onclick="setTimeFilter('daily','ytd',this)">YTD</button>
+                <button class="btn time-btn active-time" onclick="setTimeFilter('daily','all',this)">Alles</button>
             </div>
         </div>
+        <div id="dailyReturnLegend" style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:6px;margin-top:2px;"></div>
         <div class="chart-wrapper"><canvas id="chartDailyReturn"></canvas></div>
     </div>
 
     <!-- Rij 5: Gecumuleerd rendement, volle breedte -->
     <div id="cumulReturnChartContainer" class="card chart-box span-3">
-        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:4px;">
-            <h3 style="margin:0;">GECUMULEERD RENDEMENT %</h3>
-            <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
-                <div class="time-filter-btns" data-chart="cumul">
-                    <button class="btn time-btn" onclick="setTimeFilter('cumul','1w',this)">1W</button>
-                    <button class="btn time-btn" onclick="setTimeFilter('cumul','1m',this)">1M</button>
-                    <button class="btn time-btn" onclick="setTimeFilter('cumul','ytd',this)">YTD</button>
-                    <button class="btn time-btn active-time" onclick="setTimeFilter('cumul','all',this)">Alles</button>
-                </div>
-                <div id="cumulReturnLegend" style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;"></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:4px;flex-wrap:nowrap;">
+            <h3 style="margin:0;white-space:nowrap;">GECUMULEERD RENDEMENT %</h3>
+            <div class="time-filter-btns" data-chart="cumul" style="display:flex;gap:4px;margin-left:auto;">
+                <button class="btn time-btn" onclick="setTimeFilter('cumul','1w',this)">1W</button>
+                <button class="btn time-btn" onclick="setTimeFilter('cumul','1m',this)">1M</button>
+                <button class="btn time-btn" onclick="setTimeFilter('cumul','ytd',this)">YTD</button>
+                <button class="btn time-btn active-time" onclick="setTimeFilter('cumul','all',this)">Alles</button>
             </div>
         </div>
+        <div id="cumulReturnLegend" style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:6px;margin-top:2px;"></div>
         <div class="chart-wrapper"><canvas id="chartCumulReturn"></canvas></div>
     </div>
 
@@ -988,6 +1024,27 @@
                 <thead id="maandTableHead"></thead>
                 <tbody id="maandTableBody"></tbody>
             </table>
+        </div>
+    </div>
+
+        <!-- Rij 2b: PRESTATIES + DOEL (elk 1 kolom van de 3-kolomme grid) -->
+    <div id="prestatiesBlockContainer" class="card" style="display:flex;flex-direction:column;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+            <h3 style="margin:0;">PRESTATIES</h3>
+            <span style="font-size:0.62rem;font-weight:700;color:var(--text-muted);letter-spacing:0.04em;">VANAF 13/04/2026</span>
+        </div>
+        <div id="prestatiesBody" style="display:flex;flex-direction:column;gap:10px;flex:1;">
+            <div class="info-line"><span class="info-label">Winst €</span><span id="prest-euro" class="blur-target" style="font-weight:800;font-size:1rem;">–</span></div>
+            <div class="info-line"><span class="info-label">Winst %</span><span id="prest-perc" style="font-weight:800;font-size:1rem;">–</span></div>
+            <div style="height:1px;background:var(--border-color);margin:4px 0;"></div>
+            <div style="font-size:0.65rem;font-weight:700;text-transform:uppercase;color:var(--text-muted);letter-spacing:0.05em;margin-bottom:2px;">vs. Benchmark</div>
+            <div class="info-line"><span class="info-label" style="--c:#e67e22;">S&amp;P 500</span><span id="prest-sp" style="font-weight:700;font-size:0.85rem;">–</span></div>
+            <div class="info-line"><span class="info-label" style="--c:#8e44ad;">MSCI World</span><span id="prest-msci" style="font-weight:700;font-size:0.85rem;">–</span></div>
+            <div class="info-line"><span class="info-label" style="--c:#c0392b;">Bitcoin</span><span id="prest-btc" style="font-weight:700;font-size:0.85rem;">–</span></div>
+            <div style="height:1px;background:var(--border-color);margin:4px 0;"></div>
+            <div class="info-line"><span class="info-label">Beste dag</span><span id="prest-bestdag" style="font-weight:700;font-size:0.82rem;color:var(--success);">–</span></div>
+            <div class="info-line"><span class="info-label">Slechtste dag</span><span id="prest-slechtdag" style="font-weight:700;font-size:0.82rem;color:var(--danger);">–</span></div>
+            <div class="info-line"><span class="info-label">Groeidagen</span><span id="prest-groeidagen" style="font-weight:700;font-size:0.82rem;">–</span></div>
         </div>
     </div>
 
@@ -1246,8 +1303,8 @@
     <div class="header" style="margin-bottom:16px;">
         <div class="header-titles"><h1>HEATMAP</h1></div>
         <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
-            <button class="btn" onclick="refreshHeatmapPage()" style="font-size:0.8rem;padding:8px 14px;">↻ Vernieuwen</button>
             <button class="btn" id="hmCompactBtn" onclick="toggleHmCompact()" style="font-size:0.8rem;padding:8px 14px;">⊟ Compact</button>
+            <button class="btn" onclick="refreshHeatmapPage()" style="font-size:0.8rem;padding:8px 14px;">↻ Vernieuwen</button>
         </div>
     </div>
 
@@ -1565,7 +1622,10 @@ const WIDGET_DEFS = [
     { id: 'cumulReturnChartContainer', label: 'GECUMULEERD %' },
     { id: 'heatmapContainer',          label: 'KALENDER' },
     { id: 'maandoverzichtContainer',   label: 'MAANDOVERZICHT' },
+    { id: 'prestatiesBlockContainer',  label: 'PRESTATIES' },
     { id: 'weekoverzichtContainer',    label: 'WEEKOVERZICHT' },
+    { id: 'doelBlockContainer',        label: 'DOEL' },
+
 ];
 let widgetOrder   = JSON.parse(localStorage.getItem('v25_widget_order'))   || WIDGET_DEFS.map(w => w.id);
 let widgetVisible = JSON.parse(localStorage.getItem('v25_widget_visible')) || {};
@@ -1589,6 +1649,13 @@ function applyWidgetOrder() {
         const visible = widgetVisible[id] !== false;
         el.style.display = visible ? '' : 'none';
     });
+    // PRESTATIES en DOEL: als ze aaneengesloten in de volgorde staan en beide zichtbaar zijn,
+    // staan ze automatisch naast elkaar in het 3-koloms grid (elk 1 kolom).
+    // Reset grid-column voor beide zodat andere span-klassen niet worden overschreven.
+    const pEl = document.getElementById('prestatiesBlockContainer');
+    const dEl = document.getElementById('doelBlockContainer');
+    if (pEl) pEl.style.gridColumn = '';
+    if (dEl) dEl.style.gridColumn = '';
 }
 
 function renderWidgetSortList() {
@@ -2168,7 +2235,181 @@ function importMasterJSON(input) {
         renderHeatmap();
         renderMaandoverzicht();
         renderWeekoverzicht();
+        renderPrestaties();
+        renderDoel();
     }
+
+// ── PRESTATIES (vanaf 13/04/2026) ────────────────────────────────────────────
+const PRESTATIES_START_DATE = '13/04/2026';
+
+function parseDate_NL(str) {
+    const [d, m, y] = str.split('/').map(Number);
+    return new Date(y, m - 1, d);
+}
+
+function renderPrestaties() {
+    if (!brokerData || brokerData.length === 0) return;
+    const startTs = parseDate_NL(PRESTATIES_START_DATE).getTime();
+    let startEntry = null;
+    for (let i = 0; i < brokerData.length; i++) {
+        const ts = parseDate_NL(brokerData[i].date).getTime();
+        if (ts >= startTs) { startEntry = brokerData[i]; break; }
+    }
+    if (!startEntry) startEntry = brokerData[0];
+
+    const latestEntry = brokerData[brokerData.length - 1];
+    const startTotal  = startEntry.degiro + startEntry.bolero + startEntry.saxo;
+    const latestTotal = latestEntry.degiro + latestEntry.bolero + latestEntry.saxo;
+    const winstEuro   = latestTotal - startTotal;
+    const winstPerc   = startTotal !== 0 ? (winstEuro / startTotal) * 100 : 0;
+    const isBlurred   = document.querySelector('.blur-target')?.classList.contains('blur');
+    const sign  = winstEuro >= 0 ? '+' : '';
+    const color = winstEuro >= 0 ? 'var(--success)' : 'var(--danger)';
+
+    const setEl = (id, val, style) => {
+        const el = document.getElementById(id);
+        if (el) { el.textContent = val; if (style) el.style.cssText += style; }
+    };
+
+    setEl('prest-euro', isBlurred ? '€ •••' : `${sign}${formatEuro(winstEuro)}`, `color:${color};`);
+    setEl('prest-perc', `${sign}${winstPerc.toFixed(2)}%`, `color:${color};`);
+
+    // Benchmark vergelijking: ophalen via Yahoo Finance vanaf PRESTATIES_START_DATE
+    const benchDefs = [
+        { id: 'prest-sp',   ticker: '%5EGSPC' },
+        { id: 'prest-msci', ticker: 'URTH'    },
+        { id: 'prest-btc',  ticker: 'BTC-USD' },
+    ];
+    // Zet laadtekst
+    benchDefs.forEach(b => {
+        const el = document.getElementById(b.id);
+        if (el) { el.textContent = '⏳'; el.style.color = 'var(--text-muted)'; el.style.fontSize = '0.75rem'; }
+    });
+    // Bereken startdatum en einddatum voor Yahoo Finance
+    const startParts = PRESTATIES_START_DATE.split('/').map(Number);
+    const startYF = new Date(startParts[2], startParts[1]-1, startParts[0]);
+    const endYF   = new Date();
+    // Één dag eerder voor period1 zodat we de slotkoers van de startdag mee krijgen
+    const period1 = Math.floor((startYF.getTime() - 86400000) / 1000);
+    const period2 = Math.floor(endYF.getTime() / 1000);
+
+    benchDefs.forEach(async b => {
+        const el = document.getElementById(b.id);
+        if (!el) return;
+        try {
+            const url = `https://corsproxy.io/?url=${encodeURIComponent(`https://query2.finance.yahoo.com/v8/finance/chart/${b.ticker}?interval=1d&period1=${period1}&period2=${period2}`)}`;
+            const r = await fetch(url);
+            if (!r.ok) throw new Error(r.status);
+            const data = await r.json();
+            const closes = data?.chart?.result?.[0]?.indicators?.quote?.[0]?.close;
+            if (!closes || closes.length < 2) throw new Error('geen data');
+            // Eerste geldige slotkoers als referentie
+            const bStart = closes.find(v => v != null);
+            const bEnd   = [...closes].reverse().find(v => v != null);
+            if (!bStart || !bEnd || bStart === 0) throw new Error('ongeldige waarden');
+            const bPerc = ((bEnd - bStart) / Math.abs(bStart)) * 100;
+            const diff  = winstPerc - bPerc;
+            const dSign = diff >= 0 ? '+' : '';
+            const dCol  = diff >= 0 ? 'var(--success)' : 'var(--danger)';
+            el.innerHTML = `<span style="color:${dCol};font-weight:800;">${dSign}${diff.toFixed(2)}%</span> <span style="color:var(--text-muted);font-size:0.72rem;">(bench: ${bPerc.toFixed(2)}%)</span>`;
+        } catch {
+            el.textContent = '– (geen data)';
+            el.style.color = 'var(--text-muted)';
+            el.style.fontSize = '0.75rem';
+        }
+    });
+
+    const startIdx = brokerData.indexOf(startEntry);
+    let bestDag = null, slechtDag = null, groeiDagen = 0, totalDagen = 0;
+    for (let i = Math.max(startIdx, 1); i < brokerData.length; i++) {
+        const cur  = brokerData[i];
+        const prev = brokerData[i - 1];
+        const diff = (cur.degiro + cur.bolero + cur.saxo) - (prev.degiro + prev.bolero + prev.saxo);
+        totalDagen++;
+        if (diff >= 0) groeiDagen++;
+        if (bestDag === null || diff > bestDag.diff) bestDag = { diff, date: cur.date };
+        if (slechtDag === null || diff < slechtDag.diff) slechtDag = { diff, date: cur.date };
+    }
+    const bestEl   = document.getElementById('prest-bestdag');
+    const slechtEl = document.getElementById('prest-slechtdag');
+    const groeiEl  = document.getElementById('prest-groeidagen');
+    if (bestEl && bestDag)   bestEl.textContent   = isBlurred ? `+•••• (${bestDag.date})` : `+${formatEuro(bestDag.diff)} (${bestDag.date})`;
+    if (slechtEl && slechtDag) slechtEl.textContent = isBlurred ? `-•••• (${slechtDag.date})` : `${formatEuro(slechtDag.diff)} (${slechtDag.date})`;
+    if (groeiEl) groeiEl.textContent = `${groeiDagen} / ${totalDagen} dagen (${totalDagen > 0 ? Math.round(groeiDagen/totalDagen*100) : 0}%)`;
+}
+
+// ── DOEL ─────────────────────────────────────────────────────────────────────
+function getDoelData() { return JSON.parse(localStorage.getItem('doel_data') || '{}'); }
+function saveDoelDataLS(data) { localStorage.setItem('doel_data', JSON.stringify(data)); }
+
+function renderDoel() {
+    const doel = getDoelData();
+    const target   = doel.target || null;
+    const deadline = doel.deadline || null;
+    if (!brokerData || brokerData.length === 0) return;
+    const latestEntry = brokerData[brokerData.length - 1];
+    const current = latestEntry.degiro + latestEntry.bolero + latestEntry.saxo;
+    const isBlurred = document.querySelector('.blur-target')?.classList.contains('blur');
+    const setEl  = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+    const setHTML = (id, val) => { const el = document.getElementById(id); if (el) el.innerHTML = val; };
+
+    if (!target) {
+        setEl('doel-target',    'Niet ingesteld');
+        setEl('doel-current',   isBlurred ? '€ •••' : formatEuro(current));
+        setEl('doel-resterend', '–');
+        setEl('doel-pct-label', '0%');
+        const bar = document.getElementById('doel-progress-bar');
+        if (bar) bar.style.width = '0%';
+        setEl('doel-eta',      '–');
+        setEl('doel-dagnodig', '–');
+        return;
+    }
+    const resterend = target - current;
+    const pct = Math.min(Math.max((current / target) * 100, 0), 100);
+    const bar = document.getElementById('doel-progress-bar');
+    if (bar) { bar.style.width = pct.toFixed(1) + '%'; bar.style.background = pct >= 100 ? 'var(--success)' : 'linear-gradient(90deg,var(--bolero),var(--success))'; }
+    const pctLblEl = document.getElementById('doel-pct-label');
+    if (pctLblEl) { pctLblEl.textContent = pct.toFixed(1) + '%'; pctLblEl.style.color = pct >= 100 ? 'var(--success)' : pct >= 50 ? 'var(--bolero)' : 'var(--text-main)'; }
+    setEl('doel-target',  isBlurred ? '€ •••' : formatEuro(target));
+    setEl('doel-current', isBlurred ? '€ •••' : formatEuro(current));
+    if (resterend <= 0) setHTML('doel-resterend', '<span style="color:var(--success);font-weight:800;">🎉 Doel bereikt!</span>');
+    else setEl('doel-resterend', isBlurred ? '€ •••' : formatEuro(resterend));
+
+    if (deadline) {
+        const deadlineDate = new Date(deadline);
+        const today = new Date();
+        const daysLeft = Math.max(0, Math.round((deadlineDate - today) / 86400000));
+        const dateStr = deadlineDate.toLocaleDateString('nl-NL', { day: 'numeric', month: 'short', year: 'numeric' });
+        setEl('doel-eta', `${dateStr} (${daysLeft} d.)`);
+        setEl('doel-dagnodig', resterend > 0 && daysLeft > 0 ? (isBlurred ? '€ •••/dag' : `${formatEuro(resterend / daysLeft)}/dag`) : resterend <= 0 ? '–' : 'Deadline verstreken');
+    } else {
+        const startIdx = Math.max(0, brokerData.length - 30);
+        if (brokerData.length >= 2 && resterend > 0) {
+            const oldVal = brokerData[startIdx].degiro + brokerData[startIdx].bolero + brokerData[startIdx].saxo;
+            const avgPerDay = (brokerData.length - 1 - startIdx) > 0 ? (current - oldVal) / (brokerData.length - 1 - startIdx) : 0;
+            if (avgPerDay > 0) {
+                const daysNeeded = Math.ceil(resterend / avgPerDay);
+                const eta = new Date(); eta.setDate(eta.getDate() + daysNeeded);
+                setEl('doel-eta', eta.toLocaleDateString('nl-NL', { day: 'numeric', month: 'short', year: 'numeric' }) + ` (~${daysNeeded}d)`);
+                setEl('doel-dagnodig', isBlurred ? '€ •••/dag' : `${formatEuro(avgPerDay)}/dag (gem.)`);
+            } else { setEl('doel-eta', 'Onvoldoende groei'); setEl('doel-dagnodig', '–'); }
+        } else { setEl('doel-eta', '–'); setEl('doel-dagnodig', '–'); }
+    }
+}
+function openDoelModal() {
+    const doel = getDoelData();
+    const inp = document.getElementById('doelInput'); if (inp) inp.value = doel.target || '';
+    const dat = document.getElementById('doelDatumInput'); if (dat) dat.value = doel.deadline || '';
+    const modal = document.getElementById('doelModal'); if (modal) modal.style.display = 'flex';
+}
+function closeDoelModal() { const modal = document.getElementById('doelModal'); if (modal) modal.style.display = 'none'; }
+function saveDoelModal() {
+    const target   = parseFloat(document.getElementById('doelInput')?.value) || null;
+    const deadline = document.getElementById('doelDatumInput')?.value || null;
+    saveDoelDataLS({ target, deadline });
+    closeDoelModal();
+    renderDoel();
+}
 
 function renderWeeklyReturns() {
     const tbody = document.getElementById('weeklyReturnBody');
@@ -2183,6 +2424,7 @@ function renderWeeklyReturns() {
         const row = document.createElement('tr');
         
         // Datum kolom
+
         let html = `<td>${current.date}</td>`;
         
         // Bereken kolommen voor Totaal en de 3 brokers
@@ -3640,8 +3882,9 @@ function renderWeeklyReturns() {
                 const sign = pct !== null && pct >= 0 ? '+' : '';
                 const pctStr = pct !== null ? `${sign}${pct.toFixed(1)}%` : '–';
                 const isLoading = !d;
+                const displayTicker = s.type === 'crypto' ? s.ticker.replace(/-USD$/i,'') : s.ticker;
                 return `<div class="hm-cell-compact ${isLoading?'loading':''}" style="background:${isLoading?'var(--row-hover)':bg};color:${isLoading?'var(--text-muted)':text};" title="${s.name}: ${pctStr}" onclick="void(0)">
-                    <div style="font-size:0.62rem;font-weight:800;letter-spacing:0.02em;">${s.ticker}</div>
+                    <div style="font-size:0.62rem;font-weight:800;letter-spacing:0.02em;">${displayTicker}</div>
                     <div style="font-size:0.65rem;font-weight:700;margin-top:1px;">${pctStr}</div>
                 </div>`;
             }).join('');
