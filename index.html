@@ -442,8 +442,23 @@
     }
     .tp-hero-val-lg { font-size: 1.7rem; }
     .tp-hero-val-md { font-size: 1.2rem; }
-    .tp-hero-bottom { flex-direction: column; }
-    .tp-hero-posities { border-right: none; border-bottom: 1px solid var(--border-color); }
+    .tp-hero-bottom {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        flex-direction: unset;
+    }
+    .tp-hero-posities {
+        border-right: 1px solid var(--border-color);
+        border-bottom: 1px solid var(--border-color);
+    }
+    .tp-hero-cash {
+        flex: unset;
+        border-left: none;
+        border-bottom: 1px solid var(--border-color);
+    }
+    .tp-hero-cash .ap-cash-editor { display: none; }
+    .tp-hero-stat { border-left: none; }
+    .tp-hero-stat:nth-child(even) { border-left: 1px solid var(--border-color); }
     .ap-broker-tab { min-width: 0; padding: 9px 8px; font-size: 0.72rem; gap: 5px; }
 }
 
