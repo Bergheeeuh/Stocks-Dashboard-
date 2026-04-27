@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio v43</title>
+    <title>Portfolio v48</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
     <style>
@@ -44,6 +44,22 @@
 #aandelen-portfolio-page[data-broker="Bolero"] { --ap-accent: var(--bolero); }
 #aandelen-portfolio-page[data-broker="Degiro"] { --ap-accent: var(--degiro); }
 #aandelen-portfolio-page[data-broker="Saxo"]   { --ap-accent: var(--saxo); }
+/* TEST pagina — kopie van AANDELEN */
+#test-portfolio-page { --ap-accent: var(--total-gray); }
+#test-portfolio-page[data-broker="Bolero"] { --ap-accent: var(--bolero); }
+#test-portfolio-page[data-broker="Degiro"] { --ap-accent: var(--degiro); }
+#test-portfolio-page[data-broker="Saxo"]   { --ap-accent: var(--saxo); }
+/* Crypto pagina gebruikt zelfde hero styling met eigen accent kleur */
+#crypto-portfolio-page { --ap-accent: #f7931a; /* bitcoin oranje */ }
+#crypto-portfolio-page .cp-hero-card { border-top-color: var(--ap-accent); }
+#crypto-portfolio-page .cp-hero-card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 80px;
+    background: linear-gradient(180deg, var(--ap-accent), transparent);
+    opacity: 0.10;
+    pointer-events: none;
+}
 
 .ap-broker-tabs {
     display: flex;
@@ -129,6 +145,32 @@
     color: var(--text-muted);
     margin-top: 4px;
     text-align: center;
+}
+
+/* View toggle (per sector / alle posities) */
+.ap-view-toggle {
+    display: inline-flex;
+    background: var(--row-hover);
+    border-radius: 8px;
+    padding: 3px;
+    gap: 2px;
+}
+.ap-view-btn {
+    background: transparent;
+    border: none;
+    padding: 6px 12px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all 0.15s;
+}
+.ap-view-btn:hover { color: var(--text-main); }
+.ap-view-btn.active {
+    background: var(--card-bg);
+    color: var(--ap-accent);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
 }
 
 /* Top 3 lists in beste/slechtste cards */
@@ -293,6 +335,89 @@
     .ap-hero-value { font-size: 1.8rem; }
 }
 
+/* TEST pagina hero card — responsive */
+.tp-hero-top {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    align-items: stretch;
+}
+.tp-hero-col {
+    padding: 18px 18px 14px;
+}
+.tp-hero-col + .tp-hero-col {
+    border-left: 1px solid var(--border-color);
+}
+.tp-hero-label {
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+}
+.tp-hero-val-lg {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--ap-accent);
+    line-height: 1;
+    letter-spacing: -0.03em;
+}
+.tp-hero-val-md {
+    font-size: 1.45rem;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.02em;
+}
+.tp-hero-sub {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 6px;
+    line-height: 1.4;
+}
+.tp-hero-pct {
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-top: 6px;
+}
+.tp-hero-bottom {
+    display: flex;
+    align-items: stretch;
+    border-top: 1px solid var(--border-color);
+    background: var(--row-hover);
+}
+.tp-hero-posities {
+    padding: 10px 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-right: 1px solid var(--border-color);
+    flex-shrink: 0;
+}
+.tp-hero-cash {
+    padding: 10px 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex: 1;
+    flex-wrap: wrap;
+    min-width: 0;
+}
+@media (max-width: 600px) {
+    .tp-hero-top {
+        grid-template-columns: 1fr 1fr;
+    }
+    .tp-hero-col-main {
+        grid-column: 1 / -1;
+        border-bottom: 1px solid var(--border-color);
+        border-left: none !important;
+    }
+    .tp-hero-val-lg { font-size: 1.7rem; }
+    .tp-hero-val-md { font-size: 1.2rem; }
+    .tp-hero-bottom { flex-direction: column; }
+    .tp-hero-posities { border-right: none; border-bottom: 1px solid var(--border-color); }
+    .ap-broker-tab { min-width: 0; padding: 9px 8px; font-size: 0.72rem; gap: 5px; }
+}
+
 /* CASH editor in CASH card */
 .ap-card-cash .ap-card-value { font-size: 1.4rem; }
 .ap-cash-editor { margin-top: 10px; display: flex; flex-direction: column; gap: 4px; width: 100%; }
@@ -413,13 +538,14 @@
     flex-shrink: 0;
 }
 .ap-pie-legend-row .ap-pie-name {
-    flex: 1;
     font-weight: 600;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     min-width: 0;
+    flex-shrink: 0;
 }
+.ap-pie-legend-row .ap-pie-spacer { flex: 1; }
 .ap-pie-legend-row .ap-pie-val {
     color: var(--text-muted);
     font-size: 0.76rem;
@@ -427,9 +553,9 @@
 }
 .ap-pie-legend-row .ap-pie-pct {
     font-weight: 800;
-    min-width: 48px;
     text-align: right;
     flex-shrink: 0;
+    margin-left: 6px;
 }
 
         body {
@@ -1131,6 +1257,7 @@
     <div class="nav-item" onclick="switchTab('data-page', this); closeNav()">DATA</div>
     <div class="nav-item" onclick="switchTab('aandelen-page', this); closeNav()">LIVE</div>
     <div class="nav-item" onclick="switchTab('aandelen-portfolio-page', this); closeNav()">AANDELEN</div>
+    <div class="nav-item" onclick="switchTab('test-portfolio-page', this); closeNav()">TEST</div>
     <div class="nav-item" onclick="switchTab('crypto-portfolio-page', this); closeNav()">CRYPTO</div>
     <div class="nav-item" onclick="switchTab('heatmap-page', this); closeNav()">HEATMAP</div>
     <div class="nav-item" onclick="switchTab('kalender-page', this); closeNav()">KALENDER</div>
@@ -1802,11 +1929,11 @@
     <!-- Rij 2: Top 3 lists -->
     <div class="ap-stats-row ap-stats-row-2">
         <div class="card ap-card ap-card-toplist">
-            <div class="ap-card-label">TOP 3 BESTE</div>
+            <div class="ap-card-label">TOP 5 BESTE</div>
             <div id="ap-bestList" class="ap-toplist">–</div>
         </div>
         <div class="card ap-card ap-card-toplist">
-            <div class="ap-card-label">TOP 3 SLECHTSTE</div>
+            <div class="ap-card-label">TOP 5 SLECHTSTE</div>
             <div id="ap-worstList" class="ap-toplist">–</div>
         </div>
     </div>
@@ -1822,12 +1949,173 @@
         </div>
     </div>
 
-    <!-- Posities per sector -->
+    <!-- Posities — toggle tussen per sector en alle in 1 tabel -->
     <div class="card">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px;">
-            <h3 style="margin:0;">POSITIES PER SECTOR</h3>
+            <h3 id="ap-positionsTitle" style="margin:0;">POSITIES PER SECTOR</h3>
+            <div class="ap-view-toggle">
+                <button class="ap-view-btn active" data-view="sector" onclick="setApPositionsView('sector', this)">Per sector</button>
+                <button class="ap-view-btn"        data-view="all"    onclick="setApPositionsView('all', this)">Alle posities</button>
+            </div>
         </div>
         <div id="ap-bySector"></div>
+        <div id="ap-allPositions" style="display:none;"></div>
+    </div>
+</div>
+
+<!-- ============================================ -->
+<!-- TEST PAGINA — KOPIE VAN AANDELEN + GRAFIEK  -->
+<!-- ============================================ -->
+<div id="test-portfolio-page" class="tab-content">
+    <div class="header" style="margin-bottom:16px;">
+        <div class="header-titles"><h1>TEST</h1></div>
+        <div style="display:flex;align-items:center;gap:10px;">
+            <span id="testPfStatus" style="font-size:0.75rem;color:var(--text-muted);"></span>
+            <button class="btn" onclick="initTestPortfolio(true)" style="font-size:0.8rem;padding:8px 14px;">↻ Vernieuwen</button>
+        </div>
+    </div>
+
+    <!-- Portfolio vooruitgang grafiek -->
+    <div class="card" style="margin-bottom:1.5rem;">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:4px;flex-wrap:wrap;">
+            <h3 style="margin:0;">PORTFOLIO VOORUITGANG</h3>
+            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+                <span id="tp-periodReturn" style="font-size:0.85rem;font-weight:800;letter-spacing:-0.01em;"></span>
+                <div class="time-filter-btns" data-chart="tp" style="display:flex;gap:4px;">
+                    <button class="btn time-btn" onclick="setTpTimeFilter('1w',this)">1W</button>
+                    <button class="btn time-btn" onclick="setTpTimeFilter('1m',this)">1M</button>
+                    <button class="btn time-btn" onclick="setTpTimeFilter('ytd',this)">YTD</button>
+                    <button class="btn time-btn active-time" onclick="setTpTimeFilter('all',this)">ALLES</button>
+                </div>
+                <button class="btn" onclick="runPortfolioBackfill(true)" style="font-size:0.75rem;padding:6px 10px;">↻</button>
+            </div>
+        </div>
+        <!-- Benchmark toggles -->
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:8px;margin-top:4px;">
+            <label class="bench-toggle" style="--c:#e67e22;">
+                <input type="checkbox" id="tp-benchSP" onchange="updateTpBenchmarks()">
+                <span class="bench-dot"></span> S&amp;P 500
+            </label>
+            <label class="bench-toggle" style="--c:#8e44ad;">
+                <input type="checkbox" id="tp-benchMSCI" onchange="updateTpBenchmarks()">
+                <span class="bench-dot"></span> MSCI World
+            </label>
+            <label class="bench-toggle" style="--c:#16a085;">
+                <input type="checkbox" id="tp-benchNASDAQ" onchange="updateTpBenchmarks()">
+                <span class="bench-dot"></span> Nasdaq 100
+            </label>
+            <label class="bench-toggle" style="--c:#c0392b;">
+                <input type="checkbox" id="tp-benchBTC" onchange="updateTpBenchmarks()">
+                <span class="bench-dot"></span> Bitcoin
+            </label>
+            <label class="bench-toggle" style="--c:#2980b9;">
+                <input type="checkbox" id="tp-benchBEL20" onchange="updateTpBenchmarks()">
+                <span class="bench-dot"></span> BEL 20
+            </label>
+        </div>
+        <div id="tp-historyLoading" style="display:none;text-align:center;padding:40px 0;color:var(--text-muted);font-size:0.85rem;">
+            ⏳ Historische prijzen ophalen…
+        </div>
+        <div style="position:relative;height:240px;">
+            <canvas id="tp-historyChart"></canvas>
+        </div>
+        <div id="tp-historyEmpty" style="display:none;text-align:center;padding:40px 0;color:var(--text-muted);font-size:0.85rem;">
+            Geen data beschikbaar. Klik op ↻ om historische prijzen op te halen.
+        </div>
+    </div>
+
+    <!-- Broker filter tabs -->
+    <div class="ap-broker-tabs">
+        <button class="ap-broker-tab active" data-broker="all"    onclick="setTpBroker('all', this)">
+            <span class="ap-tab-dot" style="background:var(--total-gray);"></span> TOTAAL
+        </button>
+        <button class="ap-broker-tab" data-broker="Bolero" onclick="setTpBroker('Bolero', this)">
+            <span class="ap-tab-dot" style="background:var(--bolero);"></span> BOLERO
+        </button>
+        <button class="ap-broker-tab" data-broker="Degiro" onclick="setTpBroker('Degiro', this)">
+            <span class="ap-tab-dot" style="background:var(--degiro);"></span> DEGIRO
+        </button>
+        <button class="ap-broker-tab" data-broker="Saxo"   onclick="setTpBroker('Saxo', this)">
+            <span class="ap-tab-dot" style="background:var(--saxo);"></span> SAXO
+        </button>
+    </div>
+
+    <!-- Hero card -->
+    <div class="card" style="margin-bottom:1.5rem;padding:0;overflow:hidden;border-top:3px solid var(--ap-accent);">
+        <div class="tp-hero-top">
+            <!-- Totale waarde — volle breedte op mobiel -->
+            <div class="tp-hero-col tp-hero-col-main">
+                <div class="tp-hero-label">TOTALE WAARDE</div>
+                <div id="tp-totalValue" class="blur-target tp-hero-val-lg">€ –</div>
+                <div id="tp-totalCost" class="blur-target tp-hero-sub">Gestort: € –</div>
+            </div>
+            <!-- Totale P/L -->
+            <div class="tp-hero-col">
+                <div class="tp-hero-label">P/L TOTAAL</div>
+                <div id="tp-totalPL" class="blur-target tp-hero-val-md">€ –</div>
+                <div id="tp-totalPLPct" class="tp-hero-pct">–</div>
+            </div>
+            <!-- Dag P/L -->
+            <div class="tp-hero-col">
+                <div class="tp-hero-label">DAG P/L</div>
+                <div id="tp-dayPL" class="blur-target tp-hero-val-md">€ –</div>
+                <div id="tp-dayPLPct" class="tp-hero-pct">–</div>
+            </div>
+        </div>
+        <div class="tp-hero-bottom">
+            <!-- Posities -->
+            <div class="tp-hero-posities">
+                <div>
+                    <div class="tp-hero-label" style="margin-bottom:2px;">POSITIES</div>
+                    <div id="tp-positions" style="font-size:1.05rem;font-weight:800;line-height:1;">–</div>
+                </div>
+                <div id="tp-positionsBreakdown" style="font-size:0.7rem;color:var(--text-muted);line-height:1.4;">–</div>
+            </div>
+            <!-- Cash -->
+            <div class="tp-hero-cash">
+                <div style="flex-shrink:0;">
+                    <div class="tp-hero-label" style="margin-bottom:2px;">CASH</div>
+                    <div id="tp-cash" class="blur-target" style="font-size:1.05rem;font-weight:800;color:var(--ap-accent);line-height:1;">€ –</div>
+                </div>
+                <div id="tp-cashEditor" class="ap-cash-editor" style="flex:1;max-width:420px;margin:0;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Top 5 lijsten -->
+    <div class="ap-stats-row ap-stats-row-2">
+        <div class="card ap-card ap-card-toplist">
+            <div class="ap-card-label">TOP 5 BESTE</div>
+            <div id="tp-bestList" class="ap-toplist">–</div>
+        </div>
+        <div class="card ap-card ap-card-toplist">
+            <div class="ap-card-label">TOP 5 SLECHTSTE</div>
+            <div id="tp-worstList" class="ap-toplist">–</div>
+        </div>
+    </div>
+
+    <!-- Sectorverdeling -->
+    <div class="card" style="margin-bottom:1.5rem;">
+        <h3 style="margin:0 0 14px 0;">SECTORVERDELING</h3>
+        <div class="ap-pie-wrapper">
+            <div class="ap-pie-chart-wrap">
+                <canvas id="tp-sectorPie"></canvas>
+            </div>
+            <div id="tp-sectorLegend" class="ap-pie-legend"></div>
+        </div>
+    </div>
+
+    <!-- Posities -->
+    <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px;">
+            <h3 id="tp-positionsTitle" style="margin:0;">POSITIES PER SECTOR</h3>
+            <div class="ap-view-toggle">
+                <button class="ap-view-btn active" data-view="sector" onclick="setTpPositionsView('sector', this)">Per sector</button>
+                <button class="ap-view-btn"        data-view="all"    onclick="setTpPositionsView('all', this)">Alle posities</button>
+            </div>
+        </div>
+        <div id="tp-bySector"></div>
+        <div id="tp-allPositions" style="display:none;"></div>
     </div>
 </div>
 
@@ -1843,44 +2131,55 @@
         </div>
     </div>
 
-    <!-- Statistiek kaarten -->
-    <div class="stats-grid" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin-bottom:1.5rem;">
-        <div class="card" style="padding:18px;">
-            <div style="font-size:0.7rem;font-weight:700;color:var(--text-muted);letter-spacing:0.05em;">TOTALE WAARDE</div>
-            <div id="cp-totalValue" class="blur-target" style="font-size:1.6rem;font-weight:800;margin-top:6px;">€ –</div>
-            <div id="cp-totalCost" class="blur-target" style="font-size:0.78rem;color:var(--text-muted);margin-top:2px;">Gestort: € –</div>
+    <!-- Hero card: alle hoofdmetrics samen -->
+    <div class="card cp-hero-card ap-hero-card">
+        <div class="ap-hero-top">
+            <div class="ap-card-label">TOTALE WAARDE</div>
+            <div id="cp-totalValue" class="blur-target ap-hero-value">€ –</div>
         </div>
-        <div class="card" style="padding:18px;">
-            <div style="font-size:0.7rem;font-weight:700;color:var(--text-muted);letter-spacing:0.05em;">TOTALE P/L</div>
-            <div id="cp-totalPL" class="blur-target" style="font-size:1.6rem;font-weight:800;margin-top:6px;">€ –</div>
-            <div id="cp-totalPLPct" style="font-size:0.85rem;font-weight:700;margin-top:2px;">–</div>
-        </div>
-        <div class="card" style="padding:18px;">
-            <div style="font-size:0.7rem;font-weight:700;color:var(--text-muted);letter-spacing:0.05em;">24H P/L</div>
-            <div id="cp-dayPL" class="blur-target" style="font-size:1.6rem;font-weight:800;margin-top:6px;">€ –</div>
-            <div id="cp-dayPLPct" style="font-size:0.85rem;font-weight:700;margin-top:2px;">–</div>
-        </div>
-        <div class="card" style="padding:18px;">
-            <div style="font-size:0.7rem;font-weight:700;color:var(--text-muted);letter-spacing:0.05em;">POSITIES</div>
-            <div id="cp-positions" style="font-size:1.6rem;font-weight:800;margin-top:6px;">–</div>
-            <div id="cp-positionsBreakdown" style="font-size:0.78rem;color:var(--text-muted);margin-top:2px;">Coins</div>
-        </div>
-        <div class="card" style="padding:18px;">
-            <div style="font-size:0.7rem;font-weight:700;color:var(--text-muted);letter-spacing:0.05em;">BESTE COIN</div>
-            <div id="cp-best" style="font-size:1.05rem;font-weight:800;margin-top:6px;color:var(--success);">–</div>
-            <div id="cp-bestPct" style="font-size:0.78rem;color:var(--text-muted);margin-top:2px;">–</div>
-        </div>
-        <div class="card" style="padding:18px;">
-            <div style="font-size:0.7rem;font-weight:700;color:var(--text-muted);letter-spacing:0.05em;">SLECHTSTE COIN</div>
-            <div id="cp-worst" style="font-size:1.05rem;font-weight:800;margin-top:6px;color:var(--danger);">–</div>
-            <div id="cp-worstPct" style="font-size:0.78rem;color:var(--text-muted);margin-top:2px;">–</div>
+
+        <div class="ap-hero-divider"></div>
+
+        <div class="ap-hero-metrics">
+            <div class="ap-hero-metric">
+                <div class="ap-card-label">TOTALE P/L</div>
+                <div id="cp-totalPL" class="blur-target ap-hero-metric-value">€ –</div>
+                <div id="cp-totalPLPct" class="ap-hero-metric-sub">–</div>
+            </div>
+            <div class="ap-hero-metric">
+                <div class="ap-card-label">24H P/L</div>
+                <div id="cp-dayPL" class="blur-target ap-hero-metric-value">€ –</div>
+                <div id="cp-dayPLPct" class="ap-hero-metric-sub">–</div>
+            </div>
+            <div class="ap-hero-metric">
+                <div class="ap-card-label">POSITIES</div>
+                <div id="cp-positions" class="ap-hero-metric-value" style="color:var(--text-main);">–</div>
+                <div id="cp-positionsBreakdown" class="ap-hero-metric-sub">Coins</div>
+            </div>
         </div>
     </div>
 
-    <!-- Sector verdeling -->
+    <!-- Top 3 lists (sinds 13/04/2026) -->
+    <div class="ap-stats-row ap-stats-row-2">
+        <div class="card ap-card ap-card-toplist">
+            <div class="ap-card-label">TOP 3 BESTE <span style="font-weight:600;opacity:0.7;">· sinds 13/04</span></div>
+            <div id="cp-bestList" class="ap-toplist">–</div>
+        </div>
+        <div class="card ap-card ap-card-toplist">
+            <div class="ap-card-label">TOP 3 SLECHTSTE <span style="font-weight:600;opacity:0.7;">· sinds 13/04</span></div>
+            <div id="cp-worstList" class="ap-toplist">–</div>
+        </div>
+    </div>
+
+    <!-- Categorie verdeling: pie chart + legenda -->
     <div class="card" style="margin-bottom:1.5rem;">
         <h3 style="margin:0 0 14px 0;">CATEGORIE-VERDELING</h3>
-        <div id="cp-sectorBars"></div>
+        <div class="ap-pie-wrapper">
+            <div class="ap-pie-chart-wrap">
+                <canvas id="cp-sectorPie"></canvas>
+            </div>
+            <div id="cp-sectorLegend" class="ap-pie-legend"></div>
+        </div>
     </div>
 
     <!-- Posities per categorie -->
@@ -1908,6 +2207,7 @@
         <button class="hm-tab-btn hm-sort-btn active" onclick="setHmTab('all',this)">Alle</button>
         <button class="hm-tab-btn hm-sort-btn" onclick="setHmTab('stock',this)">Aandelen</button>
         <button class="hm-tab-btn hm-sort-btn" onclick="setHmTab('etf',this)">ETFs</button>
+        <button class="hm-tab-btn hm-sort-btn" onclick="setHmTab('stock_etf',this)">Aandelen + ETFs</button>
         <button class="hm-tab-btn hm-sort-btn" onclick="setHmTab('crypto',this)">Crypto</button>
     </div>
 
@@ -2417,7 +2717,7 @@ function applyTimeFilter(chartKey) {
     }
 
     // ── SWIPE NAVIGATIE ──────────────────────────────────────────────────────
-    const TABS = ['dashboard', 'data-page', 'aandelen-page', 'aandelen-portfolio-page', 'crypto-portfolio-page', 'heatmap-page', 'kalender-page', 'cijfer-page'];
+    const TABS = ['dashboard', 'data-page', 'aandelen-page', 'aandelen-portfolio-page', 'test-portfolio-page', 'crypto-portfolio-page', 'heatmap-page', 'kalender-page', 'cijfer-page'];
     const TAB_NAV_ITEMS = () => document.querySelectorAll('.nav-item');
 
     function getActiveTabIndex() {
@@ -2461,14 +2761,6 @@ function applyTimeFilter(chartKey) {
             } else if (dx < 0 && isOpen) {
                 // Swipe links terwijl menu open → sluit menu
                 closeNav();
-            } else if (dx < 0 && !isOpen) {
-                // Swipe links door pagina → volgende tab
-                const cur = getActiveTabIndex();
-                if (cur < TABS.length - 1) switchToTabIndex(cur + 1);
-            } else if (dx > 0 && !isOpen) {
-                // Swipe rechts door pagina → vorige tab
-                const cur = getActiveTabIndex();
-                if (cur > 0) switchToTabIndex(cur - 1);
             }
         }, { passive: true });
     })();
@@ -2527,12 +2819,13 @@ function applyTimeFilter(chartKey) {
         document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
         document.getElementById(id).classList.add('active');
         if (el) el.classList.add('active');
-        const labels = { 'dashboard':'PORTFOLIO', 'data-page':'DATA', 'aandelen-page':'LIVE', 'aandelen-portfolio-page':'AANDELEN', 'crypto-portfolio-page':'CRYPTO', 'heatmap-page':'HEATMAP', 'kalender-page':'KALENDER', 'cijfer-page':'CIJFERS' };
+        const labels = { 'dashboard':'PORTFOLIO', 'data-page':'DATA', 'aandelen-page':'LIVE', 'aandelen-portfolio-page':'AANDELEN', 'test-portfolio-page':'TEST', 'crypto-portfolio-page':'CRYPTO', 'heatmap-page':'HEATMAP', 'kalender-page':'KALENDER', 'cijfer-page':'CIJFERS' };
         const navLabel = document.querySelector('.nav span[style*="font-weight"]');
         if (navLabel) navLabel.textContent = labels[id] || '';
         closeNav();
         if (id === 'aandelen-page') loadMarktData(true);
         if (id === 'aandelen-portfolio-page') initAandelenPortfolio();
+        if (id === 'test-portfolio-page') initTestPortfolio();
         if (id === 'crypto-portfolio-page') initCryptoPortfolio();
         if (id === 'heatmap-page') initHeatmapPage();
         if (id === 'kalender-page') initKalender();
@@ -4518,60 +4811,60 @@ function renderWeeklyReturns() {
     // CleanSpark Call Jan'27 optie is overgeslagen (geen ticker te volgen via Yahoo)
     const DEFAULT_STOCKS = [
         // ── BOLERO ──────────────────────────────────────────────────────────
-        {ticker:'NVDA',    name:'NVIDIA',           type:'stock', currency:'USD', broker:'Bolero', gak:14.67,  aantal:120},
-        {ticker:'PYPL',    name:'PayPal',           type:'stock', currency:'USD', broker:'Bolero', gak:73.26,  aantal:29},
-        {ticker:'BMNR',    name:'Bitmine',          type:'stock', currency:'USD', broker:'Bolero', gak:54.92,  aantal:66},
+        {ticker:'NVDA',    name:'NVIDIA Corporation',           type:'stock', currency:'USD', broker:'Bolero', gak:14.67,  aantal:120},
+        {ticker:'PYPL',    name:'PayPal Holdings',           type:'stock', currency:'USD', broker:'Bolero', gak:73.26,  aantal:29},
+        {ticker:'BMNR',    name:'Bitmine Immersion Technologies',          type:'stock', currency:'USD', broker:'Bolero', gak:54.92,  aantal:66},
 
         // ── DEGIRO — aandelen ───────────────────────────────────────────────
-        {ticker:'ABCL',    name:'AbCellera',        type:'stock', currency:'USD', broker:'Degiro', gak:3.59,   aantal:886},
-        {ticker:'AMZN',    name:'Amazon',           type:'stock', currency:'USD', broker:'Degiro', gak:219.77, aantal:11},
-        {ticker:'APLD',    name:'Applied Digital',  type:'stock', currency:'USD', broker:'Degiro', gak:4.19,   aantal:184},
+        {ticker:'ABCL',    name:'AbCellera Biologics',        type:'stock', currency:'USD', broker:'Degiro', gak:3.59,   aantal:886},
+        {ticker:'AMZN',    name:'Amazon.com',           type:'stock', currency:'USD', broker:'Degiro', gak:219.77, aantal:11},
+        {ticker:'APLD',    name:'Applied Digital Corporation',  type:'stock', currency:'USD', broker:'Degiro', gak:4.19,   aantal:184},
         {ticker:'ACHR',    name:'Archer Aviation',  type:'stock', currency:'USD', broker:'Degiro', gak:9.50,   aantal:60},
-        {ticker:'CRCL',    name:'Circle',           type:'stock', currency:'USD', broker:'Degiro', gak:105.47, aantal:16},
+        {ticker:'CRCL',    name:'Circle Internet Group',           type:'stock', currency:'USD', broker:'Degiro', gak:105.47, aantal:16},
         {ticker:'CRWV',    name:'CoreWeave',        type:'stock', currency:'USD', broker:'Degiro', gak:88.17,  aantal:31},
-        {ticker:'CRDO',    name:'Credo',            type:'stock', currency:'USD', broker:'Degiro', gak:118.16, aantal:21},
+        {ticker:'CRDO',    name:'Credo Technology Group',            type:'stock', currency:'USD', broker:'Degiro', gak:118.16, aantal:21},
         {ticker:'IONQ',    name:'IonQ',             type:'stock', currency:'USD', broker:'Degiro', gak:27.43,  aantal:42},
-        {ticker:'KEEL',    name:'Keel',             type:'stock', currency:'USD', broker:'Degiro', gak:1.98,   aantal:1730},
+        {ticker:'KEEL',    name:'Keel Infrastructure Corporation',             type:'stock', currency:'USD', broker:'Degiro', gak:1.98,   aantal:1730},
         {ticker:'LMND',    name:'Lemonade',         type:'stock', currency:'USD', broker:'Degiro', gak:32.50,  aantal:7},
         {ticker:'MRLN',    name:'Merlin',           type:'stock', currency:'USD', broker:'Degiro', gak:7.16,   aantal:162},
-        {ticker:'MSFT',    name:'Microsoft',        type:'stock', currency:'USD', broker:'Degiro', gak:395.47, aantal:12},
+        {ticker:'MSFT',    name:'Microsoft Corporation',        type:'stock', currency:'USD', broker:'Degiro', gak:395.47, aantal:12},
         {ticker:'OUST',    name:'Ouster',           type:'stock', currency:'USD', broker:'Degiro', gak:24.60,  aantal:24},
-        {ticker:'RR',      name:'Richtech',         type:'stock', currency:'USD', broker:'Degiro', gak:3.60,   aantal:162},
+        {ticker:'RR',      name:'Richtech Robotics',         type:'stock', currency:'USD', broker:'Degiro', gak:3.60,   aantal:162},
         {ticker:'SBET',    name:'SharpLink',        type:'stock', currency:'USD', broker:'Degiro', gak:21.26,  aantal:55},
-        {ticker:'SOI.PA',  name:'Soitec',           type:'stock', currency:'EUR', broker:'Degiro', gak:64.16,  aantal:32},
-        {ticker:'TOYO',    name:'Toyo',             type:'stock', currency:'USD', broker:'Degiro', gak:9.00,   aantal:66},
-        {ticker:'UBER',    name:'Uber',             type:'stock', currency:'USD', broker:'Degiro', gak:79.32,  aantal:21},
-        {ticker:'UAMY',    name:'US Antimony',      type:'stock', currency:'USD', broker:'Degiro', gak:11.23,  aantal:85},
+        {ticker:'SOI.PA',  name:'Soitec SA',           type:'stock', currency:'EUR', broker:'Degiro', gak:64.16,  aantal:32},
+        {ticker:'TOYO',    name:'Toyo Co',             type:'stock', currency:'USD', broker:'Degiro', gak:9.00,   aantal:66},
+        {ticker:'UBER',    name:'Uber Technologies',             type:'stock', currency:'USD', broker:'Degiro', gak:79.32,  aantal:21},
+        {ticker:'UAMY',    name:'United States Antimony Corporation',      type:'stock', currency:'USD', broker:'Degiro', gak:11.23,  aantal:85},
         // ── DEGIRO — ETFs ───────────────────────────────────────────────────
-        {ticker:'2B76.DE', name:'iSh. Automation',  type:'etf',   currency:'EUR', broker:'Degiro', gak:14.14,  aantal:71},
-        {ticker:'DAPP.MI', name:'VanEck Crypto',    type:'etf',   currency:'EUR', broker:'Degiro', gak:9.70,   aantal:492},
-        {ticker:'REMX.MI', name:'VanEck Rare Earth',type:'etf',   currency:'EUR', broker:'Degiro', gak:8.11,   aantal:115},
-        {ticker:'SMH.MI',  name:'VanEck Semi',      type:'etf',   currency:'EUR', broker:'Degiro', gak:28.42,  aantal:35},
-        {ticker:'3HCL.L',  name:'WT Copper 3x',     type:'etf',   currency:'USD', broker:'Degiro', gak:16.50,  aantal:140},
+        {ticker:'2B76.DE', name:'iShares Automation & Robotics',  type:'etf',   currency:'EUR', broker:'Degiro', gak:14.14,  aantal:71},
+        {ticker:'DAPP.MI', name:'VanEck Crypto & Blockchain Innovators',    type:'etf',   currency:'EUR', broker:'Degiro', gak:9.70,   aantal:492},
+        {ticker:'REMX.MI', name:'VanEck Rare Earth and Strategic Metals',type:'etf',   currency:'EUR', broker:'Degiro', gak:8.11,   aantal:115},
+        {ticker:'SMH.MI',  name:'VanEck Semiconductor ',      type:'etf',   currency:'EUR', broker:'Degiro', gak:28.42,  aantal:35},
+        {ticker:'3HCL.L',  name:'WisdomTree Copper 3x Daily Leveraged',     type:'etf',   currency:'USD', broker:'Degiro', gak:16.50,  aantal:140},
 
         // ── SAXO — aandelen ─────────────────────────────────────────────────
         {ticker:'QBTS',    name:'D-Wave',           type:'stock', currency:'USD', broker:'Saxo',   gak:15.07,  aantal:50},
         {ticker:'IREN',    name:'IREN',             type:'stock', currency:'USD', broker:'Saxo',   gak:39.28,  aantal:301},
         {ticker:'JD',      name:'JD.com',           type:'stock', currency:'USD', broker:'Saxo',   gak:33.82,  aantal:29},
-        {ticker:'CIFR',    name:'Cipher Digital',   type:'stock', currency:'USD', broker:'Saxo',   gak:14.66,  aantal:245},
+        {ticker:'CIFR',    name:'Cipher Digital Corporation',   type:'stock', currency:'USD', broker:'Saxo',   gak:14.66,  aantal:245},
         {ticker:'CLSK',    name:'CleanSpark',       type:'stock', currency:'USD', broker:'Saxo',   gak:13.17,  aantal:165},
         {ticker:'BKKT',    name:'Bakkt',            type:'stock', currency:'USD', broker:'Saxo',   gak:13.32,  aantal:169},
-        {ticker:'SOFI',    name:'SoFi',             type:'stock', currency:'USD', broker:'Saxo',   gak:27.50,  aantal:19},
+        {ticker:'SOFI',    name:'SoFi Technologies',             type:'stock', currency:'USD', broker:'Saxo',   gak:27.50,  aantal:19},
         {ticker:'GOOGL',   name:'Alphabet',         type:'stock', currency:'USD', broker:'Saxo',   gak:163.20, aantal:28},
         {ticker:'SYM',     name:'Symbotic',         type:'stock', currency:'USD', broker:'Saxo',   gak:45.25,  aantal:9},
-        {ticker:'RXRX',    name:'Recursion',        type:'stock', currency:'USD', broker:'Saxo',   gak:5.73,   aantal:87},
-        {ticker:'ABAT',    name:'Am. Battery',      type:'stock', currency:'USD', broker:'Saxo',   gak:5.85,   aantal:113},
+        {ticker:'RXRX',    name:'Recursion Pharmaceuticals',        type:'stock', currency:'USD', broker:'Saxo',   gak:5.73,   aantal:87},
+        {ticker:'ABAT',    name:'American Battery Technology Company',      type:'stock', currency:'USD', broker:'Saxo',   gak:5.85,   aantal:113},
         {ticker:'XPEV',    name:'XPeng',            type:'stock', currency:'USD', broker:'Saxo',   gak:22.94,  aantal:36},
         {ticker:'CRM',     name:'Salesforce',       type:'stock', currency:'USD', broker:'Saxo',   gak:250.38, aantal:2},
         {ticker:'ZENA',    name:'Zenatech',         type:'stock', currency:'USD', broker:'Saxo',   gak:2.68,   aantal:115},
         // ── SAXO — ETFs ─────────────────────────────────────────────────────
-        {ticker:'SGLD.MI', name:'Inv. Gold',        type:'etf',   currency:'EUR', broker:'Saxo',   gak:295.07, aantal:3},
+        {ticker:'SGLD.MI', name:'Invesco Physical Gold',        type:'etf',   currency:'EUR', broker:'Saxo',   gak:295.07, aantal:3},
 
         // ── SAXO — opties (handmatige prijs, geen Yahoo ticker) ─────────────
         {ticker:'CLSK-2027C25', name:'CleanSpark Jan2027 25C', type:'option', currency:'EUR', broker:'Saxo', gak:482.15, aantal:1, manualPrice:120.58},
 
         // ── CRYPTO (placeholders — vul aantal aan via DATA → CRYPTO) ────────
-        {ticker:'BTC-USD', name:'Bitcoin',          type:'crypto', currency:'USD', gak:0, aantal:0},
+       {ticker:'BTC-USD', name:'Bitcoin',          type:'crypto', currency:'USD', gak:0, aantal:0},
         {ticker:'ETH-USD', name:'Ethereum',         type:'crypto', currency:'USD', gak:0, aantal:0.42356231},
         {ticker:'SOL-USD', name:'Solana',           type:'crypto', currency:'USD', gak:0, aantal:0.00040417},
         {ticker:'AVAX-USD',name:'Avalanche',        type:'crypto', currency:'USD', gak:0, aantal:5.28471},
@@ -4634,9 +4927,10 @@ function renderWeeklyReturns() {
         // Filter op tab — opties uitsluiten (geen Yahoo ticker)
         let stocks = hmStocks.filter(s => {
             if (s.type === 'option') return false;
-            if (hmTabMode === 'all')    return true;
-            if (hmTabMode === 'crypto') return s.type === 'crypto';
-            if (hmTabMode === 'etf')    return s.type === 'etf';
+            if (hmTabMode === 'all')       return true;
+            if (hmTabMode === 'crypto')    return s.type === 'crypto';
+            if (hmTabMode === 'etf')       return s.type === 'etf';
+            if (hmTabMode === 'stock_etf') return s.type === 'stock' || s.type === 'etf' || !s.type;
             return s.type === 'stock' || !s.type;
         });
 
@@ -5173,14 +5467,32 @@ function renderWeeklyReturns() {
                 <button class="btn" onclick="loadCijferData(true)" style="font-size:0.8rem;padding:8px 14px;">↻ Vernieuwen</button>
             </div>
         </div>
-        <p style="color:var(--text-muted);font-size:0.82rem;margin:6px 0 0 0;">Recente en aankomende earnings van uw aandelen, opgehaald via Finnhub.</p>
     </div>
 
-    <!-- Filters -->
-    <div style="display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap;">
-        <button class="cijfer-filter-btn active" onclick="setCijferFilter('all',this)">Alle</button>
-        <button class="cijfer-filter-btn" onclick="setCijferFilter('reported',this)">Gerapporteerd</button>
-        <button class="cijfer-filter-btn" onclick="setCijferFilter('upcoming',this)">Aankomend</button>
+    <!-- Summary stats -->
+    <div id="cijferSummary" class="cijfer-summary"></div>
+
+    <!-- Filters + Sortering -->
+    <div style="display:flex;gap:14px;margin-bottom:18px;flex-wrap:wrap;align-items:center;justify-content:space-between;">
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <button class="cijfer-filter-btn active" onclick="setCijferFilter('all',this)">Alle</button>
+            <button class="cijfer-filter-btn" onclick="setCijferFilter('upcoming',this)">📅 Aankomend</button>
+            <button class="cijfer-filter-btn" onclick="setCijferFilter('reported',this)">✓ Gerapporteerd</button>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+            <span style="font-size:0.7rem;color:var(--text-muted);font-weight:700;letter-spacing:0.05em;">SECTOR:</span>
+            <select id="cijferSectorFilter" onchange="setCijferSectorFilter(this.value)" class="cijfer-sort-select">
+                <option value="all">Alle sectoren</option>
+            </select>
+            <span style="font-size:0.7rem;color:var(--text-muted);font-weight:700;letter-spacing:0.05em;">SORTEER:</span>
+            <select id="cijferSort" onchange="setCijferSort(this.value)" class="cijfer-sort-select">
+                <option value="date_asc">Datum (eerstvolgend)</option>
+                <option value="date_desc">Datum (recentst)</option>
+                <option value="surprise_desc">Grootste beat</option>
+                <option value="surprise_asc">Grootste miss</option>
+                <option value="ticker">Ticker A-Z</option>
+            </select>
+        </div>
     </div>
 
     <!-- Surprise ranking blok -->
@@ -5195,7 +5507,7 @@ function renderWeeklyReturns() {
     <div id="upcomingBlock" style="display:none;margin-bottom:20px;">
         <div class="card" style="padding:20px;">
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px;">
-                <h3 style="margin:0;">📅 KOMENDE 2 WEKEN</h3>
+                <h3 style="margin:0;">📅 KOMENDE 4 WEKEN</h3>
                 <span id="upcomingCountdown" style="font-size:0.75rem;color:var(--text-muted);"></span>
             </div>
             <div id="upcomingList" style="display:flex;flex-direction:column;gap:8px;"></div>
@@ -5237,14 +5549,80 @@ function renderWeeklyReturns() {
     color: var(--bg-color);
     border-color: var(--text-main);
 }
+.cijfer-sort-select {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 7px 28px 7px 12px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--text-main);
+    cursor: pointer;
+    -webkit-appearance: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path fill='%238e9196' d='M5 6L0 0h10z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+}
+
+.cijfer-summary {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 18px;
+}
+@media (max-width: 720px) {
+    .cijfer-summary { grid-template-columns: repeat(2, 1fr); }
+}
+.cijfer-summary-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 14px 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    position: relative;
+    overflow: hidden;
+}
+.cijfer-summary-card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 100%;
+    background: var(--cs-color, var(--bolero));
+}
+.cijfer-summary-card .cs-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+}
+.cijfer-summary-card .cs-value {
+    font-size: 1.6rem;
+    font-weight: 800;
+    line-height: 1.1;
+    margin-top: 4px;
+    color: var(--cs-color, var(--text-main));
+}
+.cijfer-summary-card .cs-sub {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    margin-top: 4px;
+}
 .cijfer-card {
     background: var(--card-bg);
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius);
-    padding: 18px;
+    padding: 16px 18px;
     box-shadow: 0 4px 16px rgba(0,0,0,0.04);
     position: relative;
     overflow: hidden;
+    transition: transform 0.15s, box-shadow 0.15s;
+    cursor: pointer;
+}
+.cijfer-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
 }
 .cijfer-card::before {
     content: '';
@@ -5256,6 +5634,56 @@ function renderWeeklyReturns() {
 .cijfer-card.reported::before { background: var(--success); }
 .cijfer-card.upcoming::before  { background: var(--bolero); }
 .cijfer-card.no-data::before   { background: var(--border-color); }
+
+/* Aankomend countdown badge — large prominent display */
+.cijfer-countdown {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    background: rgba(52,152,219,0.10);
+    color: var(--bolero);
+    border-radius: 10px;
+    padding: 6px 12px;
+    min-width: 64px;
+    font-weight: 800;
+}
+.cijfer-countdown.today { background: rgba(231,76,60,0.12); color: var(--danger); }
+.cijfer-countdown.soon  { background: rgba(230,126,34,0.12); color: #e67e22; }
+.cijfer-countdown .cd-num {
+    font-size: 1.4rem;
+    line-height: 1;
+}
+.cijfer-countdown .cd-lbl {
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    opacity: 0.8;
+    margin-top: 2px;
+}
+
+/* Beat/miss banner — prominent on reported cards */
+.cijfer-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 8px 12px;
+    border-radius: 10px;
+    margin: 10px 0;
+}
+.cijfer-banner.beat { background: rgba(46,204,113,0.10); color: var(--success); }
+.cijfer-banner.miss { background: rgba(231,76,60,0.10);  color: var(--danger); }
+.cijfer-banner .cb-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    opacity: 0.85;
+}
+.cijfer-banner .cb-value {
+    font-size: 1.05rem;
+    font-weight: 800;
+}
 .cijfer-ticker {
     font-size: 0.7rem;
     font-weight: 800;
@@ -5337,6 +5765,8 @@ function renderWeeklyReturns() {
 <script>
 let cijferData = [];
 let cijferFilter = 'all';
+let cijferSort = 'date_asc';
+let cijferSectorFilter = 'all';
 let cijferInitialized = false;
 let epsBarChartInstance = null;
 const epsHistoryCache = {}; // ticker -> array of quarterly EPS entries
@@ -5347,6 +5777,90 @@ function setCijferFilter(mode, btn) {
     document.querySelectorAll('.cijfer-filter-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     renderCijferGrid();
+}
+
+function setCijferSort(mode) {
+    cijferSort = mode;
+    renderCijferGrid();
+}
+
+function setCijferSectorFilter(sector) {
+    cijferSectorFilter = sector;
+    renderCijferGrid();
+}
+
+// Vul sector dropdown opties in op basis van actieve cijferData
+function populateCijferSectorFilter() {
+    const sel = document.getElementById('cijferSectorFilter');
+    if (!sel) return;
+    const sectors = new Set();
+    cijferData.forEach(d => {
+        const t = (d.ticker || '').toUpperCase();
+        const sec = (typeof SECTOR_MAP !== 'undefined' && SECTOR_MAP[t]) || 'Onbekend';
+        sectors.add(sec);
+    });
+    const current = sel.value;
+    const sorted = [...sectors].sort();
+    sel.innerHTML = '<option value="all">Alle sectoren</option>' + sorted.map(s => `<option value="${s}">${s}</option>`).join('');
+    if ([...sectors, 'all'].includes(current)) sel.value = current;
+}
+
+// Bereken summary stats voor de header
+function computeCijferSummary() {
+    const today = new Date();
+    const todayStr = today.toISOString().split('T')[0];
+    const weekOut  = new Date(today); weekOut.setDate(today.getDate() + 7);
+    const weekStr  = weekOut.toISOString().split('T')[0];
+    const monthOut = new Date(today); monthOut.setDate(today.getDate() + 30);
+    const monthStr = monthOut.toISOString().split('T')[0];
+
+    let thisWeek = 0, thisMonth = 0, todayCount = 0;
+    let beats = 0, misses = 0;
+
+    cijferData.forEach(d => {
+        if (d.next?.date) {
+            if (d.next.date === todayStr) todayCount++;
+            if (d.next.date >= todayStr && d.next.date <= weekStr) thisWeek++;
+            if (d.next.date >= todayStr && d.next.date <= monthStr) thisMonth++;
+        }
+        if (d.latest && d.latest.epsActual != null && d.latest.epsEstimate != null) {
+            if (d.latest.epsActual >= d.latest.epsEstimate) beats++;
+            else misses++;
+        }
+    });
+    return { thisWeek, thisMonth, todayCount, beats, misses };
+}
+
+function renderCijferSummary() {
+    const el = document.getElementById('cijferSummary');
+    if (!el) return;
+    if (!cijferData.length) { el.innerHTML = ''; return; }
+    const s = computeCijferSummary();
+    const totalReported = s.beats + s.misses;
+    const beatPct = totalReported > 0 ? Math.round((s.beats / totalReported) * 100) : 0;
+
+    el.innerHTML = `
+        <div class="cijfer-summary-card" style="--cs-color: var(--danger);">
+            <div class="cs-label">Vandaag</div>
+            <div class="cs-value">${s.todayCount}</div>
+            <div class="cs-sub">${s.todayCount === 1 ? 'rapport' : 'rapporten'}</div>
+        </div>
+        <div class="cijfer-summary-card" style="--cs-color: var(--bolero);">
+            <div class="cs-label">Komende 7 dagen</div>
+            <div class="cs-value">${s.thisWeek}</div>
+            <div class="cs-sub">${s.thisWeek === 1 ? 'rapport' : 'rapporten'}</div>
+        </div>
+        <div class="cijfer-summary-card" style="--cs-color: #8e44ad;">
+            <div class="cs-label">Komende 30 dagen</div>
+            <div class="cs-value">${s.thisMonth}</div>
+            <div class="cs-sub">${s.thisMonth === 1 ? 'rapport' : 'rapporten'}</div>
+        </div>
+        <div class="cijfer-summary-card" style="--cs-color: var(--success);">
+            <div class="cs-label">Beat / Miss ratio</div>
+            <div class="cs-value">${beatPct}%</div>
+            <div class="cs-sub">${s.beats} beats · ${s.misses} misses</div>
+        </div>
+    `;
 }
 
 async function initCijferPage() {
@@ -5470,12 +5984,12 @@ function renderUpcomingBlock() {
     if (!block || !list) return;
 
     const today = new Date();
-    const twoWeeksOut = new Date(today); twoWeeksOut.setDate(today.getDate() + 14);
+    const fourWeeksOut = new Date(today); fourWeeksOut.setDate(today.getDate() + 28);
     const todayStr = today.toISOString().split('T')[0];
-    const twoWStr  = twoWeeksOut.toISOString().split('T')[0];
+    const fourWStr = fourWeeksOut.toISOString().split('T')[0];
 
     const upcoming = cijferData
-        .filter(d => d.next && d.next.date >= todayStr && d.next.date <= twoWStr)
+        .filter(d => d.next && d.next.date >= todayStr && d.next.date <= fourWStr)
         .sort((a,b) => a.next.date.localeCompare(b.next.date));
 
     if (upcoming.length === 0) { block.style.display = 'none'; return; }
@@ -5574,8 +6088,8 @@ async function loadCijferData(manual = false) {
     if (grid) grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text-muted);">⏳ Cijfers laden…</div>`;
 
     const today = new Date();
-    const fromD = new Date(today); fromD.setDate(fromD.getDate() - 90);
-    const toD   = new Date(today); toD.setDate(toD.getDate() + 60);
+    const fromD = new Date(today); fromD.setDate(fromD.getDate() - 180);
+    const toD   = new Date(today); toD.setDate(toD.getDate() + 180);
     const fmt   = d => d.toISOString().split('T')[0];
 
     const stockTickers = hmStocks
@@ -5630,23 +6144,73 @@ async function loadCijferData(manual = false) {
         return;
     }
 
+    populateCijferSectorFilter();
+    renderCijferSummary();
     renderUpcomingBlock();
     renderSurpriseRanking();
     renderCijferGrid();
+}
+
+// Helper: parse YYYY-MM-DD date string
+function parseEarningsDate(str) {
+    if (!str) return null;
+    const [y, m, d] = str.split('-').map(Number);
+    return new Date(y, m - 1, d);
+}
+
+// Helper: surprise % voor sortering
+function epsSurprisePct(d) {
+    if (!d.latest || d.latest.epsActual == null || d.latest.epsEstimate == null) return null;
+    const est = d.latest.epsEstimate;
+    if (est === 0) return null;
+    return ((d.latest.epsActual - est) / Math.abs(est)) * 100;
 }
 
 function renderCijferGrid() {
     const grid = document.getElementById('cijferGrid');
     if (!grid) return;
 
-    let items = cijferData;
+    let items = [...cijferData];
     if (cijferFilter === 'reported') items = items.filter(d => d.latest);
     if (cijferFilter === 'upcoming') items = items.filter(d => d.next);
+    if (cijferSectorFilter !== 'all') {
+        items = items.filter(d => {
+            const t = (d.ticker || '').toUpperCase();
+            const sec = (typeof SECTOR_MAP !== 'undefined' && SECTOR_MAP[t]) || 'Onbekend';
+            return sec === cijferSectorFilter;
+        });
+    }
+
+    // Sortering
+    items.sort((a, b) => {
+        if (cijferSort === 'ticker') return a.ticker.localeCompare(b.ticker);
+        if (cijferSort === 'surprise_desc' || cijferSort === 'surprise_asc') {
+            const sa = epsSurprisePct(a);
+            const sb = epsSurprisePct(b);
+            const va = sa == null ? -Infinity : sa;
+            const vb = sb == null ? -Infinity : sb;
+            return cijferSort === 'surprise_desc' ? vb - va : va - vb;
+        }
+        // Datum sortering
+        const aDate = a.next?.date || a.latest?.date || '0000';
+        const bDate = b.next?.date || b.latest?.date || '0000';
+        if (cijferSort === 'date_desc') return bDate.localeCompare(aDate);
+        // date_asc — toekomstige eerst, dan recent gerapporteerde
+        const today = new Date().toISOString().split('T')[0];
+        const aIsFuture = a.next && a.next.date >= today;
+        const bIsFuture = b.next && b.next.date >= today;
+        if (aIsFuture && !bIsFuture) return -1;
+        if (!aIsFuture && bIsFuture) return 1;
+        if (aIsFuture && bIsFuture) return aDate.localeCompare(bDate);
+        return bDate.localeCompare(aDate);
+    });
 
     if (items.length === 0) {
         grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text-muted);">Geen cijfers gevonden voor dit filter.</div>`;
         return;
     }
+
+    const today = new Date(); today.setHours(0,0,0,0);
 
     grid.innerHTML = items.map(d => {
         const e = d.latest || d.next;
@@ -5654,31 +6218,17 @@ function renderCijferGrid() {
         const isUpcoming = !d.latest && !!d.next;
         const cardClass  = isReported ? 'reported' : isUpcoming ? 'upcoming' : 'no-data';
 
-        const statusBadge = isReported
-            ? `<span style="font-size:0.65rem;font-weight:800;padding:2px 8px;border-radius:99px;background:rgba(46,204,113,0.15);color:var(--success);">✓ Gerapporteerd</span>`
-            : isUpcoming
-            ? `<span style="font-size:0.65rem;font-weight:800;padding:2px 8px;border-radius:99px;background:rgba(52,152,219,0.15);color:var(--bolero);">📅 Aankomend</span>`
-            : `<span style="font-size:0.65rem;font-weight:800;padding:2px 8px;border-radius:99px;background:var(--row-hover);color:var(--text-muted);">Geen data</span>`;
-
-        const dateStr = e ? formatEarningsDate(e.date) : '–';
-        const timingBadge = e?.hour === 'bmo'
-            ? `<span class="cijfer-badge bmo">Voor Opening</span>`
-            : e?.hour === 'amc'
-            ? `<span class="cijfer-badge amc">Na Sluiting</span>`
-            : '';
-
         if (!e) {
-            return `<div class="cijfer-card no-data">
-                <div class="cijfer-ticker">${d.ticker}</div>
-                <div class="cijfer-name">${d.name}</div>
-                <div style="color:var(--text-muted);font-size:0.8rem;margin-top:8px;">Geen earnings data beschikbaar in het geselecteerde bereik.</div>
+            return `<div class="cijfer-card no-data" onclick="openEpsPopup('${d.ticker}','${d.name.replace(/'/g,"\\'")}')">
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+                    <div>
+                        <div class="cijfer-ticker">${d.ticker}</div>
+                        <div class="cijfer-name">${d.name}</div>
+                    </div>
+                </div>
+                <div style="color:var(--text-muted);font-size:0.78rem;margin-top:10px;">Geen earnings data in dit bereik.</div>
             </div>`;
         }
-
-        const epsActual = e.epsActual  != null ? e.epsActual  : null;
-        const epsEst    = e.epsEstimate != null ? e.epsEstimate : null;
-        const revActual = e.revenueActual   != null ? e.revenueActual   : null;
-        const revEst    = e.revenueEstimate != null ? e.revenueEstimate : null;
 
         const fmtEps = v => v != null ? v.toFixed(2) : '–';
         const fmtRev = v => {
@@ -5688,35 +6238,14 @@ function renderCijferGrid() {
             return '$' + v.toLocaleString();
         };
 
-        let surpriseHtml = '';
-        if (isReported && epsActual != null && epsEst != null) {
-            const diff = epsActual - epsEst;
-            const pct  = epsEst !== 0 ? Math.abs(diff / epsEst * 100).toFixed(1) : null;
-            const isBeat = diff >= 0;
-            surpriseHtml = `<div class="cijfer-surprise ${isBeat?'beat':'miss'}">
-                ${isBeat ? '▲' : '▼'} ${isBeat ? 'Beat' : 'Miss'} ${pct ? `(${pct}%)` : ''}
-            </div>`;
-        }
+        const dateStr = formatEarningsDate(e.date);
+        const timingBadge = e.hour === 'bmo'
+            ? `<span class="cijfer-badge bmo">Voor opening</span>`
+            : e.hour === 'amc'
+            ? `<span class="cijfer-badge amc">Na sluiting</span>`
+            : '';
 
-        let revSurpriseHtml = '';
-        if (isReported && revActual != null && revEst != null) {
-            const diff = revActual - revEst;
-            const isBeat = diff >= 0;
-            const pct = revEst !== 0 ? Math.abs(diff / revEst * 100).toFixed(1) : null;
-            revSurpriseHtml = `<div class="cijfer-surprise ${isBeat?'beat':'miss'}" style="font-size:0.68rem;padding:1px 6px;">
-                ${isBeat ? '▲' : '▼'} Rev ${isBeat ? 'Beat' : 'Miss'} ${pct ? `(${pct}%)` : ''}
-            </div>`;
-        }
-
-        let nextHtml = '';
-        if (isReported && d.next) {
-            nextHtml = `<div style="margin-top:12px;padding-top:10px;border-top:1px dashed var(--border-color);font-size:0.75rem;color:var(--text-muted);">
-                📅 Volgend: <strong style="color:var(--bolero);">${formatEarningsDate(d.next.date)}</strong>
-                ${d.next.epsEstimate != null ? `· EPS est: <strong>$${d.next.epsEstimate.toFixed(2)}</strong>` : ''}
-            </div>`;
-        }
-
-        // Mini EPS trend sparkline (laatste 4 kwartalen vanuit allReported)
+        // Mini EPS sparkline + beat/miss streak (laatste 4 kwartalen)
         let trendHtml = '';
         const hist = (d.allReported || []).slice(0, 4).reverse();
         if (hist.length >= 2) {
@@ -5727,47 +6256,166 @@ function renderCijferGrid() {
                 const col = v >= 0 ? '#2ecc71' : '#e74c3c';
                 return `<div style="width:8px;height:${h}px;background:${col};border-radius:2px 2px 0 0;align-self:flex-end;opacity:0.85;"></div>`;
             }).join('');
-            trendHtml = `<div style="margin-top:10px;padding-top:8px;border-top:1px solid var(--border-color);">
-                <div style="font-size:0.62rem;font-weight:700;text-transform:uppercase;color:var(--text-muted);margin-bottom:4px;">EPS Trend (${hist.length}Q)</div>
-                <div style="display:flex;gap:3px;align-items:flex-end;height:28px;">${bars}</div>
+            // Beat/miss streak dots
+            const streakDots = hist.map(q => {
+                if (q.epsActual == null || q.epsEstimate == null) {
+                    return `<span style="width:8px;height:8px;border-radius:50%;background:var(--border-color);display:inline-block;" title="${q.date}: geen data"></span>`;
+                }
+                const beat = q.epsActual >= q.epsEstimate;
+                const col = beat ? '#2ecc71' : '#e74c3c';
+                const lbl = beat ? 'Beat' : 'Miss';
+                return `<span style="width:8px;height:8px;border-radius:50%;background:${col};display:inline-block;" title="${q.date}: ${lbl}"></span>`;
+            }).join('');
+            trendHtml = `<div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:10px;padding-top:8px;border-top:1px solid var(--border-color);">
+                <div style="display:flex;align-items:center;gap:8px;">
+                    <div style="font-size:0.6rem;font-weight:700;text-transform:uppercase;color:var(--text-muted);">EPS ${hist.length}Q</div>
+                    <div style="display:flex;gap:3px;align-items:flex-end;height:24px;">${bars}</div>
+                </div>
+                <div style="display:flex;gap:4px;align-items:center;" title="Laatste ${hist.length} kwartalen: groen = beat, rood = miss">
+                    ${streakDots}
+                </div>
             </div>`;
         }
 
-        return `<div class="cijfer-card ${cardClass}" style="cursor:pointer;" onclick="openEpsPopup('${d.ticker}','${d.name.replace(/'/g,"\'")}')" title="Klik voor EPS trend & consensus">
-            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px;">
-                <div>
-                    <div class="cijfer-ticker">${d.ticker}</div>
-                    <div class="cijfer-name">${d.name}</div>
-                </div>
-                ${statusBadge}
-            </div>
-            <div class="cijfer-date-row">
-                📆 ${dateStr}
-                ${timingBadge}
-            </div>
-            <div class="cijfer-metrics">
-                <div class="cijfer-metric-block">
-                    <div class="cijfer-metric-label">EPS Actueel</div>
-                    <div class="cijfer-metric-value" style="color:${epsActual!=null?(epsActual>=0?'var(--success)':'var(--danger)'):'var(--text-main)'}">
-                        ${isReported ? fmtEps(epsActual) : '–'}
+        // ── AANKOMENDE CIJFERS — countdown + verwachting prominent ─────────
+        if (isUpcoming) {
+            const dateObj = parseEarningsDate(e.date);
+            const diffD = Math.ceil((dateObj - today) / 86400000);
+            const cdLabel = diffD === 0 ? 'vandaag'
+                          : diffD === 1 ? 'morgen'
+                          : diffD < 0   ? `${-diffD} dgn geleden`
+                          : `${diffD} dgn`;
+            const cdClass = diffD === 0 ? 'today' : diffD <= 7 && diffD > 0 ? 'soon' : '';
+            const cdNum = diffD === 0 ? 'NU' : diffD === 1 ? '1' : diffD < 0 ? '!' : `${diffD}`;
+            const cdSub = diffD === 0 ? 'vandaag' : diffD === 1 ? 'morgen' : diffD < 0 ? 'late' : 'dagen';
+
+            // Last reported reference
+            let lastRef = '';
+            if (d.allReported && d.allReported.length > 0) {
+                const last = d.allReported[0];
+                const lDate = formatEarningsDate(last.date);
+                const surprise = (last.epsActual != null && last.epsEstimate != null && last.epsEstimate !== 0)
+                    ? ((last.epsActual - last.epsEstimate) / Math.abs(last.epsEstimate)) * 100
+                    : null;
+                const sBadge = surprise != null
+                    ? `<span class="cijfer-surprise ${surprise >= 0 ? 'beat' : 'miss'}" style="font-size:0.62rem;padding:1px 6px;">${surprise >= 0 ? '▲' : '▼'} ${Math.abs(surprise).toFixed(1)}%</span>`
+                    : '';
+                lastRef = `<div style="font-size:0.7rem;color:var(--text-muted);margin-top:6px;">Vorig kwartaal: ${lDate} ${sBadge}</div>`;
+            }
+
+            return `<div class="cijfer-card ${cardClass}" onclick="openEpsPopup('${d.ticker}','${d.name.replace(/'/g,"\\'")}')" title="Klik voor EPS trend & consensus">
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;">
+                    <div style="min-width:0;flex:1;">
+                        <div class="cijfer-ticker">${d.ticker}</div>
+                        <div class="cijfer-name" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${d.name}</div>
                     </div>
-                    ${surpriseHtml}
+                    <div class="cijfer-countdown ${cdClass}">
+                        <span class="cd-num">${cdNum}</span>
+                        <span class="cd-lbl">${cdSub}</span>
+                    </div>
                 </div>
-                <div class="cijfer-metric-block">
-                    <div class="cijfer-metric-label">EPS Verwacht</div>
-                    <div class="cijfer-metric-value">${fmtEps(epsEst)}</div>
-                    <div class="cijfer-metric-sub">${epsEst != null ? 'consensus' : ''}</div>
+                <div style="display:flex;align-items:center;gap:8px;margin-top:8px;font-size:0.78rem;color:var(--text-muted);">
+                    📆 ${dateStr} ${timingBadge}
                 </div>
-                <div class="cijfer-metric-block">
-                    <div class="cijfer-metric-label">Omzet Actueel</div>
-                    <div class="cijfer-metric-value">${isReported ? fmtRev(revActual) : '–'}</div>
-                    ${revSurpriseHtml}
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px;border-top:1px solid var(--border-color);padding-top:10px;">
+                    <div class="cijfer-metric-block">
+                        <div class="cijfer-metric-label">EPS verwacht</div>
+                        <div class="cijfer-metric-value">${fmtEps(e.epsEstimate)}</div>
+                        <div class="cijfer-metric-sub">consensus</div>
+                    </div>
+                    <div class="cijfer-metric-block">
+                        <div class="cijfer-metric-label">Omzet verwacht</div>
+                        <div class="cijfer-metric-value">${fmtRev(e.revenueEstimate)}</div>
+                    </div>
                 </div>
-                <div class="cijfer-metric-block">
-                    <div class="cijfer-metric-label">Omzet Verwacht</div>
-                    <div class="cijfer-metric-value">${fmtRev(revEst)}</div>
+                ${lastRef}
+                ${trendHtml}
+            </div>`;
+        }
+
+        // ── GERAPPORTEERDE CIJFERS — beat/miss banner prominent ────────────
+        const epsActual = e.epsActual;
+        const epsEst    = e.epsEstimate;
+        const revActual = e.revenueActual;
+        const revEst    = e.revenueEstimate;
+
+        // Beat/miss banner
+        let bannerHtml = '';
+        if (epsActual != null && epsEst != null) {
+            const diff = epsActual - epsEst;
+            const pct = epsEst !== 0 ? (diff / Math.abs(epsEst)) * 100 : 0;
+            const isBeat = diff >= 0;
+            const sign = isBeat ? '+' : '';
+            bannerHtml = `<div class="cijfer-banner ${isBeat ? 'beat' : 'miss'}">
+                <div>
+                    <div class="cb-label">${isBeat ? '▲ EPS BEAT' : '▼ EPS MISS'}</div>
+                    <div style="font-size:0.7rem;opacity:0.75;margin-top:2px;">$${fmtEps(epsActual)} vs $${fmtEps(epsEst)}</div>
+                </div>
+                <div class="cb-value">${sign}${pct.toFixed(1)}%</div>
+            </div>`;
+        }
+
+        // YoY EPS groei (huidige Q vs zelfde Q vorig jaar — 4 kwartalen terug in allReported)
+        let yoyHtml = '';
+        if (d.allReported && d.allReported.length >= 5 && epsActual != null) {
+            // allReported is gesorteerd nieuwste eerst — index 0 = laatste, index 4 = 4 kwartalen geleden
+            const yearAgo = d.allReported[4];
+            if (yearAgo && yearAgo.epsActual != null && yearAgo.epsActual !== 0) {
+                const yoyPct = ((epsActual - yearAgo.epsActual) / Math.abs(yearAgo.epsActual)) * 100;
+                const sign = yoyPct >= 0 ? '+' : '';
+                const col = yoyPct >= 0 ? 'var(--success)' : 'var(--danger)';
+                yoyHtml = `<div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px;font-size:0.7rem;color:var(--text-muted);">
+                    <span>EPS YoY</span>
+                    <span style="color:${col};font-weight:800;">${sign}${yoyPct.toFixed(1)}%</span>
+                </div>`;
+            }
+        }
+
+        // Revenue surprise badge
+        let revBadge = '';
+        if (revActual != null && revEst != null && revEst !== 0) {
+            const diff = revActual - revEst;
+            const pct = (diff / revEst) * 100;
+            const isBeat = diff >= 0;
+            revBadge = `<span class="cijfer-surprise ${isBeat ? 'beat' : 'miss'}" style="font-size:0.65rem;padding:1px 6px;">
+                ${isBeat ? '▲' : '▼'} Rev ${pct >= 0 ? '+' : ''}${pct.toFixed(1)}%
+            </span>`;
+        }
+
+        // Volgende rapport (als bekend)
+        let nextHtml = '';
+        if (d.next) {
+            const nextDate = formatEarningsDate(d.next.date);
+            const nextEps  = d.next.epsEstimate != null ? `$${d.next.epsEstimate.toFixed(2)}` : '–';
+            nextHtml = `<div style="margin-top:10px;padding-top:8px;border-top:1px dashed var(--border-color);font-size:0.72rem;color:var(--text-muted);">
+                📅 Volgend: <strong style="color:var(--bolero);">${nextDate}</strong> · EPS est: <strong>${nextEps}</strong>
+            </div>`;
+        }
+
+        return `<div class="cijfer-card ${cardClass}" onclick="openEpsPopup('${d.ticker}','${d.name.replace(/'/g,"\\'")}')" title="Klik voor EPS trend & consensus">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;">
+                <div style="min-width:0;flex:1;">
+                    <div class="cijfer-ticker">${d.ticker}</div>
+                    <div class="cijfer-name" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${d.name}</div>
+                </div>
+                <span style="font-size:0.62rem;font-weight:800;padding:3px 8px;border-radius:99px;background:rgba(46,204,113,0.15);color:var(--success);white-space:nowrap;">✓ Q-rapport</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;margin-top:6px;font-size:0.75rem;color:var(--text-muted);">
+                📆 ${dateStr} ${timingBadge}
+            </div>
+            ${bannerHtml}
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:0.75rem;">
+                <div>
+                    <div class="cijfer-metric-label">Omzet actueel</div>
+                    <div style="font-weight:800;font-size:0.95rem;">${fmtRev(revActual)}</div>
+                    ${revBadge}
+                </div>
+                <div>
+                    <div class="cijfer-metric-label">Omzet verwacht</div>
+                    <div style="font-weight:600;font-size:0.85rem;color:var(--text-muted);">${fmtRev(revEst)}</div>
                 </div>
             </div>
+            ${yoyHtml}
             ${trendHtml}
             ${nextHtml}
         </div>`;
@@ -6006,8 +6654,117 @@ function setApSort(key) {
     }
     // Re-render zonder opnieuw quotes te halen
     if (_apLastEnriched && _apLastTotalValue != null) {
-        renderBySector('ap-bySector', _apLastEnriched, _apLastTotalValue, false);
+        if (_apPositionsView === 'sector') {
+            renderBySector('ap-bySector', _apLastEnriched, _apLastTotalValue, false);
+        } else {
+            renderAllPositions(_apLastEnriched, _apLastTotalValue);
+        }
     }
+}
+
+// View toggle: 'sector' (per sector groepering) of 'all' (alle posities in 1 tabel)
+let _apPositionsView = 'sector';
+
+function setApPositionsView(view, btn) {
+    _apPositionsView = view;
+    document.querySelectorAll('#aandelen-portfolio-page .ap-view-btn').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+    document.getElementById('ap-positionsTitle').textContent = view === 'sector' ? 'POSITIES PER SECTOR' : 'ALLE POSITIES';
+    document.getElementById('ap-bySector').style.display     = view === 'sector' ? '' : 'none';
+    document.getElementById('ap-allPositions').style.display = view === 'all'    ? '' : 'none';
+    if (_apLastEnriched && _apLastTotalValue != null) {
+        if (view === 'sector') {
+            renderBySector('ap-bySector', _apLastEnriched, _apLastTotalValue, false);
+        } else {
+            renderAllPositions(_apLastEnriched, _apLastTotalValue);
+        }
+    }
+}
+
+// Render alle posities in één tabel met % van portfolio kolom
+function renderAllPositions(positions, totalValue, containerId, sortOpts) {
+    containerId = containerId || 'ap-allPositions';
+    const sk  = sortOpts ? sortOpts.key : _apSortKey;
+    const sd  = sortOpts ? sortOpts.dir : _apSortDir;
+    const sfn = sortOpts ? sortOpts.fn  : 'setApSort';
+    const el = document.getElementById(containerId);
+    if (!el) return;
+
+    // Sorteren
+    const sorted = [...positions];
+    if (sk) {
+        sorted.sort((a, b) => {
+            let av = a[sk], bv = b[sk];
+            if (sk === 'ticker' || sk === 'name' || sk === 'sector') {
+                av = (av || '').toString().toLowerCase();
+                bv = (bv || '').toString().toLowerCase();
+                return sd === 'asc' ? av.localeCompare(bv) : bv.localeCompare(av);
+            }
+            if (av == null) av = -Infinity;
+            if (bv == null) bv = -Infinity;
+            return sd === 'asc' ? av - bv : bv - av;
+        });
+    }
+
+    const arrow = (k) => sk === k ? `<span class="ap-sort-arrow">${sd === 'asc' ? '▲' : '▼'}</span>` : '';
+    const thBase = 'padding:6px;border-bottom:1px solid var(--border-color);';
+    const mkTh = (key, label, align) => {
+        const cls = `ap-sort-th${sk === key ? ' active' : ''}`;
+        return `<th class="${cls}" onclick="${sfn}('${key}')" style="${thBase}${align ? 'text-align:'+align+';' : ''}">${label}${arrow(key)}</th>`;
+    };
+
+    let html = `<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">
+        <table class="ap-positions-table" style="width:100%;min-width:980px;border-collapse:collapse;font-size:0.8rem;table-layout:fixed;">
+            <colgroup>
+                <col style="width:78px;">
+                <col style="min-width:140px;">
+                <col style="width:110px;">
+                <col style="width:70px;">
+                <col style="width:80px;">
+                <col style="width:115px;">
+                <col style="width:80px;">
+                <col style="width:115px;">
+                <col style="width:80px;">
+                <col style="width:75px;">
+            </colgroup>
+            <thead><tr style="text-align:left;color:var(--text-muted);font-size:0.65rem;">
+                ${mkTh('ticker', 'TICKER', 'left')}
+                ${mkTh('name', 'NAAM', 'left')}
+                ${mkTh('sector', 'SECTOR', 'left')}
+                ${mkTh('aantal', 'AANTAL', 'right')}
+                ${mkTh('price', 'PRIJS', 'right')}
+                ${mkTh('valueEur', 'WAARDE €', 'right')}
+                <th style="${thBase}text-align:right;">% PORT.</th>
+                ${mkTh('plEur', 'P/L €', 'right')}
+                ${mkTh('plPct', 'P/L %', 'right')}
+                ${mkTh('dayPLPct', 'DAG %', 'right')}
+            </tr></thead>
+            <tbody>`;
+
+    sorted.forEach(p => {
+        const plCol = p.plEur >= 0 ? 'var(--success)' : 'var(--danger)';
+        const dpCol = p.dayPLPct == null ? 'var(--text-muted)' : p.dayPLPct >= 0 ? 'var(--success)' : 'var(--danger)';
+        const cur = (p.currency || 'USD').toUpperCase();
+        const dec = p.price < 1 ? 4 : 2;
+        const cellBase = 'padding:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;';
+        const portPct = totalValue > 0 ? (p.valueEur / totalValue) * 100 : 0;
+
+        html += `<tr style="border-bottom:1px solid var(--border-color);">
+            <td style="${cellBase}font-weight:700;font-family:monospace;">${p.ticker}</td>
+            <td style="${cellBase}" title="${p.name}">${p.name}</td>
+            <td style="${cellBase}color:var(--text-muted);" title="${p.sector}">${p.sector}</td>
+            <td style="${cellBase}text-align:right;">${(p.aantal || 0).toLocaleString('nl-NL', { maximumFractionDigits: 8 })}</td>
+            <td style="${cellBase}text-align:right;">${cur === 'EUR' ? '€' : '$'}${(p.price || 0).toLocaleString('nl-NL', { minimumFractionDigits: 2, maximumFractionDigits: dec })}</td>
+            <td class="blur-target" style="${cellBase}text-align:right;font-weight:700;">${fmtEuroAlt(p.valueEur)}</td>
+            <td style="${cellBase}text-align:right;font-weight:700;">${portPct.toFixed(2)}%</td>
+            <td class="blur-target" style="${cellBase}text-align:right;color:${plCol};font-weight:700;">${p.plEur >= 0 ? '+' : ''}${fmtEuroAlt(p.plEur)}</td>
+            <td style="${cellBase}text-align:right;color:${plCol};font-weight:800;">${p.plPct == null ? '–' : (p.plPct >= 0 ? '+' : '') + p.plPct.toFixed(2) + '%'}</td>
+            <td style="${cellBase}text-align:right;color:${dpCol};font-weight:700;">${p.dayPLPct == null ? '–' : (p.dayPLPct >= 0 ? '+' : '') + p.dayPLPct.toFixed(2) + '%'}</td>
+        </tr>`;
+    });
+
+    html += `</tbody></table></div>`;
+    el.innerHTML = html;
 }
 
 let _apLastEnriched = null;
@@ -6113,10 +6870,10 @@ async function initAandelenPortfolio(force = false) {
     ].join(' · ');
     document.getElementById('ap-positionsBreakdown').textContent = breakdown;
 
-    // Top 3 beste (alleen winnaars) / slechtste (alleen verliezers)
+    // Top 5 beste (alleen winnaars) / slechtste (alleen verliezers)
     const sortedByPct = [...enriched].filter(x => x.plPct != null).sort((a,b) => b.plPct - a.plPct);
-    const top3Best  = sortedByPct.filter(x => x.plPct > 0).slice(0, 3);
-    const top3Worst = sortedByPct.filter(x => x.plPct < 0).slice(-3).reverse();
+    const top3Best  = sortedByPct.filter(x => x.plPct > 0).slice(0, 5);
+    const top3Worst = sortedByPct.filter(x => x.plPct < 0).slice(-5).reverse();
 
     const renderTopList = (items, isBest) => {
         if (items.length === 0) return '<div class="ap-toplist-empty">Geen data</div>';
@@ -6144,12 +6901,40 @@ async function initAandelenPortfolio(force = false) {
 
     // Sectorverdeling — pie chart, gebruikt positionsValue (cash niet als sector)
     renderSectorPie(enriched, positionsValue);
+    // Render beide views; toggle bepaalt welke zichtbaar is
     renderBySector('ap-bySector', enriched, positionsValue, false);
+    renderAllPositions(enriched, positionsValue);
 
     if (status) status.textContent = `✓ Bijgewerkt · ${new Date().toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit'})}`;
 }
 
 // ── CRYPTO PORTFOLIO ────────────────────────────────────────────────────────
+// Cache voor historische crypto prijzen op 13/04/2026
+let _cpHistCache = JSON.parse(localStorage.getItem('cp_hist_cache_v1') || '{}');
+function saveCpHistCache() { localStorage.setItem('cp_hist_cache_v1', JSON.stringify(_cpHistCache)); }
+
+// Haal close-prijs op de eerste dag ≥ startTs op (Yahoo Finance chart)
+async function fetchHistoricalPrice(ticker, startTs) {
+    const cacheKey = `${ticker}@${startTs}`;
+    if (_cpHistCache[cacheKey] != null) return _cpHistCache[cacheKey];
+    try {
+        const period1 = Math.floor((startTs - 86400000) / 1000);
+        const period2 = Math.floor((startTs + 14*86400000) / 1000); // 2 weken venster
+        const url = `https://corsproxy.io/?url=${encodeURIComponent(`https://query2.finance.yahoo.com/v8/finance/chart/${ticker}?interval=1d&period1=${period1}&period2=${period2}`)}`;
+        const r = await fetch(url);
+        if (!r.ok) throw new Error(r.status);
+        const data = await r.json();
+        const closes = data?.chart?.result?.[0]?.indicators?.quote?.[0]?.close;
+        const startClose = closes?.find(v => v != null);
+        if (startClose) {
+            _cpHistCache[cacheKey] = startClose;
+            saveCpHistCache();
+            return startClose;
+        }
+    } catch {}
+    return null;
+}
+
 async function initCryptoPortfolio(force = false) {
     const status = document.getElementById('cryptoPfStatus');
     if (status) status.textContent = '⏳ Laden…';
@@ -6159,13 +6944,20 @@ async function initCryptoPortfolio(force = false) {
     if (positions.length === 0) {
         const totalCard = document.getElementById('cp-totalValue');
         if (totalCard) totalCard.textContent = '€ 0,00';
-        ['cp-totalCost','cp-totalPL','cp-totalPLPct','cp-dayPL','cp-dayPLPct','cp-positions','cp-positionsBreakdown','cp-best','cp-bestPct','cp-worst','cp-worstPct']
+        ['cp-totalPL','cp-totalPLPct','cp-dayPL','cp-dayPLPct','cp-positions','cp-positionsBreakdown']
             .forEach(id => { const e = document.getElementById(id); if (e) e.textContent = '–'; });
-        const sb = document.getElementById('cp-sectorBars'); if (sb) sb.innerHTML = '<div style="color:var(--text-muted);font-size:0.85rem;">Geen crypto posities. Voeg eerst crypto + aantal toe in DATA → CRYPTO.</div>';
-        const bs = document.getElementById('cp-bySector');   if (bs) bs.innerHTML = '';
+        const emptyList = '<div class="ap-toplist-empty">Geen coins</div>';
+        const bl = document.getElementById('cp-bestList');  if (bl) bl.innerHTML = emptyList;
+        const wl = document.getElementById('cp-worstList'); if (wl) wl.innerHTML = emptyList;
+        if (_cpSectorChart) { _cpSectorChart.destroy(); _cpSectorChart = null; }
+        const lg = document.getElementById('cp-sectorLegend'); if (lg) lg.innerHTML = '<div style="color:var(--text-muted);font-size:0.85rem;">Geen crypto posities. Voeg eerst crypto + aantal toe in DATA → CRYPTO.</div>';
+        const bs = document.getElementById('cp-bySector');     if (bs) bs.innerHTML = '';
         if (status) status.textContent = '';
         return;
     }
+
+    // Startdatum 13/04/2026 voor performance vergelijking
+    const startTs = new Date(2026, 3, 13).getTime();
 
     const usdEur = await getUsdEurRate();
     const enriched = await Promise.all(positions.map(async s => {
@@ -6175,14 +6967,21 @@ async function initCryptoPortfolio(force = false) {
         const price     = q?.price ?? 0;
         const dayChange = q?.change ?? 0;
         const aantal    = s.aantal || 0;
-        const gak       = s.gak || 0;
         const valueEur  = price * aantal * fx;
-        const costEur   = gak   * aantal * fx;
-        const plEur     = valueEur - costEur;
-        const plPct     = costEur > 0 ? (plEur / costEur) * 100 : null;
+
+        // Historische prijs op 13/04/2026 → basis voor P/L
+        const histPrice = await fetchHistoricalPrice(s.ticker, startTs);
+        // costEur is hier waarde op 13/04 (niet GAK) zodat alle P/L vanaf die datum telt
+        const costEur   = histPrice ? histPrice * aantal * fx : 0;
+        const plEur     = histPrice ? valueEur - costEur : 0;
+        const plPct     = (histPrice && histPrice > 0) ? ((price - histPrice) / histPrice) * 100 : null;
         const dayPLEur  = dayChange * aantal * fx;
         const dayPLPct  = q?.pct ?? null;
-        return { ...s, q, sector, price, valueEur, costEur, plEur, plPct, dayPLEur, dayPLPct };
+        // sinds-start velden = zelfde als plEur/plPct (voor consistency met top lists)
+        const sinceStartPct = plPct;
+        const sinceStartEur = plEur;
+
+        return { ...s, q, sector, price, histPrice, valueEur, costEur, plEur, plPct, dayPLEur, dayPLPct, sinceStartPct, sinceStartEur };
     }));
 
     const totalValue = enriched.reduce((a,x) => a + x.valueEur, 0);
@@ -6193,7 +6992,6 @@ async function initCryptoPortfolio(force = false) {
     const dayPLPct   = totalValue > 0 ? (dayPL / (totalValue - dayPL)) * 100 : 0;
 
     document.getElementById('cp-totalValue').textContent = fmtEuroAlt(totalValue);
-    document.getElementById('cp-totalCost').textContent  = 'Gestort: ' + fmtEuroAlt(totalCost);
 
     const tplEl = document.getElementById('cp-totalPL');
     tplEl.textContent = (totalPL >= 0 ? '+' : '') + fmtEuroAlt(totalPL);
@@ -6206,24 +7004,104 @@ async function initCryptoPortfolio(force = false) {
     document.getElementById('cp-dayPLPct').innerHTML = plChip(dayPLPct);
 
     document.getElementById('cp-positions').textContent = `${enriched.length}`;
-    document.getElementById('cp-positionsBreakdown').textContent = `${enriched.length === 1 ? 'Coin' : 'Coins'}`;
+    document.getElementById('cp-positionsBreakdown').textContent = enriched.length === 1 ? 'Coin' : 'Coins';
 
-    const sortedByPct = [...enriched].filter(x => x.plPct != null).sort((a,b) => b.plPct - a.plPct);
-    const best = sortedByPct[0];
-    const worst = sortedByPct[sortedByPct.length - 1];
-    if (best) {
-        document.getElementById('cp-best').textContent = `${best.ticker.replace(/-USD$/,'')} · ${best.name}`;
-        document.getElementById('cp-bestPct').innerHTML = plChip(best.plPct) + ` &nbsp;<span style="color:var(--text-muted);">(${(best.plEur >= 0 ? '+' : '') + fmtEuroAlt(best.plEur)})</span>`;
-    }
-    if (worst && worst !== best) {
-        document.getElementById('cp-worst').textContent = `${worst.ticker.replace(/-USD$/,'')} · ${worst.name}`;
-        document.getElementById('cp-worstPct').innerHTML = plChip(worst.plPct) + ` &nbsp;<span style="color:var(--text-muted);">(${(worst.plEur >= 0 ? '+' : '') + fmtEuroAlt(worst.plEur)})</span>`;
-    }
+    // Top 3 beste/slechtste sinds 13/04 — gebruik sinceStartPct
+    const sortedByStart = [...enriched]
+        .filter(x => x.sinceStartPct != null)
+        .sort((a,b) => b.sinceStartPct - a.sinceStartPct);
+    const top3Best  = sortedByStart.filter(x => x.sinceStartPct > 0).slice(0, 3);
+    const top3Worst = sortedByStart.filter(x => x.sinceStartPct < 0).slice(-3).reverse();
 
-    renderSectorBars('cp-sectorBars', enriched, totalValue);
+    const renderCpTop = (items, isBest) => {
+        if (items.length === 0) return '<div class="ap-toplist-empty">Geen data</div>';
+        return items.map((p, i) => {
+            const col = isBest ? 'var(--success)' : 'var(--danger)';
+            const sign = p.sinceStartPct >= 0 ? '+' : '';
+            const eurSign = (p.sinceStartEur ?? 0) >= 0 ? '+' : '';
+            const tickerShort = p.ticker.replace(/-USD$/i, '');
+            return `<div class="ap-toplist-row" title="${p.name}">
+                <span class="ap-toplist-rank">${i+1}.</span>
+                <span class="ap-toplist-ticker">${tickerShort}</span>
+                <span class="ap-toplist-eur blur-target">${p.sinceStartEur != null ? eurSign + fmtEuroAlt(p.sinceStartEur, 0) : '–'}</span>
+                <span class="ap-toplist-pct" style="color:${col};">${sign}${p.sinceStartPct.toFixed(2)}%</span>
+            </div>`;
+        }).join('');
+    };
+    const bestEl  = document.getElementById('cp-bestList');
+    const worstEl = document.getElementById('cp-worstList');
+    if (bestEl)  bestEl.innerHTML  = renderCpTop(top3Best, true);
+    if (worstEl) worstEl.innerHTML = renderCpTop(top3Worst, false);
+
+    // Pie chart voor categorie-verdeling
+    renderCryptoPie(enriched, totalValue);
     renderBySector('cp-bySector', enriched, totalValue, true);
 
     if (status) status.textContent = `✓ Bijgewerkt · ${new Date().toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit'})}`;
+}
+
+// Crypto pie chart (apart om botsing met aandelen pie te vermijden)
+let _cpSectorChart = null;
+function renderCryptoPie(positions, totalValue) {
+    const canvas = document.getElementById('cp-sectorPie');
+    const legendEl = document.getElementById('cp-sectorLegend');
+    if (!canvas || !legendEl) return;
+
+    const bySector = {};
+    positions.forEach(p => {
+        if (!bySector[p.sector]) bySector[p.sector] = 0;
+        bySector[p.sector] += p.valueEur;
+    });
+    const entries = Object.entries(bySector).sort((a,b) => b[1] - a[1]);
+
+    if (entries.length === 0 || totalValue === 0) {
+        if (_cpSectorChart) { _cpSectorChart.destroy(); _cpSectorChart = null; }
+        legendEl.innerHTML = '<div style="color:var(--text-muted);font-size:0.85rem;">Geen data</div>';
+        return;
+    }
+
+    const labels = entries.map(([sec]) => sec);
+    const values = entries.map(([, v]) => v);
+    const colors = entries.map((_, i) => sectorColor(i));
+
+    if (_cpSectorChart) _cpSectorChart.destroy();
+    const cardBg = getComputedStyle(document.documentElement).getPropertyValue('--card-bg').trim() || '#fff';
+    _cpSectorChart = new Chart(canvas.getContext('2d'), {
+        type: 'doughnut',
+        data: {
+            labels,
+            datasets: [{ data: values, backgroundColor: colors, borderColor: cardBg, borderWidth: 2, hoverOffset: 8 }],
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '62%',
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: (ctx) => {
+                            const v = ctx.parsed;
+                            const pct = (v / totalValue) * 100;
+                            return `${fmtEuroAlt(v)} (${pct.toFixed(1)}%)`;
+                        }
+                    }
+                },
+                datalabels: { display: false }
+            }
+        }
+    });
+
+    legendEl.innerHTML = entries.map(([sec, val], i) => {
+        const pct = (val / totalValue) * 100;
+        return `<div class="ap-pie-legend-row" title="${sec}">
+            <span class="ap-pie-dot" style="background:${colors[i]};"></span>
+            <span class="ap-pie-name">${sec}</span>
+            <span class="ap-pie-spacer"></span>
+            <span class="ap-pie-val blur-target">${fmtEuroAlt(val, 0)}</span>
+            <span class="ap-pie-pct">${pct.toFixed(1)}%</span>
+        </div>`;
+    }).join('');
 }
 
 // ── Render hulpfuncties ────────────────────────────────────────────────────
@@ -6287,12 +7165,13 @@ function renderSectorPie(positions, totalValue) {
         }
     });
 
-    // Legenda: dot + naam + €waarde + %
+    // Legenda: dot + naam | spacer | €waarde + %
     legendEl.innerHTML = entries.map(([sec, val], i) => {
         const pct = (val / totalValue) * 100;
         return `<div class="ap-pie-legend-row" title="${sec}">
             <span class="ap-pie-dot" style="background:${colors[i]};"></span>
             <span class="ap-pie-name">${sec}</span>
+            <span class="ap-pie-spacer"></span>
             <span class="ap-pie-val blur-target">${fmtEuroAlt(val, 0)}</span>
             <span class="ap-pie-pct">${pct.toFixed(1)}%</span>
         </div>`;
@@ -6335,7 +7214,7 @@ function renderSectorBars(containerId, positions, totalValue) {
     el.innerHTML = bar + legend;
 }
 
-function renderBySector(containerId, positions, totalValue, isCrypto) {
+function renderBySector(containerId, positions, totalValue, isCrypto, sortOpts) {
     const el = document.getElementById(containerId);
     if (!el) return;
     const bySector = {};
@@ -6360,8 +7239,9 @@ function renderBySector(containerId, positions, totalValue, isCrypto) {
         const plSign = sectorPL >= 0 ? '+' : '';
 
         // Sortable kolomheaders (alleen voor aandelen, niet crypto)
-        const sortKey = isCrypto ? null : _apSortKey;
-        const sortDir = isCrypto ? null : _apSortDir;
+        const sortKey = isCrypto ? null : (sortOpts ? sortOpts.key : _apSortKey);
+        const sortDir = isCrypto ? null : (sortOpts ? sortOpts.dir : _apSortDir);
+        const sortFn  = (sortOpts ? sortOpts.fn : null) || 'setApSort';
         const arrow = (k) => sortKey === k ? `<span class="ap-sort-arrow">${sortDir === 'asc' ? '▲' : '▼'}</span>` : '';
         const thBase = 'padding:4px 6px;border-bottom:1px solid var(--border-color);';
         const mkTh = (key, label, align) => {
@@ -6369,7 +7249,7 @@ function renderBySector(containerId, positions, totalValue, isCrypto) {
                 return `<th style="${thBase}${align ? 'text-align:'+align+';' : ''}">${label}</th>`;
             }
             const cls = `ap-sort-th${sortKey === key ? ' active' : ''}`;
-            return `<th class="${cls}" onclick="setApSort('${key}')" style="${thBase}${align ? 'text-align:'+align+';' : ''}">${label}${arrow(key)}</th>`;
+            return `<th class="${cls}" onclick="${sortFn}('${key}')" style="${thBase}${align ? 'text-align:'+align+';' : ''}">${label}${arrow(key)}</th>`;
         };
 
         // Sorteer posities binnen sector
@@ -6418,7 +7298,7 @@ function renderBySector(containerId, positions, totalValue, isCrypto) {
                         ${mkTh('ticker', 'TICKER', 'left')}
                         ${mkTh('name', 'NAAM', 'left')}
                         ${mkTh('aantal', 'AANTAL', 'right')}
-                        ${mkTh('gak', 'GAK', 'right')}
+                        ${mkTh('gak', isCrypto ? 'PRIJS 13/04' : 'GAK', 'right')}
                         ${mkTh('price', 'PRIJS', 'right')}
                         ${mkTh('valueEur', 'WAARDE €', 'right')}
                         ${mkTh('plEur', 'P/L €', 'right')}
@@ -6437,7 +7317,7 @@ function renderBySector(containerId, positions, totalValue, isCrypto) {
                 <td style="${cellBase}font-weight:700;font-family:monospace;">${displayTicker}</td>
                 <td style="${cellBase}" title="${p.name}">${p.name}</td>
                 <td style="${cellBase}text-align:right;">${(p.aantal || 0).toLocaleString('nl-NL', { maximumFractionDigits: 8 })}</td>
-                <td style="${cellBase}text-align:right;color:var(--text-muted);">${cur === 'EUR' ? '€' : '$'}${(p.gak || 0).toLocaleString('nl-NL', { minimumFractionDigits: 2, maximumFractionDigits: dec })}</td>
+                <td style="${cellBase}text-align:right;color:var(--text-muted);">${cur === 'EUR' ? '€' : '$'}${((isCrypto ? (p.histPrice ?? 0) : (p.gak || 0))).toLocaleString('nl-NL', { minimumFractionDigits: 2, maximumFractionDigits: dec })}</td>
                 <td style="${cellBase}text-align:right;">${cur === 'EUR' ? '€' : '$'}${(p.price || 0).toLocaleString('nl-NL', { minimumFractionDigits: 2, maximumFractionDigits: dec })}</td>
                 <td class="blur-target" style="${cellBase}text-align:right;font-weight:700;">${fmtEuroAlt(p.valueEur)}</td>
                 <td class="blur-target" style="${cellBase}text-align:right;color:${plCol};font-weight:700;">${p.plEur >= 0 ? '+' : ''}${fmtEuroAlt(p.plEur)}</td>
@@ -6448,6 +7328,639 @@ function renderBySector(containerId, positions, totalValue, isCrypto) {
         html += `</tbody></table></div></div>`;
     });
     el.innerHTML = html;
+}
+
+// ── TEST PORTFOLIO PAGINA ────────────────────────────────────────────────────
+
+const PORTFOLIO_HISTORY_KEY   = 'portfolio_history_v1';
+const PORTFOLIO_BACKFILL_KEY  = 'portfolio_hist_backfill_v1';
+const PORTFOLIO_HISTORY_START = '2025-01-01';
+
+function loadPortfolioHistory() {
+    try { return JSON.parse(localStorage.getItem(PORTFOLIO_HISTORY_KEY) || '[]'); }
+    catch { return []; }
+}
+
+function needsBackfill() {
+    try {
+        const cached = JSON.parse(localStorage.getItem(PORTFOLIO_BACKFILL_KEY) || 'null');
+        if (!cached) return true;
+        return Date.now() - cached.fetched > 24 * 60 * 60 * 1000; // eens per dag vernieuwen
+    } catch { return true; }
+}
+
+// Haalt dagelijkse slotkoersen op van Yahoo Finance voor een tijdsbereik
+async function fetchPriceSeries(ticker, startDate, endDate) {
+    const p1 = Math.floor(new Date(startDate).getTime() / 1000);
+    const p2 = Math.floor(new Date(endDate).getTime() / 1000) + 86400;
+    const url = `https://corsproxy.io/?url=${encodeURIComponent(
+        `https://query2.finance.yahoo.com/v8/finance/chart/${ticker}?interval=1d&period1=${p1}&period2=${p2}`
+    )}`;
+    try {
+        const r = await fetch(url);
+        if (!r.ok) throw new Error(r.status);
+        const data = await r.json();
+        const result = data?.chart?.result?.[0];
+        if (!result) return {};
+        const timestamps = result.timestamp || [];
+        const closes = result.indicators?.quote?.[0]?.close || [];
+        const series = {};
+        timestamps.forEach((ts, i) => {
+            if (closes[i] != null) {
+                const date = new Date(ts * 1000).toISOString().slice(0, 10);
+                series[date] = closes[i];
+            }
+        });
+        return series;
+    } catch { return {}; }
+}
+
+async function runPortfolioBackfill(force = false) {
+    if (!force && !needsBackfill()) { renderPortfolioHistoryChart(); return; }
+
+    const loadingEl = document.getElementById('tp-historyLoading');
+    const canvas    = document.getElementById('tp-historyChart');
+    const emptyEl   = document.getElementById('tp-historyEmpty');
+    if (loadingEl) loadingEl.style.display = '';
+    if (canvas)    canvas.style.display    = 'none';
+    if (emptyEl)   emptyEl.style.display   = 'none';
+
+    const today = new Date().toISOString().slice(0, 10);
+    const positions = hmStocks.filter(s =>
+        (s.type === 'stock' || s.type === 'etf' || s.type === 'option') && (s.aantal || 0) > 0
+    );
+
+    // Haal EUR/USD historisch op (EURUSD=X geeft USD per EUR, dus 1/waarde = EUR per USD)
+    const eurusdSeries = await fetchPriceSeries('EURUSD=X', PORTFOLIO_HISTORY_START, today);
+
+    // Haal alle positie-prijsseries op in parallel
+    const seriesMap = {};
+    await Promise.all(positions.map(async s => {
+        seriesMap[s.ticker] = await fetchPriceSeries(s.ticker, PORTFOLIO_HISTORY_START, today);
+    }));
+
+    // Verzamel alle handelsdagen
+    const allDates = new Set(Object.keys(eurusdSeries));
+    Object.values(seriesMap).forEach(s => Object.keys(s).forEach(d => allDates.add(d)));
+    const sortedDates = [...allDates]
+        .filter(d => d >= PORTFOLIO_HISTORY_START && d <= today)
+        .sort();
+
+    if (sortedDates.length === 0) {
+        if (loadingEl) loadingEl.style.display = 'none';
+        if (emptyEl)   emptyEl.style.display   = '';
+        return;
+    }
+
+    // Reconstrueer dagelijkse portfoliowaarde (totaal + per broker)
+    const brokerCash = { Bolero: _apCash.Bolero || 0, Degiro: _apCash.Degiro || 0, Saxo: _apCash.Saxo || 0 };
+    const totalCash  = brokerCash.Bolero + brokerCash.Degiro + brokerCash.Saxo;
+    const lastPrices = {};
+    let lastEurusd = null;
+    const history = [];
+
+    sortedDates.forEach(date => {
+        const er = eurusdSeries[date];
+        if (er != null) lastEurusd = er;
+        positions.forEach(s => {
+            const p = seriesMap[s.ticker]?.[date];
+            if (p != null) lastPrices[s.ticker] = p;
+        });
+
+        const brokerValues = { Bolero: brokerCash.Bolero, Degiro: brokerCash.Degiro, Saxo: brokerCash.Saxo };
+        positions.forEach(s => {
+            const price = lastPrices[s.ticker];
+            if (price == null) return;
+            const cur    = (s.currency || 'USD').toUpperCase();
+            const fx     = cur === 'EUR' ? 1 : (lastEurusd ? 1 / lastEurusd : 0.92);
+            const broker = s.broker || 'Degiro';
+            brokerValues[broker] = (brokerValues[broker] || 0) + price * (s.aantal || 0) * fx;
+        });
+        history.push({
+            date,
+            value:  brokerValues.Bolero + brokerValues.Degiro + brokerValues.Saxo,
+            bolero: brokerValues.Bolero,
+            degiro: brokerValues.Degiro,
+            saxo:   brokerValues.Saxo,
+        });
+    });
+
+    localStorage.setItem(PORTFOLIO_HISTORY_KEY,  JSON.stringify(history));
+    localStorage.setItem(PORTFOLIO_BACKFILL_KEY, JSON.stringify({ fetched: Date.now() }));
+
+    if (loadingEl) loadingEl.style.display = 'none';
+    renderPortfolioHistoryChart();
+}
+
+let _tpHistoryChart = null;
+
+function renderPortfolioHistoryChart() {
+    const canvas    = document.getElementById('tp-historyChart');
+    const emptyEl   = document.getElementById('tp-historyEmpty');
+    const loadingEl = document.getElementById('tp-historyLoading');
+    if (!canvas) return;
+    if (loadingEl) loadingEl.style.display = 'none';
+
+    // Bepaal data key en kleur op basis van actieve broker tab
+    const brokerKey = { all: 'value', Bolero: 'bolero', Degiro: 'degiro', Saxo: 'saxo' }[_tpBrokerFilter] || 'value';
+    const colorVar  = { all: '--total-gray', Bolero: '--bolero', Degiro: '--degiro', Saxo: '--saxo' }[_tpBrokerFilter] || '--total-gray';
+
+    const history = getFilteredHistory(_tpTimeFilter).filter(h => h[brokerKey] != null);
+
+    if (history.length === 0) {
+        canvas.style.display = 'none';
+        if (emptyEl) emptyEl.style.display = '';
+        return;
+    }
+    canvas.style.display = '';
+    if (emptyEl) emptyEl.style.display = 'none';
+
+    // Rendement berekenen voor de geselecteerde periode
+    const returnEl = document.getElementById('tp-periodReturn');
+    if (returnEl) {
+        const first = history[0][brokerKey];
+        const last  = history[history.length - 1][brokerKey];
+        if (first > 0) {
+            const pct  = ((last - first) / first) * 100;
+            const sign = pct >= 0 ? '+' : '';
+            returnEl.textContent  = sign + pct.toFixed(2) + '%';
+            returnEl.style.color  = pct >= 0 ? 'var(--success)' : 'var(--danger)';
+        } else {
+            returnEl.textContent = '';
+        }
+    }
+
+    const labels = history.map(h => {
+        const d = new Date(h.date);
+        return d.toLocaleDateString('nl-NL', { day: '2-digit', month: 'short' });
+    });
+    const values = history.map(h => h[brokerKey]);
+
+    const resolvedLine = getComputedStyle(document.documentElement).getPropertyValue(colorVar).trim() || '#6c757d';
+
+    if (_tpHistoryChart) { _tpHistoryChart.destroy(); _tpHistoryChart = null; }
+
+    // Benchmark datasets — initieel leeg en verborgen
+    const benchDatasets = TP_BENCHMARKS.map(b => ({
+        label: b.label,
+        data: [],
+        borderColor: b.color,
+        borderWidth: 1.8,
+        borderDash: [4, 3],
+        pointRadius: 0,
+        pointHoverRadius: 5,
+        fill: false,
+        tension: 0.3,
+        hidden: true,
+        spanGaps: true,
+    }));
+
+    _tpHistoryChart = new Chart(canvas.getContext('2d'), {
+        type: 'line',
+        data: {
+            labels,
+            datasets: [
+                {
+                    label: 'Portfolio',
+                    data: values,
+                    borderColor: resolvedLine,
+                    borderWidth: 2.5,
+                    pointRadius: history.length <= 30 ? 3 : 0,
+                    pointHoverRadius: 6,
+                    pointBackgroundColor: resolvedLine,
+                    fill: true,
+                    backgroundColor: (ctx) => {
+                        const gradient = ctx.chart.ctx.createLinearGradient(0, 0, 0, ctx.chart.height);
+                        gradient.addColorStop(0, resolvedLine + '44');
+                        gradient.addColorStop(1, resolvedLine + '00');
+                        return gradient;
+                    },
+                    tension: 0.3,
+                },
+                ...benchDatasets,
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: { mode: 'index', intersect: false },
+            plugins: {
+                legend: { display: false },
+                datalabels: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: (ctx) => {
+                            const v = ctx.parsed.y;
+                            if (v == null) return null;
+                            return ' ' + ctx.dataset.label + ': ' + fmtEuroAlt(v);
+                        },
+                        title: (items) => history[items[0].dataIndex]?.date ?? '',
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    grid: { display: false },
+                    ticks: { color: 'var(--text-muted)', font: { size: 10 }, maxTicksLimit: 8 }
+                },
+                y: {
+                    grid: {
+                        color: (ctx) => {
+                            const len = ctx.scale.ticks.length;
+                            return (ctx.index === 0 || ctx.index === len - 1)
+                                ? 'rgba(128,128,128,0.12)' : 'transparent';
+                        }
+                    },
+                    ticks: {
+                        color: 'var(--text-muted)',
+                        font: { size: 10 },
+                        callback: (v) => '€' + Math.round(v).toLocaleString('nl-NL'),
+                    },
+                    afterTickToLabelConversion: (scale) => {
+                        const ticks = scale.ticks;
+                        for (let i = 1; i < ticks.length - 1; i++) ticks[i].label = '';
+                    }
+                }
+            }
+        }
+    });
+
+    // Herstel actieve benchmarks na herrendering
+    const anyActive = TP_BENCHMARKS.some(b => document.getElementById(b.id)?.checked);
+    if (anyActive) updateTpBenchmarks();
+}
+
+// TEST pagina — benchmark definities
+const TP_BENCHMARKS = [
+    { id: 'tp-benchSP',     ticker: 'SPY',     label: 'S&P 500',    color: '#e67e22' },
+    { id: 'tp-benchMSCI',   ticker: 'URTH',    label: 'MSCI World', color: '#8e44ad' },
+    { id: 'tp-benchNASDAQ', ticker: 'QQQ',     label: 'Nasdaq 100', color: '#16a085' },
+    { id: 'tp-benchBTC',    ticker: 'BTC-USD', label: 'Bitcoin',    color: '#c0392b' },
+    { id: 'tp-benchBEL20',  ticker: '^BFX',    label: 'BEL 20',     color: '#2980b9' },
+];
+let _tpBenchCache  = {};
+let _tpTimeFilter  = 'all';
+
+function getFilteredHistory(range) {
+    const history = loadPortfolioHistory().filter(h => h.date >= PORTFOLIO_HISTORY_START);
+    if (!history.length) return [];
+    const now = new Date();
+    let cutoff = null;
+    if (range === '1w')  { cutoff = new Date(now); cutoff.setDate(now.getDate() - 7); }
+    else if (range === '1m')  { cutoff = new Date(now); cutoff.setMonth(now.getMonth() - 1); }
+    else if (range === 'ytd') { cutoff = new Date(now.getFullYear(), 0, 1); }
+    if (!cutoff) return history;
+    return history.filter(h => new Date(h.date) >= cutoff);
+}
+
+function setTpTimeFilter(range, btn) {
+    _tpTimeFilter = range;
+    btn.closest('.time-filter-btns').querySelectorAll('.time-btn').forEach(b => b.classList.remove('active-time'));
+    btn.classList.add('active-time');
+    _tpBenchCache = {}; // reset cache zodat benchmark opnieuw uitlijnt op nieuw startpunt
+    renderPortfolioHistoryChart();
+}
+
+async function fetchTpBenchmarkSeries(ticker, fromDate) {
+    const cacheKey = ticker + '@' + fromDate;
+    if (_tpBenchCache[cacheKey]) return _tpBenchCache[cacheKey];
+    const today = new Date().toISOString().slice(0, 10);
+    const series = await fetchPriceSeries(ticker, fromDate, today);
+    _tpBenchCache[cacheKey] = series;
+    return series;
+}
+
+function alignTpBenchmark(priceMap, dates, portfolioValues) {
+    if (!priceMap || !dates.length) return null;
+    let basePrice = null;
+    const basePortfolio = portfolioValues[0];
+    const result = [];
+    for (let i = 0; i < dates.length; i++) {
+        let price = priceMap[dates[i]];
+        if (price == null) {
+            const d = new Date(dates[i]);
+            for (let off = -3; off <= 3; off++) {
+                const t = new Date(d); t.setDate(d.getDate() + off);
+                const k = t.toISOString().slice(0, 10);
+                if (priceMap[k] != null) { price = priceMap[k]; break; }
+            }
+        }
+        if (price == null) { result.push(null); continue; }
+        if (basePrice === null) basePrice = price;
+        const pct = basePrice > 0 ? (price - basePrice) / basePrice : 0;
+        result.push(basePortfolio * (1 + pct));
+    }
+    return basePrice !== null ? result : null;
+}
+
+async function updateTpBenchmarks() {
+    if (!_tpHistoryChart) return;
+    const brokerKey = { all: 'value', Bolero: 'bolero', Degiro: 'degiro', Saxo: 'saxo' }[_tpBrokerFilter] || 'value';
+    const history = getFilteredHistory(_tpTimeFilter).filter(h => h[brokerKey] != null);
+    if (!history.length) return;
+    const dates    = history.map(h => h.date);
+    const values   = history.map(h => h[brokerKey]);
+    const fromDate = dates[0];
+
+    for (let i = 0; i < TP_BENCHMARKS.length; i++) {
+        const bench = TP_BENCHMARKS[i];
+        const cb = document.getElementById(bench.id);
+        const ds = _tpHistoryChart.data.datasets[i + 1];
+        if (!cb || !ds) continue;
+        if (cb.checked) {
+            ds.hidden = false;
+            const map = await fetchTpBenchmarkSeries(bench.ticker, fromDate);
+            ds.data   = alignTpBenchmark(map, dates, values) ?? [];
+        } else {
+            ds.hidden = true;
+            ds.data   = [];
+        }
+    }
+    _tpHistoryChart.update();
+}
+
+// TEST pagina state
+let _tpBrokerFilter  = 'all';
+let _tpSortKey       = 'valueEur';
+let _tpSortDir       = 'desc';
+let _tpPositionsView = 'sector';
+let _tpLastEnriched  = null;
+let _tpLastTotalValue = null;
+let _tpSectorChart   = null;
+
+function setTpBroker(broker, btn) {
+    _tpBrokerFilter = broker;
+    document.querySelectorAll('#test-portfolio-page .ap-broker-tab').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+    const pg = document.getElementById('test-portfolio-page');
+    if (pg) {
+        if (broker === 'all') pg.removeAttribute('data-broker');
+        else pg.setAttribute('data-broker', broker);
+    }
+    renderPortfolioHistoryChart(); // grafiek updatet direct op cached data
+    initTestPortfolio();           // portfolio metrics verversen op de achtergrond
+}
+
+function renderTpCashEditor() {
+    const editor = document.getElementById('tp-cashEditor');
+    const cashEl = document.getElementById('tp-cash');
+    if (!editor) return;
+    if (_tpBrokerFilter === 'all') {
+        if (cashEl) cashEl.style.display = '';
+        editor.innerHTML = ['Bolero', 'Degiro', 'Saxo'].map(b => `
+            <div class="ap-cash-row">
+                <span class="ap-cash-broker" style="background:${brokerColorVar(b)};"></span>
+                <span class="ap-cash-label">${b}</span>
+                <span class="ap-cash-readonly blur-target">${fmtEuroAlt(_apCash[b] || 0)}</span>
+            </div>
+        `).join('');
+    } else {
+        if (cashEl) cashEl.style.display = 'none';
+        editor.innerHTML = `
+            <div class="ap-cash-big-wrap">
+                <span class="ap-cash-prefix">€</span>
+                <input class="ap-cash-input-big blur-target" type="number" step="0.01" min="0" value="${_apCash[_tpBrokerFilter] || 0}" onchange="setTpCashFor('${_tpBrokerFilter}', this.value)" placeholder="0,00">
+            </div>
+            <div class="ap-card-sub" style="margin-top:4px;">${_tpBrokerFilter}</div>
+        `;
+    }
+}
+
+function setTpCashFor(broker, val) {
+    _apCash[broker] = parseFloat(val) || 0;
+    saveApCash();
+    initTestPortfolio();
+}
+
+function setTpSort(key) {
+    if (_tpSortKey === key) {
+        _tpSortDir = _tpSortDir === 'asc' ? 'desc' : 'asc';
+    } else {
+        _tpSortKey = key;
+        _tpSortDir = 'desc';
+    }
+    if (_tpLastEnriched && _tpLastTotalValue != null) {
+        const sortOpts = { key: _tpSortKey, dir: _tpSortDir, fn: 'setTpSort' };
+        if (_tpPositionsView === 'sector') {
+            renderBySector('tp-bySector', _tpLastEnriched, _tpLastTotalValue, false, sortOpts);
+        } else {
+            renderAllPositions(_tpLastEnriched, _tpLastTotalValue, 'tp-allPositions', sortOpts);
+        }
+    }
+}
+
+function setTpPositionsView(view, btn) {
+    _tpPositionsView = view;
+    document.querySelectorAll('#test-portfolio-page .ap-view-btn').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+    document.getElementById('tp-positionsTitle').textContent = view === 'sector' ? 'POSITIES PER SECTOR' : 'ALLE POSITIES';
+    document.getElementById('tp-bySector').style.display     = view === 'sector' ? '' : 'none';
+    document.getElementById('tp-allPositions').style.display = view === 'all'    ? '' : 'none';
+    if (_tpLastEnriched && _tpLastTotalValue != null) {
+        const sortOpts = { key: _tpSortKey, dir: _tpSortDir, fn: 'setTpSort' };
+        if (view === 'sector') {
+            renderBySector('tp-bySector', _tpLastEnriched, _tpLastTotalValue, false, sortOpts);
+        } else {
+            renderAllPositions(_tpLastEnriched, _tpLastTotalValue, 'tp-allPositions', sortOpts);
+        }
+    }
+}
+
+function renderTpSectorPie(positions, totalValue) {
+    const canvas   = document.getElementById('tp-sectorPie');
+    const legendEl = document.getElementById('tp-sectorLegend');
+    if (!canvas || !legendEl) return;
+
+    const bySector = {};
+    positions.forEach(p => {
+        if (!bySector[p.sector]) bySector[p.sector] = 0;
+        bySector[p.sector] += p.valueEur;
+    });
+    const entries = Object.entries(bySector).sort((a,b) => b[1] - a[1]);
+
+    if (entries.length === 0 || totalValue === 0) {
+        if (_tpSectorChart) { _tpSectorChart.destroy(); _tpSectorChart = null; }
+        legendEl.innerHTML = '<div style="color:var(--text-muted);font-size:0.85rem;">Geen data</div>';
+        return;
+    }
+
+    const labels = entries.map(([sec]) => sec);
+    const values = entries.map(([, v]) => v);
+    const colors = entries.map((_, i) => sectorColor(i));
+
+    if (_tpSectorChart) _tpSectorChart.destroy();
+    const cardBg = getComputedStyle(document.documentElement).getPropertyValue('--card-bg').trim() || '#fff';
+    _tpSectorChart = new Chart(canvas.getContext('2d'), {
+        type: 'doughnut',
+        data: {
+            labels,
+            datasets: [{
+                data: values,
+                backgroundColor: colors,
+                borderColor: cardBg,
+                borderWidth: 2,
+                hoverOffset: 8,
+            }],
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '62%',
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: (ctx) => {
+                            const v = ctx.parsed;
+                            const pct = (v / totalValue) * 100;
+                            return `${fmtEuroAlt(v)} (${pct.toFixed(1)}%)`;
+                        }
+                    }
+                },
+                datalabels: { display: false }
+            }
+        }
+    });
+
+    legendEl.innerHTML = entries.map(([sec, val], i) => {
+        const pct = (val / totalValue) * 100;
+        return `<div class="ap-pie-legend-row" title="${sec}">
+            <span class="ap-pie-dot" style="background:${colors[i]};"></span>
+            <span class="ap-pie-name">${sec}</span>
+            <span class="ap-pie-spacer"></span>
+            <span class="ap-pie-val blur-target">${fmtEuroAlt(val, 0)}</span>
+            <span class="ap-pie-pct">${pct.toFixed(1)}%</span>
+        </div>`;
+    }).join('');
+}
+
+async function initTestPortfolio(force = false) {
+    const status = document.getElementById('testPfStatus');
+    if (status) status.textContent = '⏳ Laden…';
+
+    document.querySelectorAll('#test-portfolio-page .ap-broker-tab').forEach(b => {
+        b.classList.toggle('active', b.dataset.broker === _tpBrokerFilter);
+    });
+    const pg = document.getElementById('test-portfolio-page');
+    if (pg) {
+        if (_tpBrokerFilter === 'all') pg.removeAttribute('data-broker');
+        else pg.setAttribute('data-broker', _tpBrokerFilter);
+    }
+
+    let positions = hmStocks.filter(s => (s.type === 'stock' || s.type === 'etf' || s.type === 'option') && (s.aantal || 0) > 0);
+    if (_tpBrokerFilter !== 'all') {
+        positions = positions.filter(s => (s.broker || 'Degiro') === _tpBrokerFilter);
+    }
+
+    const cashEur = getCashForBroker(_tpBrokerFilter);
+    const cashEl  = document.getElementById('tp-cash');
+    if (cashEl) cashEl.textContent = fmtEuroAlt(cashEur);
+    renderTpCashEditor();
+
+    if (positions.length === 0) {
+        const totalCard = document.getElementById('tp-totalValue');
+        if (totalCard) totalCard.textContent = fmtEuroAlt(cashEur);
+        document.getElementById('tp-totalCost').textContent = 'Gestort: ' + fmtEuroAlt(getStortingForBroker(_tpBrokerFilter));
+        ['tp-totalPL','tp-totalPLPct','tp-dayPL','tp-dayPLPct','tp-positions','tp-positionsBreakdown']
+            .forEach(id => { const e = document.getElementById(id); if (e) e.textContent = '–'; });
+        const emptyList = '<div class="ap-toplist-empty">Geen posities</div>';
+        const bl = document.getElementById('tp-bestList');  if (bl) bl.innerHTML = emptyList;
+        const wl = document.getElementById('tp-worstList'); if (wl) wl.innerHTML = emptyList;
+        if (_tpSectorChart) { _tpSectorChart.destroy(); _tpSectorChart = null; }
+        const lg = document.getElementById('tp-sectorLegend');
+        if (lg) lg.innerHTML = '<div style="color:var(--text-muted);font-size:0.85rem;">Geen posities. Voeg eerst aandelen toe in DATA → AANDELEN.</div>';
+        if (status) status.textContent = '';
+        renderPortfolioHistoryChart();
+        return;
+    }
+
+    const usdEur = await getUsdEurRate();
+    const enriched = await Promise.all(positions.map(async s => {
+        const q = await loadQuoteForPosition(s);
+        const sector = await fetchSector(s.ticker, s.type);
+        const cur = (s.currency || 'USD').toUpperCase();
+        const fx = cur === 'EUR' ? 1 : usdEur;
+        const price     = q?.price ?? 0;
+        const dayChange = q?.change ?? 0;
+        const aantal    = s.aantal || 0;
+        const gak       = s.gak || 0;
+        const valueEur  = price * aantal * fx;
+        const costEur   = gak   * aantal * fx;
+        const plEur     = valueEur - costEur;
+        const plPct     = costEur > 0 ? (plEur / costEur) * 100 : null;
+        const dayPLEur  = dayChange * aantal * fx;
+        const dayPLPct  = q?.pct ?? null;
+        return { ...s, q, sector, price, valueEur, costEur, plEur, plPct, dayPLEur, dayPLPct };
+    }));
+
+    const positionsValue = enriched.reduce((a,x) => a + x.valueEur, 0);
+    const totalCost      = enriched.reduce((a,x) => a + x.costEur,  0);
+    const totalValue     = positionsValue + cashEur;
+    const totalPL        = positionsValue - totalCost;
+    const totalPLPct     = totalCost > 0 ? (totalPL / totalCost) * 100 : 0;
+    const dayPL          = enriched.reduce((a,x) => a + x.dayPLEur, 0);
+    const dayPLPct       = positionsValue > 0 ? (dayPL / (positionsValue - dayPL)) * 100 : 0;
+
+    document.getElementById('tp-totalValue').textContent = fmtEuroAlt(totalValue);
+    const stortingEur = getStortingForBroker(_tpBrokerFilter);
+    const cashLine = cashEur > 0 ? ` &nbsp;·&nbsp; Cash: ${fmtEuroAlt(cashEur)}` : '';
+    document.getElementById('tp-totalCost').innerHTML = 'Gestort: ' + fmtEuroAlt(stortingEur) + cashLine;
+
+    const tplEl = document.getElementById('tp-totalPL');
+    tplEl.textContent = (totalPL >= 0 ? '+' : '') + fmtEuroAlt(totalPL);
+    tplEl.style.color = totalPL >= 0 ? 'var(--success)' : 'var(--danger)';
+    document.getElementById('tp-totalPLPct').innerHTML = plChip(totalPLPct);
+
+    const dplEl = document.getElementById('tp-dayPL');
+    dplEl.textContent = (dayPL >= 0 ? '+' : '') + fmtEuroAlt(dayPL);
+    dplEl.style.color = dayPL >= 0 ? 'var(--success)' : 'var(--danger)';
+    document.getElementById('tp-dayPLPct').innerHTML = plChip(dayPLPct);
+
+    const stockCnt  = enriched.filter(x => x.type === 'stock').length;
+    const etfCnt    = enriched.filter(x => x.type === 'etf').length;
+    const optionCnt = enriched.filter(x => x.type === 'option').length;
+    document.getElementById('tp-positions').textContent = `${enriched.length}`;
+    document.getElementById('tp-positionsBreakdown').textContent = [
+        `${stockCnt} aandelen`, `${etfCnt} ETFs`,
+        ...(optionCnt > 0 ? [`${optionCnt} opties`] : []),
+    ].join(' · ');
+
+    const sortedByPct = [...enriched].filter(x => x.plPct != null).sort((a,b) => b.plPct - a.plPct);
+    const top5Best  = sortedByPct.filter(x => x.plPct > 0).slice(0, 5);
+    const top5Worst = sortedByPct.filter(x => x.plPct < 0).slice(-5).reverse();
+
+    const renderTopList = (items, isBest) => {
+        if (items.length === 0) return '<div class="ap-toplist-empty">Geen data</div>';
+        return items.map((p, i) => {
+            const col = isBest ? 'var(--success)' : 'var(--danger)';
+            const sign = p.plPct >= 0 ? '+' : '';
+            const eurSign = p.plEur >= 0 ? '+' : '';
+            return `<div class="ap-toplist-row" title="${p.name}">
+                <span class="ap-toplist-rank">${i+1}.</span>
+                <span class="ap-toplist-ticker">${p.ticker}</span>
+                <span class="ap-toplist-eur blur-target">${eurSign}${fmtEuroAlt(p.plEur, 0)}</span>
+                <span class="ap-toplist-pct" style="color:${col};">${sign}${p.plPct.toFixed(2)}%</span>
+            </div>`;
+        }).join('');
+    };
+
+    const bestEl  = document.getElementById('tp-bestList');
+    const worstEl = document.getElementById('tp-worstList');
+    if (bestEl)  bestEl.innerHTML  = renderTopList(top5Best,  true);
+    if (worstEl) worstEl.innerHTML = renderTopList(top5Worst, false);
+
+    _tpLastEnriched   = enriched;
+    _tpLastTotalValue = positionsValue;
+
+    renderTpSectorPie(enriched, positionsValue);
+    const sortOpts = { key: _tpSortKey, dir: _tpSortDir, fn: 'setTpSort' };
+    renderBySector('tp-bySector', enriched, positionsValue, false, sortOpts);
+    renderAllPositions(enriched, positionsValue, 'tp-allPositions', sortOpts);
+
+    // Backfill historische data (eens per dag automatisch, of bij 'all' filter)
+    if (_tpBrokerFilter === 'all') await runPortfolioBackfill();
+
+    if (status) status.textContent = `✓ Bijgewerkt · ${new Date().toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit'})}`;
 }
 </script>
 
