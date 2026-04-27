@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio v48</title>
+    <title>Portfolio BART V1</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
     <style>
@@ -402,6 +402,35 @@
     flex-wrap: wrap;
     min-width: 0;
 }
+.tp-hero-cash .ap-cash-editor { margin-top: 0; width: auto; }
+.tp-hero-cash .ap-cash-big-wrap { justify-content: flex-start; margin-top: 0; gap: 2px; align-items: center; }
+.tp-hero-cash .ap-cash-big-wrap .ap-cash-prefix { font-size: 1.05rem; font-weight: 800; line-height: 1; }
+.tp-hero-cash .ap-cash-input-big { width: auto; min-width: 60px; max-width: 120px; font-size: 1.05rem; padding: 2px 4px; text-align: left; }
+.tp-hero-stat {
+    padding: 10px 18px;
+    border-left: 1px solid var(--border-color);
+    flex-shrink: 0;
+}
+.tp-view-tab {
+    background: none;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 6px 16px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.tp-view-tab:hover { background: var(--row-hover); color: var(--text-main); }
+.tp-view-tab.active { background: var(--ap-accent); color: #fff; border-color: var(--ap-accent); }
+.tp-collapsible-hdr { cursor: pointer; display: flex; justify-content: space-between; align-items: center; user-select: none; }
+.tp-collapsible-hdr:hover { color: var(--text-main); }
+.tp-collapse-icon { font-size: 0.75rem; transition: transform 0.2s; }
+.tp-collapsible-hdr.collapsed .tp-collapse-icon { transform: rotate(-90deg); }
+.ap-card-toplist.tp-card-collapsed { padding: 9px 14px !important; align-self: start !important; min-height: 0 !important; }
+.ap-card-toplist.tp-card-collapsed .ap-card-label { margin-bottom: 0; }
 @media (max-width: 600px) {
     .tp-hero-top {
         grid-template-columns: 1fr 1fr;
@@ -417,6 +446,32 @@
     .tp-hero-posities { border-right: none; border-bottom: 1px solid var(--border-color); }
     .ap-broker-tab { min-width: 0; padding: 9px 8px; font-size: 0.72rem; gap: 5px; }
 }
+
+/* ── TEST DATA pagina ─────────────────────────────────────────────────────── */
+.td-sub-tabs { display:flex; border-bottom:1px solid var(--border-color); margin-bottom:1.5rem; }
+.td-sub-tab { background:none; border:none; border-bottom:2px solid transparent; margin-bottom:-1px; padding:10px 18px; font-size:0.8rem; font-weight:700; letter-spacing:0.06em; color:var(--text-muted); cursor:pointer; transition:all 0.15s; }
+.td-sub-tab.active { color:var(--text-main); border-bottom-color:var(--text-main); }
+.td-sub-tab:hover { color:var(--text-main); }
+.td-form-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(155px, 1fr)); gap:10px; align-items:end; }
+.td-form-group { display:flex; flex-direction:column; gap:4px; }
+.td-form-label { font-size:0.63rem; font-weight:700; letter-spacing:0.08em; color:var(--text-muted); text-transform:uppercase; }
+.td-form-input { box-sizing:border-box; height:36px; background:var(--bg-main); border:1px solid var(--border-color); border-radius:6px; padding:0 10px; font-size:0.85rem; color:var(--text-main); font-family:inherit; transition:border-color 0.15s; }
+.td-form-input:focus { outline:none; border-color:var(--total-gray); }
+.td-input-row { display:flex; }
+.td-input-row .td-form-input:first-child { border-radius:6px 0 0 6px; border-right:none; flex:1; min-width:0; }
+.td-input-row select.td-form-input { border-radius:0 6px 6px 0; padding:0 4px; width:52px; flex-shrink:0; }
+.td-table { width:100%; border-collapse:collapse; font-size:0.8rem; }
+.td-table th { font-size:0.63rem; font-weight:700; letter-spacing:0.08em; color:var(--text-muted); text-align:left; padding:8px 10px; border-bottom:1px solid var(--border-color); white-space:nowrap; }
+.td-table td { padding:8px 10px; border-bottom:1px solid var(--border-color); vertical-align:middle; white-space:nowrap; }
+.td-table tr:last-child td { border-bottom:none; }
+.td-table tr:hover td { background:var(--row-hover); }
+.td-del-btn { background:none; border:none; cursor:pointer; color:var(--text-muted); font-size:0.85rem; padding:2px 6px; border-radius:4px; transition:all 0.15s; }
+.td-del-btn:hover { background:rgba(220,50,50,0.1); color:#d33; }
+.td-badge { padding:2px 8px; border-radius:20px; font-size:0.7rem; font-weight:700; }
+.td-badge-buy  { background:rgba(0,180,80,0.12);   color:#0b5; }
+.td-badge-sell { background:rgba(220,50,50,0.1);   color:#d33; }
+.td-badge-in   { background:rgba(0,120,255,0.1);   color:#08f; }
+.td-badge-out  { background:rgba(220,100,0,0.1);   color:#e60; }
 
 /* CASH editor in CASH card */
 .ap-card-cash .ap-card-value { font-size: 1.4rem; }
@@ -1190,6 +1245,25 @@
             border-bottom: none;
             color: var(--text-main);
         }
+        /* TEST pagina maand/week tabellen — zelfde stijl als #maandTable */
+        #tpMaandTable th, #tpWeekTable th {
+            padding: 8px 10px; text-align: right; font-size: 0.7rem; font-weight: 700;
+            text-transform: uppercase; color: var(--text-muted);
+            border-bottom: 2px solid var(--border-color); white-space: nowrap;
+        }
+        #tpMaandTable th:first-child, #tpWeekTable th:first-child { text-align: left; }
+        #tpMaandTable td, #tpWeekTable td {
+            padding: 7px 10px; text-align: right; border: none;
+            border-bottom: 1px solid var(--border-color); font-size: 0.82rem; background: transparent;
+        }
+        #tpMaandTable td:first-child { text-align: left; font-weight: 700; color: var(--text-muted); }
+        #tpMaandTable tr:hover td, #tpWeekTable tr:hover td { background: var(--row-hover); }
+        #tpMaandTable tr.maand-totaal td, #tpWeekTable tr.week-totaal td {
+            font-weight: 800; border-top: 2px solid var(--border-color);
+            border-bottom: none; color: var(--text-main);
+        }
+        #tpWeekTable td:first-child, #tpWeekTable td:nth-child(2) { text-align: left; }
+        #tpWeekTable th:nth-child(2) { text-align: left; }
         /* Styling voor het widget menu */
 .widget-option {
     display: flex;
@@ -1258,6 +1332,7 @@
     <div class="nav-item" onclick="switchTab('aandelen-page', this); closeNav()">LIVE</div>
     <div class="nav-item" onclick="switchTab('aandelen-portfolio-page', this); closeNav()">AANDELEN</div>
     <div class="nav-item" onclick="switchTab('test-portfolio-page', this); closeNav()">TEST</div>
+    <div class="nav-item" onclick="switchTab('test-data-page', this); closeNav()">TEST DATA</div>
     <div class="nav-item" onclick="switchTab('crypto-portfolio-page', this); closeNav()">CRYPTO</div>
     <div class="nav-item" onclick="switchTab('heatmap-page', this); closeNav()">HEATMAP</div>
     <div class="nav-item" onclick="switchTab('kalender-page', this); closeNav()">KALENDER</div>
@@ -1967,25 +2042,38 @@
 <!-- TEST PAGINA — KOPIE VAN AANDELEN + GRAFIEK  -->
 <!-- ============================================ -->
 <div id="test-portfolio-page" class="tab-content">
-    <div class="header" style="margin-bottom:16px;">
+    <div class="header" style="margin-bottom:12px;">
         <div class="header-titles"><h1>TEST</h1></div>
         <div style="display:flex;align-items:center;gap:10px;">
             <span id="testPfStatus" style="font-size:0.75rem;color:var(--text-muted);"></span>
-            <button class="btn" onclick="initTestPortfolio(true)" style="font-size:0.8rem;padding:8px 14px;">↻ Vernieuwen</button>
+            <button class="btn" onclick="initTestPortfolio(true)" style="font-size:0.75rem;padding:4px 10px;" id="tp-vernieuwen-btn">↻ Vernieuwen</button>
         </div>
     </div>
+
+    <!-- View tabs: PORTFOLIO / KALENDER / OVERZICHT / DOEL -->
+    <div class="tp-view-tabs" style="display:flex;gap:4px;margin-bottom:16px;flex-wrap:wrap;">
+        <button class="tp-view-tab active" id="tp-vtab-overzicht"  onclick="switchTpView('overzicht',this)">PORTFOLIO</button>
+        <button class="tp-view-tab" id="tp-vtab-kalender"          onclick="switchTpView('kalender',this)">KALENDER</button>
+        <button class="tp-view-tab" id="tp-vtab-periodeoverzicht"  onclick="switchTpView('periodeoverzicht',this)">OVERZICHT</button>
+        <button class="tp-view-tab" id="tp-vtab-doel"              onclick="switchTpView('doel',this)">DOEL</button>
+    </div>
+
+    <!-- OVERZICHT VIEW -->
+    <div id="tp-view-overzicht">
 
     <!-- Portfolio vooruitgang grafiek -->
     <div class="card" style="margin-bottom:1.5rem;">
         <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:4px;flex-wrap:wrap;">
-            <h3 style="margin:0;">PORTFOLIO VOORUITGANG</h3>
+            <h3 id="tp-chart-title" style="margin:0;">PORTFOLIO VOORUITGANG</h3>
             <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
                 <span id="tp-periodReturn" style="font-size:0.85rem;font-weight:800;letter-spacing:-0.01em;"></span>
                 <div class="time-filter-btns" data-chart="tp" style="display:flex;gap:4px;">
                     <button class="btn time-btn" onclick="setTpTimeFilter('1w',this)">1W</button>
                     <button class="btn time-btn" onclick="setTpTimeFilter('1m',this)">1M</button>
-                    <button class="btn time-btn" onclick="setTpTimeFilter('ytd',this)">YTD</button>
-                    <button class="btn time-btn active-time" onclick="setTpTimeFilter('all',this)">ALLES</button>
+                    <button class="btn time-btn active-time" onclick="setTpTimeFilter('ytd',this)">YTD</button>
+                    <button class="btn time-btn" onclick="setTpTimeFilter('1y',this)">1J</button>
+                    <button class="btn time-btn" onclick="setTpTimeFilter('2y',this)">2J</button>
+                    <button class="btn time-btn" onclick="setTpTimeFilter('all',this)">ALLES</button>
                 </div>
                 <button class="btn" onclick="runPortfolioBackfill(true)" style="font-size:0.75rem;padding:6px 10px;">↻</button>
             </div>
@@ -2077,19 +2165,50 @@
                     <div class="tp-hero-label" style="margin-bottom:2px;">CASH</div>
                     <div id="tp-cash" class="blur-target" style="font-size:1.05rem;font-weight:800;color:var(--ap-accent);line-height:1;">€ –</div>
                 </div>
-                <div id="tp-cashEditor" class="ap-cash-editor" style="flex:1;max-width:420px;margin:0;"></div>
+                <div id="tp-cashEditor" class="ap-cash-editor" style="flex:0 0 auto;margin:0;"></div>
             </div>
+            <!-- Startdatum -->
+            <div class="tp-hero-stat" id="tp-hero-start" style="display:none;">
+                <div class="tp-hero-label" style="margin-bottom:2px;">START</div>
+                <div id="tp-startDate" style="font-size:1.05rem;font-weight:800;line-height:1;">–</div>
+                <div id="tp-startDays" style="font-size:0.7rem;color:var(--text-muted);margin-top:2px;">–</div>
+            </div>
+            <!-- CAGR -->
+            <div class="tp-hero-stat" id="tp-hero-cagr" style="display:none;">
+                <div class="tp-hero-label" style="margin-bottom:2px;">CAGR</div>
+                <div id="tp-cagr" style="font-size:1.05rem;font-weight:800;line-height:1;">–</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Top 5 vandaag -->
+    <div class="ap-stats-row ap-stats-row-2" style="margin-bottom:1rem;">
+        <div class="card ap-card ap-card-toplist">
+            <div class="ap-card-label tp-collapsible-hdr" onclick="tpToggleList('tp-dayBestList',this)">
+                TOP 5 WINNERS VANDAAG <span class="tp-collapse-icon">▾</span>
+            </div>
+            <div id="tp-dayBestList" class="ap-toplist">–</div>
+        </div>
+        <div class="card ap-card ap-card-toplist">
+            <div class="ap-card-label tp-collapsible-hdr" onclick="tpToggleList('tp-dayWorstList',this)">
+                TOP 5 VERLIEZERS VANDAAG <span class="tp-collapse-icon">▾</span>
+            </div>
+            <div id="tp-dayWorstList" class="ap-toplist">–</div>
         </div>
     </div>
 
     <!-- Top 5 lijsten -->
     <div class="ap-stats-row ap-stats-row-2">
         <div class="card ap-card ap-card-toplist">
-            <div class="ap-card-label">TOP 5 BESTE</div>
+            <div class="ap-card-label tp-collapsible-hdr" onclick="tpToggleList('tp-bestList',this)">
+                TOP 5 BESTE <span class="tp-collapse-icon">▾</span>
+            </div>
             <div id="tp-bestList" class="ap-toplist">–</div>
         </div>
         <div class="card ap-card ap-card-toplist">
-            <div class="ap-card-label">TOP 5 SLECHTSTE</div>
+            <div class="ap-card-label tp-collapsible-hdr" onclick="tpToggleList('tp-worstList',this)">
+                TOP 5 SLECHTSTE <span class="tp-collapse-icon">▾</span>
+            </div>
             <div id="tp-worstList" class="ap-toplist">–</div>
         </div>
     </div>
@@ -2117,6 +2236,98 @@
         <div id="tp-bySector"></div>
         <div id="tp-allPositions" style="display:none;"></div>
     </div>
+
+    </div><!-- /tp-view-overzicht -->
+
+    <!-- RENDEMENT KALENDER VIEW -->
+    <div id="tp-view-kalender" style="display:none;">
+        <div class="card" style="padding:18px 16px;">
+            <div style="display:flex;gap:8px;margin-bottom:14px;align-items:center;flex-wrap:wrap;">
+                <button class="btn" id="tpHeatmapBrokerBtn" onclick="cycleTpHeatmapBroker()" style="font-size:0.75rem;padding:6px 14px;">TOTAAL ▾</button>
+                <button class="btn" onclick="tpHeatmapYear--; renderTpHeatmap();" style="font-size:0.75rem;padding:6px 10px;">◀</button>
+                <span id="tpHeatmapYearLabel" style="font-weight:700;font-size:0.9rem;min-width:40px;text-align:center;"></span>
+                <button class="btn" onclick="tpHeatmapYear++; renderTpHeatmap();" style="font-size:0.75rem;padding:6px 10px;">▶</button>
+                <div style="display:flex;gap:6px;align-items:center;margin-left:auto;font-size:0.7rem;color:var(--text-muted);">
+                    <span style="width:14px;height:14px;border-radius:3px;background:#2ecc71;display:inline-block;opacity:0.85;"></span>Winst
+                    <span style="width:14px;height:14px;border-radius:3px;background:#e74c3c;display:inline-block;margin-left:6px;opacity:0.85;"></span>Verlies
+                    <span style="width:14px;height:14px;border-radius:3px;background:var(--border-color);display:inline-block;margin-left:6px;"></span>Geen data
+                </div>
+            </div>
+            <div id="tpHeatmapGrid" style="overflow-x:auto;"></div>
+        </div>
+    </div><!-- /tp-view-kalender -->
+
+    <!-- OVERZICHT VIEW (maand + week gecombineerd) -->
+    <div id="tp-view-periodeoverzicht" style="display:none;">
+        <div style="display:flex;flex-direction:column;gap:1rem;">
+
+            <!-- Maandoverzicht -->
+            <div class="card">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px;">
+                    <h3 style="margin:0;">MAAND</h3>
+                    <div style="display:flex;gap:6px;align-items:center;">
+                        <button class="btn" id="tpMaandBrokerBtn" onclick="cycleTpMaandBroker()" style="font-size:0.72rem;padding:5px 10px;">TOTAAL ▾</button>
+                        <button class="btn" onclick="tpMaandYear--; renderTpMaandoverzicht();" style="font-size:0.72rem;padding:5px 8px;">◀</button>
+                        <span id="tpMaandYearLabel" style="font-weight:700;font-size:0.85rem;min-width:36px;text-align:center;"></span>
+                        <button class="btn" onclick="tpMaandYear++; renderTpMaandoverzicht();" style="font-size:0.72rem;padding:5px 8px;">▶</button>
+                    </div>
+                </div>
+                <div style="overflow-x:auto;">
+                    <table id="tpMaandTable" style="width:100%;border-collapse:collapse;font-size:0.82rem;">
+                        <thead id="tpMaandTableHead"></thead>
+                        <tbody id="tpMaandTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Weekoverzicht -->
+            <div class="card">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px;">
+                    <h3 style="margin:0;">WEEK</h3>
+                    <div style="display:flex;gap:6px;align-items:center;">
+                        <button class="btn" id="tpWeekBrokerBtn" onclick="cycleTpWeekBroker()" style="font-size:0.72rem;padding:5px 10px;">TOTAAL ▾</button>
+                        <button class="btn" onclick="tpWeekYear--; renderTpWeekoverzicht();" style="font-size:0.72rem;padding:5px 8px;">◀</button>
+                        <span id="tpWeekYearLabel" style="font-weight:700;font-size:0.85rem;min-width:36px;text-align:center;"></span>
+                        <button class="btn" onclick="tpWeekYear++; renderTpWeekoverzicht();" style="font-size:0.72rem;padding:5px 8px;">▶</button>
+                    </div>
+                </div>
+                <div style="overflow-x:auto;">
+                    <table id="tpWeekTable" style="width:100%;border-collapse:collapse;font-size:0.82rem;">
+                        <thead id="tpWeekTableHead"></thead>
+                        <tbody id="tpWeekTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div><!-- /tp-view-periodeoverzicht -->
+
+    <!-- DOEL VIEW -->
+    <div id="tp-view-doel" style="display:none;">
+        <div class="card" style="max-width:480px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+                <h3 style="margin:0;">DOEL</h3>
+                <button onclick="openDoelModal()" style="background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:0.9rem;padding:4px;" title="Doel aanpassen">✏️</button>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:10px;">
+                <div class="info-line"><span class="info-label">Doel</span><span id="tpDoel-target" class="blur-target" style="font-weight:800;font-size:1rem;">–</span></div>
+                <div class="info-line"><span class="info-label">Huidig</span><span id="tpDoel-current" class="blur-target" style="font-weight:800;font-size:1rem;">–</span></div>
+                <div class="info-line"><span class="info-label">Nog nodig</span><span id="tpDoel-resterend" class="blur-target" style="font-weight:700;font-size:0.9rem;">–</span></div>
+                <div style="margin:4px 0;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+                        <span style="font-size:0.7rem;font-weight:700;color:var(--text-muted);">VOORTGANG</span>
+                        <span id="tpDoel-pct-label" style="font-size:0.75rem;font-weight:800;">0%</span>
+                    </div>
+                    <div style="height:10px;border-radius:99px;background:var(--border-color);overflow:hidden;">
+                        <div id="tpDoel-progress-bar" style="height:100%;border-radius:99px;background:linear-gradient(90deg,var(--bolero),var(--success));width:0%;transition:width 0.6s ease;"></div>
+                    </div>
+                </div>
+                <div class="info-line"><span class="info-label">ETA</span><span id="tpDoel-eta" style="font-weight:700;font-size:0.82rem;">–</span></div>
+                <div class="info-line"><span class="info-label">Dagelijks nodig</span><span id="tpDoel-dagnodig" class="blur-target" style="font-weight:700;font-size:0.82rem;">–</span></div>
+            </div>
+        </div>
+    </div><!-- /tp-view-doel -->
+
 </div>
 
 <!-- ============================================ -->
@@ -2717,7 +2928,7 @@ function applyTimeFilter(chartKey) {
     }
 
     // ── SWIPE NAVIGATIE ──────────────────────────────────────────────────────
-    const TABS = ['dashboard', 'data-page', 'aandelen-page', 'aandelen-portfolio-page', 'test-portfolio-page', 'crypto-portfolio-page', 'heatmap-page', 'kalender-page', 'cijfer-page'];
+    const TABS = ['dashboard', 'data-page', 'aandelen-page', 'aandelen-portfolio-page', 'test-portfolio-page', 'test-data-page', 'crypto-portfolio-page', 'heatmap-page', 'kalender-page', 'cijfer-page'];
     const TAB_NAV_ITEMS = () => document.querySelectorAll('.nav-item');
 
     function getActiveTabIndex() {
@@ -2814,22 +3025,31 @@ function applyTimeFilter(chartKey) {
 
     let charts = {};
 
+    let _tpAutoRefreshInterval = null;
+
     function switchTab(id, el) {
         document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
         document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
         document.getElementById(id).classList.add('active');
         if (el) el.classList.add('active');
-        const labels = { 'dashboard':'PORTFOLIO', 'data-page':'DATA', 'aandelen-page':'LIVE', 'aandelen-portfolio-page':'AANDELEN', 'test-portfolio-page':'TEST', 'crypto-portfolio-page':'CRYPTO', 'heatmap-page':'HEATMAP', 'kalender-page':'KALENDER', 'cijfer-page':'CIJFERS' };
+        const labels = { 'dashboard':'PORTFOLIO', 'data-page':'DATA', 'aandelen-page':'LIVE', 'aandelen-portfolio-page':'AANDELEN', 'test-portfolio-page':'TEST', 'test-data-page':'TEST DATA', 'crypto-portfolio-page':'CRYPTO', 'heatmap-page':'HEATMAP', 'kalender-page':'KALENDER', 'cijfer-page':'CIJFERS' };
         const navLabel = document.querySelector('.nav span[style*="font-weight"]');
         if (navLabel) navLabel.textContent = labels[id] || '';
         closeNav();
         if (id === 'aandelen-page') loadMarktData(true);
         if (id === 'aandelen-portfolio-page') initAandelenPortfolio();
-        if (id === 'test-portfolio-page') initTestPortfolio();
+        if (id === 'test-data-page') initTestDataPage();
         if (id === 'crypto-portfolio-page') initCryptoPortfolio();
         if (id === 'heatmap-page') initHeatmapPage();
         if (id === 'kalender-page') initKalender();
         if (id === 'cijfer-page') initCijferPage();
+
+        // TEST pagina: start auto-refresh interval; stop bij verlaten
+        if (_tpAutoRefreshInterval) { clearInterval(_tpAutoRefreshInterval); _tpAutoRefreshInterval = null; }
+        if (id === 'test-portfolio-page') {
+            initTestPortfolio();
+            _tpAutoRefreshInterval = setInterval(() => initTestPortfolio(true), 60000);
+        }
     }
 
     function toggleBlur() { 
@@ -3310,7 +3530,7 @@ function renderPrestaties() {
 }
 
 // ── DOEL ─────────────────────────────────────────────────────────────────────
-function getDoelData() { return JSON.parse(localStorage.getItem('doel_data') || '{}'); }
+function getDoelData() { const d = JSON.parse(localStorage.getItem('doel_data') || '{}'); if (!d.target) d.target = 1000000; return d; }
 function saveDoelDataLS(data) { localStorage.setItem('doel_data', JSON.stringify(data)); }
 
 function renderDoel() {
@@ -3352,7 +3572,7 @@ function renderDoel() {
         const daysLeft = Math.max(0, Math.round((deadlineDate - today) / 86400000));
         const dateStr = deadlineDate.toLocaleDateString('nl-NL', { day: 'numeric', month: 'short', year: 'numeric' });
         setEl('doel-eta', `${dateStr} (${daysLeft} d.)`);
-        setEl('doel-dagnodig', resterend > 0 && daysLeft > 0 ? (isBlurred ? '€ •••/dag' : `${formatEuro(resterend / daysLeft)}/dag`) : resterend <= 0 ? '–' : 'Deadline verstreken');
+        setEl('doel-dagnodig', resterend > 0 && daysLeft > 0 ? (isBlurred ? '€ •••/dag' : `${formatEuro(Math.round(resterend / daysLeft))}/dag`) : resterend <= 0 ? '–' : 'Deadline verstreken');
     } else {
         const startIdx = Math.max(0, brokerData.length - 30);
         if (brokerData.length >= 2 && resterend > 0) {
@@ -3362,14 +3582,14 @@ function renderDoel() {
                 const daysNeeded = Math.ceil(resterend / avgPerDay);
                 const eta = new Date(); eta.setDate(eta.getDate() + daysNeeded);
                 setEl('doel-eta', eta.toLocaleDateString('nl-NL', { day: 'numeric', month: 'short', year: 'numeric' }) + ` (~${daysNeeded}d)`);
-                setEl('doel-dagnodig', isBlurred ? '€ •••/dag' : `${formatEuro(avgPerDay)}/dag (gem.)`);
+                setEl('doel-dagnodig', isBlurred ? '€ •••/dag' : `${formatEuro(Math.round(avgPerDay))}/dag (gem.)`);
             } else { setEl('doel-eta', 'Onvoldoende groei'); setEl('doel-dagnodig', '–'); }
         } else { setEl('doel-eta', '–'); setEl('doel-dagnodig', '–'); }
     }
 }
 function openDoelModal() {
     const doel = getDoelData();
-    const inp = document.getElementById('doelInput'); if (inp) inp.value = doel.target || '';
+    const inp = document.getElementById('doelInput'); if (inp) inp.value = doel.target || 1000000;
     const dat = document.getElementById('doelDatumInput'); if (dat) dat.value = doel.deadline || '';
     const modal = document.getElementById('doelModal'); if (modal) modal.style.display = 'flex';
 }
@@ -3380,6 +3600,7 @@ function saveDoelModal() {
     saveDoelDataLS({ target, deadline });
     closeDoelModal();
     renderDoel();
+    renderTpDoel();
 }
 
 function renderWeeklyReturns() {
@@ -5532,6 +5753,198 @@ function renderWeeklyReturns() {
     </div>
 </div>
 
+<!-- ════════════════════════════════════════════════════════════════════════════
+     TEST DATA pagina
+     ════════════════════════════════════════════════════════════════════════ -->
+<div id="test-data-page" class="tab-content">
+    <div style="margin-bottom:20px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
+            <h1 style="margin:0;font-weight:800;">TEST DATA</h1>
+            <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+                <button class="btn" onclick="runPortfolioBackfill(true)" style="font-size:0.8rem;padding:8px 14px;">↻ Grafiek vernieuwen</button>
+                <button class="btn" onclick="tdShowCsvPanel('export')" style="font-size:0.8rem;padding:8px 14px;">↓ CSV</button>
+                <button class="btn" onclick="tdShowCsvPanel('import')" style="font-size:0.8rem;padding:8px 14px;">↑ CSV</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CSV paneel -->
+    <div id="td-csv-panel" style="display:none;margin-bottom:1rem;">
+        <div class="card" style="padding:14px 16px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;gap:10px;flex-wrap:wrap;">
+                <span id="td-csv-title" style="font-size:0.7rem;font-weight:700;letter-spacing:0.08em;color:var(--text-muted);"></span>
+                <div style="display:flex;gap:6px;">
+                    <button id="td-csv-action-btn" class="btn btn-main" style="font-size:0.8rem;padding:7px 14px;"></button>
+                    <button class="btn" onclick="tdCloseCsvPanel()" style="font-size:0.8rem;padding:7px 12px;">✕</button>
+                </div>
+            </div>
+            <textarea id="td-csv-text" spellcheck="false" style="width:100%;box-sizing:border-box;height:180px;font-family:monospace;font-size:0.75rem;background:var(--bg-main);border:1px solid var(--border-color);border-radius:6px;padding:10px;color:var(--text-main);resize:vertical;"></textarea>
+        </div>
+    </div>
+
+    <div class="td-sub-tabs">
+        <button class="td-sub-tab active" onclick="switchTdTab('transactions',this)">Transacties</button>
+        <button class="td-sub-tab" onclick="switchTdTab('cashflows',this)">Stortingen &amp; Opnames</button>
+    </div>
+
+    <!-- ── TRANSACTIES ─────────────────────────────────────────────────── -->
+    <div id="td-transactions-tab">
+        <div class="card" style="margin-bottom:1rem;">
+            <div style="font-size:0.7rem;font-weight:700;letter-spacing:0.08em;color:var(--text-muted);margin-bottom:14px;">TRANSACTIE TOEVOEGEN</div>
+            <div class="td-form-grid">
+                <div class="td-form-group">
+                    <label class="td-form-label">Datum</label>
+                    <input type="date" id="td-date" class="td-form-input" />
+                </div>
+                <div class="td-form-group">
+                    <label class="td-form-label">Type</label>
+                    <select id="td-type" class="td-form-input">
+                        <option value="buy">Koop</option>
+                        <option value="sell">Verkoop</option>
+                    </select>
+                </div>
+                <div class="td-form-group">
+                    <label class="td-form-label">Ticker</label>
+                    <input type="text" id="td-ticker" class="td-form-input" placeholder="bijv. AAPL" style="text-transform:uppercase;" />
+                </div>
+                <div class="td-form-group">
+                    <label class="td-form-label">Valuta ticker</label>
+                    <select id="td-currency" class="td-form-input">
+                        <option value="USD" selected>USD</option>
+                        <option value="EUR">EUR</option>
+                        <option value="GBP">GBP</option>
+                        <option value="CHF">CHF</option>
+                        <option value="SEK">SEK</option>
+                        <option value="DKK">DKK</option>
+                        <option value="NOK">NOK</option>
+                    </select>
+                </div>
+                <div class="td-form-group">
+                    <label class="td-form-label">Aantal</label>
+                    <input type="number" id="td-quantity" class="td-form-input" placeholder="0" step="any" min="0" />
+                </div>
+                <div class="td-form-group">
+                    <label class="td-form-label">Prijs/stuk (ticker valuta)</label>
+                    <input type="number" id="td-price" class="td-form-input" placeholder="0.00" step="any" min="0" />
+                </div>
+                <div class="td-form-group">
+                    <label class="td-form-label">Transactiekosten</label>
+                    <div class="td-input-row">
+                        <input type="number" id="td-cost" class="td-form-input" placeholder="0.00" step="any" min="0" />
+                        <select id="td-costCurrency" class="td-form-input">
+                            <option value="EUR">€</option>
+                            <option value="USD">$</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="td-form-group">
+                    <label class="td-form-label">Broker</label>
+                    <select id="td-broker" class="td-form-input">
+                        <option value="Bolero">Bolero</option>
+                        <option value="Degiro">Degiro</option>
+                        <option value="Saxo">Saxo</option>
+                    </select>
+                </div>
+                <div class="td-form-group">
+                    <label class="td-form-label" style="display:flex;align-items:center;gap:4px;">
+                        EUR/USD koers
+                        <button onclick="tdFetchEurusd()" style="background:none;border:none;cursor:pointer;color:var(--total-gray);font-size:0.78rem;padding:0 2px;line-height:1;" title="Ophalen voor datum">↻</button>
+                    </label>
+                    <input type="number" id="td-eurusd" class="td-form-input" placeholder="1.05" step="0.0001" min="0" />
+                </div>
+            </div>
+            <!-- Live totalen preview -->
+            <div style="display:flex;gap:24px;margin-top:14px;padding-top:12px;border-top:1px solid var(--border-color);flex-wrap:wrap;align-items:flex-end;">
+                <div>
+                    <div class="td-form-label">Totaal EUR</div>
+                    <div id="td-preview-eur" style="font-size:1.05rem;font-weight:800;margin-top:2px;">€ –</div>
+                </div>
+                <div>
+                    <div class="td-form-label">Totaal USD</div>
+                    <div id="td-preview-usd" style="font-size:1.05rem;font-weight:800;margin-top:2px;">$ –</div>
+                </div>
+                <div style="margin-left:auto;">
+                    <button class="btn btn-main" onclick="addTdTransaction()" style="padding:10px 22px;font-size:0.85rem;">+ Toevoegen</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" style="overflow-x:auto;padding:0;">
+            <div id="td-tx-empty" style="text-align:center;padding:32px;color:var(--text-muted);font-size:0.85rem;">Nog geen transacties ingegeven.</div>
+            <table class="td-table" id="td-tx-table" style="display:none;">
+                <thead>
+                    <tr>
+                        <th>Datum</th>
+                        <th>Type</th>
+                        <th>Ticker</th>
+                        <th>Valuta</th>
+                        <th style="text-align:right;">Aantal</th>
+                        <th style="text-align:right;">Prijs/stuk</th>
+                        <th style="text-align:right;">Kosten</th>
+                        <th>Broker</th>
+                        <th style="text-align:right;">EUR/USD</th>
+                        <th style="text-align:right;">Totaal EUR</th>
+                        <th style="text-align:right;">Totaal USD</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="td-tx-body"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ── STORTINGEN & OPNAMES ────────────────────────────────────────── -->
+    <div id="td-cashflows-tab" style="display:none;">
+        <div class="card" style="margin-bottom:1rem;">
+            <div style="font-size:0.7rem;font-weight:700;letter-spacing:0.08em;color:var(--text-muted);margin-bottom:14px;">STORTING / OPNAME TOEVOEGEN</div>
+            <div class="td-form-grid" style="grid-template-columns:repeat(auto-fill,minmax(140px,1fr));">
+                <div class="td-form-group">
+                    <label class="td-form-label">Datum</label>
+                    <input type="date" id="cf-date" class="td-form-input" />
+                </div>
+                <div class="td-form-group">
+                    <label class="td-form-label">Type</label>
+                    <select id="cf-type" class="td-form-input">
+                        <option value="storting">Storting</option>
+                        <option value="opname">Opname</option>
+                    </select>
+                </div>
+                <div class="td-form-group">
+                    <label class="td-form-label">Broker</label>
+                    <select id="cf-broker" class="td-form-input">
+                        <option value="Bolero">Bolero</option>
+                        <option value="Degiro">Degiro</option>
+                        <option value="Saxo">Saxo</option>
+                    </select>
+                </div>
+                <div class="td-form-group">
+                    <label class="td-form-label">Bedrag (€)</label>
+                    <input type="number" id="cf-amount" class="td-form-input" placeholder="0.00" step="0.01" min="0" />
+                </div>
+            </div>
+            <div style="margin-top:14px;display:flex;justify-content:flex-end;">
+                <button class="btn btn-main" onclick="addTdCashflow()" style="padding:10px 22px;font-size:0.85rem;">+ Toevoegen</button>
+            </div>
+        </div>
+
+        <div class="card" style="overflow-x:auto;padding:0;">
+            <div id="td-cf-empty" style="text-align:center;padding:32px;color:var(--text-muted);font-size:0.85rem;">Nog geen stortingen of opnames ingegeven.</div>
+            <table class="td-table" id="td-cf-table" style="display:none;">
+                <thead>
+                    <tr>
+                        <th>Datum</th>
+                        <th>Type</th>
+                        <th>Broker</th>
+                        <th style="text-align:right;">Bedrag (€)</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="td-cf-body"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
 <style>
 .cijfer-filter-btn {
     background: var(--row-hover);
@@ -6596,6 +7009,15 @@ function setApCashFor(broker, val) {
     initAandelenPortfolio();
 }
 
+// Netto gestort per broker vanuit TEST DATA (stortingen − opnames)
+function getTdNetStorting(broker) {
+    const brokers = broker === 'all' ? ['Bolero','Degiro','Saxo'] : [broker];
+    return brokers.reduce((s, b) =>
+        s + tdCashflows.filter(c => c.broker === b)
+                       .reduce((a, c) => a + (c.type === 'storting' ? c.amountEur : -c.amountEur), 0)
+    , 0);
+}
+
 // Storting per broker — leest uit cashData (DATA → STORTING pagina)
 function getStortingForBroker(broker) {
     if (typeof cashData === 'undefined' || !Array.isArray(cashData)) return 0;
@@ -7330,11 +7752,384 @@ function renderBySector(containerId, positions, totalValue, isCrypto, sortOpts) 
     el.innerHTML = html;
 }
 
+// ── TEST DATA PAGINA ─────────────────────────────────────────────────────────
+
+const TD_TX_KEY = 'td_transactions_v1';
+const TD_CF_KEY = 'td_cashflows_v1';
+
+let tdTransactions = (() => { try { return JSON.parse(localStorage.getItem(TD_TX_KEY) || '[]'); } catch { return []; } })();
+let tdCashflows    = (() => { try { return JSON.parse(localStorage.getItem(TD_CF_KEY) || '[]'); } catch { return []; } })();
+
+function saveTdTx() { localStorage.setItem(TD_TX_KEY, JSON.stringify(tdTransactions)); }
+function saveTdCf() { localStorage.setItem(TD_CF_KEY, JSON.stringify(tdCashflows)); }
+
+function tdCalcTotals(qty, price, currency, costAmt, costCur, eurusd) {
+    let priceEur, priceUsd;
+    if (currency === 'EUR') {
+        priceEur = price; priceUsd = price * eurusd;
+    } else if (currency === 'USD') {
+        priceUsd = price; priceEur = eurusd > 0 ? price / eurusd : price;
+    } else {
+        priceEur = price; priceUsd = price * eurusd; // andere valuta → treat as EUR
+    }
+    let costEur, costUsd;
+    if (costCur === 'EUR') {
+        costEur = costAmt; costUsd = costAmt * eurusd;
+    } else {
+        costUsd = costAmt; costEur = eurusd > 0 ? costAmt / eurusd : costAmt;
+    }
+    return {
+        totalEur: qty * priceEur + costEur,
+        totalUsd: qty * priceUsd + costUsd,
+    };
+}
+
+function tdUpdatePreview() {
+    const qty     = parseFloat(document.getElementById('td-quantity')?.value) || 0;
+    const price   = parseFloat(document.getElementById('td-price')?.value) || 0;
+    const cur     = document.getElementById('td-currency')?.value || 'USD';
+    const costAmt = parseFloat(document.getElementById('td-cost')?.value) || 0;
+    const costCur = document.getElementById('td-costCurrency')?.value || 'EUR';
+    const eurusd  = parseFloat(document.getElementById('td-eurusd')?.value) || 0;
+    const eurEl   = document.getElementById('td-preview-eur');
+    const usdEl   = document.getElementById('td-preview-usd');
+    if (!eurEl || !usdEl) return;
+    if (qty <= 0 || price <= 0 || eurusd <= 0) { eurEl.textContent = '€ –'; usdEl.textContent = '$ –'; return; }
+    const t = tdCalcTotals(qty, price, cur, costAmt, costCur, eurusd);
+    const fmt = n => n.toLocaleString('nl-NL', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    eurEl.textContent = '€ ' + fmt(t.totalEur);
+    usdEl.textContent = '$ ' + fmt(t.totalUsd);
+}
+
+async function tdFetchEurusd() {
+    const dateVal = document.getElementById('td-date')?.value;
+    const eurusdEl = document.getElementById('td-eurusd');
+    if (!eurusdEl) return;
+    if (!dateVal) { alert('Kies eerst een datum.'); return; }
+    const origPlaceholder = eurusdEl.placeholder;
+    eurusdEl.placeholder = '...';
+    try {
+        // Try exact date, fall back to 5 days prior (weekends/holidays)
+        const d = new Date(dateVal); d.setDate(d.getDate() - 5);
+        const from = d.toISOString().slice(0, 10);
+        const series = await fetchPriceSeries('EURUSD=X', from, dateVal);
+        const vals = Object.entries(series).filter(([k]) => k <= dateVal).sort((a,b) => a[0].localeCompare(b[0]));
+        if (vals.length > 0) {
+            eurusdEl.value = vals[vals.length - 1][1].toFixed(4);
+            tdUpdatePreview();
+        }
+    } catch(e) { console.error('EURUSD fetch', e); }
+    eurusdEl.placeholder = origPlaceholder;
+}
+
+function addTdTransaction() {
+    const date     = document.getElementById('td-date').value;
+    const type     = document.getElementById('td-type').value;
+    const ticker   = document.getElementById('td-ticker').value.trim().toUpperCase();
+    const currency = document.getElementById('td-currency').value;
+    const quantity = parseFloat(document.getElementById('td-quantity').value);
+    const price    = parseFloat(document.getElementById('td-price').value);
+    const costAmt  = parseFloat(document.getElementById('td-cost').value) || 0;
+    const costCur  = document.getElementById('td-costCurrency').value;
+    const broker   = document.getElementById('td-broker').value;
+    const eurusd   = parseFloat(document.getElementById('td-eurusd').value) || 1.05;
+
+    if (!date || !ticker || isNaN(quantity) || quantity <= 0 || isNaN(price) || price <= 0) {
+        alert('Vul alle verplichte velden in: datum, ticker, aantal en prijs.');
+        return;
+    }
+    const totals = tdCalcTotals(quantity, price, currency, costAmt, costCur, eurusd);
+    tdTransactions.push({
+        id: Date.now().toString(36) + Math.random().toString(36).slice(2),
+        date, type, ticker, tickerCurrency: currency,
+        quantity, pricePerShare: price,
+        costAmount: costAmt, costCurrency: costCur,
+        broker, eurusdRate: eurusd,
+        totalEur: totals.totalEur, totalUsd: totals.totalUsd,
+    });
+    tdTransactions.sort((a, b) => b.date.localeCompare(a.date));
+    saveTdTx();
+    renderTdTransactionsTable();
+    // Clear variable fields, keep date/broker/currency/eurusd
+    ['td-ticker','td-quantity','td-price','td-cost'].forEach(id => {
+        const el = document.getElementById(id); if (el) el.value = '';
+    });
+    tdUpdatePreview();
+}
+
+function deleteTdTransaction(id) {
+    if (!confirm('Verwijder deze transactie?')) return;
+    tdTransactions = tdTransactions.filter(t => t.id !== id);
+    saveTdTx();
+    renderTdTransactionsTable();
+}
+
+function addTdCashflow() {
+    const date   = document.getElementById('cf-date').value;
+    const type   = document.getElementById('cf-type').value;
+    const broker = document.getElementById('cf-broker').value;
+    const amount = parseFloat(document.getElementById('cf-amount').value);
+    if (!date || isNaN(amount) || amount <= 0) { alert('Vul datum en bedrag in.'); return; }
+    tdCashflows.push({
+        id: Date.now().toString(36) + Math.random().toString(36).slice(2),
+        date, type, broker, amountEur: amount,
+    });
+    tdCashflows.sort((a, b) => b.date.localeCompare(a.date));
+    saveTdCf();
+    renderTdCashflowsTable();
+    document.getElementById('cf-amount').value = '';
+}
+
+function deleteTdCashflow(id) {
+    if (!confirm('Verwijder deze cashflow?')) return;
+    tdCashflows = tdCashflows.filter(c => c.id !== id);
+    saveTdCf();
+    renderTdCashflowsTable();
+}
+
+function renderTdTransactionsTable() {
+    const body    = document.getElementById('td-tx-body');
+    const emptyEl = document.getElementById('td-tx-empty');
+    const tableEl = document.getElementById('td-tx-table');
+    if (!body) return;
+    const hasTx = tdTransactions.length > 0;
+    if (emptyEl) emptyEl.style.display = hasTx ? 'none' : '';
+    if (tableEl) tableEl.style.display = hasTx ? '' : 'none';
+    if (!hasTx) return;
+    const fmt = (n, dec = 2) => n.toLocaleString('nl-NL', { minimumFractionDigits: dec, maximumFractionDigits: dec });
+    const brokerCol = { Bolero: 'var(--bolero)', Degiro: 'var(--degiro)', Saxo: 'var(--saxo)' };
+    body.innerHTML = tdTransactions.map(tx => {
+        const isBuy = tx.type === 'buy';
+        const sign  = isBuy ? '−' : '+';
+        const costStr = tx.costAmount > 0
+            ? (tx.costCurrency === 'EUR' ? '€' : '$') + ' ' + fmt(tx.costAmount)
+            : '–';
+        const qty = tx.quantity;
+        const qtyStr = Number.isInteger(qty) ? qty : fmt(qty, 6).replace(/\.?0+$/, '');
+        return `<tr>
+            <td>${tx.date}</td>
+            <td><span class="td-badge ${isBuy ? 'td-badge-buy' : 'td-badge-sell'}">${isBuy ? 'Koop' : 'Verkoop'}</span></td>
+            <td style="font-weight:700;">${tx.ticker}</td>
+            <td style="color:var(--text-muted);">${tx.tickerCurrency}</td>
+            <td style="text-align:right;">${qtyStr}</td>
+            <td style="text-align:right;">${fmt(tx.pricePerShare, 4)}</td>
+            <td style="text-align:right;color:var(--text-muted);">${costStr}</td>
+            <td style="color:${brokerCol[tx.broker]||'inherit'};font-weight:700;">${tx.broker}</td>
+            <td style="text-align:right;color:var(--text-muted);font-size:0.75rem;">${tx.eurusdRate?.toFixed(4) || '–'}</td>
+            <td style="text-align:right;font-weight:700;">${sign}€ ${fmt(tx.totalEur)}</td>
+            <td style="text-align:right;font-weight:700;">${sign}$ ${fmt(tx.totalUsd)}</td>
+            <td><button class="td-del-btn" onclick="deleteTdTransaction('${tx.id}')">✕</button></td>
+        </tr>`;
+    }).join('');
+}
+
+function renderTdCashflowsTable() {
+    const body    = document.getElementById('td-cf-body');
+    const emptyEl = document.getElementById('td-cf-empty');
+    const tableEl = document.getElementById('td-cf-table');
+    if (!body) return;
+    const hasCf = tdCashflows.length > 0;
+    if (emptyEl) emptyEl.style.display = hasCf ? 'none' : '';
+    if (tableEl) tableEl.style.display = hasCf ? '' : 'none';
+    if (!hasCf) return;
+    const fmt = n => n.toLocaleString('nl-NL', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const brokerCol = { Bolero: 'var(--bolero)', Degiro: 'var(--degiro)', Saxo: 'var(--saxo)' };
+    body.innerHTML = tdCashflows.map(cf => {
+        const isIn = cf.type === 'storting';
+        return `<tr>
+            <td>${cf.date}</td>
+            <td><span class="td-badge ${isIn ? 'td-badge-in' : 'td-badge-out'}">${isIn ? 'Storting' : 'Opname'}</span></td>
+            <td style="color:${brokerCol[cf.broker]||'inherit'};font-weight:700;">${cf.broker}</td>
+            <td style="text-align:right;font-weight:700;">${isIn ? '+' : '−'}€ ${fmt(cf.amountEur)}</td>
+            <td><button class="td-del-btn" onclick="deleteTdCashflow('${cf.id}')">✕</button></td>
+        </tr>`;
+    }).join('');
+}
+
+function switchTdTab(tab, btn) {
+    document.querySelectorAll('.td-sub-tab').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+    document.getElementById('td-transactions-tab').style.display = tab === 'transactions' ? '' : 'none';
+    document.getElementById('td-cashflows-tab').style.display    = tab === 'cashflows'    ? '' : 'none';
+}
+
+function tdIsTxTab() {
+    return document.getElementById('td-transactions-tab')?.style.display !== 'none';
+}
+
+function parseCsvLine(line) {
+    const result = []; let cur = '', inQ = false;
+    for (let i = 0; i < line.length; i++) {
+        const ch = line[i];
+        if (ch === '"') { if (inQ && line[i+1] === '"') { cur += '"'; i++; } else { inQ = !inQ; } }
+        else if (ch === ',' && !inQ) { result.push(cur); cur = ''; }
+        else { cur += ch; }
+    }
+    result.push(cur);
+    return result.map(v => v.trim());
+}
+
+function tdBuildCsv(headers, rows) {
+    return [headers, ...rows].map(r => r.join(',')).join('\n');
+}
+
+function tdShowCsvPanel(mode) {
+    const panel    = document.getElementById('td-csv-panel');
+    const title    = document.getElementById('td-csv-title');
+    const textarea = document.getElementById('td-csv-text');
+    const btn      = document.getElementById('td-csv-action-btn');
+    const isTx     = tdIsTxTab();
+
+    if (mode === 'export') {
+        title.textContent = isTx ? 'EXPORTEER TRANSACTIES — kopieer naar Excel' : 'EXPORTEER STORTINGEN & OPNAMES — kopieer naar Excel';
+        if (isTx) {
+            const rows = tdTransactions.map(tx => [
+                tx.date, tx.type, tx.ticker, tx.tickerCurrency,
+                tx.quantity, tx.pricePerShare, tx.costAmount, tx.costCurrency,
+                tx.broker,
+            ]);
+            textarea.value = tdBuildCsv(
+                ['Datum','Type','Ticker','Valuta','Aantal','Prijs/stuk','Kosten','KostenValuta','Broker'],
+                rows
+            );
+        } else {
+            const rows = tdCashflows.map(cf => [cf.date, cf.type, cf.broker, cf.amountEur]);
+            textarea.value = tdBuildCsv(['Datum','Type','Broker','BedragEUR'], rows);
+        }
+        textarea.readOnly = true;
+        btn.textContent = 'Kopieer';
+        btn.onclick = () => {
+            textarea.select();
+            document.execCommand('copy');
+            btn.textContent = '✓ Gekopieerd';
+            setTimeout(() => { btn.textContent = 'Kopieer'; }, 2000);
+        };
+    } else {
+        title.textContent = isTx ? 'IMPORTEER TRANSACTIES — plak CSV-tekst' : 'IMPORTEER STORTINGEN & OPNAMES — plak CSV-tekst';
+        textarea.value = '';
+        textarea.readOnly = false;
+        textarea.placeholder = isTx
+            ? 'Datum,Type,Ticker,Valuta,Aantal,Prijs/stuk,Kosten,KostenValuta,Broker\n2025-01-15,buy,AAPL,USD,10,220.5,2.5,EUR,Bolero'
+            : 'Datum,Type,Broker,BedragEUR\n2025-01-01,storting,Bolero,10000';
+        btn.textContent = 'Importeren';
+        btn.onclick = () => tdImportCsv(textarea.value).catch(e => alert('Fout: ' + e.message));
+    }
+
+    panel.style.display = '';
+    if (mode === 'import') textarea.focus();
+}
+
+function tdCloseCsvPanel() {
+    document.getElementById('td-csv-panel').style.display = 'none';
+}
+
+async function tdImportCsv(text) {
+    try {
+        const lines = text.trim().split(/\r?\n/).map(l => l.trim()).filter(l => l);
+        if (lines.length < 2) { alert('Geen data gevonden. Zorg voor een header + minstens 1 rij.'); return; }
+        const headers = parseCsvLine(lines[0]);
+        const get = (row, col) => row[headers.indexOf(col)] ?? '';
+
+        if (headers.includes('Ticker')) {
+            const parsed = lines.slice(1).map((line, i) => {
+                const v = parseCsvLine(line);
+                return {
+                    id:             Date.now().toString(36) + i + Math.random().toString(36).slice(2),
+                    date:           get(v, 'Datum'),
+                    type:           get(v, 'Type'),
+                    ticker:         get(v, 'Ticker').toUpperCase(),
+                    tickerCurrency: get(v, 'Valuta')       || 'USD',
+                    quantity:       parseFloat(get(v, 'Aantal'))     || 0,
+                    pricePerShare:  parseFloat(get(v, 'Prijs/stuk')) || 0,
+                    costAmount:     parseFloat(get(v, 'Kosten'))     || 0,
+                    costCurrency:   get(v, 'KostenValuta') || 'EUR',
+                    broker:         get(v, 'Broker')       || 'Degiro',
+                };
+            }).filter(t => t.date && t.ticker && t.quantity > 0);
+
+            if (!confirm(`${parsed.length} transacties importeren? Dit vervangt de huidige transacties.`)) return;
+
+            // EURUSD ophalen voor het volledige datumbereik
+            const btn = document.getElementById('td-csv-action-btn');
+            const origText = btn.textContent;
+            btn.textContent = 'EUR/USD ophalen…';
+            btn.disabled = true;
+
+            const dates = parsed.map(t => t.date).sort();
+            const eurusdSeries = await fetchPriceSeries('EURUSD=X', dates[0], dates[dates.length - 1]);
+
+            // Dichtsbijzijnde koers opzoeken (weekends/feestdagen)
+            const getEurusd = (date) => {
+                if (eurusdSeries[date]) return eurusdSeries[date];
+                // zoek dichtste voorafgaande datum
+                const prior = Object.keys(eurusdSeries).filter(d => d <= date).sort();
+                return prior.length ? eurusdSeries[prior[prior.length - 1]] : 1.05;
+            };
+
+            // Totalen berekenen per transactie
+            const imported = parsed.map(t => {
+                const eurusd  = getEurusd(t.date);
+                const totals  = tdCalcTotals(t.quantity, t.pricePerShare, t.tickerCurrency, t.costAmount, t.costCurrency, eurusd);
+                return { ...t, eurusdRate: eurusd, totalEur: totals.totalEur, totalUsd: totals.totalUsd };
+            });
+
+            btn.textContent = origText;
+            btn.disabled = false;
+
+            tdTransactions = imported.sort((a, b) => b.date.localeCompare(a.date));
+            saveTdTx();
+            renderTdTransactionsTable();
+            switchTdTab('transactions', document.querySelector('#test-data-page .td-sub-tab'));
+        } else if (headers.includes('BedragEUR')) {
+            const imported = lines.slice(1).map((line, i) => {
+                const v = parseCsvLine(line);
+                return {
+                    id:        Date.now().toString(36) + i + Math.random().toString(36).slice(2),
+                    date:      get(v, 'Datum'),
+                    type:      get(v, 'Type')   || 'storting',
+                    broker:    get(v, 'Broker') || 'Degiro',
+                    amountEur: parseFloat(get(v, 'BedragEUR')) || 0,
+                };
+            }).filter(c => c.date && c.amountEur > 0);
+            if (!confirm(`${imported.length} stortingen/opnames importeren? Dit vervangt de huidige data.`)) return;
+            tdCashflows = imported.sort((a, b) => b.date.localeCompare(a.date));
+            saveTdCf();
+            renderTdCashflowsTable();
+            switchTdTab('cashflows', document.querySelectorAll('#test-data-page .td-sub-tab')[1]);
+        } else {
+            alert('Onbekend formaat. Verwacht kolom "Ticker" (transacties) of "BedragEUR" (stortingen).');
+            return;
+        }
+        tdCloseCsvPanel();
+    } catch(err) {
+        alert('Fout bij importeren: ' + err.message);
+    }
+}
+
+function initTestDataPage() {
+    const today = new Date().toISOString().slice(0, 10);
+    const dateEl   = document.getElementById('td-date');
+    const cfDateEl = document.getElementById('cf-date');
+    if (dateEl   && !dateEl.value)   dateEl.value   = today;
+    if (cfDateEl && !cfDateEl.value) cfDateEl.value = today;
+    ['td-quantity','td-price','td-currency','td-cost','td-costCurrency','td-eurusd'].forEach(id => {
+        document.getElementById(id)?.addEventListener('input', tdUpdatePreview);
+    });
+    renderTdTransactionsTable();
+    renderTdCashflowsTable();
+}
+
 // ── TEST PORTFOLIO PAGINA ────────────────────────────────────────────────────
 
 const PORTFOLIO_HISTORY_KEY   = 'portfolio_history_v1';
 const PORTFOLIO_BACKFILL_KEY  = 'portfolio_hist_backfill_v1';
-const PORTFOLIO_HISTORY_START = '2025-01-01';
+const PORTFOLIO_HISTORY_START = '2021-01-01'; // vroegste broker-startdatum
+const BROKER_HISTORY_START = {
+    all:    '2021-01-01',
+    Bolero: '2021-01-01',
+    Degiro: '2023-07-01',
+    Saxo:   '2024-12-01',
+};
 
 function loadPortfolioHistory() {
     try { return JSON.parse(localStorage.getItem(PORTFOLIO_HISTORY_KEY) || '[]'); }
@@ -7375,6 +8170,108 @@ async function fetchPriceSeries(ticker, startDate, endDate) {
     } catch { return {}; }
 }
 
+async function buildTxBasedHistory() {
+    if (tdTransactions.length === 0) return null;
+    const today = new Date().toISOString().slice(0, 10);
+
+    // Vroegste datum uit transacties én cashflows
+    const allStartDates = [
+        ...tdTransactions.map(t => t.date),
+        ...tdCashflows.map(c => c.date),
+    ].sort();
+    const startDate = allStartDates[0];
+    if (!startDate) return null;
+
+    // Unieke tickers met hun valuta
+    const tickerCurrency = {};
+    tdTransactions.forEach(tx => { tickerCurrency[tx.ticker] = tx.tickerCurrency; });
+    const tickers = Object.keys(tickerCurrency);
+
+    // Prijsseries ophalen in parallel
+    const [eurusdSeries, ...priceSeries] = await Promise.all([
+        fetchPriceSeries('EURUSD=X', startDate, today),
+        ...tickers.map(t => fetchPriceSeries(t, startDate, today)),
+    ]);
+    const seriesMap = {};
+    tickers.forEach((t, i) => { seriesMap[t] = priceSeries[i]; });
+
+    // Alle handelsdagen verzamelen (weekends uitsluiten — EURUSD=X heeft forex-data in het weekend)
+    const allDatesSet = new Set(Object.keys(eurusdSeries));
+    Object.values(seriesMap).forEach(s => Object.keys(s).forEach(d => allDatesSet.add(d)));
+    const sortedDates = [...allDatesSet]
+        .filter(d => d >= startDate && d <= today)
+        .filter(d => { const dow = new Date(d).getDay(); return dow !== 0 && dow !== 6; }) // geen za/zo
+        .sort();
+    if (sortedDates.length === 0) return null;
+
+    // Transacties en cashflows gesorteerd op datum (oplopend)
+    const sortedTx = [...tdTransactions].sort((a, b) => a.date.localeCompare(b.date));
+    const sortedCf = [...tdCashflows].sort((a, b) => a.date.localeCompare(b.date));
+
+    // Lopende state: posities per broker + cash per broker
+    const positions = { Bolero: {}, Degiro: {}, Saxo: {} };
+    const cash = { Bolero: 0, Degiro: 0, Saxo: 0 };
+    let txIdx = 0, cfIdx = 0;
+    const lastPrices = {};
+    let lastEurusd = 1.05;
+    const history = [];
+
+    for (const date of sortedDates) {
+        // Cashflows toepassen t/m deze datum
+        while (cfIdx < sortedCf.length && sortedCf[cfIdx].date <= date) {
+            const cf = sortedCf[cfIdx++];
+            const b  = cf.broker in cash ? cf.broker : 'Degiro';
+            cash[b] += cf.type === 'storting' ? cf.amountEur : -cf.amountEur;
+        }
+        // Transacties toepassen t/m deze datum
+        while (txIdx < sortedTx.length && sortedTx[txIdx].date <= date) {
+            const tx = sortedTx[txIdx++];
+            const b  = tx.broker in positions ? tx.broker : 'Degiro';
+            if (!positions[b][tx.ticker]) positions[b][tx.ticker] = 0;
+            if (tx.type === 'buy') {
+                positions[b][tx.ticker] += tx.quantity;
+                cash[b] -= tx.totalEur;
+            } else {
+                positions[b][tx.ticker] -= tx.quantity;
+                cash[b] += tx.totalEur;
+            }
+        }
+
+        // Meest recente koersen bijhouden
+        const er = eurusdSeries[date];
+        if (er != null) lastEurusd = er;
+        tickers.forEach(t => { const p = seriesMap[t]?.[date]; if (p != null) lastPrices[t] = p; });
+
+        // Portfoliowaarde per broker = aandelenwaarde + cash (alleen actieve brokers)
+        const bv = {
+            Bolero: date >= BROKER_HISTORY_START.Bolero ? cash.Bolero : null,
+            Degiro: date >= BROKER_HISTORY_START.Degiro ? cash.Degiro : null,
+            Saxo:   date >= BROKER_HISTORY_START.Saxo   ? cash.Saxo   : null,
+        };
+        ['Bolero','Degiro','Saxo'].forEach(b => {
+            if (bv[b] == null) return;
+            Object.entries(positions[b]).forEach(([ticker, qty]) => {
+                if (qty <= 0) return;
+                const price = lastPrices[ticker]; if (price == null) return;
+                const cur   = tickerCurrency[ticker] || 'EUR';
+                const priceEur = cur === 'USD' ? price / lastEurusd : price;
+                bv[b] += qty * priceEur;
+            });
+        });
+
+        const activeBrokers = ['Bolero','Degiro','Saxo'].filter(b => bv[b] != null);
+        if (activeBrokers.length === 0) return;
+        history.push({
+            date,
+            value:  activeBrokers.reduce((s, b) => s + bv[b], 0),
+            bolero: bv.Bolero,
+            degiro: bv.Degiro,
+            saxo:   bv.Saxo,
+        });
+    }
+    return history;
+}
+
 async function runPortfolioBackfill(force = false) {
     if (!force && !needsBackfill()) { renderPortfolioHistoryChart(); return; }
 
@@ -7386,6 +8283,18 @@ async function runPortfolioBackfill(force = false) {
     if (emptyEl)   emptyEl.style.display   = 'none';
 
     const today = new Date().toISOString().slice(0, 10);
+
+    // Gebruik transactiedata als die beschikbaar is
+    if (tdTransactions.length > 0) {
+        const history = await buildTxBasedHistory();
+        if (history && history.length > 0) {
+            localStorage.setItem(PORTFOLIO_HISTORY_KEY,  JSON.stringify(history));
+            localStorage.setItem(PORTFOLIO_BACKFILL_KEY, JSON.stringify({ fetched: Date.now() }));
+            if (loadingEl) loadingEl.style.display = 'none';
+            renderPortfolioHistoryChart();
+            return;
+        }
+    }
     const positions = hmStocks.filter(s =>
         (s.type === 'stock' || s.type === 'etf' || s.type === 'option') && (s.aantal || 0) > 0
     );
@@ -7414,7 +8323,6 @@ async function runPortfolioBackfill(force = false) {
 
     // Reconstrueer dagelijkse portfoliowaarde (totaal + per broker)
     const brokerCash = { Bolero: _apCash.Bolero || 0, Degiro: _apCash.Degiro || 0, Saxo: _apCash.Saxo || 0 };
-    const totalCash  = brokerCash.Bolero + brokerCash.Degiro + brokerCash.Saxo;
     const lastPrices = {};
     let lastEurusd = null;
     const history = [];
@@ -7427,18 +8335,26 @@ async function runPortfolioBackfill(force = false) {
             if (p != null) lastPrices[s.ticker] = p;
         });
 
-        const brokerValues = { Bolero: brokerCash.Bolero, Degiro: brokerCash.Degiro, Saxo: brokerCash.Saxo };
+        const brokerValues = {
+            Bolero: date >= BROKER_HISTORY_START.Bolero ? brokerCash.Bolero : null,
+            Degiro: date >= BROKER_HISTORY_START.Degiro ? brokerCash.Degiro : null,
+            Saxo:   date >= BROKER_HISTORY_START.Saxo   ? brokerCash.Saxo   : null,
+        };
         positions.forEach(s => {
-            const price = lastPrices[s.ticker];
+            const price  = lastPrices[s.ticker];
             if (price == null) return;
-            const cur    = (s.currency || 'USD').toUpperCase();
-            const fx     = cur === 'EUR' ? 1 : (lastEurusd ? 1 / lastEurusd : 0.92);
             const broker = s.broker || 'Degiro';
+            if (date < BROKER_HISTORY_START[broker]) return; // broker nog niet actief
+            const cur = (s.currency || 'USD').toUpperCase();
+            const fx  = cur === 'EUR' ? 1 : (lastEurusd ? 1 / lastEurusd : 0.92);
             brokerValues[broker] = (brokerValues[broker] || 0) + price * (s.aantal || 0) * fx;
         });
+
+        const activeBrokers = ['Bolero','Degiro','Saxo'].filter(b => brokerValues[b] != null);
+        if (activeBrokers.length === 0) return;
         history.push({
             date,
-            value:  brokerValues.Bolero + brokerValues.Degiro + brokerValues.Saxo,
+            value:  activeBrokers.reduce((s, b) => s + brokerValues[b], 0),
             bolero: brokerValues.Bolero,
             degiro: brokerValues.Degiro,
             saxo:   brokerValues.Saxo,
@@ -7599,18 +8515,23 @@ const TP_BENCHMARKS = [
     { id: 'tp-benchBEL20',  ticker: '^BFX',    label: 'BEL 20',     color: '#2980b9' },
 ];
 let _tpBenchCache  = {};
-let _tpTimeFilter  = 'all';
+let _tpTimeFilter  = 'ytd';
 
-function getFilteredHistory(range) {
-    const history = loadPortfolioHistory().filter(h => h.date >= PORTFOLIO_HISTORY_START);
+function getFilteredHistory(range, broker) {
+    const start = BROKER_HISTORY_START[broker || _tpBrokerFilter] || PORTFOLIO_HISTORY_START;
+    const history = loadPortfolioHistory().filter(h => h.date >= start);
     if (!history.length) return [];
     const now = new Date();
     let cutoff = null;
-    if (range === '1w')  { cutoff = new Date(now); cutoff.setDate(now.getDate() - 7); }
+    if (range === '1w')       { cutoff = new Date(now); cutoff.setDate(now.getDate() - 7); }
     else if (range === '1m')  { cutoff = new Date(now); cutoff.setMonth(now.getMonth() - 1); }
     else if (range === 'ytd') { cutoff = new Date(now.getFullYear(), 0, 1); }
+    else if (range === '1y')  { cutoff = new Date(now); cutoff.setFullYear(now.getFullYear() - 1); }
+    else if (range === '2y')  { cutoff = new Date(now); cutoff.setFullYear(now.getFullYear() - 2); }
     if (!cutoff) return history;
-    return history.filter(h => new Date(h.date) >= cutoff);
+    const cutoffStr = cutoff.toISOString().slice(0, 10);
+    // cutoff nooit vroeger dan broker-startdatum
+    return history.filter(h => h.date >= (cutoffStr > start ? cutoffStr : start));
 }
 
 function setTpTimeFilter(range, btn) {
@@ -7697,8 +8618,448 @@ function setTpBroker(broker, btn) {
         if (broker === 'all') pg.removeAttribute('data-broker');
         else pg.setAttribute('data-broker', broker);
     }
+    const titleEl = document.getElementById('tp-chart-title');
+    if (titleEl) {
+        const labels = { all: 'PORTFOLIO VOORUITGANG', Bolero: 'BOLERO VOORUITGANG', Degiro: 'DEGIRO VOORUITGANG', Saxo: 'SAXO VOORUITGANG' };
+        titleEl.textContent = labels[broker] || 'PORTFOLIO VOORUITGANG';
+    }
     renderPortfolioHistoryChart(); // grafiek updatet direct op cached data
     initTestPortfolio();           // portfolio metrics verversen op de achtergrond
+}
+
+// ── TEST PAGE VIEW SWITCHER ───────────────────────────────────────────────────
+function switchTpView(view, btn) {
+    ['overzicht','kalender','periodeoverzicht','doel'].forEach(v => {
+        const el = document.getElementById(`tp-view-${v}`);
+        if (el) el.style.display = v === view ? '' : 'none';
+    });
+    document.getElementById('tp-vernieuwen-btn').style.display = view === 'overzicht' ? '' : 'none';
+    document.querySelectorAll('.tp-view-tab').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+    if (view === 'kalender')          renderTpHeatmap();
+    if (view === 'periodeoverzicht')  { renderTpMaandoverzicht(); renderTpWeekoverzicht(); }
+    if (view === 'doel')              renderTpDoel();
+}
+
+// ── TEST RENDEMENT KALENDER (dagelijkse returns heatmap) ──────────────────────
+const TP_HEATMAP_BROKERS = ['all', 'Bolero', 'Degiro', 'Saxo'];
+const TP_HEATMAP_LABELS  = { all:'TOTAAL', Bolero:'BOLERO', Degiro:'DEGIRO', Saxo:'SAXO' };
+let tpHeatmapBrokerIdx = 0;
+let tpHeatmapYear = new Date().getFullYear();
+
+function cycleTpHeatmapBroker() {
+    tpHeatmapBrokerIdx = (tpHeatmapBrokerIdx + 1) % TP_HEATMAP_BROKERS.length;
+    const broker = TP_HEATMAP_BROKERS[tpHeatmapBrokerIdx];
+    const btn = document.getElementById('tpHeatmapBrokerBtn');
+    if (btn) btn.textContent = TP_HEATMAP_LABELS[broker] + ' ▾';
+    renderTpHeatmap();
+}
+
+function renderTpHeatmap() {
+    const grid      = document.getElementById('tpHeatmapGrid');
+    const yearLabel = document.getElementById('tpHeatmapYearLabel');
+    if (!grid || !yearLabel) return;
+    yearLabel.textContent = tpHeatmapYear;
+
+    const broker  = TP_HEATMAP_BROKERS[tpHeatmapBrokerIdx];
+    const brokerKey = { all:'value', Bolero:'bolero', Degiro:'degiro', Saxo:'saxo' }[broker];
+
+    // Bouw dagrendement map vanuit portfolio history (weekends overslaan)
+    const isWeekday = d => { const dow = new Date(d).getDay(); return dow !== 0 && dow !== 6; };
+    const history = loadPortfolioHistory().filter(h => h[brokerKey] != null && isWeekday(h.date));
+    const returnMap = {};
+    for (let i = 1; i < history.length; i++) {
+        const cur  = history[i];
+        const prev = history[i - 1];
+        const val  = (cur[brokerKey] ?? 0) - (prev[brokerKey] ?? 0);
+        returnMap[cur.date] = val;
+    }
+
+    const allVals = Object.values(returnMap).filter(v => isFinite(v) && v !== 0);
+    const maxAbs  = allVals.length > 0 ? Math.max(...allVals.map(Math.abs)) : 1;
+
+    const MONTH_NL = ['Jan','Feb','Mrt','Apr','Mei','Jun','Jul','Aug','Sep','Okt','Nov','Dec'];
+    const DAY_NL   = ['Ma','Di','Wo','Do','Vr','Za','Zo'];
+
+    let html = `<div style="display:flex;gap:12px;flex-wrap:wrap;">`;
+    for (let month = 0; month < 12; month++) {
+        const firstDay    = new Date(tpHeatmapYear, month, 1);
+        const daysInMonth = new Date(tpHeatmapYear, month + 1, 0).getDate();
+        const startDow    = (firstDay.getDay() + 6) % 7; // Ma=0
+
+        html += `<div style="min-width:130px;">`;
+        html += `<div style="font-size:0.7rem;font-weight:700;color:var(--text-muted);margin-bottom:4px;">${MONTH_NL[month]}</div>`;
+        html += `<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:2px;">`;
+        DAY_NL.forEach(d => {
+            html += `<div style="font-size:0.55rem;color:var(--text-muted);text-align:center;">${d}</div>`;
+        });
+        html += `</div>`;
+        html += `<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;">`;
+
+        for (let e = 0; e < startDow; e++) html += `<div></div>`;
+
+        for (let day = 1; day <= daysInMonth; day++) {
+            const mm  = String(month + 1).padStart(2, '0');
+            const dd  = String(day).padStart(2, '0');
+            const key = `${tpHeatmapYear}-${mm}-${dd}`;
+            const val = returnMap[key];
+
+            let bg = 'var(--border-color)';
+            let dataTooltip = `${dd}/${mm}/${tpHeatmapYear}: geen data`;
+
+            if (val !== undefined) {
+                const intensity = maxAbs > 0 ? Math.min(Math.abs(val) / maxAbs, 1) : 0;
+                const alpha     = Math.round(55 + intensity * 200);
+                const alphaHex  = alpha.toString(16).padStart(2, '0');
+                bg = val >= 0 ? `#2ecc71${alphaHex}` : `#e74c3c${alphaHex}`;
+                const sign = val >= 0 ? '+' : '';
+                const isBlurred = document.querySelector('.blur-target')?.classList.contains('blur');
+                const displayVal = isBlurred ? '€ •••' : `${sign}€${Math.round(val).toLocaleString('nl-NL')}`;
+                dataTooltip = `${dd}/${mm}/${tpHeatmapYear}  ${displayVal}`;
+            }
+
+            html += `<div data-tip="${dataTooltip}" class="heatmap-cell" style="aspect-ratio:1;border-radius:2px;background:${bg};cursor:default;position:relative;"></div>`;
+        }
+        html += `</div></div>`;
+    }
+    html += `</div>`;
+    grid.innerHTML = html;
+
+    // Bind tooltip events — hergebruik bestaande handlers
+    grid.querySelectorAll('.heatmap-cell').forEach(cell => {
+        cell.addEventListener('mouseenter', showHeatTip);
+        cell.addEventListener('mousemove',  moveHeatTip);
+        cell.addEventListener('mouseleave', hideHeatTip);
+        cell.addEventListener('touchstart', showHeatTipTouch, { passive: true });
+    });
+}
+
+// ── TEST DOEL ─────────────────────────────────────────────────────────────────
+function renderTpDoel() {
+    const doel     = getDoelData();
+    const target   = doel.target   || null;
+    const deadline = doel.deadline || null;
+
+    const isWeekday = d => { const dow = new Date(d).getDay(); return dow !== 0 && dow !== 6; };
+    const hist = loadPortfolioHistory().filter(h => isWeekday(h.date) && h.value != null);
+    if (hist.length === 0) return;
+
+    const current   = hist[hist.length - 1].value;
+    const isBlurred = document.querySelector('.blur-target')?.classList.contains('blur');
+    const setEl   = (id, val)  => { const el = document.getElementById(id); if (el) el.textContent = val; };
+    const setHTML = (id, html) => { const el = document.getElementById(id); if (el) el.innerHTML  = html; };
+
+    if (!target) {
+        setEl('tpDoel-target',    'Niet ingesteld');
+        setEl('tpDoel-current',   isBlurred ? '€ •••' : formatEuro(current));
+        setEl('tpDoel-resterend', '–');
+        setEl('tpDoel-pct-label', '0%');
+        const bar = document.getElementById('tpDoel-progress-bar');
+        if (bar) bar.style.width = '0%';
+        setEl('tpDoel-eta',      '–');
+        setEl('tpDoel-dagnodig', '–');
+        return;
+    }
+
+    const resterend = target - current;
+    const pct = Math.min(Math.max((current / target) * 100, 0), 100);
+    const bar = document.getElementById('tpDoel-progress-bar');
+    if (bar) {
+        bar.style.width      = pct.toFixed(1) + '%';
+        bar.style.background = pct >= 100 ? 'var(--success)' : 'linear-gradient(90deg,var(--bolero),var(--success))';
+    }
+    const pctLbl = document.getElementById('tpDoel-pct-label');
+    if (pctLbl) {
+        pctLbl.textContent = pct.toFixed(1) + '%';
+        pctLbl.style.color = pct >= 100 ? 'var(--success)' : pct >= 50 ? 'var(--bolero)' : 'var(--text-main)';
+    }
+    setEl('tpDoel-target',  isBlurred ? '€ •••' : formatEuro(target));
+    setEl('tpDoel-current', isBlurred ? '€ •••' : formatEuro(current));
+    if (resterend <= 0) setHTML('tpDoel-resterend', '<span style="color:var(--success);font-weight:800;">🎉 Doel bereikt!</span>');
+    else setEl('tpDoel-resterend', isBlurred ? '€ •••' : formatEuro(resterend));
+
+    if (deadline) {
+        const deadlineDate = new Date(deadline);
+        const today        = new Date();
+        const daysLeft     = Math.max(0, Math.round((deadlineDate - today) / 86400000));
+        const dateStr      = deadlineDate.toLocaleDateString('nl-NL', { day:'numeric', month:'short', year:'numeric' });
+        setEl('tpDoel-eta', `${dateStr} (${daysLeft} d.)`);
+        setEl('tpDoel-dagnodig', resterend > 0 && daysLeft > 0
+            ? (isBlurred ? '€ •••/dag' : `${formatEuro(Math.round(resterend / daysLeft))}/dag`)
+            : resterend <= 0 ? '–' : 'Deadline verstreken');
+    } else {
+        // ETA op basis van gemiddelde daggroei (laatste 30 handelsdagen)
+        const startIdx = Math.max(0, hist.length - 30);
+        if (hist.length >= 2 && resterend > 0) {
+            const oldVal    = hist[startIdx].value;
+            const days      = hist.length - 1 - startIdx;
+            const avgPerDay = days > 0 ? (current - oldVal) / days : 0;
+            if (avgPerDay > 0) {
+                const daysNeeded = Math.ceil(resterend / avgPerDay);
+                const eta = new Date(); eta.setDate(eta.getDate() + daysNeeded);
+                setEl('tpDoel-eta', eta.toLocaleDateString('nl-NL', { day:'numeric', month:'short', year:'numeric' }) + ` (~${daysNeeded}d)`);
+                setEl('tpDoel-dagnodig', isBlurred ? '€ •••/dag' : `${formatEuro(Math.round(avgPerDay))}/dag (gem.)`);
+            } else {
+                setEl('tpDoel-eta',      'Onvoldoende groei');
+                setEl('tpDoel-dagnodig', '–');
+            }
+        } else {
+            setEl('tpDoel-eta', '–'); setEl('tpDoel-dagnodig', '–');
+        }
+    }
+}
+
+// ── TEST MAANDOVERZICHT ───────────────────────────────────────────────────────
+const TP_MAAND_BROKERS = ['all', 'Bolero', 'Degiro', 'Saxo'];
+const TP_MAAND_LABELS  = { all:'TOTAAL', Bolero:'BOLERO', Degiro:'DEGIRO', Saxo:'SAXO' };
+const TP_MAAND_NL = ['Jan','Feb','Mrt','Apr','Mei','Jun','Jul','Aug','Sep','Okt','Nov','Dec'];
+let tpMaandBrokerIdx = 0;
+let tpMaandYear = new Date().getFullYear();
+
+function cycleTpMaandBroker() {
+    tpMaandBrokerIdx = (tpMaandBrokerIdx + 1) % TP_MAAND_BROKERS.length;
+    const broker = TP_MAAND_BROKERS[tpMaandBrokerIdx];
+    const btn = document.getElementById('tpMaandBrokerBtn');
+    if (btn) btn.textContent = TP_MAAND_LABELS[broker] + ' ▾';
+    renderTpMaandoverzicht();
+}
+
+function renderTpMaandoverzicht() {
+    const head    = document.getElementById('tpMaandTableHead');
+    const body    = document.getElementById('tpMaandTableBody');
+    const yearLbl = document.getElementById('tpMaandYearLabel');
+    if (!head || !body || !yearLbl) return;
+    yearLbl.textContent = tpMaandYear;
+
+    const broker    = TP_MAAND_BROKERS[tpMaandBrokerIdx];
+    const brokerKey = broker === 'all' ? 'value' : broker.toLowerCase();
+    const isBlurred = document.querySelector('.blur-target')?.classList.contains('blur');
+
+    const getVal = (entry) => entry[brokerKey] ?? null;
+
+    // Groepeer portfolio history per YYYY-MM (history heeft 'YYYY-MM-DD' datums)
+    const isWeekday = d => { const dow = new Date(d).getDay(); return dow !== 0 && dow !== 6; };
+    const allHistory = loadPortfolioHistory()
+        .filter(h => isWeekday(h.date) && getVal(h) != null);
+
+    const byMonth = {};
+    allHistory.forEach(entry => {
+        const key = entry.date.slice(0, 7); // 'YYYY-MM'
+        if (!byMonth[key]) byMonth[key] = [];
+        byMonth[key].push(entry);
+    });
+
+    // Rijen per maand van het geselecteerde jaar
+    const months = [];
+    for (let m = 1; m <= 12; m++) {
+        const key     = `${tpMaandYear}-${String(m).padStart(2,'0')}`;
+        const entries = byMonth[key];
+        if (!entries || entries.length === 0) {
+            months.push({ month: m, start: null, end: null, diff: null, perc: null });
+            continue;
+        }
+        const prevM   = m === 1 ? 12 : m - 1;
+        const prevY   = m === 1 ? tpMaandYear - 1 : tpMaandYear;
+        const prevKey = `${prevY}-${String(prevM).padStart(2,'0')}`;
+        const prevEntries = byMonth[prevKey];
+
+        const endVal = getVal(entries[entries.length - 1]);
+        let startVal = null;
+        if (prevEntries && prevEntries.length > 0) {
+            startVal = getVal(prevEntries[prevEntries.length - 1]);
+        } else {
+            startVal = entries.length > 1 ? getVal(entries[0]) : null;
+        }
+
+        const diff = startVal !== null ? endVal - startVal : null;
+        const perc = startVal !== null && startVal !== 0 ? ((endVal - startVal) / startVal) * 100 : null;
+        months.push({ month: m, end: endVal, diff, perc });
+    }
+
+    // Jaarstotaal
+    const validMonths  = months.filter(m => m.diff !== null);
+    const jaarDiff     = validMonths.reduce((s, m) => s + m.diff, 0);
+    const firstValidEnd = validMonths.length > 0 ? validMonths[0].end - validMonths[0].diff : null;
+    const jaarPerc      = firstValidEnd && firstValidEnd !== 0 ? (jaarDiff / firstValidEnd) * 100 : null;
+
+    head.innerHTML = `<tr>
+        <th>Maand</th><th>Rendement €</th><th>Rendement %</th><th>Eindwaarde</th>
+    </tr>`;
+
+    body.innerHTML = months.map(m => {
+        if (m.diff === null) {
+            return `<tr><td>${TP_MAAND_NL[m.month-1]}</td>
+                <td colspan="3" style="color:var(--text-muted);font-size:0.75rem;text-align:right;">geen data</td></tr>`;
+        }
+        const color   = m.diff >= 0 ? 'var(--success)' : 'var(--danger)';
+        const sign    = m.diff >= 0 ? '+' : '';
+        const euroStr = isBlurred ? '€ •••' : `${sign}${formatEuro(m.diff)}`;
+        const percStr = m.perc !== null ? `${sign}${m.perc.toFixed(2)}%` : '–';
+        const eindStr = isBlurred ? '€ •••' : formatEuro(m.end);
+        return `<tr><td>${TP_MAAND_NL[m.month-1]}</td>
+            <td style="color:${color};font-weight:700;">${euroStr}</td>
+            <td style="color:${color};font-weight:700;">${percStr}</td>
+            <td>${eindStr}</td></tr>`;
+    }).join('');
+
+    if (validMonths.length > 0) {
+        const color = jaarDiff >= 0 ? 'var(--success)' : 'var(--danger)';
+        const sign  = jaarDiff >= 0 ? '+' : '';
+        body.innerHTML += `<tr class="maand-totaal">
+            <td>Jaar ${tpMaandYear}</td>
+            <td style="color:${color};">${isBlurred ? '€ •••' : sign + formatEuro(jaarDiff)}</td>
+            <td style="color:${color};">${jaarPerc !== null ? sign + jaarPerc.toFixed(2) + '%' : '–'}</td>
+            <td></td></tr>`;
+    }
+}
+
+// ── TEST WEEKOVERZICHT ────────────────────────────────────────────────────────
+const TP_WEEK_BROKERS = ['all', 'Bolero', 'Degiro', 'Saxo'];
+const TP_WEEK_LABELS  = { all:'TOTAAL', Bolero:'BOLERO', Degiro:'DEGIRO', Saxo:'SAXO' };
+let tpWeekBrokerIdx = 0;
+let tpWeekYear = new Date().getFullYear();
+
+function cycleTpWeekBroker() {
+    tpWeekBrokerIdx = (tpWeekBrokerIdx + 1) % TP_WEEK_BROKERS.length;
+    const broker = TP_WEEK_BROKERS[tpWeekBrokerIdx];
+    const btn = document.getElementById('tpWeekBrokerBtn');
+    if (btn) btn.textContent = TP_WEEK_LABELS[broker] + ' ▾';
+    renderTpWeekoverzicht();
+}
+
+// ISO week berekening voor YYYY-MM-DD format
+function getTpISOWeekAndYear(dateStr) {
+    const [y, m, d] = dateStr.split('-').map(Number);
+    const date = new Date(y, m - 1, d);
+    date.setHours(0, 0, 0, 0);
+    const thursday = new Date(date);
+    thursday.setDate(date.getDate() + 3 - (date.getDay() + 6) % 7);
+    const week1 = new Date(thursday.getFullYear(), 0, 4);
+    const weekNum = 1 + Math.round(((thursday - week1) / 86400000 - 3 + (week1.getDay() + 6) % 7) / 7);
+    return { week: weekNum, year: thursday.getFullYear() };
+}
+
+function renderTpWeekoverzicht() {
+    const head    = document.getElementById('tpWeekTableHead');
+    const body    = document.getElementById('tpWeekTableBody');
+    const yearLbl = document.getElementById('tpWeekYearLabel');
+    if (!head || !body || !yearLbl) return;
+    yearLbl.textContent = tpWeekYear;
+
+    const broker    = TP_WEEK_BROKERS[tpWeekBrokerIdx];
+    const brokerKey = broker === 'all' ? 'value' : broker.toLowerCase();
+    const isBlurred = document.querySelector('.blur-target')?.classList.contains('blur');
+
+    const getVal = (entry) => entry[brokerKey] ?? null;
+
+    const isWeekday = d => { const dow = new Date(d).getDay(); return dow !== 0 && dow !== 6; };
+    const allHistory = loadPortfolioHistory()
+        .filter(h => isWeekday(h.date) && getVal(h) != null);
+
+    // Groepeer per ISO-week
+    const byWeek = {};
+    allHistory.forEach(entry => {
+        const wi = getTpISOWeekAndYear(entry.date);
+        const key = `${wi.year}-W${String(wi.week).padStart(2,'0')}`;
+        if (!byWeek[key]) byWeek[key] = [];
+        byWeek[key].push(entry);
+    });
+
+    const allKeysSorted = Object.keys(byWeek).sort();
+    const yearKeys      = allKeysSorted.filter(k => k.startsWith(`${tpWeekYear}-W`));
+
+    head.innerHTML = `<tr>
+        <th>Week</th><th>Periode</th>
+        <th style="text-align:right;">Rendement €</th>
+        <th style="text-align:right;">Rendement %</th>
+        <th style="text-align:right;">Eindwaarde</th>
+    </tr>`;
+
+    if (yearKeys.length === 0) {
+        body.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:24px;color:var(--text-muted);">Geen data voor ${tpWeekYear}</td></tr>`;
+        return;
+    }
+
+    const sortedKeys = [...yearKeys].reverse();
+    let totalDiff = 0;
+    const rows = [];
+
+    sortedKeys.forEach(key => {
+        const entries = byWeek[key];
+        const weekNum = parseInt(key.split('-W')[1]);
+        const lastEntry = entries[entries.length - 1];
+        const endVal    = getVal(lastEntry);
+
+        // Startwaarde = laatste punt van vorige week
+        const globalIdx = allKeysSorted.indexOf(key);
+        let startVal = null;
+        if (allKeysSorted.indexOf(key) > 0) {
+            const prevKey     = allKeysSorted[globalIdx - 1];
+            const prevEntries = byWeek[prevKey];
+            startVal = getVal(prevEntries[prevEntries.length - 1]);
+        } else if (entries.length > 1) {
+            startVal = getVal(entries[0]);
+        }
+
+        // Datumrange tonen: DD/MM
+        const fmtDate = (iso) => { const [, m, d] = iso.split('-'); return `${d}/${m}`; };
+        const firstEntry  = entries[0];
+        const periodeStr  = firstEntry.date === lastEntry.date
+            ? fmtDate(firstEntry.date)
+            : `${fmtDate(firstEntry.date)} – ${fmtDate(lastEntry.date)}`;
+
+        if (startVal === null) {
+            rows.push(`<tr>
+                <td style="font-weight:700;color:var(--text-muted);font-size:0.75rem;">W${weekNum}</td>
+                <td style="font-size:0.78rem;">${periodeStr}</td>
+                <td colspan="3" style="text-align:right;color:var(--text-muted);font-size:0.75rem;">geen vorige week</td>
+            </tr>`);
+            return;
+        }
+
+        const diff    = endVal - startVal;
+        const perc    = startVal !== 0 ? (diff / startVal) * 100 : null;
+        totalDiff += diff;
+        const color   = diff >= 0 ? 'var(--success)' : 'var(--danger)';
+        const sign    = diff >= 0 ? '+' : '';
+        const euroStr = isBlurred ? '€ •••' : `${sign}${formatEuro(diff)}`;
+        const percStr = perc !== null ? `${sign}${perc.toFixed(2)}%` : '–';
+        const eindStr = isBlurred ? '€ •••' : formatEuro(endVal);
+
+        rows.push(`<tr style="border-bottom:1px solid var(--border-color);">
+            <td style="font-weight:700;color:var(--text-muted);font-size:0.75rem;">W${weekNum}</td>
+            <td style="font-size:0.78rem;">${periodeStr}</td>
+            <td style="text-align:right;color:${color};font-weight:700;">${euroStr}</td>
+            <td style="text-align:right;color:${color};font-weight:700;">${percStr}</td>
+            <td style="text-align:right;">${eindStr}</td>
+        </tr>`);
+    });
+
+    body.innerHTML = rows.join('');
+
+    // Totaalrij
+    const hasRows = sortedKeys.some(k => allKeysSorted.indexOf(k) > 0 || yearKeys.indexOf(k) > 0);
+    if (hasRows) {
+        const color = totalDiff >= 0 ? 'var(--success)' : 'var(--danger)';
+        const sign  = totalDiff >= 0 ? '+' : '';
+        body.innerHTML += `<tr class="week-totaal">
+            <td colspan="2">Jaar ${tpWeekYear}</td>
+            <td style="text-align:right;color:${color};">${isBlurred ? '€ •••' : sign + formatEuro(totalDiff)}</td>
+            <td style="text-align:right;color:var(--text-muted);">–</td>
+            <td></td>
+        </tr>`;
+    }
+}
+
+const _tpCollapsed = {};
+function tpToggleList(id, hdr) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    _tpCollapsed[id] = !_tpCollapsed[id];
+    const isCollapsed = _tpCollapsed[id];
+    el.style.display = isCollapsed ? 'none' : '';
+    hdr.classList.toggle('collapsed', isCollapsed);
+    hdr.closest('.ap-card-toplist')?.classList.toggle('tp-card-collapsed', isCollapsed);
 }
 
 function renderTpCashEditor() {
@@ -7707,13 +9068,15 @@ function renderTpCashEditor() {
     if (!editor) return;
     if (_tpBrokerFilter === 'all') {
         if (cashEl) cashEl.style.display = '';
-        editor.innerHTML = ['Bolero', 'Degiro', 'Saxo'].map(b => `
-            <div class="ap-cash-row">
-                <span class="ap-cash-broker" style="background:${brokerColorVar(b)};"></span>
-                <span class="ap-cash-label">${b}</span>
-                <span class="ap-cash-readonly blur-target">${fmtEuroAlt(_apCash[b] || 0)}</span>
-            </div>
-        `).join('');
+        editor.innerHTML = `<div style="display:flex;gap:16px;flex-wrap:wrap;align-items:center;">` +
+            ['Bolero', 'Degiro', 'Saxo'].map(b => `
+                <div style="display:flex;align-items:center;gap:5px;">
+                    <span style="width:7px;height:7px;border-radius:50%;background:${brokerColorVar(b)};flex-shrink:0;"></span>
+                    <span style="font-size:0.7rem;color:var(--text-muted);font-weight:600;">${b}</span>
+                    <span class="blur-target" style="font-size:0.82rem;font-weight:800;">${fmtEuroAlt(_apCash[b] || 0)}</span>
+                </div>
+            `).join('') +
+        `</div>`;
     } else {
         if (cashEl) cashEl.style.display = 'none';
         editor.innerHTML = `
@@ -7721,7 +9084,6 @@ function renderTpCashEditor() {
                 <span class="ap-cash-prefix">€</span>
                 <input class="ap-cash-input-big blur-target" type="number" step="0.01" min="0" value="${_apCash[_tpBrokerFilter] || 0}" onchange="setTpCashFor('${_tpBrokerFilter}', this.value)" placeholder="0,00">
             </div>
-            <div class="ap-card-sub" style="margin-top:4px;">${_tpBrokerFilter}</div>
         `;
     }
 }
@@ -7860,7 +9222,8 @@ async function initTestPortfolio(force = false) {
     if (positions.length === 0) {
         const totalCard = document.getElementById('tp-totalValue');
         if (totalCard) totalCard.textContent = fmtEuroAlt(cashEur);
-        document.getElementById('tp-totalCost').textContent = 'Gestort: ' + fmtEuroAlt(getStortingForBroker(_tpBrokerFilter));
+        const stortingEmpty = tdCashflows.length > 0 ? getTdNetStorting(_tpBrokerFilter) : getStortingForBroker(_tpBrokerFilter);
+        document.getElementById('tp-totalCost').textContent = 'Gestort: ' + fmtEuroAlt(stortingEmpty);
         ['tp-totalPL','tp-totalPLPct','tp-dayPL','tp-dayPLPct','tp-positions','tp-positionsBreakdown']
             .forEach(id => { const e = document.getElementById(id); if (e) e.textContent = '–'; });
         const emptyList = '<div class="ap-toplist-empty">Geen posities</div>';
@@ -7902,7 +9265,7 @@ async function initTestPortfolio(force = false) {
     const dayPLPct       = positionsValue > 0 ? (dayPL / (positionsValue - dayPL)) * 100 : 0;
 
     document.getElementById('tp-totalValue').textContent = fmtEuroAlt(totalValue);
-    const stortingEur = getStortingForBroker(_tpBrokerFilter);
+    const stortingEur = tdCashflows.length > 0 ? getTdNetStorting(_tpBrokerFilter) : getStortingForBroker(_tpBrokerFilter);
     const cashLine = cashEur > 0 ? ` &nbsp;·&nbsp; Cash: ${fmtEuroAlt(cashEur)}` : '';
     document.getElementById('tp-totalCost').innerHTML = 'Gestort: ' + fmtEuroAlt(stortingEur) + cashLine;
 
@@ -7925,24 +9288,36 @@ async function initTestPortfolio(force = false) {
         ...(optionCnt > 0 ? [`${optionCnt} opties`] : []),
     ].join(' · ');
 
-    const sortedByPct = [...enriched].filter(x => x.plPct != null).sort((a,b) => b.plPct - a.plPct);
+    const sortedByPct = [...enriched].filter(x => x.plPct != null && x.type !== 'option').sort((a,b) => b.plPct - a.plPct);
     const top5Best  = sortedByPct.filter(x => x.plPct > 0).slice(0, 5);
     const top5Worst = sortedByPct.filter(x => x.plPct < 0).slice(-5).reverse();
 
-    const renderTopList = (items, isBest) => {
+    const renderTopList = (items, isBest, useDay = false) => {
         if (items.length === 0) return '<div class="ap-toplist-empty">Geen data</div>';
         return items.map((p, i) => {
-            const col = isBest ? 'var(--success)' : 'var(--danger)';
-            const sign = p.plPct >= 0 ? '+' : '';
-            const eurSign = p.plEur >= 0 ? '+' : '';
+            const pct    = useDay ? p.dayPLPct  : p.plPct;
+            const eur    = useDay ? p.dayPLEur  : p.plEur;
+            const col    = isBest ? 'var(--success)' : 'var(--danger)';
+            const sign   = pct  >= 0 ? '+' : '';
+            const eurSign = eur >= 0 ? '+' : '';
             return `<div class="ap-toplist-row" title="${p.name}">
                 <span class="ap-toplist-rank">${i+1}.</span>
                 <span class="ap-toplist-ticker">${p.ticker}</span>
-                <span class="ap-toplist-eur blur-target">${eurSign}${fmtEuroAlt(p.plEur, 0)}</span>
-                <span class="ap-toplist-pct" style="color:${col};">${sign}${p.plPct.toFixed(2)}%</span>
+                <span class="ap-toplist-eur blur-target">${eurSign}${fmtEuroAlt(eur, 0)}</span>
+                <span class="ap-toplist-pct" style="color:${col};">${sign}${pct.toFixed(2)}%</span>
             </div>`;
         }).join('');
     };
+
+    // Vandaag winners/verliezers (geen opties)
+    const sortedByDay   = [...enriched].filter(x => x.dayPLPct != null && x.type !== 'option').sort((a,b) => b.dayPLPct - a.dayPLPct);
+    const dayBest       = sortedByDay.filter(x => x.dayPLPct > 0).slice(0, 5);
+    const dayWorst      = sortedByDay.filter(x => x.dayPLPct < 0).slice(-5).reverse();
+
+    const dayBestEl  = document.getElementById('tp-dayBestList');
+    const dayWorstEl = document.getElementById('tp-dayWorstList');
+    if (dayBestEl)  dayBestEl.innerHTML  = renderTopList(dayBest,  true,  true);
+    if (dayWorstEl) dayWorstEl.innerHTML = renderTopList(dayWorst, false, true);
 
     const bestEl  = document.getElementById('tp-bestList');
     const worstEl = document.getElementById('tp-worstList');
@@ -7957,10 +9332,59 @@ async function initTestPortfolio(force = false) {
     renderBySector('tp-bySector', enriched, positionsValue, false, sortOpts);
     renderAllPositions(enriched, positionsValue, 'tp-allPositions', sortOpts);
 
+    // Startdatum + dagen + CAGR
+    const brokerKey   = { all: 'value', Bolero: 'bolero', Degiro: 'degiro', Saxo: 'saxo' }[_tpBrokerFilter] || 'value';
+    const startDateStr = BROKER_HISTORY_START[_tpBrokerFilter] || PORTFOLIO_HISTORY_START;
+    const histAll     = loadPortfolioHistory().filter(h => h.date >= startDateStr && h[brokerKey] != null);
+    const startEl     = document.getElementById('tp-hero-start');
+    const cagrEl      = document.getElementById('tp-hero-cagr');
+    if (startEl && cagrEl && histAll.length > 0) {
+        startEl.style.display = '';
+        cagrEl.style.display  = '';
+        const firstEntry  = histAll[0];
+        const startValue  = firstEntry[brokerKey];
+        const today       = new Date();
+        const startD      = new Date(firstEntry.date);
+        const days        = Math.round((today - startD) / 86400000);
+        const years       = days / 365.25;
+        const cagr        = years > 0 && startValue > 0 ? (Math.pow(totalValue / startValue, 1 / years) - 1) * 100 : null;
+
+        // Format startdatum als MM/JJJJ
+        const [y, m] = firstEntry.date.split('-');
+        document.getElementById('tp-startDate').textContent = `${m}/${y}`;
+        document.getElementById('tp-startDays').textContent = `${days.toLocaleString('nl-NL')} dagen`;
+
+        const cagrDiv = document.getElementById('tp-cagr');
+        if (cagrDiv) {
+            if (cagr != null) {
+                cagrDiv.textContent  = (cagr >= 0 ? '+' : '') + cagr.toFixed(1) + '%';
+                cagrDiv.style.color  = cagr >= 0 ? 'var(--success)' : 'var(--danger)';
+            } else {
+                cagrDiv.textContent = '–';
+                cagrDiv.style.color = '';
+            }
+        }
+    } else {
+        if (startEl) startEl.style.display = 'none';
+        if (cagrEl)  cagrEl.style.display  = 'none';
+    }
+
     // Backfill historische data (eens per dag automatisch, of bij 'all' filter)
     if (_tpBrokerFilter === 'all') await runPortfolioBackfill();
 
-    if (status) status.textContent = `✓ Bijgewerkt · ${new Date().toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit'})}`;
+    // Meest recente koerstijd uit de Yahoo quotes halen (regularMarketTime)
+    const priceTimes = enriched
+        .filter(x => x.type !== 'option' && x.q?.time instanceof Date)
+        .map(x => x.q.time.getTime())
+        .filter(t => isFinite(t) && t > 0);
+    const latestPriceTime = priceTimes.length > 0 ? new Date(Math.max(...priceTimes)) : null;
+    const timeStr = latestPriceTime
+        ? latestPriceTime.toLocaleTimeString('nl-NL', {hour:'2-digit', minute:'2-digit'})
+        : new Date().toLocaleTimeString('nl-NL', {hour:'2-digit', minute:'2-digit'});
+    const hasLive = enriched.some(x => x.type !== 'option' && x.q?.price != null);
+    const dotCol  = hasLive ? 'var(--success)' : 'var(--danger)';
+    if (status) status.innerHTML =
+        `<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${dotCol};margin-right:5px;vertical-align:middle;box-shadow:0 0 4px ${dotCol};"></span>Koersen: ${timeStr}`;
 }
 </script>
 
