@@ -9051,7 +9051,7 @@ function renderTpFromEnriched(allEnriched) {
 
     const cashEur        = getCashForBroker(broker);
     const cashEl         = document.getElementById('tp-cash');
-    if (cashEl) cashEl.textContent = fmtEuroAlt(cashEur);
+    if (cashEl) cashEl.textContent = fmtEuroAlt(cashEur, 0);
     renderTpCashEditor();
 
     const positionsValue = enriched.reduce((a, x) => a + x.valueEur, 0);
@@ -9062,13 +9062,13 @@ function renderTpFromEnriched(allEnriched) {
     const dayPL          = enriched.reduce((a, x) => a + x.dayPLEur, 0);
     const dayPLPct       = positionsValue > 0 ? (dayPL / (positionsValue - dayPL)) * 100 : 0;
 
-    document.getElementById('tp-totalValue').textContent = fmtEuroAlt(totalValue);
+    document.getElementById('tp-totalValue').textContent = fmtEuroAlt(totalValue, 0);
     const stortingEur = tdCashflows.length > 0 ? getTdNetStorting(broker) : getStortingForBroker(broker);
-    const cashLine = cashEur > 0 ? ` &nbsp;·&nbsp; Cash: ${fmtEuroAlt(cashEur)}` : '';
-    document.getElementById('tp-totalCost').innerHTML = 'Gestort: ' + fmtEuroAlt(stortingEur) + cashLine;
+    const cashLine = cashEur > 0 ? ` &nbsp;·&nbsp; Cash: ${fmtEuroAlt(cashEur, 0)}` : '';
+    document.getElementById('tp-totalCost').innerHTML = 'Gestort: ' + fmtEuroAlt(stortingEur, 0) + cashLine;
 
     const tplEl = document.getElementById('tp-totalPL');
-    tplEl.textContent = (totalPL >= 0 ? '+' : '') + fmtEuroAlt(totalPL);
+    tplEl.textContent = (totalPL >= 0 ? '+' : '') + fmtEuroAlt(totalPL, 0);
     tplEl.style.color = totalPL >= 0 ? 'var(--success)' : 'var(--danger)';
 
     const mkChip = (pct) => {
@@ -9078,7 +9078,7 @@ function renderTpFromEnriched(allEnriched) {
     };
     document.getElementById('tp-totalPLPct').innerHTML = mkChip(totalPLPct);
     const dplEl = document.getElementById('tp-dayPL');
-    dplEl.textContent = (dayPL >= 0 ? '+' : '') + fmtEuroAlt(dayPL);
+    dplEl.textContent = (dayPL >= 0 ? '+' : '') + fmtEuroAlt(dayPL, 0);
     dplEl.style.color = dayPL >= 0 ? 'var(--success)' : 'var(--danger)';
     document.getElementById('tp-dayPLPct').innerHTML = mkChip(dayPLPct);
 
@@ -9424,9 +9424,9 @@ function renderTpMaandoverzicht() {
         }
         const color   = m.diff >= 0 ? 'var(--success)' : 'var(--danger)';
         const sign    = m.diff >= 0 ? '+' : '';
-        const euroStr = isBlurred ? '€ •••' : `${sign}${formatEuro(m.diff)}`;
+        const euroStr = isBlurred ? '€ •••' : `${sign}${fmtEuroAlt(m.diff, 0)}`;
         const percStr = m.perc !== null ? `${sign}${m.perc.toFixed(2)}%` : '–';
-        const eindStr = isBlurred ? '€ •••' : formatEuro(m.end);
+        const eindStr = isBlurred ? '€ •••' : fmtEuroAlt(m.end, 0);
         return `<tr><td>${TP_MAAND_NL[m.month-1]}</td>
             <td style="color:${color};font-weight:700;">${euroStr}</td>
             <td style="color:${color};font-weight:700;">${percStr}</td>
@@ -9438,7 +9438,7 @@ function renderTpMaandoverzicht() {
         const sign  = jaarDiff >= 0 ? '+' : '';
         body.innerHTML += `<tr class="maand-totaal">
             <td>Jaar ${tpMaandYear}</td>
-            <td style="color:${color};">${isBlurred ? '€ •••' : sign + formatEuro(jaarDiff)}</td>
+            <td style="color:${color};">${isBlurred ? '€ •••' : sign + fmtEuroAlt(jaarDiff, 0)}</td>
             <td style="color:${color};">${jaarPerc !== null ? sign + jaarPerc.toFixed(2) + '%' : '–'}</td>
             <td></td></tr>`;
     }
@@ -9553,9 +9553,9 @@ function renderTpWeekoverzicht() {
         totalDiff += diff;
         const color   = diff >= 0 ? 'var(--success)' : 'var(--danger)';
         const sign    = diff >= 0 ? '+' : '';
-        const euroStr = isBlurred ? '€ •••' : `${sign}${formatEuro(diff)}`;
+        const euroStr = isBlurred ? '€ •••' : `${sign}${fmtEuroAlt(diff, 0)}`;
         const percStr = perc !== null ? `${sign}${perc.toFixed(2)}%` : '–';
-        const eindStr = isBlurred ? '€ •••' : formatEuro(endVal);
+        const eindStr = isBlurred ? '€ •••' : fmtEuroAlt(endVal, 0);
 
         rows.push(`<tr style="border-bottom:1px solid var(--border-color);">
             <td style="font-weight:700;color:var(--text-muted);font-size:0.75rem;">W${weekNum}</td>
@@ -9575,7 +9575,7 @@ function renderTpWeekoverzicht() {
         const sign  = totalDiff >= 0 ? '+' : '';
         body.innerHTML += `<tr class="week-totaal">
             <td colspan="2">Jaar ${tpWeekYear}</td>
-            <td style="text-align:right;color:${color};">${isBlurred ? '€ •••' : sign + formatEuro(totalDiff)}</td>
+            <td style="text-align:right;color:${color};">${isBlurred ? '€ •••' : sign + fmtEuroAlt(totalDiff, 0)}</td>
             <td style="text-align:right;color:var(--text-muted);">–</td>
             <td></td>
         </tr>`;
@@ -9747,14 +9747,14 @@ async function initTestPortfolio(force = false) {
 
     const cashEur = getCashForBroker(_tpBrokerFilter);
     const cashEl  = document.getElementById('tp-cash');
-    if (cashEl) cashEl.textContent = fmtEuroAlt(cashEur);
+    if (cashEl) cashEl.textContent = fmtEuroAlt(cashEur, 0);
     renderTpCashEditor();
 
     if (positions.length === 0) {
         const totalCard = document.getElementById('tp-totalValue');
-        if (totalCard) totalCard.textContent = fmtEuroAlt(cashEur);
+        if (totalCard) totalCard.textContent = fmtEuroAlt(cashEur, 0);
         const stortingEmpty = tdCashflows.length > 0 ? getTdNetStorting(_tpBrokerFilter) : getStortingForBroker(_tpBrokerFilter);
-        document.getElementById('tp-totalCost').textContent = 'Gestort: ' + fmtEuroAlt(stortingEmpty);
+        document.getElementById('tp-totalCost').textContent = 'Gestort: ' + fmtEuroAlt(stortingEmpty, 0);
         ['tp-totalPL','tp-totalPLPct','tp-dayPL','tp-dayPLPct','tp-positions','tp-positionsBreakdown']
             .forEach(id => { const e = document.getElementById(id); if (e) e.textContent = '–'; });
         const emptyList = '<div class="ap-toplist-empty">Geen posities</div>';
@@ -9805,13 +9805,13 @@ async function initTestPortfolio(force = false) {
     const dayPL          = enriched.reduce((a,x) => a + x.dayPLEur, 0);
     const dayPLPct       = positionsValue > 0 ? (dayPL / (positionsValue - dayPL)) * 100 : 0;
 
-    document.getElementById('tp-totalValue').textContent = fmtEuroAlt(totalValue);
+    document.getElementById('tp-totalValue').textContent = fmtEuroAlt(totalValue, 0);
     const stortingEur = tdCashflows.length > 0 ? getTdNetStorting(_tpBrokerFilter) : getStortingForBroker(_tpBrokerFilter);
-    const cashLine = cashEur > 0 ? ` &nbsp;·&nbsp; Cash: ${fmtEuroAlt(cashEur)}` : '';
-    document.getElementById('tp-totalCost').innerHTML = 'Gestort: ' + fmtEuroAlt(stortingEur) + cashLine;
+    const cashLine = cashEur > 0 ? ` &nbsp;·&nbsp; Cash: ${fmtEuroAlt(cashEur, 0)}` : '';
+    document.getElementById('tp-totalCost').innerHTML = 'Gestort: ' + fmtEuroAlt(stortingEur, 0) + cashLine;
 
     const tplEl = document.getElementById('tp-totalPL');
-    tplEl.textContent = (totalPL >= 0 ? '+' : '') + fmtEuroAlt(totalPL);
+    tplEl.textContent = (totalPL >= 0 ? '+' : '') + fmtEuroAlt(totalPL, 0);
     tplEl.style.color = totalPL >= 0 ? 'var(--success)' : 'var(--danger)';
     const mkChip = (pct) => {
         if (pct == null || isNaN(pct)) return '<span class="tp-hero-pct-chip neu">–</span>';
@@ -9822,7 +9822,7 @@ async function initTestPortfolio(force = false) {
     document.getElementById('tp-totalPLPct').innerHTML = mkChip(totalPLPct);
 
     const dplEl = document.getElementById('tp-dayPL');
-    dplEl.textContent = (dayPL >= 0 ? '+' : '') + fmtEuroAlt(dayPL);
+    dplEl.textContent = (dayPL >= 0 ? '+' : '') + fmtEuroAlt(dayPL, 0);
     dplEl.style.color = dayPL >= 0 ? 'var(--success)' : 'var(--danger)';
     document.getElementById('tp-dayPLPct').innerHTML = mkChip(dayPLPct);
 
