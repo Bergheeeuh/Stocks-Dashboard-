@@ -4559,7 +4559,7 @@ function renderWeeklyReturns() {
             const change = d.c - d.pc;
             // d.dp is Finnhub's official day change % — gebruik dit direct voor nauwkeurigheid
             const pct    = (d.dp != null && d.dp !== 0) ? d.dp : (d.pc ? (change / d.pc) * 100 : 0);
-            return { price: d.c, change, pct, high: d.h, low: d.l, prevClose: d.pc, time: d.t ? new Date(d.t * 1000) : new Date() };
+            return { price: d.c, change, pct, high: d.h, low: d.l, prevClose: d.pc, time: d.t ? new Date(d.t * 1000) : new Date(), source: 'finnhub' };
         } catch { return null; }
     }
 
@@ -4577,7 +4577,7 @@ function renderWeeklyReturns() {
             const prevClose = meta.chartPreviousClose ?? meta.previousClose ?? price;
             const change    = price - prevClose;
             const pct       = prevClose ? (change / prevClose) * 100 : 0;
-            return { price, change, pct, high: meta.regularMarketDayHigh, low: meta.regularMarketDayLow, time: meta.regularMarketTime ? new Date(meta.regularMarketTime * 1000) : new Date() };
+            return { price, change, pct, high: meta.regularMarketDayHigh, low: meta.regularMarketDayLow, time: meta.regularMarketTime ? new Date(meta.regularMarketTime * 1000) : new Date(), source: 'yahoo' };
         } catch { return null; }
     }
 
@@ -7350,9 +7350,12 @@ function renderAllPositions(positions, totalValue, containerId, sortOpts) {
         const cellBase = 'padding:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;';
         const portPct = totalValue > 0 && !noQ ? (p.valueEur / totalValue) * 100 : 0;
         const priceStr = noQ ? '<span style="color:var(--text-muted)">–</span>' : `${curSym}${p.price.toLocaleString('nl-NL', { minimumFractionDigits: 2, maximumFractionDigits: dec })}`;
+        const yahooTag = p.yahooFallback
+            ? `<span title="Koers via Yahoo Finance (fallback)" style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#9b59b6;margin-left:5px;vertical-align:middle;flex-shrink:0;"></span>`
+            : '';
 
         html += `<tr style="border-bottom:1px solid var(--border-color);">
-            <td style="${cellBase}font-weight:700;font-family:monospace;">${p.ticker}</td>
+            <td style="${cellBase}font-weight:700;font-family:monospace;">${p.ticker}${yahooTag}</td>
             <td style="${cellBase}" title="${p.name}">${p.name}</td>
             <td style="${cellBase}color:var(--text-muted);" title="${p.sector}">${p.sector}</td>
             <td style="${cellBase}text-align:right;">${(p.aantal || 0).toLocaleString('nl-NL', { maximumFractionDigits: 8 })}</td>
@@ -9550,14 +9553,15 @@ async function initTestPortfolio(force = false) {
         const dayChange = q?.change ?? 0;
         const aantal    = s.aantal || 0;
         const gak       = s.gak || 0;
-        const noQuote   = s.type !== 'option' && (!q || !q.price);
+        const noQuote      = s.type !== 'option' && (!q || !q.price);
+        const yahooFallback = !noQuote && q?.source === 'yahoo';
         const valueEur  = price * aantal * fx;
         const costEur   = gak   * aantal * fx;
         const plEur     = valueEur - costEur;
         const plPct     = costEur > 0 && !noQuote ? (plEur / costEur) * 100 : null;
         const dayPLEur  = dayChange * aantal * fx;
         const dayPLPct  = q?.pct ?? null;
-        return { ...s, q, sector, price, noQuote, valueEur, costEur, plEur, plPct, dayPLEur, dayPLPct };
+        return { ...s, q, sector, price, noQuote, yahooFallback, valueEur, costEur, plEur, plPct, dayPLEur, dayPLPct };
     }));
 
     const positionsValue = enriched.reduce((a,x) => a + x.valueEur, 0);
