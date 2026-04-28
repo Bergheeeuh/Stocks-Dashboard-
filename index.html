@@ -4567,11 +4567,12 @@ function renderWeeklyReturns() {
             const data = await r.json();
             const meta = data?.chart?.result?.[0]?.meta;
             if (!meta || !meta.regularMarketPrice) return null;
-            const price  = meta.regularMarketPrice;
-            // Gebruik Yahoo's eigen dagwijziging — niet zelf berekenen via chartPreviousClose
-            // (chartPreviousClose is split/dividend-gecorrigeerd en geeft verkeerde %)
-            const change = meta.regularMarketChange ?? (price - (meta.previousClose ?? price));
-            const pct    = meta.regularMarketChangePercent ?? (meta.previousClose ? ((price - meta.previousClose) / meta.previousClose) * 100 : 0);
+            const price     = meta.regularMarketPrice;
+            // previousClose = ongecorrigeerde vorige slotkoers (zelfde als TradingView)
+            // chartPreviousClose is split/dividend-gecorrigeerd en geeft afwijkende %
+            const prevClose = meta.previousClose ?? meta.chartPreviousClose ?? price;
+            const change    = price - prevClose;
+            const pct       = prevClose ? (change / prevClose) * 100 : 0;
             return { price, change, pct, high: meta.regularMarketDayHigh, low: meta.regularMarketDayLow, time: meta.regularMarketTime ? new Date(meta.regularMarketTime * 1000) : new Date() };
         } catch { return null; }
     }
