@@ -234,8 +234,12 @@
     transition: color 0.15s;
 }
 .ap-sort-th:hover { color: var(--ap-accent) !important; }
-.ap-sort-th.active { color: var(--ap-accent) !important; }
-.ap-sort-arrow { font-size: 0.55rem; margin-left: 3px; opacity: 0.6; }
+.ap-sort-th.active {
+    color: var(--ap-accent) !important;
+    border-bottom: 2px solid var(--ap-accent) !important;
+    padding-bottom: 4px;
+}
+.ap-sort-arrow { font-size: 0.55rem; margin-left: 3px; opacity: 0.8; }
 
 /* Vaste rij-grids voor stat cards */
 .ap-stats-row {
@@ -1382,11 +1386,11 @@
 
 <body>
 <div id="mySidebar" class="sidebar">
-    <div class="nav-item active" onclick="switchTab('dashboard', this); closeNav()">PORTFOLIO</div>
+    <div class="nav-item" onclick="switchTab('dashboard', this); closeNav()">PORTFOLIO</div>
     <div class="nav-item" onclick="switchTab('data-page', this); closeNav()">DATA</div>
     <div class="nav-item" onclick="switchTab('aandelen-page', this); closeNav()">LIVE</div>
     <div class="nav-item" onclick="switchTab('aandelen-portfolio-page', this); closeNav()">AANDELEN</div>
-    <div class="nav-item" onclick="switchTab('test-portfolio-page', this); closeNav()">TEST</div>
+    <div class="nav-item active" onclick="switchTab('test-portfolio-page', this); closeNav()">TEST</div>
     <div class="nav-item" onclick="switchTab('test-data-page', this); closeNav()">TEST DATA</div>
     <div class="nav-item" onclick="switchTab('crypto-portfolio-page', this); closeNav()">CRYPTO</div>
     <div class="nav-item" onclick="switchTab('heatmap-page', this); closeNav()">HEATMAP</div>
@@ -1412,7 +1416,7 @@
 
 <div class="container">
 
-    <div id="dashboard" class="tab-content active">
+    <div id="dashboard" class="tab-content">
         <div class="header">
             <div class="header-titles">
                 <h1>PORTFOLIO</h1>
@@ -1834,29 +1838,6 @@
                 </table>
             </div>
         </div>
-        <!-- Opties tabel -->
-        <div class="card" style="margin-top:16px;">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px;">
-                <h3 style="margin:0;">OPTIES</h3>
-                <button class="btn btn-main" onclick="showAddStockData('option')" style="font-size:0.8rem;">+ Toevoegen</button>
-            </div>
-            <div style="overflow-x:auto;">
-                <table style="width:100%;border-collapse:collapse;font-size:0.85rem;min-width:780px;">
-                    <thead><tr>
-                        <th style="text-align:left;padding:8px 6px;color:var(--text-muted);font-size:0.68rem;font-weight:700;border-bottom:2px solid var(--border-color);">Ticker</th>
-                        <th style="text-align:left;padding:8px 6px;color:var(--text-muted);font-size:0.68rem;font-weight:700;border-bottom:2px solid var(--border-color);">Naam</th>
-                        <th style="text-align:center;padding:8px 6px;color:var(--text-muted);font-size:0.68rem;font-weight:700;border-bottom:2px solid var(--border-color);">Broker</th>
-                        <th style="text-align:center;padding:8px 6px;color:var(--text-muted);font-size:0.68rem;font-weight:700;border-bottom:2px solid var(--border-color);">Valuta</th>
-                        <th style="text-align:right;padding:8px 6px;color:var(--text-muted);font-size:0.68rem;font-weight:700;border-bottom:2px solid var(--border-color);">GAK</th>
-                        <th style="text-align:right;padding:8px 6px;color:var(--text-muted);font-size:0.68rem;font-weight:700;border-bottom:2px solid var(--border-color);">Aantal</th>
-                        <th style="text-align:right;padding:8px 6px;color:var(--text-muted);font-size:0.68rem;font-weight:700;border-bottom:2px solid var(--border-color);">Prijs</th>
-                        <th style="padding:8px 6px;border-bottom:2px solid var(--border-color);"></th>
-                    </tr></thead>
-                    <tbody id="optionDataBody"></tbody>
-                </table>
-            </div>
-            <div style="font-size:0.7rem;color:var(--text-muted);margin-top:6px;">Opties hebben geen Yahoo ticker — vul de huidige prijs handmatig in.</div>
-        </div>
     </div>
 
     <!-- CRYPTO TAB -->
@@ -2096,7 +2077,7 @@
 <!-- ============================================ -->
 <!-- TEST PAGINA — KOPIE VAN AANDELEN + GRAFIEK  -->
 <!-- ============================================ -->
-<div id="test-portfolio-page" class="tab-content">
+<div id="test-portfolio-page" class="tab-content active">
     <div class="header" style="margin-bottom:12px;">
         <div class="header-titles"><h1>TEST</h1></div>
         <div style="display:flex;align-items:center;gap:10px;">
@@ -2297,12 +2278,12 @@
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px;">
             <h3 id="tp-positionsTitle" style="margin:0;">POSITIES PER SECTOR</h3>
             <div class="ap-view-toggle">
-                <button class="ap-view-btn active" data-view="sector" onclick="setTpPositionsView('sector', this)">Per sector</button>
-                <button class="ap-view-btn"        data-view="all"    onclick="setTpPositionsView('all', this)">Alle posities</button>
+                <button class="ap-view-btn"        data-view="sector" onclick="setTpPositionsView('sector', this)">Per sector</button>
+                <button class="ap-view-btn active" data-view="all"    onclick="setTpPositionsView('all', this)">Alle posities</button>
             </div>
         </div>
-        <div id="tp-bySector"></div>
-        <div id="tp-allPositions" style="display:none;"></div>
+        <div id="tp-bySector" style="display:none;"></div>
+        <div id="tp-allPositions"></div>
     </div>
 
     </div><!-- /tp-view-overzicht -->
@@ -3111,9 +3092,7 @@ function applyTimeFilter(chartKey) {
         if (_tpAutoRefreshInterval) { clearInterval(_tpAutoRefreshInterval); _tpAutoRefreshInterval = null; }
         const delay = isMarktOpen() ? 60000 : 15 * 60000;
         _tpAutoRefreshInterval = setInterval(() => {
-            if (document.hidden) return; // tab niet zichtbaar → sla over
             initTestPortfolio(true);
-            // Herstart interval met juiste delay (kan veranderd zijn)
             startTpAutoRefresh();
         }, delay);
     }
@@ -3128,14 +3107,20 @@ function applyTimeFilter(chartKey) {
         if (navLabel) navLabel.textContent = labels[id] || '';
         closeNav();
         if (id === 'aandelen-page') loadMarktData(true);
-        if (id === 'aandelen-portfolio-page') initAandelenPortfolio();
         if (id === 'test-data-page') initTestDataPage();
         if (id === 'crypto-portfolio-page') initCryptoPortfolio();
         if (id === 'heatmap-page') initHeatmapPage();
         if (id === 'kalender-page') initKalender();
         if (id === 'cijfer-page') initCijferPage();
 
-        // TEST pagina: start slimme auto-refresh; stop bij verlaten
+        // LIVE pagina: slimme auto-refresh; stop bij verlaten
+        if (_apAutoRefreshInterval) { clearInterval(_apAutoRefreshInterval); _apAutoRefreshInterval = null; }
+        if (id === 'aandelen-portfolio-page') {
+            initAandelenPortfolio();
+            startApAutoRefresh();
+        }
+
+        // TEST pagina: slimme auto-refresh; stop bij verlaten
         if (_tpAutoRefreshInterval) { clearInterval(_tpAutoRefreshInterval); _tpAutoRefreshInterval = null; }
         if (id === 'test-portfolio-page') {
             initTestPortfolio();
@@ -3143,14 +3128,6 @@ function applyTimeFilter(chartKey) {
         }
     }
 
-    // Hervat refresh zodra gebruiker terugkeert naar het tabblad
-    document.addEventListener('visibilitychange', () => {
-        const testPage = document.getElementById('test-portfolio-page');
-        if (!document.hidden && testPage?.classList.contains('active')) {
-            initTestPortfolio(true);
-            startTpAutoRefresh();
-        }
-    });
 
     function toggleBlur() { 
         document.querySelectorAll('.blur-target').forEach(e => e.classList.toggle('blur')); 
@@ -4595,7 +4572,8 @@ function renderWeeklyReturns() {
         } catch { return null; }
     }
 
-    // Yahoo Finance via corsproxy.io — fallback voor Europese tickers, futures & commodities
+    // Yahoo Finance via corsproxy.io — alleen nog voor marktdata-widgets (futures, indices)
+    // Niet meer gebruikt voor portfolio-posities (te onnauwkeurig voor dagrendementen)
     async function yhQuote(ticker) {
         const bust = Math.floor(Date.now() / 60000); // verandert elke minuut
         const url = `https://corsproxy.io/?url=${encodeURIComponent('https://query2.finance.yahoo.com/v8/finance/chart/' + ticker + '?interval=1d&range=2d&_=' + bust)}`;
@@ -4969,13 +4947,11 @@ function renderWeeklyReturns() {
 
     // ── DATA PAGINA: AANDELEN & CRYPTO TABS ─────────────────────────────────
     function renderAandelenData() {
-        const stockBody  = document.getElementById('aandelenDataBody');
-        const etfBody    = document.getElementById('etfDataBody');
-        const optionBody = document.getElementById('optionDataBody');
+        const stockBody = document.getElementById('aandelenDataBody');
+        const etfBody   = document.getElementById('etfDataBody');
 
-        const stocks  = hmStocks.filter(s => s.type === 'stock').sort((a,b)=>a.ticker.localeCompare(b.ticker));
-        const etfs    = hmStocks.filter(s => s.type === 'etf').sort((a,b)=>a.ticker.localeCompare(b.ticker));
-        const options = hmStocks.filter(s => s.type === 'option').sort((a,b)=>a.ticker.localeCompare(b.ticker));
+        const stocks = hmStocks.filter(s => s.type === 'stock').sort((a,b)=>a.ticker.localeCompare(b.ticker));
+        const etfs   = hmStocks.filter(s => s.type === 'etf').sort((a,b)=>a.ticker.localeCompare(b.ticker));
 
         const inputStyle = 'width:80px;border:1px solid var(--border-color);border-radius:6px;padding:4px 6px;font-size:0.78rem;background:var(--bg-color);color:var(--text-main);text-align:right;';
 
@@ -5006,42 +4982,10 @@ function renderWeeklyReturns() {
             </td>
         </tr>`).join('');
 
-        // Optie rij: identiek aan stocks/ETFs maar met extra "Prijs" invulveld (manualPrice)
-        const makeOptionRows = (items) => items.map(s => `<tr style="border-bottom:1px solid var(--border-color);">
-            <td style="padding:8px 6px;font-weight:700;font-family:monospace;">${s.ticker}</td>
-            <td style="padding:8px 6px;">${s.name}</td>
-            <td style="padding:8px 6px;text-align:center;">
-                <select onchange="updateHmBroker('${s.ticker}',this.value)" style="border:1px solid var(--border-color);border-radius:6px;padding:3px 6px;font-size:0.78rem;background:var(--bg-color);color:var(--text-main);">
-                    <option value="Degiro" ${(s.broker||'Degiro')==='Degiro'?'selected':''}>Degiro</option>
-                    <option value="Bolero" ${(s.broker||'Degiro')==='Bolero'?'selected':''}>Bolero</option>
-                    <option value="Saxo"   ${(s.broker||'Degiro')==='Saxo'?'selected':''}>Saxo</option>
-                </select>
-            </td>
-            <td style="padding:8px 6px;text-align:center;">
-                <select onchange="updateHmCurrency('${s.ticker}',this.value)" style="border:1px solid var(--border-color);border-radius:6px;padding:3px 6px;font-size:0.78rem;background:var(--bg-color);color:var(--text-main);">
-                    <option value="USD" ${(s.currency||'EUR')==='USD'?'selected':''}>USD</option>
-                    <option value="EUR" ${(s.currency||'EUR')==='EUR'?'selected':''}>EUR</option>
-                </select>
-            </td>
-            <td style="padding:8px 6px;text-align:right;">
-                <input type="number" step="0.01" min="0" value="${s.gak ?? 0}" onchange="updateHmGak('${s.ticker}', this.value)" style="${inputStyle}">
-            </td>
-            <td style="padding:8px 6px;text-align:right;">
-                <input type="number" step="0.01" min="0" value="${s.aantal ?? 0}" onchange="updateHmAantal('${s.ticker}', this.value)" style="${inputStyle}">
-            </td>
-            <td style="padding:8px 6px;text-align:right;">
-                <input type="number" step="0.01" min="0" value="${s.manualPrice ?? 0}" onchange="updateHmManualPrice('${s.ticker}', this.value)" style="${inputStyle}">
-            </td>
-            <td style="padding:8px 6px;text-align:right;">
-                <button onclick="removeHmStockData('${s.ticker}')" style="background:none;border:none;color:var(--danger);cursor:pointer;font-size:0.85rem;font-weight:700;">✕</button>
-            </td>
-        </tr>`).join('');
+        const emptyRow = (msg) => `<tr><td colspan="7" style="padding:16px;color:var(--text-muted);text-align:center;">${msg}</td></tr>`;
 
-        const emptyRow    = (msg, cols=7) => `<tr><td colspan="${cols}" style="padding:16px;color:var(--text-muted);text-align:center;">${msg}</td></tr>`;
-
-        if (stockBody)  stockBody.innerHTML  = stocks.length  ? makeRows(stocks)         : emptyRow('Geen aandelen. Voeg er toe via + Toevoegen.');
-        if (etfBody)    etfBody.innerHTML    = etfs.length    ? makeRows(etfs)           : emptyRow('Geen ETFs. Voeg er toe via + Toevoegen.');
-        if (optionBody) optionBody.innerHTML = options.length ? makeOptionRows(options)  : emptyRow('Geen opties. Voeg er toe via + Toevoegen.', 8);
+        if (stockBody) stockBody.innerHTML = stocks.length ? makeRows(stocks) : emptyRow('Geen aandelen. Voeg er toe via + Toevoegen.');
+        if (etfBody)   etfBody.innerHTML   = etfs.length   ? makeRows(etfs)   : emptyRow('Geen ETFs. Voeg er toe via + Toevoegen.');
     }
 
     function updateHmCurrency(ticker, currency) {
@@ -5781,6 +5725,9 @@ function renderWeeklyReturns() {
         renderChartLegends();
         updateDashboard();
         applyWidgetOrder();
+        // TEST pagina is standaard actief — laad koersen en start auto-refresh
+        initTestPortfolio();
+        startTpAutoRefresh();
     };
 
 
@@ -7119,27 +7066,27 @@ async function getUsdEurRate() {
     return _usdEurCache || 0.92;
 }
 
-// Algemene quote loader: Finnhub eerst (geen proxy, nauwkeurig), Yahoo als fallback
-// Europese tickers (bijv. SOI.PA, 2B76.DE, DAPP.MI) worden niet door Finnhub gratis ondersteund → Yahoo
+// Detecteer Europese beurs-ticker (heeft exchange-suffix: .PA, .DE, .MI, .L, enz.)
+function isEuropeanTicker(ticker) {
+    return /\.[A-Z]{1,4}$/.test(ticker);
+}
+
+// Algemene quote loader:
+// - Europese tickers (.PA/.DE/.MI/.L) → Yahoo (source: 'yahoo', paarse bol)
+// - Amerikaanse tickers → Finnhub (source: 'finnhub', groene bol)
 async function loadQuoteForPosition(s) {
-    if (s.type === 'option') {
-        // Geen Yahoo ticker — gebruik handmatige prijs
-        const price = parseFloat(s.manualPrice) || 0;
-        return { price, change: 0, pct: null, prevClose: price, time: new Date() };
-    }
     if (s.type === 'crypto') {
-        // Probeer Binance, dan Yahoo
         const sym = s.ticker.toUpperCase().replace(/-USD$/, '') + 'USDT';
         let q = await binanceQuote(sym).catch(() => null);
         if (!q) q = await fhQuote('BINANCE:' + sym).catch(() => null);
-        if (!q) q = await yhQuote(s.ticker);
         return q;
     }
-    // Aandelen/ETFs: probeer Finnhub eerst (direct, geen proxy, nauwkeurige dag%)
-    const fh = await fhQuote(s.ticker).catch(() => null);
-    if (fh && fh.price > 0) return fh;
-    // Fallback naar Yahoo (Europese tickers, futures, of als Finnhub faalt)
-    return await yhQuote(s.ticker);
+    // Europese ticker → Yahoo (nauwkeurigheid is hier beperkt maar er is geen alternatief)
+    if (isEuropeanTicker(s.ticker)) {
+        return await yhQuote(s.ticker).catch(() => null);
+    }
+    // Amerikaanse ticker → Finnhub (direct, nauwkeurige dag%)
+    return await fhQuote(s.ticker).catch(() => null);
 }
 
 // Quote-cache: voorkomt herhaaldelijk ophalen bij snel refreshen (55s TTL)
@@ -7197,7 +7144,74 @@ function setApBroker(broker, btn) {
         if (broker === 'all') pg.removeAttribute('data-broker');
         else pg.setAttribute('data-broker', broker);
     }
-    initAandelenPortfolio();
+    // Hergebruik bestaande koersen als die al geladen zijn — geen nieuwe API-calls
+    if (_apLastEnriched) {
+        renderApFromEnriched(_apLastEnriched);
+    } else {
+        initAandelenPortfolio();
+    }
+}
+
+// Rendert de LIVE pagina opnieuw op basis van al-geladen koersen — geen API-calls
+function renderApFromEnriched(allEnriched) {
+    const broker = _apBrokerFilter;
+    const enriched = broker === 'all'
+        ? allEnriched
+        : allEnriched.filter(p => (p.broker || 'Degiro') === broker);
+
+    const cashEur        = getCashForBroker(broker);
+    const cashEl         = document.getElementById('ap-cash');
+    if (cashEl) cashEl.textContent = fmtEuroAlt(cashEur);
+    renderCashEditor();
+
+    const positionsValue = enriched.reduce((a, x) => a + x.valueEur, 0);
+    const totalCost      = enriched.reduce((a, x) => a + x.costEur,  0);
+    const totalValue     = positionsValue + cashEur;
+    const totalPL        = positionsValue - totalCost;
+    const dayPL          = enriched.reduce((a, x) => a + x.dayPLEur, 0);
+
+    document.getElementById('ap-totalValue').textContent = fmtEuroAlt(totalValue);
+    const stortingEur = getStortingForBroker(broker);
+    const cashLine = cashEur > 0 ? ` &nbsp;·&nbsp; Cash: ${fmtEuroAlt(cashEur)}` : '';
+    document.getElementById('ap-totalCost').innerHTML = 'Gestort: ' + fmtEuroAlt(stortingEur) + cashLine;
+
+    const tplEl = document.getElementById('ap-totalPL');
+    tplEl.textContent = (totalPL >= 0 ? '+' : '') + fmtEuroAlt(totalPL);
+    tplEl.style.color = totalPL >= 0 ? 'var(--success)' : 'var(--danger)';
+    document.getElementById('ap-totalPLPct').innerHTML = plChip(totalCost > 0 ? (totalPL / totalCost) * 100 : 0);
+    const dplEl = document.getElementById('ap-dayPL');
+    dplEl.textContent = (dayPL >= 0 ? '+' : '') + fmtEuroAlt(dayPL);
+    dplEl.style.color = dayPL >= 0 ? 'var(--success)' : 'var(--danger)';
+    document.getElementById('ap-dayPLPct').innerHTML = plChip(positionsValue > 0 ? (dayPL / (positionsValue - dayPL)) * 100 : 0);
+
+    const stockCnt = enriched.filter(x => x.type === 'stock').length;
+    const etfCnt   = enriched.filter(x => x.type === 'etf').length;
+    document.getElementById('ap-positions').textContent = `${enriched.length}`;
+    document.getElementById('ap-positionsBreakdown').textContent = `${stockCnt} aandelen · ${etfCnt} ETFs`;
+
+    const sortedByPct = [...enriched].filter(x => x.plPct != null).sort((a, b) => b.plPct - a.plPct);
+    const renderTopList = (items, isBest) => {
+        if (items.length === 0) return '<div class="ap-toplist-empty">Geen data</div>';
+        return items.map((p, i) => {
+            const col = isBest ? 'var(--success)' : 'var(--danger)';
+            const sign = p.plPct >= 0 ? '+' : '';
+            return `<div class="ap-toplist-row" title="${p.name}">
+                <span class="ap-toplist-rank">${i + 1}.</span>
+                <span class="ap-toplist-ticker">${p.ticker}</span>
+                <span class="ap-toplist-eur blur-target">${p.plEur >= 0 ? '+' : ''}${fmtEuroAlt(p.plEur, 0)}</span>
+                <span class="ap-toplist-pct" style="color:${col};">${sign}${p.plPct.toFixed(2)}%</span>
+            </div>`;
+        }).join('');
+    };
+    const bestEl  = document.getElementById('ap-bestList');
+    const worstEl = document.getElementById('ap-worstList');
+    if (bestEl)  bestEl.innerHTML  = renderTopList(sortedByPct.filter(x => x.plPct > 0).slice(0, 5), true);
+    if (worstEl) worstEl.innerHTML = renderTopList(sortedByPct.filter(x => x.plPct < 0).slice(-5).reverse(), false);
+
+    _apLastTotalValue = positionsValue;
+    renderSectorPie(enriched, positionsValue);
+    renderBySector('ap-bySector', enriched, positionsValue, false);
+    renderAllPositions(enriched, positionsValue);
 }
 
 // Cash per broker — eigen state op AANDELEN pagina (los van DATA → CASH pagina)
@@ -7382,12 +7396,14 @@ function renderAllPositions(positions, totalValue, containerId, sortOpts) {
         const cellBase = 'padding:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;';
         const portPct = totalValue > 0 && !noQ ? (p.valueEur / totalValue) * 100 : 0;
         const priceStr = noQ ? '<span style="color:var(--text-muted)">–</span>' : `${curSym}${p.price.toLocaleString('nl-NL', { minimumFractionDigits: 2, maximumFractionDigits: dec })}`;
-        const yahooTag = p.yahooFallback
-            ? `<span title="Koers via Yahoo Finance (fallback)" style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#9b59b6;margin-left:5px;vertical-align:middle;flex-shrink:0;"></span>`
+        const sourceCol = p.q?.source === 'yahoo' ? '#9b59b6' : p.q?.source === 'finnhub' ? 'var(--success)' : null;
+        const sourceTitle = p.q?.source === 'yahoo' ? 'Koers via Yahoo Finance' : p.q?.source === 'finnhub' ? 'Koers via Finnhub' : '';
+        const yahooTag = sourceCol && !p.noQuote
+            ? `<span title="${sourceTitle}" style="display:inline-block;width:7px;height:7px;border-radius:50%;background:${sourceCol};margin-right:5px;vertical-align:middle;flex-shrink:0;"></span>`
             : '';
 
         html += `<tr style="border-bottom:1px solid var(--border-color);">
-            <td style="${cellBase}font-weight:700;font-family:monospace;">${p.ticker}${yahooTag}</td>
+            <td style="${cellBase}font-weight:700;font-family:monospace;">${yahooTag}${p.ticker}</td>
             <td style="${cellBase}" title="${p.name}">${p.name}</td>
             <td style="${cellBase}color:var(--text-muted);" title="${p.sector}">${p.sector}</td>
             <td style="${cellBase}text-align:right;">${(p.aantal || 0).toLocaleString('nl-NL', { maximumFractionDigits: 8 })}</td>
@@ -7421,8 +7437,12 @@ async function initAandelenPortfolio(force = false) {
         else pg.setAttribute('data-broker', _apBrokerFilter);
     }
 
+    // Annuleer lopende retry-timers
+    if (_apRetryTimeout) { clearTimeout(_apRetryTimeout); _apRetryTimeout = null; }
+    if (force) _quoteCache.clear();
+
     // Posities = stock + etf (alleen die met aantal > 0), gefilterd op gekozen broker
-    let positions = hmStocks.filter(s => (s.type === 'stock' || s.type === 'etf' || s.type === 'option') && (s.aantal || 0) > 0);
+    let positions = hmStocks.filter(s => (s.type === 'stock' || s.type === 'etf') && (s.aantal || 0) > 0);
     if (_apBrokerFilter !== 'all') {
         positions = positions.filter(s => (s.broker || 'Degiro') === _apBrokerFilter);
     }
@@ -7452,24 +7472,27 @@ async function initAandelenPortfolio(force = false) {
         return;
     }
 
-    // Quotes parallel laden
+    // Quotes gebatcht laden (5 tegelijk) — zelfde systeem als TEST pagina
     const usdEur = await getUsdEurRate();
-    const enriched = await Promise.all(positions.map(async s => {
-        const q = await loadQuoteForPosition(s);
-        const sector = await fetchSector(s.ticker, s.type);
-        const cur = (s.currency || 'USD').toUpperCase();
-        const fx = cur === 'EUR' ? 1 : usdEur;
+    const quotes  = await loadAllQuotesBatched(positions);
+    const enriched = await Promise.all(positions.map(async (s, i) => {
+        const q       = quotes[i];
+        const sector  = await fetchSector(s.ticker, s.type);
+        const cur     = (q?.currency || s.currency || 'USD').toUpperCase();
+        const fx      = cur === 'EUR' ? 1 : usdEur;
+        const gakCur  = (s.currency || 'USD').toUpperCase();
+        const gakFx   = gakCur === 'EUR' ? 1 : usdEur;
         const price     = q?.price ?? 0;
         const dayChange = q?.change ?? 0;
         const aantal    = s.aantal || 0;
-        const gak       = s.gak || 0;
+        const noQuote   = !q || !q.price;
         const valueEur  = price * aantal * fx;
-        const costEur   = gak   * aantal * fx;
+        const costEur   = (s.gak || 0) * aantal * gakFx;
         const plEur     = valueEur - costEur;
-        const plPct     = costEur > 0 ? (plEur / costEur) * 100 : null;
+        const plPct     = costEur > 0 && !noQuote ? (plEur / costEur) * 100 : null;
         const dayPLEur  = dayChange * aantal * fx;
         const dayPLPct  = q?.pct ?? null;
-        return { ...s, q, sector, price, valueEur, costEur, plEur, plPct, dayPLEur, dayPLPct };
+        return { ...s, q, sector, price, noQuote, valueEur, costEur, plEur, plPct, dayPLEur, dayPLPct };
     }));
 
     // Posities totalen + cash
@@ -7496,21 +7519,15 @@ async function initAandelenPortfolio(force = false) {
     dplEl.style.color = dayPL >= 0 ? 'var(--success)' : 'var(--danger)';
     document.getElementById('ap-dayPLPct').innerHTML = plChip(dayPLPct);
 
-    const stockCnt  = enriched.filter(x => x.type === 'stock').length;
-    const etfCnt    = enriched.filter(x => x.type === 'etf').length;
-    const optionCnt = enriched.filter(x => x.type === 'option').length;
+    const stockCnt = enriched.filter(x => x.type === 'stock').length;
+    const etfCnt   = enriched.filter(x => x.type === 'etf').length;
     document.getElementById('ap-positions').textContent = `${enriched.length}`;
-    const breakdown = [
-        `${stockCnt} aandelen`,
-        `${etfCnt} ETFs`,
-        ...(optionCnt > 0 ? [`${optionCnt} opties`] : []),
-    ].join(' · ');
-    document.getElementById('ap-positionsBreakdown').textContent = breakdown;
+    document.getElementById('ap-positionsBreakdown').textContent = `${stockCnt} aandelen · ${etfCnt} ETFs`;
 
-    // Top 5 beste (alleen winnaars) / slechtste (alleen verliezers)
+    // Top 5 beste / slechtste
     const sortedByPct = [...enriched].filter(x => x.plPct != null).sort((a,b) => b.plPct - a.plPct);
-    const top3Best  = sortedByPct.filter(x => x.plPct > 0).slice(0, 5);
-    const top3Worst = sortedByPct.filter(x => x.plPct < 0).slice(-5).reverse();
+    const top5Best  = sortedByPct.filter(x => x.plPct > 0).slice(0, 5);
+    const top5Worst = sortedByPct.filter(x => x.plPct < 0).slice(-5).reverse();
 
     const renderTopList = (items, isBest) => {
         if (items.length === 0) return '<div class="ap-toplist-empty">Geen data</div>';
@@ -7529,20 +7546,98 @@ async function initAandelenPortfolio(force = false) {
 
     const bestEl  = document.getElementById('ap-bestList');
     const worstEl = document.getElementById('ap-worstList');
-    if (bestEl)  bestEl.innerHTML  = renderTopList(top3Best,  true);
-    if (worstEl) worstEl.innerHTML = renderTopList(top3Worst, false);
+    if (bestEl)  bestEl.innerHTML  = renderTopList(top5Best,  true);
+    if (worstEl) worstEl.innerHTML = renderTopList(top5Worst, false);
 
-    // Bewaar voor herrendering bij sortering
-    _apLastEnriched = enriched;
+    _apLastEnriched   = enriched;
     _apLastTotalValue = positionsValue;
 
-    // Sectorverdeling — pie chart, gebruikt positionsValue (cash niet als sector)
     renderSectorPie(enriched, positionsValue);
-    // Render beide views; toggle bepaalt welke zichtbaar is
     renderBySector('ap-bySector', enriched, positionsValue, false);
     renderAllPositions(enriched, positionsValue);
 
-    if (status) status.textContent = `✓ Bijgewerkt · ${new Date().toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit'})}`;
+    // Statusbol + automatisch opnieuw proberen voor mislukte koersen
+    const loadedQuotes = enriched.filter(x => x.q?.price != null && x.q.price > 0);
+    const allOk  = loadedQuotes.length === enriched.length && enriched.length > 0;
+    const someOk = loadedQuotes.length > 0 && !allOk;
+    const dotCol = allOk ? 'var(--success)' : someOk ? '#f39c12' : 'var(--danger)';
+    const priceTimes = loadedQuotes.filter(x => x.q.time instanceof Date).map(x => x.q.time.getTime()).filter(t => isFinite(t) && t > 0);
+    const latestTime = priceTimes.length > 0 ? new Date(Math.max(...priceTimes)) : new Date();
+    const timeStr = latestTime.toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' });
+    const label = allOk ? `Koersen: ${timeStr}` : someOk ? `Koersen: ${timeStr} · niet volledig` : 'Koersen: niet geladen';
+    if (status) status.innerHTML =
+        `<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${dotCol};margin-right:5px;vertical-align:middle;box-shadow:0 0 4px ${dotCol};"></span>${label}`;
+
+    if (!allOk) scheduleApQuoteRetry(enriched, cashEur, usdEur, 1);
+}
+
+let _apRetryTimeout      = null;
+let _apAutoRefreshInterval = null;
+
+function startApAutoRefresh() {
+    if (_apAutoRefreshInterval) { clearInterval(_apAutoRefreshInterval); _apAutoRefreshInterval = null; }
+    const delay = isMarktOpen() ? 60000 : 15 * 60000;
+    _apAutoRefreshInterval = setInterval(() => {
+        initAandelenPortfolio(true);
+        startApAutoRefresh();
+    }, delay);
+}
+
+function scheduleApQuoteRetry(enriched, cashEur, usdEur, attempt) {
+    if (_apRetryTimeout) clearTimeout(_apRetryTimeout);
+    if (attempt > 6) return;
+    const delay = Math.min(3000 * Math.pow(2, attempt - 1), 60000);
+    _apRetryTimeout = setTimeout(() => retryFailedApQuotes(enriched, cashEur, usdEur, attempt), delay);
+}
+
+async function retryFailedApQuotes(enriched, cashEur, usdEur, attempt) {
+    const status = document.getElementById('aandelenPfStatus');
+    const failed = enriched.filter(x => x.noQuote);
+    if (failed.length === 0) return;
+
+    failed.forEach(x => _quoteCache.delete((x.ticker || '') + '|' + (x.type || '')));
+    const retried = await loadAllQuotesBatched(failed);
+
+    let anyNew = false;
+    failed.forEach((pos, i) => {
+        const q = retried[i];
+        if (!q || !q.price) return;
+        const idx    = enriched.indexOf(pos);
+        if (idx === -1) return;
+        const cur    = (q.currency || pos.currency || 'USD').toUpperCase();
+        const fx     = cur === 'EUR' ? 1 : usdEur;
+        const gakCur = (pos.currency || 'USD').toUpperCase();
+        const gakFx  = gakCur === 'EUR' ? 1 : usdEur;
+        const price    = q.price;
+        const dayChange = q.change ?? 0;
+        const valueEur = price * pos.aantal * fx;
+        const costEur  = (pos.gak || 0) * pos.aantal * gakFx;
+        const plEur    = valueEur - costEur;
+        enriched[idx] = { ...pos, q, price, noQuote: false,
+            valueEur, costEur, plEur,
+            plPct:   costEur > 0 ? (plEur / costEur) * 100 : null,
+            dayPLEur: dayChange * pos.aantal * fx,
+            dayPLPct: q.pct ?? null };
+        anyNew = true;
+    });
+
+    if (!anyNew) { scheduleApQuoteRetry(enriched, cashEur, usdEur, attempt + 1); return; }
+
+    // Sla alle posities op en herrender via renderApFromEnriched (handelt broker-filter correct af)
+    _apLastEnriched = enriched;
+    renderApFromEnriched(enriched);
+
+    const loadedQuotes = enriched.filter(x => x.q?.price != null && x.q.price > 0);
+    const allOk  = loadedQuotes.length === enriched.length && enriched.length > 0;
+    const someOk = loadedQuotes.length > 0 && !allOk;
+    const dotCol = allOk ? 'var(--success)' : someOk ? '#f39c12' : 'var(--danger)';
+    const priceTimes = loadedQuotes.filter(x => x.q.time instanceof Date).map(x => x.q.time.getTime()).filter(t => isFinite(t) && t > 0);
+    const timeStr = (priceTimes.length > 0 ? new Date(Math.max(...priceTimes)) : new Date()).toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' });
+    const label = allOk ? `Koersen: ${timeStr}` : someOk ? `Koersen: ${timeStr} · niet volledig` : 'Koersen: niet geladen';
+    if (status) status.innerHTML =
+        `<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${dotCol};margin-right:5px;vertical-align:middle;box-shadow:0 0 4px ${dotCol};"></span>${label}`;
+
+    if (!allOk) scheduleApQuoteRetry(enriched, cashEur, usdEur, attempt + 1);
 }
 
 // ── CRYPTO PORTFOLIO ────────────────────────────────────────────────────────
@@ -8547,7 +8642,7 @@ async function runPortfolioBackfill(force = false) {
         }
     }
     const positions = hmStocks.filter(s =>
-        (s.type === 'stock' || s.type === 'etf' || s.type === 'option') && (s.aantal || 0) > 0
+        (s.type === 'stock' || s.type === 'etf') && (s.aantal || 0) > 0
     );
 
     // Haal EUR/USD historisch op (EURUSD=X geeft USD per EUR, dus 1/waarde = EUR per USD)
@@ -8855,9 +8950,10 @@ async function updateTpBenchmarks() {
 let _tpBrokerFilter  = 'all';
 let _tpSortKey       = 'valueEur';
 let _tpSortDir       = 'desc';
-let _tpPositionsView = 'sector';
+let _tpPositionsView = 'all';
 let _tpLastEnriched  = null;
 let _tpLastTotalValue = null;
+let _tpRetryTimeout  = null;
 let _tpSectorChart   = null;
 let _tpBrokerChart   = null;
 
@@ -8946,6 +9042,92 @@ function renderTpBrokerPie(enriched, cashEur) {
     }).join('');
 }
 
+// Rendert de TEST pagina opnieuw op basis van al-geladen koersen — geen API-calls
+function renderTpFromEnriched(allEnriched) {
+    const broker = _tpBrokerFilter;
+    const enriched = broker === 'all'
+        ? allEnriched
+        : allEnriched.filter(p => (p.broker || 'Degiro') === broker);
+
+    const cashEur        = getCashForBroker(broker);
+    const cashEl         = document.getElementById('tp-cash');
+    if (cashEl) cashEl.textContent = fmtEuroAlt(cashEur);
+    renderTpCashEditor();
+
+    const positionsValue = enriched.reduce((a, x) => a + x.valueEur, 0);
+    const totalCost      = enriched.reduce((a, x) => a + x.costEur,  0);
+    const totalValue     = positionsValue + cashEur;
+    const totalPL        = positionsValue - totalCost;
+    const totalPLPct     = totalCost > 0 ? (totalPL / totalCost) * 100 : 0;
+    const dayPL          = enriched.reduce((a, x) => a + x.dayPLEur, 0);
+    const dayPLPct       = positionsValue > 0 ? (dayPL / (positionsValue - dayPL)) * 100 : 0;
+
+    document.getElementById('tp-totalValue').textContent = fmtEuroAlt(totalValue);
+    const stortingEur = tdCashflows.length > 0 ? getTdNetStorting(broker) : getStortingForBroker(broker);
+    const cashLine = cashEur > 0 ? ` &nbsp;·&nbsp; Cash: ${fmtEuroAlt(cashEur)}` : '';
+    document.getElementById('tp-totalCost').innerHTML = 'Gestort: ' + fmtEuroAlt(stortingEur) + cashLine;
+
+    const tplEl = document.getElementById('tp-totalPL');
+    tplEl.textContent = (totalPL >= 0 ? '+' : '') + fmtEuroAlt(totalPL);
+    tplEl.style.color = totalPL >= 0 ? 'var(--success)' : 'var(--danger)';
+
+    const mkChip = (pct) => {
+        if (pct == null || isNaN(pct)) return '<span class="tp-hero-pct-chip neu">–</span>';
+        const cls = pct >= 0 ? 'pos' : 'neg';
+        return `<span class="tp-hero-pct-chip ${cls}">${pct >= 0 ? '+' : ''}${pct.toFixed(2)}%</span>`;
+    };
+    document.getElementById('tp-totalPLPct').innerHTML = mkChip(totalPLPct);
+    const dplEl = document.getElementById('tp-dayPL');
+    dplEl.textContent = (dayPL >= 0 ? '+' : '') + fmtEuroAlt(dayPL);
+    dplEl.style.color = dayPL >= 0 ? 'var(--success)' : 'var(--danger)';
+    document.getElementById('tp-dayPLPct').innerHTML = mkChip(dayPLPct);
+
+    const stockCnt = enriched.filter(x => x.type === 'stock').length;
+    const etfCnt   = enriched.filter(x => x.type === 'etf').length;
+    document.getElementById('tp-positions').textContent = `${enriched.length}`;
+    document.getElementById('tp-positionsBreakdown').textContent = `${stockCnt} aandelen · ${etfCnt} ETFs`;
+
+    const sortedByPct = [...enriched].filter(x => x.plPct != null).sort((a, b) => b.plPct - a.plPct);
+    const renderTopList = (items, isBest, useDay = false) => {
+        if (items.length === 0) return '<div class="ap-toplist-empty">Geen data</div>';
+        return items.map((p, i) => {
+            const pct = useDay ? p.dayPLPct : p.plPct;
+            const eur = useDay ? p.dayPLEur : p.plEur;
+            const col = isBest ? 'var(--success)' : 'var(--danger)';
+            return `<div class="ap-toplist-row" title="${p.name}">
+                <span class="ap-toplist-rank">${i + 1}.</span>
+                <span class="ap-toplist-ticker">${p.ticker}</span>
+                <span class="ap-toplist-eur blur-target">${eur >= 0 ? '+' : ''}${fmtEuroAlt(eur, 0)}</span>
+                <span class="ap-toplist-pct" style="color:${col};">${pct >= 0 ? '+' : ''}${pct.toFixed(2)}%</span>
+            </div>`;
+        }).join('');
+    };
+    const sortedByDay = [...enriched].filter(x => x.dayPLPct != null).sort((a, b) => b.dayPLPct - a.dayPLPct);
+    const dayBestEl  = document.getElementById('tp-dayBestList');
+    const dayWorstEl = document.getElementById('tp-dayWorstList');
+    if (dayBestEl)  dayBestEl.innerHTML  = renderTopList(sortedByDay.filter(x => x.dayPLPct > 0).slice(0, 5), true,  true);
+    if (dayWorstEl) dayWorstEl.innerHTML = renderTopList(sortedByDay.filter(x => x.dayPLPct < 0).slice(-5).reverse(), false, true);
+    const bestEl  = document.getElementById('tp-bestList');
+    const worstEl = document.getElementById('tp-worstList');
+    if (bestEl)  bestEl.innerHTML  = renderTopList(sortedByPct.filter(x => x.plPct > 0).slice(0, 5),  true);
+    if (worstEl) worstEl.innerHTML = renderTopList(sortedByPct.filter(x => x.plPct < 0).slice(-5).reverse(), false);
+
+    _tpLastTotalValue = positionsValue;
+
+    const brokerPieWrap = document.getElementById('tp-brokerPieWrap');
+    if (broker === 'all') {
+        if (brokerPieWrap) brokerPieWrap.style.display = '';
+        renderTpBrokerPie(allEnriched, getCashForBroker('all'));
+    } else {
+        if (brokerPieWrap) brokerPieWrap.style.display = 'none';
+        if (_tpBrokerChart) { _tpBrokerChart.destroy(); _tpBrokerChart = null; }
+    }
+    renderTpSectorPie(enriched, positionsValue);
+    const sortOpts = { key: _tpSortKey, dir: _tpSortDir, fn: 'setTpSort' };
+    renderBySector('tp-bySector', enriched, positionsValue, false, sortOpts);
+    renderAllPositions(enriched, positionsValue, 'tp-allPositions', sortOpts);
+}
+
 function setTpBroker(broker, btn) {
     _tpBrokerFilter = broker;
     document.querySelectorAll('#test-portfolio-page .ap-broker-tab').forEach(b => b.classList.remove('active'));
@@ -8960,8 +9142,20 @@ function setTpBroker(broker, btn) {
         const labels = { all: 'PORTFOLIO VOORUITGANG', Bolero: 'BOLERO VOORUITGANG', Degiro: 'DEGIRO VOORUITGANG', Saxo: 'SAXO VOORUITGANG' };
         titleEl.textContent = labels[broker] || 'PORTFOLIO VOORUITGANG';
     }
-    renderPortfolioHistoryChart(); // grafiek updatet direct op cached data
-    initTestPortfolio();           // portfolio metrics verversen op de achtergrond
+    renderPortfolioHistoryChart();
+    // Reset altijd naar 'Alle posities' bij tabwissel
+    _tpPositionsView = 'all';
+    document.querySelectorAll('#test-portfolio-page .ap-view-btn').forEach(b => {
+        b.classList.toggle('active', b.dataset.view === 'all');
+    });
+    document.getElementById('tp-bySector').style.display     = 'none';
+    document.getElementById('tp-allPositions').style.display = '';
+    // Hergebruik bestaande koersen als die al geladen zijn — geen nieuwe API-calls
+    if (_tpLastEnriched) {
+        renderTpFromEnriched(_tpLastEnriched);
+    } else {
+        initTestPortfolio();
+    }
 }
 
 // ── TEST PAGE VIEW SWITCHER ───────────────────────────────────────────────────
@@ -9530,6 +9724,8 @@ function renderTpSectorPie(positions, totalValue) {
 }
 
 async function initTestPortfolio(force = false) {
+    // Annuleer lopende retry-timers
+    if (_tpRetryTimeout) { clearTimeout(_tpRetryTimeout); _tpRetryTimeout = null; }
     const status = document.getElementById('testPfStatus');
     if (status) status.textContent = '⏳ Laden…';
     // Bij expliciete vernieuwing: cache wissen zodat verse koersen worden opgehaald
@@ -9544,7 +9740,7 @@ async function initTestPortfolio(force = false) {
         else pg.setAttribute('data-broker', _tpBrokerFilter);
     }
 
-    let positions = hmStocks.filter(s => (s.type === 'stock' || s.type === 'etf' || s.type === 'option') && (s.aantal || 0) > 0);
+    let positions = hmStocks.filter(s => (s.type === 'stock' || s.type === 'etf') && (s.aantal || 0) > 0);
     if (_tpBrokerFilter !== 'all') {
         positions = positions.filter(s => (s.broker || 'Degiro') === _tpBrokerFilter);
     }
@@ -9579,16 +9775,21 @@ async function initTestPortfolio(force = false) {
     const enriched = await Promise.all(positions.map(async (s, i) => {
         const q = quotes[i];
         const sector = await fetchSector(s.ticker, s.type);
-        const cur = (s.currency || 'USD').toUpperCase();
+        // q.currency heeft voorrang: als US-equivalent gebruikt wordt, is prijs altijd USD
+        const cur = (q?.currency || s.currency || 'USD').toUpperCase();
         const fx = cur === 'EUR' ? 1 : usdEur;
         const price     = q?.price ?? 0;
         const dayChange = q?.change ?? 0;
         const aantal    = s.aantal || 0;
         const gak       = s.gak || 0;
-        const noQuote      = s.type !== 'option' && (!q || !q.price);
+        const noQuote       = !q || !q.price;
         const yahooFallback = !noQuote && q?.source === 'yahoo';
+        // GAK staat opgeslagen in s.currency (originele aankoopvaluta)
+        // Als q.currency afwijkt (US-equivalent gebruikt), apart omrekenen
+        const gakCur = (s.currency || 'USD').toUpperCase();
+        const gakFx  = gakCur === 'EUR' ? 1 : usdEur;
         const valueEur  = price * aantal * fx;
-        const costEur   = gak   * aantal * fx;
+        const costEur   = gak   * aantal * gakFx;
         const plEur     = valueEur - costEur;
         const plPct     = costEur > 0 && !noQuote ? (plEur / costEur) * 100 : null;
         const dayPLEur  = dayChange * aantal * fx;
@@ -9625,16 +9826,12 @@ async function initTestPortfolio(force = false) {
     dplEl.style.color = dayPL >= 0 ? 'var(--success)' : 'var(--danger)';
     document.getElementById('tp-dayPLPct').innerHTML = mkChip(dayPLPct);
 
-    const stockCnt  = enriched.filter(x => x.type === 'stock').length;
-    const etfCnt    = enriched.filter(x => x.type === 'etf').length;
-    const optionCnt = enriched.filter(x => x.type === 'option').length;
+    const stockCnt = enriched.filter(x => x.type === 'stock').length;
+    const etfCnt   = enriched.filter(x => x.type === 'etf').length;
     document.getElementById('tp-positions').textContent = `${enriched.length}`;
-    document.getElementById('tp-positionsBreakdown').textContent = [
-        `${stockCnt} aandelen`, `${etfCnt} ETFs`,
-        ...(optionCnt > 0 ? [`${optionCnt} opties`] : []),
-    ].join(' · ');
+    document.getElementById('tp-positionsBreakdown').textContent = `${stockCnt} aandelen · ${etfCnt} ETFs`;
 
-    const sortedByPct = [...enriched].filter(x => x.plPct != null && x.type !== 'option').sort((a,b) => b.plPct - a.plPct);
+    const sortedByPct = [...enriched].filter(x => x.plPct != null).sort((a,b) => b.plPct - a.plPct);
     const top5Best  = sortedByPct.filter(x => x.plPct > 0).slice(0, 5);
     const top5Worst = sortedByPct.filter(x => x.plPct < 0).slice(-5).reverse();
 
@@ -9656,7 +9853,7 @@ async function initTestPortfolio(force = false) {
     };
 
     // Vandaag winners/verliezers (geen opties)
-    const sortedByDay   = [...enriched].filter(x => x.dayPLPct != null && x.type !== 'option').sort((a,b) => b.dayPLPct - a.dayPLPct);
+    const sortedByDay   = [...enriched].filter(x => x.dayPLPct != null).sort((a,b) => b.dayPLPct - a.dayPLPct);
     const dayBest       = sortedByDay.filter(x => x.dayPLPct > 0).slice(0, 5);
     const dayWorst      = sortedByDay.filter(x => x.dayPLPct < 0).slice(-5).reverse();
 
@@ -9708,7 +9905,7 @@ async function initTestPortfolio(force = false) {
     if (_tpBrokerFilter === 'all') await runPortfolioBackfill();
 
     // Meest recente koerstijd + aantal geladen quotes
-    const livePositions = enriched.filter(x => x.type !== 'option');
+    const livePositions = enriched;
     const loadedQuotes  = livePositions.filter(x => x.q?.price != null && x.q.price > 0);
     const priceTimes = loadedQuotes
         .filter(x => x.q.time instanceof Date)
@@ -9718,13 +9915,76 @@ async function initTestPortfolio(force = false) {
     const timeStr = latestPriceTime
         ? latestPriceTime.toLocaleTimeString('nl-NL', {hour:'2-digit', minute:'2-digit'})
         : new Date().toLocaleTimeString('nl-NL', {hour:'2-digit', minute:'2-digit'});
-    const allOk    = loadedQuotes.length === livePositions.length && livePositions.length > 0;
-    const someOk   = loadedQuotes.length > 0 && !allOk;
-    const hasYahoo = loadedQuotes.some(x => x.q?.source === 'yahoo');
-    const dotCol = !allOk && !someOk ? 'var(--danger)' : someOk ? '#f39c12' : hasYahoo ? '#9b59b6' : 'var(--success)';
+    const allOk  = loadedQuotes.length === livePositions.length && livePositions.length > 0;
+    const someOk = loadedQuotes.length > 0 && !allOk;
+    const dotCol = allOk ? 'var(--success)' : someOk ? '#f39c12' : 'var(--danger)';
     const label  = allOk ? `Koersen: ${timeStr}` : someOk ? `Koersen: ${timeStr} · niet volledig` : 'Koersen: niet geladen';
     if (status) status.innerHTML =
         `<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${dotCol};margin-right:5px;vertical-align:middle;box-shadow:0 0 4px ${dotCol};"></span>${label}`;
+
+    // Automatisch opnieuw proberen voor mislukte koersen
+    if (!allOk) scheduleQuoteRetry(enriched, cashEur, usdEur, 1);
+}
+
+function scheduleQuoteRetry(enriched, cashEur, usdEur, attempt) {
+    if (_tpRetryTimeout) clearTimeout(_tpRetryTimeout);
+    const maxAttempts = 6;
+    if (attempt > maxAttempts) return;
+    const delay = Math.min(3000 * Math.pow(2, attempt - 1), 60000); // 3s, 6s, 12s, 24s, 48s, 60s
+    _tpRetryTimeout = setTimeout(() => retryFailedQuotes(enriched, cashEur, usdEur, attempt), delay);
+}
+
+async function retryFailedQuotes(enriched, cashEur, usdEur, attempt) {
+    const failed = enriched.filter(x => x.noQuote);
+    if (failed.length === 0) return;
+
+    failed.forEach(x => _quoteCache.delete((x.ticker || '') + '|' + (x.type || '')));
+    const retried = await loadAllQuotesBatched(failed);
+
+    let anyNew = false;
+    failed.forEach((pos, i) => {
+        const q = retried[i];
+        if (!q || !q.price) return;
+        const idx    = enriched.indexOf(pos);
+        if (idx === -1) return;
+        const cur    = (q.currency || pos.currency || 'USD').toUpperCase();
+        const fx     = cur === 'EUR' ? 1 : usdEur;
+        const gakCur = (pos.currency || 'USD').toUpperCase();
+        const gakFx  = gakCur === 'EUR' ? 1 : usdEur;
+        const price     = q.price;
+        const dayChange = q.change ?? 0;
+        const valueEur  = price * pos.aantal * fx;
+        const costEur   = (pos.gak || 0) * pos.aantal * gakFx;
+        const plEur     = valueEur - costEur;
+        enriched[idx] = { ...pos, q, price, noQuote: false,
+            yahooFallback: q.source === 'yahoo',
+            valueEur, costEur, plEur,
+            plPct:    costEur > 0 ? (plEur / costEur) * 100 : null,
+            dayPLEur: dayChange * pos.aantal * fx,
+            dayPLPct: q.pct ?? null };
+        anyNew = true;
+    });
+
+    if (!anyNew) { scheduleQuoteRetry(enriched, cashEur, usdEur, attempt + 1); return; }
+
+    // Sla alle posities op en herrender via renderTpFromEnriched
+    // (handelt broker-filtering correct af, ook als gebruiker op een brokertab staat)
+    _tpLastEnriched = enriched;
+    renderTpFromEnriched(enriched);
+
+    // Status bijwerken
+    const loadedQuotes = enriched.filter(x => x.q?.price != null && x.q.price > 0);
+    const allOk  = loadedQuotes.length === enriched.length && enriched.length > 0;
+    const someOk = loadedQuotes.length > 0 && !allOk;
+    const dotCol = allOk ? 'var(--success)' : someOk ? '#f39c12' : 'var(--danger)';
+    const priceTimes = loadedQuotes.filter(x => x.q.time instanceof Date).map(x => x.q.time.getTime()).filter(t => isFinite(t) && t > 0);
+    const timeStr = (priceTimes.length > 0 ? new Date(Math.max(...priceTimes)) : new Date()).toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' });
+    const label = allOk ? `Koersen: ${timeStr}` : someOk ? `Koersen: ${timeStr} · niet volledig` : 'Koersen: niet geladen';
+    const status = document.getElementById('testPfStatus');
+    if (status) status.innerHTML =
+        `<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${dotCol};margin-right:5px;vertical-align:middle;box-shadow:0 0 4px ${dotCol};"></span>${label}`;
+
+    if (!allOk) scheduleQuoteRetry(enriched, cashEur, usdEur, attempt + 1);
 }
 </script>
 
