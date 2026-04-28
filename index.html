@@ -4568,9 +4568,7 @@ function renderWeeklyReturns() {
             const meta = data?.chart?.result?.[0]?.meta;
             if (!meta || !meta.regularMarketPrice) return null;
             const price     = meta.regularMarketPrice;
-            // previousClose = ongecorrigeerde vorige slotkoers (zelfde als TradingView)
-            // chartPreviousClose is split/dividend-gecorrigeerd en geeft afwijkende %
-            const prevClose = meta.previousClose ?? meta.chartPreviousClose ?? price;
+            const prevClose = meta.chartPreviousClose ?? meta.previousClose ?? price;
             const change    = price - prevClose;
             const pct       = prevClose ? (change / prevClose) * 100 : 0;
             return { price, change, pct, high: meta.regularMarketDayHigh, low: meta.regularMarketDayLow, time: meta.regularMarketTime ? new Date(meta.regularMarketTime * 1000) : new Date() };
