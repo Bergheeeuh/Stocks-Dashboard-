@@ -4544,20 +4544,26 @@ function renderWeeklyReturns() {
     // ── MARKT: LIVE DATA ────────────────────────────────────────────────────
     const FINNHUB_KEY = 'd4g9371r01qm5b34gb90d4g9371r01qm5b34gb9g';
 
-    // Finnhub — werkt voor crypto (Binance feed)
-    async function fhQuote(symbol) {
+    // Finnhub — primaire bron voor aandelen/ETFs (geen proxy, nauwkeurige dag%)
+    async function fhQuote(symbol, _retry = true) {
         try {
             const r = await fetch(`https://finnhub.io/api/v1/quote?symbol=${encodeURIComponent(symbol)}&token=${FINNHUB_KEY}`);
+            if (r.status === 429 && _retry) {
+                // Rate-limited: wacht 600ms en probeer nog één keer
+                await new Promise(res => setTimeout(res, 600));
+                return fhQuote(symbol, false);
+            }
             if (!r.ok) throw new Error(r.status);
             const d = await r.json();
             if (!d.c || d.c === 0) return null;
             const change = d.c - d.pc;
-            const pct    = d.pc ? (change / d.pc) * 100 : 0;
+            // d.dp is Finnhub's official day change % — gebruik dit direct voor nauwkeurigheid
+            const pct    = (d.dp != null && d.dp !== 0) ? d.dp : (d.pc ? (change / d.pc) * 100 : 0);
             return { price: d.c, change, pct, high: d.h, low: d.l, prevClose: d.pc, time: d.t ? new Date(d.t * 1000) : new Date() };
         } catch { return null; }
     }
 
-    // Yahoo Finance via corsproxy.io — voor futures & commodities
+    // Yahoo Finance via corsproxy.io — fallback voor Europese tickers, futures & commodities
     async function yhQuote(ticker) {
         const bust = Math.floor(Date.now() / 60000); // verandert elke minuut
         const url = `https://corsproxy.io/?url=${encodeURIComponent('https://query2.finance.yahoo.com/v8/finance/chart/' + ticker + '?interval=1d&range=2d&_=' + bust)}`;
@@ -7081,7 +7087,8 @@ async function getUsdEurRate() {
     return _usdEurCache || 0.92;
 }
 
-// Algemene quote loader: gebruikt yhQuote (al beschikbaar in script)
+// Algemene quote loader: Finnhub eerst (geen proxy, nauwkeurig), Yahoo als fallback
+// Europese tickers (bijv. SOI.PA, 2B76.DE, DAPP.MI) worden niet door Finnhub gratis ondersteund → Yahoo
 async function loadQuoteForPosition(s) {
     if (s.type === 'option') {
         // Geen Yahoo ticker — gebruik handmatige prijs
@@ -7092,10 +7099,41 @@ async function loadQuoteForPosition(s) {
         // Probeer Binance, dan Yahoo
         const sym = s.ticker.toUpperCase().replace(/-USD$/, '') + 'USDT';
         let q = await binanceQuote(sym).catch(() => null);
+        if (!q) q = await fhQuote('BINANCE:' + sym).catch(() => null);
         if (!q) q = await yhQuote(s.ticker);
         return q;
     }
+    // Aandelen/ETFs: probeer Finnhub eerst (direct, geen proxy, nauwkeurige dag%)
+    const fh = await fhQuote(s.ticker).catch(() => null);
+    if (fh && fh.price > 0) return fh;
+    // Fallback naar Yahoo (Europese tickers, futures, of als Finnhub faalt)
     return await yhQuote(s.ticker);
+}
+
+// Quote-cache: voorkomt herhaaldelijk ophalen bij snel refreshen (55s TTL)
+const _quoteCache = new Map();
+const QUOTE_CACHE_TTL = 55000;
+
+async function loadQuoteCached(s) {
+    const key = (s.ticker || '') + '|' + (s.type || '');
+    const hit = _quoteCache.get(key);
+    if (hit && Date.now() - hit.ts < QUOTE_CACHE_TTL) return hit.q;
+    const q = await loadQuoteForPosition(s);
+    if (q && q.price > 0) _quoteCache.set(key, { q, ts: Date.now() });
+    return q;
+}
+
+// Gebatcht laden: max 5 tegelijk, 80ms pauze tussen batches → vermijdt burst rate-limit
+async function loadAllQuotesBatched(positions) {
+    const BATCH = 5;
+    const results = [];
+    for (let i = 0; i < positions.length; i += BATCH) {
+        const batch = positions.slice(i, i + BATCH);
+        const batchResults = await Promise.all(batch.map(s => loadQuoteCached(s)));
+        results.push(...batchResults);
+        if (i + BATCH < positions.length) await new Promise(r => setTimeout(r, 80));
+    }
+    return results;
 }
 
 function fmtEuroAlt(v, dec = 2) {
@@ -9459,6 +9497,8 @@ function renderTpSectorPie(positions, totalValue) {
 async function initTestPortfolio(force = false) {
     const status = document.getElementById('testPfStatus');
     if (status) status.textContent = '⏳ Laden…';
+    // Bij expliciete vernieuwing: cache wissen zodat verse koersen worden opgehaald
+    if (force) _quoteCache.clear();
 
     document.querySelectorAll('#test-portfolio-page .ap-broker-tab').forEach(b => {
         b.classList.toggle('active', b.dataset.broker === _tpBrokerFilter);
@@ -9499,8 +9539,10 @@ async function initTestPortfolio(force = false) {
     }
 
     const usdEur = await getUsdEurRate();
-    const enriched = await Promise.all(positions.map(async s => {
-        const q = await loadQuoteForPosition(s);
+    // Quotes gebatcht laden (5 tegelijk, 80ms pauze) om Finnhub rate-limit te vermijden
+    const quotes = await loadAllQuotesBatched(positions);
+    const enriched = await Promise.all(positions.map(async (s, i) => {
+        const q = quotes[i];
         const sector = await fetchSector(s.ticker, s.type);
         const cur = (s.currency || 'USD').toUpperCase();
         const fx = cur === 'EUR' ? 1 : usdEur;
