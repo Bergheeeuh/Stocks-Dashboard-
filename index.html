@@ -4559,7 +4559,8 @@ function renderWeeklyReturns() {
 
     // Yahoo Finance via corsproxy.io — voor futures & commodities
     async function yhQuote(ticker) {
-        const url = `https://corsproxy.io/?url=${encodeURIComponent('https://query2.finance.yahoo.com/v8/finance/chart/' + ticker + '?interval=1d&range=2d')}`;
+        const bust = Math.floor(Date.now() / 60000); // verandert elke minuut
+        const url = `https://corsproxy.io/?url=${encodeURIComponent('https://query2.finance.yahoo.com/v8/finance/chart/' + ticker + '?interval=1d&range=2d&_=' + bust)}`;
         try {
             const r = await fetch(url, { cache: 'no-store' });
             if (!r.ok) throw new Error(r.status);
@@ -9639,11 +9640,12 @@ async function initTestPortfolio(force = false) {
     const timeStr = latestPriceTime
         ? latestPriceTime.toLocaleTimeString('nl-NL', {hour:'2-digit', minute:'2-digit'})
         : new Date().toLocaleTimeString('nl-NL', {hour:'2-digit', minute:'2-digit'});
-    const allOk   = loadedQuotes.length === livePositions.length;
-    const dotCol  = loadedQuotes.length > 0 ? (allOk ? 'var(--success)' : '#f39c12') : 'var(--danger)';
-    const countStr = `${loadedQuotes.length}/${livePositions.length}`;
+    const allOk  = loadedQuotes.length === livePositions.length && livePositions.length > 0;
+    const someOk = loadedQuotes.length > 0 && !allOk;
+    const dotCol = allOk ? 'var(--success)' : someOk ? '#f39c12' : 'var(--danger)';
+    const label  = allOk ? `Koersen: ${timeStr}` : someOk ? `Koersen: ${timeStr} · niet volledig` : 'Koersen: niet geladen';
     if (status) status.innerHTML =
-        `<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${dotCol};margin-right:5px;vertical-align:middle;box-shadow:0 0 4px ${dotCol};"></span>Koersen: ${timeStr} · ${countStr}`;
+        `<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${dotCol};margin-right:5px;vertical-align:middle;box-shadow:0 0 4px ${dotCol};"></span>${label}`;
 }
 </script>
 
