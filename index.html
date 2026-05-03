@@ -583,10 +583,6 @@
             <div style="display:flex;justify-content:space-between;font-size:0.58rem;color:var(--text-muted);margin-top:3px;">
                 <span>Extreme Fear</span><span>Fear</span><span>Neutral</span><span>Greed</span><span>Extreme Greed</span>
             </div>
-            <div style="font-size:0.62rem;color:var(--text-muted);margin-top:6px;">
-                <span style="display:inline-flex;align-items:center;gap:3px;margin-right:10px;"><span style="width:8px;height:8px;background:var(--text-main);border-radius:2px;display:inline-block;"></span>Crypto</span>
-                <span style="display:inline-flex;align-items:center;gap:3px;"><span style="width:8px;height:8px;background:var(--bolero);border-radius:2px;display:inline-block;opacity:0.7;"></span>Aandelen</span>
-            </div>
         </div>
     </div>
 
@@ -614,8 +610,10 @@
         </div>
         <div class="card markt-section" style="grid-column:span 2;">
             <div class="markt-section-header"><h3>CRYPTO</h3><span id="dot-cry" class="markt-dot markt-dot-loading" style="margin-left:auto;" title="Laden…"></span></div>
+            <div style="overflow-x:auto;">
             <table class="markt-table"><thead><tr><th>Coin</th><th>Koers (USD)</th><th>Dag △</th><th>Dag %</th><th>24h High</th><th>24h Low</th></tr></thead>
             <tbody id="mb-cry"></tbody></table>
+            </div>
         </div>
     </div>
 </div>
