@@ -42,12 +42,10 @@
         </div>
     </div>
 
-    <!-- View tabs: PORTFOLIO / KALENDER / OVERZICHT / DOEL -->
+    <!-- View tabs: PORTFOLIO / OVERZICHT -->
     <div class="tp-view-tabs" style="display:flex;gap:4px;margin-bottom:16px;flex-wrap:wrap;">
         <button class="tp-view-tab active" id="tp-vtab-overzicht"  onclick="switchTpView('overzicht',this)">PORTFOLIO</button>
-        <button class="tp-view-tab" id="tp-vtab-kalender"          onclick="switchTpView('kalender',this)">KALENDER</button>
         <button class="tp-view-tab" id="tp-vtab-periodeoverzicht"  onclick="switchTpView('periodeoverzicht',this)">OVERZICHT</button>
-        <button class="tp-view-tab" id="tp-vtab-doel"              onclick="switchTpView('doel',this)">DOEL</button>
     </div>
 
     <!-- OVERZICHT VIEW -->
@@ -244,27 +242,25 @@
 
     </div><!-- /tp-view-overzicht -->
 
-    <!-- RENDEMENT KALENDER VIEW -->
-    <div id="tp-view-kalender" style="display:none;">
-        <div class="card" style="padding:18px 16px;">
-            <div style="display:flex;gap:8px;margin-bottom:14px;align-items:center;flex-wrap:wrap;">
-                <button class="btn" id="tpHeatmapBrokerBtn" onclick="cycleTpHeatmapBroker()" style="font-size:0.75rem;padding:6px 14px;">TOTAAL ▾</button>
-                <button class="btn" onclick="tpHeatmapYear--; renderTpHeatmap();" style="font-size:0.75rem;padding:6px 10px;">◀</button>
-                <span id="tpHeatmapYearLabel" style="font-weight:700;font-size:0.9rem;min-width:40px;text-align:center;"></span>
-                <button class="btn" onclick="tpHeatmapYear++; renderTpHeatmap();" style="font-size:0.75rem;padding:6px 10px;">▶</button>
-                <div style="display:flex;gap:6px;align-items:center;margin-left:auto;font-size:0.7rem;color:var(--text-muted);">
-                    <span style="width:14px;height:14px;border-radius:3px;background:#2ecc71;display:inline-block;opacity:0.85;"></span>Winst
-                    <span style="width:14px;height:14px;border-radius:3px;background:#e74c3c;display:inline-block;margin-left:6px;opacity:0.85;"></span>Verlies
-                    <span style="width:14px;height:14px;border-radius:3px;background:var(--border-color);display:inline-block;margin-left:6px;"></span>Geen data
-                </div>
-            </div>
-            <div id="tpHeatmapGrid" style="overflow-x:auto;"></div>
-        </div>
-    </div><!-- /tp-view-kalender -->
-
-    <!-- OVERZICHT VIEW (maand + week gecombineerd) -->
+    <!-- OVERZICHT VIEW (kalender + maand + week gecombineerd) -->
     <div id="tp-view-periodeoverzicht" style="display:none;">
         <div style="display:flex;flex-direction:column;gap:1rem;">
+
+            <!-- Rendement Kalender -->
+            <div class="card" style="padding:18px 16px;">
+                <div style="display:flex;gap:8px;margin-bottom:14px;align-items:center;flex-wrap:wrap;">
+                    <button class="btn" id="tpHeatmapBrokerBtn" onclick="cycleTpHeatmapBroker()" style="font-size:0.75rem;padding:6px 14px;">TOTAAL ▾</button>
+                    <button class="btn" onclick="tpHeatmapYear--; renderTpHeatmap();" style="font-size:0.75rem;padding:6px 10px;">◀</button>
+                    <span id="tpHeatmapYearLabel" style="font-weight:700;font-size:0.9rem;min-width:40px;text-align:center;"></span>
+                    <button class="btn" onclick="tpHeatmapYear++; renderTpHeatmap();" style="font-size:0.75rem;padding:6px 10px;">▶</button>
+                    <div style="display:flex;gap:6px;align-items:center;margin-left:auto;font-size:0.7rem;color:var(--text-muted);">
+                        <span style="width:14px;height:14px;border-radius:3px;background:#2ecc71;display:inline-block;opacity:0.85;"></span>Winst
+                        <span style="width:14px;height:14px;border-radius:3px;background:#e74c3c;display:inline-block;margin-left:6px;opacity:0.85;"></span>Verlies
+                        <span style="width:14px;height:14px;border-radius:3px;background:var(--border-color);display:inline-block;margin-left:6px;"></span>Geen data
+                    </div>
+                </div>
+                <div id="tpHeatmapGrid" style="overflow-x:auto;"></div>
+            </div>
 
             <!-- Maandoverzicht -->
             <div class="card">
@@ -306,32 +302,6 @@
 
         </div>
     </div><!-- /tp-view-periodeoverzicht -->
-
-    <!-- DOEL VIEW -->
-    <div id="tp-view-doel" style="display:none;">
-        <div class="card" style="max-width:480px;">
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
-                <h3 style="margin:0;">DOEL</h3>
-                <button onclick="openDoelModal()" style="background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:0.9rem;padding:4px;" title="Doel aanpassen">✏️</button>
-            </div>
-            <div style="display:flex;flex-direction:column;gap:10px;">
-                <div class="info-line"><span class="info-label">Doel</span><span id="tpDoel-target" class="blur-target" style="font-weight:800;font-size:1rem;">–</span></div>
-                <div class="info-line"><span class="info-label">Huidig</span><span id="tpDoel-current" class="blur-target" style="font-weight:800;font-size:1rem;">–</span></div>
-                <div class="info-line"><span class="info-label">Nog nodig</span><span id="tpDoel-resterend" class="blur-target" style="font-weight:700;font-size:0.9rem;">–</span></div>
-                <div style="margin:4px 0;">
-                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
-                        <span style="font-size:0.7rem;font-weight:700;color:var(--text-muted);">VOORTGANG</span>
-                        <span id="tpDoel-pct-label" style="font-size:0.75rem;font-weight:800;">0%</span>
-                    </div>
-                    <div style="height:10px;border-radius:99px;background:var(--border-color);overflow:hidden;">
-                        <div id="tpDoel-progress-bar" style="height:100%;border-radius:99px;background:linear-gradient(90deg,var(--bolero),var(--success));width:0%;transition:width 0.6s ease;"></div>
-                    </div>
-                </div>
-                <div class="info-line"><span class="info-label">ETA</span><span id="tpDoel-eta" style="font-weight:700;font-size:0.82rem;">–</span></div>
-                <div class="info-line"><span class="info-label">Dagelijks nodig</span><span id="tpDoel-dagnodig" class="blur-target" style="font-weight:700;font-size:0.82rem;">–</span></div>
-            </div>
-        </div>
-    </div><!-- /tp-view-doel -->
 
 </div>
 
