@@ -542,7 +542,7 @@
 
     <!-- Rij 1: VIX + Fear & Greed -->
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:1.5rem;">
-        <div class="card markt-section">
+        <div class="card markt-section" style="display:flex;flex-direction:column;">
             <div class="markt-section-header"><h3>VIX — VOLATILITEITSINDEX</h3><span id="dot-vix" class="markt-dot markt-dot-loading" style="margin-left:auto;" title="Laden…"></span></div>
             <div style="display:flex;align-items:center;gap:20px;padding:6px 0;">
                 <div style="flex:1;">
@@ -552,7 +552,7 @@
                 </div>
                 <div id="vixLabelBox" style="text-align:center;padding:8px 14px;border-radius:10px;font-size:0.72rem;font-weight:800;letter-spacing:0.05em;"></div>
             </div>
-            <div style="margin-top:10px;height:6px;border-radius:3px;background:linear-gradient(to right,#2ecc71,#f1c40f,#e67e22,#e74c3c);position:relative;">
+            <div style="margin-top:auto;padding-top:10px;height:6px;border-radius:3px;background:linear-gradient(to right,#2ecc71,#f1c40f,#e67e22,#e74c3c);position:relative;">
                 <div id="vixNeedle" style="position:absolute;top:-4px;width:3px;height:14px;background:var(--text-main);border-radius:2px;transform:translateX(-50%);transition:left 0.8s ease;left:50%;"></div>
             </div>
             <div style="display:flex;justify-content:space-between;font-size:0.58rem;color:var(--text-muted);margin-top:3px;">
@@ -560,7 +560,7 @@
             </div>
         </div>
 
-        <div class="card markt-section">
+        <div class="card markt-section" style="display:flex;flex-direction:column;">
             <div class="markt-section-header"><h3>FEAR &amp; GREED INDEX</h3><span id="dot-fg" class="markt-dot markt-dot-loading" style="margin-left:auto;" title="Laden…"></span></div>
             <div style="display:flex;gap:16px;padding:6px 0;">
                 <div style="flex:1;border-right:1px solid var(--border-color);padding-right:16px;">
@@ -576,7 +576,7 @@
                     <div id="fgStockPrev" style="font-size:0.68rem;color:var(--text-muted);margin-top:4px;"></div>
                 </div>
             </div>
-            <div style="margin-top:10px;height:6px;border-radius:3px;background:linear-gradient(to right,#e74c3c,#e67e22,#f1c40f,#2ecc71,#27ae60);position:relative;">
+            <div style="margin-top:auto;padding-top:10px;height:6px;border-radius:3px;background:linear-gradient(to right,#e74c3c,#e67e22,#f1c40f,#2ecc71,#27ae60);position:relative;">
                 <div id="fgNeedle" style="position:absolute;top:-4px;width:3px;height:14px;background:var(--text-main);border-radius:2px;transform:translateX(-50%);transition:left 0.8s ease;left:50%;"></div>
                 <div id="fgStockNeedle" style="position:absolute;top:-4px;width:3px;height:14px;background:var(--bolero);border-radius:2px;transform:translateX(-50%);transition:left 0.8s ease;left:50%;opacity:0.7;"></div>
             </div>
