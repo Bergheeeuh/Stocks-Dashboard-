@@ -5013,7 +5013,7 @@ const TD_CF_DEFAULT = [
     {id:'cf101',date:'2025-12-10',type:'storting',broker:'Saxo',amountEur:500.00},
     {id:'cf102',date:'2025-12-17',type:'storting',broker:'Saxo',amountEur:500.00},
     {id:'cf103',date:'2026-02-02',type:'storting',broker:'Saxo',amountEur:2000.00},
-    {id:'cf104',date:'2026-02-06',type:'storting',broker:'Saxo',amountEur:1000.00},
+    {id:'cf104',date:'2026-02-06',type:'storting',broker:'Saxo',amountEur:2000.00},
     {id:'cf105',date:'2026-02-27',type:'storting',broker:'Saxo',amountEur:1000.00},
     {id:'cf106',date:'2026-03-02',type:'storting',broker:'Saxo',amountEur:2000.00},
 ].sort((a, b) => b.date.localeCompare(a.date));
