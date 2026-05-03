@@ -5676,6 +5676,7 @@ function renderPortfolioHistoryChart() {
     // Bepaal data key en kleur op basis van actieve broker tab
     const brokerKey = { all: 'value', Bolero: 'bolero', Degiro: 'degiro', Saxo: 'saxo' }[_tpBrokerFilter] || 'value';
     const colorVar  = { all: '--total-gray', Bolero: '--bolero', Degiro: '--degiro', Saxo: '--saxo' }[_tpBrokerFilter] || '--total-gray';
+    const labelColor = Chart.defaults.color || '#8e9196';
 
     const history = getFilteredHistory(_tpTimeFilter).filter(h => h[brokerKey] != null);
 
@@ -5773,7 +5774,7 @@ function renderPortfolioHistoryChart() {
             scales: {
                 x: {
                     grid: { display: false },
-                    ticks: { color: 'var(--chart-label-color)', font: { size: 10 }, maxTicksLimit: 8 }
+                    ticks: { color: labelColor, font: { size: 10 }, maxTicksLimit: 8 }
                 },
                 y: {
                     grid: {
@@ -5784,7 +5785,7 @@ function renderPortfolioHistoryChart() {
                         }
                     },
                     ticks: {
-                        color: 'var(--chart-label-color)',
+                        color: labelColor,
                         font: { size: 10 },
                         callback: (v) => '€' + Math.round(v).toLocaleString('nl-NL'),
                     },
